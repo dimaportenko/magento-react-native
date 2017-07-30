@@ -1,0 +1,3 @@
+rootProject.name = 'magento_mobile_app'
+
+include ':app'
