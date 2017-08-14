@@ -1,48 +1,55 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
 import Magento from './magento';
 
 
 class App extends Component {
   componentWillMount() {
-    const options = {
-      url: 'https://www.vapecove.com/',
-      authentication: {
-        login: {
-          type: 'admin',
-          username: 'dev',
-          password: 'q1w2e3r4'
-        },
-        integration: {
-          access_token: 'cdlodltsj3wfwd1jrx08q9nfprb5idq4'
-        }
-      }
-    };
-
     const magento = new Magento(options);
     magento.init()
       .then(() => {
-        magento.getProducts();
-          // .then(data => {
-          //   console.log('App.js');
-          //   console.log(data);
-          // });
+        magento.getCategoriesTree()
+          .then(data => {
+            console.log('App.js');
+            console.log(data);
+          })
+          .catch(error => {
+            // TODO :: handle error
+            console.log(error);
+          });
       })
       .catch(error => {
+        // TODO :: handle error
         console.log(error);
       });
   }
 
   render() {
+    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     return (
-      <View />
-      // <Provider store={createStore(reducers)} />
+      <Provider store={store}>
+        <View />
+      </Provider>
     );
   }
-
 }
+
+const options = {
+  url: 'http://mage2.local/',
+  authentication: {
+    login: {
+      type: 'admin',
+      username: 'dev',
+      password: 'q1w2e3r4'
+    },
+    integration: {
+      access_token: 'cdlodltsj3wfwd1jrx08q9nfprb5idq4'
+    }
+  }
+};
 
 export default App;

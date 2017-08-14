@@ -1,5 +1,3 @@
-import axios from 'axios'; // TODO: remove from dependencies
-
 const defaultOptions = {
   url: null,
   store: 'default',
@@ -24,7 +22,6 @@ class Magento {
     this.configuration = { ...defaultOptions, ...options };
     this.base_url = this.configuration.url;
     this.root_path = `rest/${this.configuration.store}`;
-    this.auth_token = false;
   }
 
   init() {
@@ -58,8 +55,8 @@ class Magento {
     });
   }
 
-  post(path, params, data) {
-    return this.send(path, 'POST', params, data);
+  post(path, params) {
+    return this.send(path, 'POST', null, params);
   }
 
   get(path, params, data) {
@@ -67,7 +64,15 @@ class Magento {
   }
 
   send(url, method, params, data) {
-    const uri = `${this.base_url}${this.root_path}${url}`;
+    let uri = `${this.base_url}${this.root_path}${url}`;
+
+    if (params) {
+      let separator = '?';
+      Object.keys(params).forEach(key => {
+        uri += `${separator}${key}=${params[key]}`;
+        separator = '&';
+      });
+    }
 
     //check if there's any missing parameters
     const missingFields = uri.match(/(\{[a-zA-Z0-9_]+\})/g);
@@ -79,13 +84,13 @@ class Magento {
       'User-Agent': this.configuration.userAgent,
       'Content-Type': 'application/json'
     };
-    if (this.auth_token) {
-      headers.Authorization = `Bearer ${this.auth_token}`;
+    if (this.access_token) {
+      headers.Authorization = `Bearer ${this.access_token}`;
     }
 
     return new Promise((resolve, reject) => {
-      console.log({ method, headers, ...params });
-      fetch(uri, { method, headers, body: JSON.stringify(params) })
+      console.log({ uri, method, headers, ...params });
+      fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => response.json())
         .then(responseData => {
           // debugger;
@@ -99,34 +104,36 @@ class Magento {
     });
   }
 
-  getProducts(pageSize = 5, currentPage = 0) {
-    // return new Promise((resolve, reject) => {
-    //   const path = '/V1/products';
-    //   const params = {
-    //     'searchCriteria[pageSize]': pageSize,
-    //     'searchCriteria[currentPage]': currentPage
-    //   };
-    //   this.get(path, params)
-    //     .then(data => {
-    //       debugger;
-    //       resolve(data);
-    //     })
-    //     .catch(e => {
-    //       console.log(e);
-    //       reject(e);
-    //     });
-    // });
+  getCategoriesTree() {
+    return new Promise((resolve, reject) => {
+      const path = '/V1/categories';
+      this.get(path)
+        .then(data => {
+          resolve(data);
+        })
+        .catch(e => {
+          console.log(e);
+          reject(e);
+        });
+    });
+  }
 
-    axios.get(`${this.base_url}index.php/rest/V1/products?searchCriteria[pageSize]=${pageSize}&searchCriteria[currentPage]=${currentPage}`,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.access_token}`
-          }
-        }
-      )
-      .then(response => console.log(response.data))
-      .catch(error => console.log(error));
+  getProducts(pageSize = 5, currentPage = 0) {
+    return new Promise((resolve, reject) => {
+      const path = '/V1/products';
+      const params = {
+        'searchCriteria[pageSize]': pageSize,
+        'searchCriteria[currentPage]': currentPage
+      };
+      this.get(path, params)
+        .then(data => {
+          resolve(data);
+        })
+        .catch(e => {
+          console.log(e);
+          reject(e);
+        });
+    });
   }
 
 
