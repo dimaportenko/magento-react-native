@@ -135,8 +135,6 @@ class Magento {
         });
     });
   }
-
-
 }
 
 export default Magento;
