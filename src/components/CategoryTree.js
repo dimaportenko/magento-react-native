@@ -2,12 +2,18 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
 import { Spinner } from './common';
-import { initMagento } from '../actions';
+import { initMagento, getCategoryTree } from '../actions';
 
 class CategoryTree extends Component {
   componentWillMount() {
     if (!this.props.magento) {
       this.props.initMagento();
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!this.props.magento && nextProps.magento) {
+      this.props.getCategoryTree(nextProps.magento);
     }
   }
 
@@ -34,4 +40,4 @@ const mapStateToProps = state => {
   return { magento };
 };
 
-export default connect(mapStateToProps, { initMagento })(CategoryTree);
+export default connect(mapStateToProps, { initMagento, getCategoryTree })(CategoryTree);
