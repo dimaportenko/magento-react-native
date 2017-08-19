@@ -23,7 +23,6 @@ const Confirm = ({ children, visible, onAccept, onDecline }) => {
         </CardSection>
       </View>
     </Modal>
-    //
   );
 };
 

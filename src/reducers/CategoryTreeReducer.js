@@ -2,7 +2,7 @@ import {
   MAGENTO_GET_CATEGORY_TREE
 } from '../actions/types';
 
-const INITIAL_STATE = {};
+const INITIAL_STATE = false;
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
