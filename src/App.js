@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import reducers from './reducers';
-import CategoryTree from './components/CategoryTree';
+import AppWithNavigationState from './navigators/AppNavigator';
 
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
     const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     return (
       <Provider store={store}>
-        <CategoryTree />
+        <AppWithNavigationState />
       </Provider>
     );
   }

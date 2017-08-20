@@ -26,7 +26,10 @@ class Magento {
 
   init() {
     return new Promise((resolve, reject) => {
-      if (this.configuration.authentication.login) {
+      if (this.configuration.authentication.integration.access_token) {
+        this.access_token = this.configuration.authentication.integration.access_token;
+        resolve(this);
+      } else if (this.configuration.authentication.login) {
         const { username, password, type } = this.configuration.authentication.login;
         if (username) {
           let path;
@@ -48,9 +51,6 @@ class Magento {
               reject(e);
             });
         }
-      } else if (this.configuration.authentication.integration.access_token) {
-        this.access_token = this.configuration.authentication.integration.access_token;
-        resolve(this);
       }
     });
   }
@@ -93,7 +93,8 @@ class Magento {
       fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => response.json())
         .then(responseData => {
-          // debugger;
+					// TODO: check response code
+					// debugger;
           console.log(responseData);
           resolve(responseData);
         })

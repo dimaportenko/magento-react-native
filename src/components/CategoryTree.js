@@ -6,6 +6,10 @@ import { initMagento, getCategoryTree } from '../actions';
 import CategoryTreeList from './CategoryTreeList';
 
 class CategoryTree extends Component {
+	static navigationOptions = {
+		title: 'Categories'
+	};
+
   componentWillMount() {
     if (!this.props.magento) {
       this.props.initMagento();
@@ -39,7 +43,6 @@ class CategoryTree extends Component {
 const styles = {
   containerStyle: {
     flex: 1,
-    paddingTop: 20
   }
 };
 
