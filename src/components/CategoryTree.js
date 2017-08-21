@@ -7,7 +7,8 @@ import CategoryTreeList from './CategoryTreeList';
 
 class CategoryTree extends Component {
 	static navigationOptions = {
-		title: 'Categories'
+		title: 'Categories',
+		headerBackTitle: ' '
 	};
 
   componentWillMount() {

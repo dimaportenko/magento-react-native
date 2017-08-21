@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
 	Text,
 	View,
@@ -7,6 +8,7 @@ import {
 } from 'react-native';
 import CategoryTreeList from './CategoryTreeList';
 import { ExpandButton } from './common';
+import { goToCategory } from '../actions';
 
 
 class CategoryTreeListItem extends Component {
@@ -25,6 +27,11 @@ class CategoryTreeListItem extends Component {
 
 	onExpandPress() {
 		this.setState({ ...this.state, expanded: !this.state.expanded });
+	}
+
+	onRowPress() {
+		const { category } = this.props;
+		this.props.goToCategory(category.name);
 	}
 
 	renderExpandButton() {
@@ -46,7 +53,7 @@ class CategoryTreeListItem extends Component {
 
 		return (
 			<View>
-				<TouchableOpacity style={styles.rowStyles}>
+				<TouchableOpacity onPress={this.onRowPress.bind(this)} style={styles.rowStyles}>
 					<Text style={titleStyle}>{category.name}</Text>
 					{this.renderExpandButton()}
 				</TouchableOpacity>
@@ -86,4 +93,4 @@ const styles = {
 	}
 };
 
-export default CategoryTreeListItem;
+export default connect(null, { goToCategory })(CategoryTreeListItem);
