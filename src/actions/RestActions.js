@@ -35,7 +35,7 @@ export const getCategoryTree = magento => {
 
 export const getProductsForCategory = ({ id, magento }) => {
   return (dispatch) => {
-    magento.getProducts()
+    magento.getProducts(id)
         .then(payload => {
 					dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
 				})

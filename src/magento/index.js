@@ -119,14 +119,19 @@ class Magento {
     });
   }
 
-  getProducts(pageSize = 5, currentPage = 0) {
+  getProducts(categoryId, pageSize = 5, offset = 0) {
+    const currentPage = parseInt(offset / pageSize, 10);
     return new Promise((resolve, reject) => {
       const path = '/V1/products';
       const params = {
+        'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
+			  'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
+        'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
         'searchCriteria[pageSize]': pageSize,
         'searchCriteria[currentPage]': currentPage
       };
-      this.get(path, params)
+
+			this.get(path, params)
         .then(data => {
           resolve(data);
         })
