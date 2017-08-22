@@ -47,9 +47,7 @@ const styles = {
   }
 };
 
-const mapStateToProps = state => {
-  const { magento, categoryTree } = state;
-
+const mapStateToProps = ({ magento, categoryTree }) => {
   return { magento, categoryTree };
 };
 
