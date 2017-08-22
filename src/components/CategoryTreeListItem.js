@@ -8,7 +8,8 @@ import {
 } from 'react-native';
 import CategoryTreeList from './CategoryTreeList';
 import { ExpandButton } from './common';
-import { goToCategory } from '../actions';
+import { goToScreen } from '../actions';
+import { NAVIGATION_CATEGORY_PATH } from '../navigators/types';
 
 
 class CategoryTreeListItem extends Component {
@@ -31,7 +32,10 @@ class CategoryTreeListItem extends Component {
 
 	onRowPress() {
 		const { category } = this.props;
-		this.props.goToCategory(category.name);
+		this.props.goToScreen({
+			routeName: NAVIGATION_CATEGORY_PATH,
+			params: { title: category.name }
+		});
 	}
 
 	renderExpandButton() {
@@ -93,4 +97,4 @@ const styles = {
 	}
 };
 
-export default connect(null, { goToCategory })(CategoryTreeListItem);
+export default connect(null, { goToScreen })(CategoryTreeListItem);

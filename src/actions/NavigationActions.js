@@ -1,11 +1,10 @@
 import {
-	NAVIGATION_CATEGORY
+	NAVIGATION_GO_TO_SCREEN
 } from '../actions/types';
 
-export const goToCategory = payload => {
+export const goToScreen = ({ routeName, params }) => {
 	return {
-		type: NAVIGATION_CATEGORY,
-		payload
+		type: NAVIGATION_GO_TO_SCREEN,
+		payload: { routeName, params }
 	};
 };
-
