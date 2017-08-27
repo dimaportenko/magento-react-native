@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
-import Category from '../components/Category';
+import ProductList from '../components/catalog/ProductList';
 import CategoryTree from '../components/CategoryTree';
 
 export const AppNavigator = StackNavigator({
 	CategoryTree: { screen: CategoryTree },
-	Category: { screen: Category }
+	Category: { screen: ProductList }
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
