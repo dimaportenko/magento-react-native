@@ -141,6 +141,10 @@ class Magento {
         });
     });
   }
+
+  getProductMediaUrl() {
+    return `${this.base_url}/media/catalog/product`;
+  }
 }
 
 export default Magento;
