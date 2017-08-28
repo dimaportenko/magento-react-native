@@ -14,6 +14,7 @@ export const initMagento = () => {
     magento.init()
       .then(() => {
         dispatch({ type: MAGENTO_INIT, payload: magento });
+				magento.getStoreConfig();
       })
       .catch(error => {
         console.log(error);

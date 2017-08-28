@@ -142,8 +142,39 @@ class Magento {
     });
   }
 
+  getConfigurableChildren(sku) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/configurable-products/${sku}/children`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
   getProductMediaUrl() {
-    return `${this.base_url}/media/catalog/product`;
+    return `${this.storeConfig.base_media_url}catalog/product`;
+  }
+
+  getStoreConfig() {
+		return new Promise((resolve, reject) => {
+			const path = '/V1/store/storeConfigs';
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+						this.storeConfig = data[0];
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
   }
 }
 
