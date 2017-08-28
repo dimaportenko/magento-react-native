@@ -37,7 +37,7 @@ class ProductList extends Component {
 	}
 
 	renderContent() {
-		if (this.props.products) {
+		if (this.props.products.length) {
 			return (
 					<ListView
 							enableEmptySections
@@ -52,12 +52,18 @@ class ProductList extends Component {
 
 	render() {
 		return (
-				<View>
+				<View style={styles.containerStyle}>
 					{this.renderContent()}
 				</View>
 		);
 	}
 }
+
+const styles = {
+	containerStyle: {
+		flex: 1,
+	}
+};
 
 const mapStateToProps = state => {
 	const { category } = state.category.current;

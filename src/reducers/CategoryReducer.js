@@ -12,7 +12,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case MAGENTO_CURRENT_CATEGORY:
-      return { ...state, current: action.payload };
+      return { ...INITIAL_STATE, current: action.payload };
     case MAGENTO_GET_CATEGORY_PRODUCTS:
       return {
         ...state,
