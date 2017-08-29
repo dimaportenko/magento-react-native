@@ -44,6 +44,7 @@ class CategoryTree extends Component {
 const styles = {
   containerStyle: {
     flex: 1,
+    backgroundColor: '#fff'
   }
 };
 

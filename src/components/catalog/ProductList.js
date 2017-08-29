@@ -62,6 +62,7 @@ class ProductList extends Component {
 const styles = {
 	containerStyle: {
 		flex: 1,
+		backgroundColor: '#fff'
 	}
 };
 

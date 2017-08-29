@@ -4,50 +4,15 @@ import { Text, View, Image } from 'react-native';
 
 class ProductListItem extends Component {
 
-	getPrice() {
-		const { product } = this.props;
-		const { price, type_id, sku, children } = product;
-
-		if (price === 0 && type_id === 'configurable') {
-			if (children) {
-				const newPrice = children.reduce((minPrice, child) => {
-					if (!minPrice) {
-						return child.price;
-					} else if (minPrice > child.price) {
-						return child.price;
-					}
-					return minPrice;
-				}, false);
-				product.price = newPrice;
-				this.props.product = product;
-				this.setState({ ...this.state, product });
-			}	else {
-				this.props.magento.getConfigurableChildren(sku)
-						.then(data => {
-							product.children = data;
-							this.props.product = product;
-							this.setState({ ...this.state, product });
-						})
-						.catch(error => {
-							console.log(error);
-						});
-			}
-		}
-
-		return price;
-	}
-
 	image() {
 		const { product, magento } = this.props;
 		let result = magento.getProductMediaUrl();
-		console.log(product);
 		product.custom_attributes.map(attribute => {
 			if (attribute.attribute_code === 'thumbnail') {
 				result += attribute.value;
 			}
 			return attribute.value;
 		});
-		console.log(result);
 		return result;
 	}
 
@@ -66,7 +31,7 @@ class ProductListItem extends Component {
 						<Text style={textStyle}>
 							{this.props.magento.storeConfig.default_display_currency_code}
 							{' '}
-							{this.getPrice()}
+							{this.props.product.price}
 						</Text>
 					</View>
 				</View>
