@@ -120,12 +120,12 @@ class Magento {
   }
 
   getProducts(categoryId, pageSize = 5, offset = 0) {
-    const currentPage = parseInt(offset / pageSize, 10);
+    const currentPage = parseInt(offset / pageSize, 10) + 1;
     return new Promise((resolve, reject) => {
       const path = '/V1/products';
       const params = {
         'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
-			  'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
+        'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
         'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
         'searchCriteria[pageSize]': pageSize,
         'searchCriteria[currentPage]': currentPage

@@ -5,7 +5,8 @@ import {
   MAGENTO_GET_CATEGORY_TREE,
   MAGENTO_CURRENT_CATEGORY,
 	MAGENTO_GET_CATEGORY_PRODUCTS,
-	MAGENTO_UPDATE_CONF_PRODUCT
+	MAGENTO_UPDATE_CONF_PRODUCT,
+	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS
 } from './types';
 
 export const initMagento = () => {
@@ -35,11 +36,15 @@ export const getCategoryTree = magento => {
   };
 };
 
-export const getProductsForCategory = ({ id, magento }) => {
+export const getProductsForCategory = ({ id, magento, offset }) => {
   return (dispatch) => {
-    magento.getProducts(id, 10)
+		if (offset) {
+			dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
+		}
+    magento.getProducts(id, 10, offset)
         .then(payload => {
 					dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
+					dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
 					updateConfigurableProductsPrices(magento, payload.items, dispatch);
 				})
         .catch(error => {

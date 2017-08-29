@@ -25,6 +25,20 @@ class ProductList extends Component {
 		this.createDataSource(nextProps);
 	}
 
+	onEndReached = () => {
+		const { canLoadMoreContent, loadingMore, products } = this.props;
+		if (!loadingMore && canLoadMoreContent) {
+			this.props.getProductsForCategory({
+				id: this.props.category.id,
+				magento: this.props.magento,
+				offset: products.length
+			});
+			// TODO:: update scroll to the end logic for Android ( to see load more spinner)
+			this.props.scrollToTheEnd = { animated: true };
+		}
+		console.log('load more');
+	};
+
 	createDataSource({ products }) {
 		const ds = new ListView.DataSource({
 			rowHasChanged: (r1, r2) => r1 !== r2
@@ -32,8 +46,16 @@ class ProductList extends Component {
 
 		this.dataSource = ds.cloneWithRows(products);
 	}
+
 	renderRow(product) {
 		return <ProductListItem product={product} />;
+	}
+
+	renderFooter() {
+		if (this.props.loadingMore) {
+			this.props.scrollToTheEnd = null;
+			return <Spinner style={{ padding: 15 }} />;
+		}
 	}
 
 	renderContent() {
@@ -43,6 +65,10 @@ class ProductList extends Component {
 							enableEmptySections
 							dataSource={this.dataSource}
 							renderRow={this.renderRow}
+							onEndReached={this.onEndReached.bind(this)}
+							onEndReachedThreshold={10}
+							renderFooter={this.renderFooter.bind(this)}
+							scrollToEnd={this.props.scrollToTheEnd}
 					/>
 			);
 		}
@@ -68,9 +94,11 @@ const styles = {
 
 const mapStateToProps = state => {
 	const { category } = state.category.current;
-	const { products, totalCount } = state.category;
+	const { products, totalCount, loadingMore } = state.category;
 	const { magento } = state;
-	return { category, magento, products, totalCount };
+	const canLoadMoreContent = products.length < totalCount;
+
+	return { category, magento, products, totalCount, canLoadMoreContent, loadingMore };
 };
 
 export default connect(mapStateToProps, { getProductsForCategory })(ProductList);
