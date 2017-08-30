@@ -93,8 +93,8 @@ const styles = {
 		justifyContent: 'space-between',
 		borderBottomWidth: 1,
 		borderColor: '#ddd',
-		paddingTop: 5,
-		paddingBottom: 5
+		paddingTop: 10,
+		paddingBottom: 10
 	}
 };
 

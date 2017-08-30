@@ -12,8 +12,6 @@ class ProductList extends Component {
 	});
 
 	componentWillMount() {
-		console.log('componentWillMount');
-		console.log(this.props);
 		this.createDataSource(this.props);
 		this.props.getProductsForCategory({
 			id: this.props.category.id,
@@ -25,19 +23,23 @@ class ProductList extends Component {
 		this.createDataSource(nextProps);
 	}
 
-	onEndReached = () => {
-		const { canLoadMoreContent, loadingMore, products } = this.props;
+	onEndReached() {
+		const {
+			canLoadMoreContent,
+			loadingMore,
+			products,
+			magento,
+			category
+		} = this.props;
+
 		if (!loadingMore && canLoadMoreContent) {
 			this.props.getProductsForCategory({
-				id: this.props.category.id,
-				magento: this.props.magento,
+				id: category.id,
+				magento,
 				offset: products.length
 			});
-			// TODO:: update scroll to the end logic for Android ( to see load more spinner)
-			this.props.scrollToTheEnd = { animated: true };
 		}
-		console.log('load more');
-	};
+	}
 
 	createDataSource({ products }) {
 		const ds = new ListView.DataSource({
@@ -52,8 +54,7 @@ class ProductList extends Component {
 	}
 
 	renderFooter() {
-		if (this.props.loadingMore) {
-			this.props.scrollToTheEnd = null;
+		if (this.props.canLoadMoreContent) {
 			return <Spinner style={{ padding: 15 }} />;
 		}
 	}
@@ -68,7 +69,6 @@ class ProductList extends Component {
 							onEndReached={this.onEndReached.bind(this)}
 							onEndReachedThreshold={10}
 							renderFooter={this.renderFooter.bind(this)}
-							scrollToEnd={this.props.scrollToTheEnd}
 					/>
 			);
 		}
