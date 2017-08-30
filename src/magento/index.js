@@ -26,7 +26,10 @@ class Magento {
 
   init() {
     return new Promise((resolve, reject) => {
-      if (this.configuration.authentication.login) {
+      if (this.configuration.authentication.integration.access_token) {
+        this.access_token = this.configuration.authentication.integration.access_token;
+        resolve(this);
+      } else if (this.configuration.authentication.login) {
         const { username, password, type } = this.configuration.authentication.login;
         if (username) {
           let path;
@@ -48,9 +51,6 @@ class Magento {
               reject(e);
             });
         }
-      } else if (this.configuration.authentication.integration.access_token) {
-        this.access_token = this.configuration.authentication.integration.access_token;
-        resolve(this);
       }
     });
   }
@@ -93,7 +93,8 @@ class Magento {
       fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => response.json())
         .then(responseData => {
-          // debugger;
+					// TODO: check response code
+					// debugger;
           console.log(responseData);
           resolve(responseData);
         })
@@ -118,14 +119,19 @@ class Magento {
     });
   }
 
-  getProducts(pageSize = 5, currentPage = 0) {
+  getProducts(categoryId, pageSize = 5, offset = 0) {
+    const currentPage = parseInt(offset / pageSize, 10) + 1;
     return new Promise((resolve, reject) => {
       const path = '/V1/products';
       const params = {
+        'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
+        'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
+        'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
         'searchCriteria[pageSize]': pageSize,
         'searchCriteria[currentPage]': currentPage
       };
-      this.get(path, params)
+
+			this.get(path, params)
         .then(data => {
           resolve(data);
         })
@@ -134,6 +140,41 @@ class Magento {
           reject(e);
         });
     });
+  }
+
+  getConfigurableChildren(sku) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/configurable-products/${sku}/children`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+  getProductMediaUrl() {
+    return `${this.storeConfig.base_media_url}catalog/product`;
+  }
+
+  getStoreConfig() {
+		return new Promise((resolve, reject) => {
+			const path = '/V1/store/storeConfigs';
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+						this.storeConfig = data[0];
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
   }
 }
 

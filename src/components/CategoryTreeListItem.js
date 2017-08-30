@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
 	Text,
 	View,
@@ -7,6 +8,8 @@ import {
 } from 'react-native';
 import CategoryTreeList from './CategoryTreeList';
 import { ExpandButton } from './common';
+import { goToScreen, setCurrentCategory } from '../actions';
+import { NAVIGATION_CATEGORY_PATH } from '../navigators/types';
 
 
 class CategoryTreeListItem extends Component {
@@ -25,6 +28,15 @@ class CategoryTreeListItem extends Component {
 
 	onExpandPress() {
 		this.setState({ ...this.state, expanded: !this.state.expanded });
+	}
+
+	onRowPress() {
+		const { category } = this.props;
+		this.props.setCurrentCategory({ category });
+		this.props.goToScreen({
+			routeName: NAVIGATION_CATEGORY_PATH,
+			params: { title: category.name }
+		});
 	}
 
 	renderExpandButton() {
@@ -46,7 +58,7 @@ class CategoryTreeListItem extends Component {
 
 		return (
 			<View>
-				<TouchableOpacity style={styles.rowStyles}>
+				<TouchableOpacity onPress={this.onRowPress.bind(this)} style={styles.rowStyles}>
 					<Text style={titleStyle}>{category.name}</Text>
 					{this.renderExpandButton()}
 				</TouchableOpacity>
@@ -81,9 +93,9 @@ const styles = {
 		justifyContent: 'space-between',
 		borderBottomWidth: 1,
 		borderColor: '#ddd',
-		paddingTop: 5,
-		paddingBottom: 5
+		paddingTop: 10,
+		paddingBottom: 10
 	}
 };
 
-export default CategoryTreeListItem;
+export default connect(null, { goToScreen, setCurrentCategory })(CategoryTreeListItem);

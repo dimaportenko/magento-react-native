@@ -6,6 +6,11 @@ import { initMagento, getCategoryTree } from '../actions';
 import CategoryTreeList from './CategoryTreeList';
 
 class CategoryTree extends Component {
+	static navigationOptions = {
+		title: 'Categories',
+		headerBackTitle: ' '
+	};
+
   componentWillMount() {
     if (!this.props.magento) {
       this.props.initMagento();
@@ -39,13 +44,11 @@ class CategoryTree extends Component {
 const styles = {
   containerStyle: {
     flex: 1,
-    paddingTop: 20
+    backgroundColor: '#fff'
   }
 };
 
-const mapStateToProps = state => {
-  const { magento, categoryTree } = state;
-
+const mapStateToProps = ({ magento, categoryTree }) => {
   return { magento, categoryTree };
 };
 
