@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 import ProductList from '../components/catalog/ProductList';
 import CategoryTree from '../components/CategoryTree';
+import Product from '../components/catalog/Product';
 
 export const AppNavigator = StackNavigator({
 	CategoryTree: { screen: CategoryTree },
-	Category: { screen: ProductList }
+	Category: { screen: ProductList },
+	Product: { screen: Product }
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
