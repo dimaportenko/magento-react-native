@@ -14,8 +14,7 @@ class ProductList extends Component {
 	componentWillMount() {
 		this.createDataSource(this.props);
 		this.props.getProductsForCategory({
-			id: this.props.category.id,
-			magento: this.props.magento
+			id: this.props.category.id
 		});
 	}
 
@@ -28,14 +27,12 @@ class ProductList extends Component {
 			canLoadMoreContent,
 			loadingMore,
 			products,
-			magento,
 			category
 		} = this.props;
 
 		if (!loadingMore && canLoadMoreContent) {
 			this.props.getProductsForCategory({
 				id: category.id,
-				magento,
 				offset: products.length
 			});
 		}
@@ -95,10 +92,9 @@ const styles = {
 const mapStateToProps = state => {
 	const { category } = state.category.current;
 	const { products, totalCount, loadingMore } = state.category;
-	const { magento } = state;
 	const canLoadMoreContent = products.length < totalCount;
 
-	return { category, magento, products, totalCount, canLoadMoreContent, loadingMore };
+	return { category, products, totalCount, canLoadMoreContent, loadingMore };
 };
 
 export default connect(mapStateToProps, { getProductsForCategory })(ProductList);

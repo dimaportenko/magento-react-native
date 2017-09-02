@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
-import { goToScreen } from '../../actions';
+import { goToScreen, setCurrentProduct } from '../../actions';
 import { NAVIGATION_PRODUCT_PATH } from '../../navigators/types';
+import { getProductImageFromAttribute } from '../../helper/product';
+import { magento } from '../../magento';
 
 class ProductListItem extends Component {
 
 	onRowPress() {
 		const { product } = this.props;
-		// this.props.setCurrentCategory({ category });
+		this.props.setCurrentProduct({ product });
 		this.props.goToScreen({
 			routeName: NAVIGATION_PRODUCT_PATH,
 			params: { title: product.name }
@@ -16,15 +18,7 @@ class ProductListItem extends Component {
 	}
 
 	image() {
-		const { product, magento } = this.props;
-		let result = magento.getProductMediaUrl();
-		product.custom_attributes.map(attribute => {
-			if (attribute.attribute_code === 'thumbnail') {
-				result += attribute.value;
-			}
-			return attribute.value;
-		});
-		return result;
+		return getProductImageFromAttribute(this.props.product);
 	}
 
 	render() {
@@ -41,7 +35,7 @@ class ProductListItem extends Component {
 						<View style={infoStyle}>
 							<Text style={textStyle}>{this.props.product.name}</Text>
 							<Text style={textStyle}>
-								{this.props.magento.storeConfig.default_display_currency_code}
+								{magento.storeConfig.default_display_currency_code}
 								{' '}
 								{this.props.product.price}
 							</Text>
@@ -77,8 +71,4 @@ const styles = {
 	}
 };
 
-const mapStateToProps = state => {
-	return { magento: state.magento };
-};
-
-export default connect(mapStateToProps, { goToScreen })(ProductListItem);
+export default connect(null, { goToScreen, setCurrentProduct })(ProductListItem);
