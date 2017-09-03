@@ -8,7 +8,8 @@ import {
 	MAGENTO_UPDATE_CONF_PRODUCT,
 	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
 	MAGENTO_CURRENT_PRODUCT,
-	MAGENTO_GET_PRODUCT_MEDIA
+	MAGENTO_GET_PRODUCT_MEDIA,
+	MAGENTO_CREATE_CART
 } from './types';
 
 export const initMagento = () => {
@@ -103,5 +104,17 @@ export const setCurrentProduct = product => {
   return {
     type: MAGENTO_CURRENT_PRODUCT,
     payload: product
+  };
+};
+
+export const createGuestCart = () => {
+  return dispatch => {
+		magento.createGuestCart()
+				.then(cartId => {
+					dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
+				})
+				.catch(error => {
+					console.log(error);
+				});
   };
 };

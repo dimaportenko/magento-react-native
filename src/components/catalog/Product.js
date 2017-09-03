@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, ScrollView, Button } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
-import { getProductMedia } from '../../actions';
+import { getProductMedia, createGuestCart } from '../../actions';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
 import { getProductCustomAttribute } from '../../helper/product';
@@ -19,6 +19,37 @@ class Product extends Component {
 		if (!media) {
 			this.props.getProductMedia({ sku: product.sku });
 		}
+	}
+
+	onPressAddToCart() {
+		console.log('onPressAddToCart');
+		const { product } = this.props;
+		magento.createGuestCart()
+				.then(cartId => {
+					magento.addItemToCart(cartId, {
+						cartItem: {
+							sku: product.sku,
+							qty: 1,
+							quoteId: cartId,
+							// productOption: {
+							// 	'extensionAttributes': {
+							// 		'configurableItemOptions': [
+							// 			{
+							// 				'optionId': '178',
+							// 				'optionValue': 45,
+							// 				'extensionAttributes': {}
+							// 			}
+							// 		]
+							// 	}
+							// }
+						}
+					})
+							.then()
+							.catch();
+				})
+				.catch(error => {
+					console.log(error);
+				});
 	}
 
 	renderMedia() {
@@ -62,10 +93,6 @@ class Product extends Component {
 					<Text style={styles.descriptionStyle}>{attribute.value}</Text>
 			);
 		}
-	}
-
-	onPressAddToCart() {
-		console.log('onPressAddToCart');
 	}
 
 	render() {
@@ -115,11 +142,12 @@ const styles = {
 
 const mapStateToProps = state => {
 	const { product, media } = state.product.current;
+	const { cart } = state;
 	console.log('Product Component');
 	console.log(product);
 	console.log(media);
 
-	return { product, media };
+	return { product, media, cart };
 };
 
-export default connect(mapStateToProps, { getProductMedia })(Product);
+export default connect(mapStateToProps, { getProductMedia, createGuestCart })(Product);

@@ -191,6 +191,37 @@ class Magento {
 					});
 		});
   }
+
+  createGuestCart() {
+		return new Promise((resolve, reject) => {
+			const path = '/V1/guest-carts';
+
+			this.post(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	addItemToCart(cartId, item) {
+		// POST /V1/guest-carts/{cartId}/items
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/items`;
+
+			this.post(path, item)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
 }
 
 export const magento = new Magento();
