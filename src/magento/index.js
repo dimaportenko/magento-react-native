@@ -18,11 +18,11 @@ const defaultOptions = {
 };
 
 class Magento {
-  constructor(options) {
-    this.configuration = { ...defaultOptions, ...options };
-    this.base_url = this.configuration.url;
-    this.root_path = `rest/${this.configuration.store}`;
-  }
+	setOptions(options) {
+		this.configuration = { ...defaultOptions, ...options };
+		this.base_url = this.configuration.url;
+		this.root_path = `rest/${this.configuration.store}`;
+	}
 
   init() {
     return new Promise((resolve, reject) => {
@@ -157,6 +157,21 @@ class Magento {
 		});
 	}
 
+	getProductMedia(sku) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/products/${sku}/media`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+  }
+
   getProductMediaUrl() {
     return `${this.storeConfig.base_media_url}catalog/product`;
   }
@@ -178,4 +193,4 @@ class Magento {
   }
 }
 
-export default Magento;
+export const magento = new Magento();

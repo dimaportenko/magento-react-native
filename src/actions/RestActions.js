@@ -1,16 +1,18 @@
-import Magento from '../magento';
+import { magento } from '../magento';
 import { magentoOptions } from '../config/magento';
 import {
-  MAGENTO_INIT,
-  MAGENTO_GET_CATEGORY_TREE,
-  MAGENTO_CURRENT_CATEGORY,
+	MAGENTO_INIT,
+	MAGENTO_GET_CATEGORY_TREE,
+	MAGENTO_CURRENT_CATEGORY,
 	MAGENTO_GET_CATEGORY_PRODUCTS,
 	MAGENTO_UPDATE_CONF_PRODUCT,
-	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS
+	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
+	MAGENTO_CURRENT_PRODUCT,
+	MAGENTO_GET_PRODUCT_MEDIA
 } from './types';
 
 export const initMagento = () => {
-  const magento = new Magento(magentoOptions);
+	magento.setOptions(magentoOptions);
 
   return (dispatch) => {
     magento.init()
@@ -24,7 +26,7 @@ export const initMagento = () => {
   };
 };
 
-export const getCategoryTree = magento => {
+export const getCategoryTree = () => {
   return (dispatch) => {
     magento.getCategoriesTree()
       .then(payload => {
@@ -36,7 +38,7 @@ export const getCategoryTree = magento => {
   };
 };
 
-export const getProductsForCategory = ({ id, magento, offset }) => {
+export const getProductsForCategory = ({ id, offset }) => {
   return (dispatch) => {
 		if (offset) {
 			dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
@@ -45,7 +47,7 @@ export const getProductsForCategory = ({ id, magento, offset }) => {
         .then(payload => {
 					dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
 					dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
-					updateConfigurableProductsPrices(magento, payload.items, dispatch);
+					updateConfigurableProductsPrices(payload.items, dispatch);
 				})
         .catch(error => {
 					console.log(error);
@@ -53,15 +55,15 @@ export const getProductsForCategory = ({ id, magento, offset }) => {
   };
 };
 
-const updateConfigurableProductsPrices = (magento, products, dispatch) => {
+const updateConfigurableProductsPrices = (products, dispatch) => {
   products.forEach(product => {
     if (product.type_id === 'configurable') {
-			updateConfigurableProductPrice(magento, product, dispatch);
+			updateConfigurableProductPrice(product, dispatch);
     }
   });
 };
 
-const updateConfigurableProductPrice = (magento, product, dispatch) => {
+const updateConfigurableProductPrice = (product, dispatch) => {
   const { sku } = product;
 	magento.getConfigurableChildren(sku)
 			.then(data => {
@@ -78,9 +80,28 @@ const updateConfigurableProductPrice = (magento, product, dispatch) => {
 			});
 };
 
+export const getProductMedia = ({ sku }) => {
+	return dispatch => {
+		magento.getProductMedia(sku)
+				.then(data => {
+					dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
 export const setCurrentCategory = category => {
   return {
     type: MAGENTO_CURRENT_CATEGORY,
     payload: category
+  };
+};
+
+export const setCurrentProduct = product => {
+  return {
+    type: MAGENTO_CURRENT_PRODUCT,
+    payload: product
   };
 };
