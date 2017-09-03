@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ScrollView, Button } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import { getProductMedia } from '../../actions';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
+import { getProductCustomAttribute } from '../../helper/product';
 
 class Product extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -52,9 +53,24 @@ class Product extends Component {
 		});
 	}
 
+	renderDescription() {
+		const { product } = this.props;
+		const attribute = getProductCustomAttribute(product, 'short_description');
+
+		if (attribute) {
+			return (
+					<Text style={styles.descriptionStyle}>{attribute.value}</Text>
+			);
+		}
+	}
+
+	onPressAddToCart() {
+		console.log('onPressAddToCart');
+	}
+
 	render() {
 		return (
-				<View style={styles.container}>
+				<ScrollView style={styles.container}>
 					<View style={styles.imageContainer}>
 						{this.renderMedia()}
 					</View>
@@ -64,7 +80,13 @@ class Product extends Component {
 						{' '}
 						{this.props.product.price}
 					</Text>
-				</View>
+					{this.renderDescription()}
+					<Button
+							onPress={this.onPressAddToCart.bind(this)}
+							title="Add to Cart"
+							color="#841584"
+					/>
+				</ScrollView>
 		);
 	}
 }
@@ -82,8 +104,13 @@ const styles = {
 		top: 0
 	},
 	textStyle: {
-		padding: 10
-	}
+		padding: 10,
+		textAlign: 'center',
+		fontWeight: 'bold'
+	},
+	descriptionStyle: {
+		padding: 10,
+	},
 };
 
 const mapStateToProps = state => {

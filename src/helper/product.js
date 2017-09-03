@@ -10,3 +10,14 @@ export const getProductImageFromAttribute = product => {
 	});
 	return result;
 };
+
+export const getProductCustomAttribute = (product, key) => {
+	const attributes = product.custom_attributes.filter(attribute => {
+		return attribute.attribute_code === key;
+	});
+
+	if (attributes.length) {
+		return attributes[0];
+	}
+	return false;
+};
