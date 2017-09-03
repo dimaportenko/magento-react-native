@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import { getProductMedia } from '../../actions';
 import { magento } from '../../magento';
-import { getProductImageFromAttribute } from '../../helper/product';
+import { Spinner } from '../common';
 
 class Product extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -21,10 +21,10 @@ class Product extends Component {
 	}
 
 	renderMedia() {
-		const { product, media } = this.props;
-		const uri = getProductImageFromAttribute(product);
+		const { media } = this.props;
+
 		if (!media) {
-			return <Image style={styles.imageStyle} resizeMode="contain" source={{uri}}/>;
+			return <Spinner />;
 		}
 		return (
 				<Swiper
@@ -58,8 +58,12 @@ class Product extends Component {
 					<View style={styles.imageContainer}>
 						{this.renderMedia()}
 					</View>
-					<Text>{this.props.product.name}</Text>
-					<Text>{this.props.product.price}</Text>
+					<Text style={styles.textStyle}>{this.props.product.name}</Text>
+					<Text style={styles.textStyle}>
+						{magento.storeConfig.default_display_currency_code}
+						{' '}
+						{this.props.product.price}
+					</Text>
 				</View>
 		);
 	}
@@ -76,6 +80,9 @@ const styles = {
 	imageStyle: {
 		height: 290,
 		top: 0
+	},
+	textStyle: {
+		padding: 10
 	}
 };
 
