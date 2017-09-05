@@ -2,15 +2,22 @@ import React, { Component } from 'react';
 import { View, Text, Image, ScrollView, Button } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
-import { getProductMedia, createGuestCart } from '../../actions';
+import {
+	getProductMedia,
+	createGuestCart,
+	addToCartLoading,
+	addToCart
+} from '../../actions';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
+import HeaderCartButton from '../cart/HeaderCartButton';
 import { getProductCustomAttribute } from '../../helper/product';
 
 class Product extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.state.params.title,
-		headerBackTitle: ' '
+		headerBackTitle: ' ',
+		headerRight: <HeaderCartButton />
 	});
 
 	componentWillMount() {
@@ -23,33 +30,29 @@ class Product extends Component {
 
 	onPressAddToCart() {
 		console.log('onPressAddToCart');
-		const { product } = this.props;
-		magento.createGuestCart()
-				.then(cartId => {
-					magento.addItemToCart(cartId, {
-						cartItem: {
-							sku: product.sku,
-							qty: 1,
-							quoteId: cartId,
-							// productOption: {
-							// 	'extensionAttributes': {
-							// 		'configurableItemOptions': [
-							// 			{
-							// 				'optionId': '178',
-							// 				'optionValue': 45,
-							// 				'extensionAttributes': {}
-							// 			}
-							// 		]
-							// 	}
-							// }
-						}
-					})
-							.then()
-							.catch();
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		const { cart, product } = this.props;
+		this.props.addToCartLoading(true);
+		this.props.addToCart({
+			cartId: cart.cartId,
+			item: {
+				cartItem: {
+					sku: product.sku,
+					qty: 1,
+					quoteId: cart.cartId,
+					// productOption: {
+					// 	'extensionAttributes': {
+					// 		'configurableItemOptions': [
+					// 			{
+					// 				'optionId': '178',
+					// 				'optionValue': 45,
+					// 				'extensionAttributes': {}
+					// 			}
+					// 		]
+					// 	}
+					// }
+				}
+			}
+		});
 	}
 
 	renderMedia() {
@@ -95,6 +98,19 @@ class Product extends Component {
 		}
 	}
 
+	renderAddToCartButton() {
+		const { cart } = this.props;
+		if (cart.addToCartLoading) {
+			return <Spinner />;
+		}
+		return (
+				<Button
+						onPress={this.onPressAddToCart.bind(this)}
+						title="Add to Cart"
+				/>
+		);
+	}
+
 	render() {
 		return (
 				<ScrollView style={styles.container}>
@@ -108,11 +124,7 @@ class Product extends Component {
 						{this.props.product.price}
 					</Text>
 					{this.renderDescription()}
-					<Button
-							onPress={this.onPressAddToCart.bind(this)}
-							title="Add to Cart"
-							color="#841584"
-					/>
+					{this.renderAddToCartButton()}
 				</ScrollView>
 		);
 	}
@@ -150,4 +162,9 @@ const mapStateToProps = state => {
 	return { product, media, cart };
 };
 
-export default connect(mapStateToProps, { getProductMedia, createGuestCart })(Product);
+export default connect(mapStateToProps, {
+	getProductMedia,
+	createGuestCart,
+	addToCartLoading,
+	addToCart
+})(Product);

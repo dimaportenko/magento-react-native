@@ -9,7 +9,9 @@ import {
 	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
 	MAGENTO_CURRENT_PRODUCT,
 	MAGENTO_GET_PRODUCT_MEDIA,
-	MAGENTO_CREATE_CART
+	MAGENTO_CREATE_CART,
+	MAGENTO_ADD_TO_CART_LOADING,
+	MAGENTO_ADD_TO_CART
 } from './types';
 
 export const initMagento = () => {
@@ -117,4 +119,36 @@ export const createGuestCart = () => {
 					console.log(error);
 				});
   };
+};
+
+export const addToCartLoading = isLoading => {
+	return {
+		type: MAGENTO_ADD_TO_CART_LOADING,
+		payload: isLoading
+	};
+};
+
+export const addToCart = ({ cartId, item }) => {
+	return dispatch => {
+		if (cartId) {
+			return dispatchAddToCart(dispatch, cartId, item);
+		}
+		magento.createGuestCart()
+				.then(guestCartId => {
+					return dispatchAddToCart(dispatch, guestCartId, item);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+const dispatchAddToCart = (dispatch, cartId, item) => {
+	return magento.addItemToCart(cartId, item)
+			.then(data => {
+				dispatch({ type: MAGENTO_ADD_TO_CART, payload: data });
+			})
+			.catch(error => {
+				console.log(error);
+			});
 };

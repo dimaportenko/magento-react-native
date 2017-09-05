@@ -9,5 +9,7 @@ export const MAGENTO_CURRENT_PRODUCT = 'magento_current_product';
 export const MAGENTO_GET_PRODUCT_MEDIA = 'magento_get_product_media';
 
 export const MAGENTO_CREATE_CART = 'magento_create_cart';
+export const MAGENTO_ADD_TO_CART_LOADING = 'magento_add_to_cart_loading';
+export const MAGENTO_ADD_TO_CART = 'magento_add_to_cart';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
