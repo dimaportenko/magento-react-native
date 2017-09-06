@@ -135,7 +135,9 @@ export const addToCart = ({ cartId, item }) => {
 		}
 		magento.createGuestCart()
 				.then(guestCartId => {
-					return dispatchAddToCart(dispatch, guestCartId, item);
+					const updatedItem = item;
+					updatedItem.cartItem.quoteId = guestCartId;
+					return dispatchAddToCart(dispatch, guestCartId, updatedItem);
 				})
 				.catch(error => {
 					console.log(error);

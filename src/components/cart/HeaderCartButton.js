@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, TouchableHighlight, View, Text } from 'react-native';
+import { Image, TouchableOpacity, View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 class HeaderCartButton extends Component {
@@ -10,7 +10,7 @@ class HeaderCartButton extends Component {
 
 	render() {
 		return (
-				<TouchableHighlight onPress={this.onPress.bind(this)}>
+				<TouchableOpacity onPress={this.onPress.bind(this)}>
 					<Image
 							source={require('../../../resources/icons/shopping-cart.png')}
 							style={styles.iconStyle}
@@ -19,7 +19,7 @@ class HeaderCartButton extends Component {
 								<Text style={styles.textStyle}>{this.props.itemsCount}</Text>
 						</View>
 					</Image>
-				</TouchableHighlight>
+				</TouchableOpacity>
 		);
 	}
 }
@@ -27,7 +27,7 @@ class HeaderCartButton extends Component {
 const styles = {
 	iconStyle: {
 		height: 32,
-		width: 32,
+		width: 40,
 		margin: 5,
 		paddingRight: 10,
 		marginRight: 10,
@@ -37,21 +37,18 @@ const styles = {
 		height: 15,
 		width: 15,
 		borderRadius: 15,
-		marginLeft: 18,
-
+		marginLeft: 23,
 	},
 	textStyle: {
 		color: '#fff',
 		fontSize: 12,
 		textAlign: 'center',
 		backgroundColor: 'transparent'
-		// flexWrap: 'wrap'
 	}
 };
 
 const mapStateToProps = ({ cart }) => {
 	const itemsCount = cart.items ? cart.items.length : 0;
-	// debugger;
 	return { itemsCount };
 };
 

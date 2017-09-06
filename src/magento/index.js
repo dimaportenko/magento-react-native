@@ -89,7 +89,7 @@ class Magento {
     }
 
     return new Promise((resolve, reject) => {
-      console.log({ uri, method, headers, ...params });
+      console.log({ uri, method, headers, data, ...params });
       fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => response.json())
         .then(responseData => {

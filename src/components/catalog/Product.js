@@ -125,6 +125,7 @@ class Product extends Component {
 					</Text>
 					{this.renderDescription()}
 					{this.renderAddToCartButton()}
+					<Text style={styles.errorStyle}>{this.props.cart.errorMessage}</Text>
 				</ScrollView>
 		);
 	}
@@ -150,6 +151,11 @@ const styles = {
 	descriptionStyle: {
 		padding: 10,
 	},
+	errorStyle: {
+		textAlign: 'center',
+		padding: 10,
+		color: 'red'
+	},
 };
 
 const mapStateToProps = state => {
@@ -157,7 +163,7 @@ const mapStateToProps = state => {
 	const { cart } = state;
 	console.log('Product Component');
 	console.log(product);
-	console.log(media);
+	console.log(cart);
 
 	return { product, media, cart };
 };
