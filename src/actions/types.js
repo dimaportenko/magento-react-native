@@ -13,3 +13,5 @@ export const MAGENTO_ADD_TO_CART_LOADING = 'magento_add_to_cart_loading';
 export const MAGENTO_ADD_TO_CART = 'magento_add_to_cart';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
+
+export const UI_PRODUCT_QTY_INPUT = 'ui_product_qty_input';

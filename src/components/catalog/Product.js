@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Button } from 'react-native';
+import { View, Text, Image, ScrollView, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 import {
 	getProductMedia,
 	createGuestCart,
 	addToCartLoading,
-	addToCart
+	addToCart,
+	updateProductQtyInput
 } from '../../actions';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
@@ -30,14 +31,14 @@ class Product extends Component {
 
 	onPressAddToCart() {
 		console.log('onPressAddToCart');
-		const { cart, product } = this.props;
+		const { cart, product, qty } = this.props;
 		this.props.addToCartLoading(true);
 		this.props.addToCart({
 			cartId: cart.cartId,
 			item: {
 				cartItem: {
 					sku: product.sku,
-					qty: 1,
+					qty,
 					quoteId: cart.cartId,
 					// productOption: {
 					// 	'extensionAttributes': {
@@ -124,6 +125,14 @@ class Product extends Component {
 						{this.props.product.price}
 					</Text>
 					{this.renderDescription()}
+					<Text style={styles.textStyle}>Qty</Text>
+					<TextInput
+							autoCorrect={false}
+							style={styles.textStyle}
+							keyboardType='numeric'
+							value={`${this.props.qty}`}
+							onChangeText={qty => this.props.updateProductQtyInput(qty)}
+					/>
 					{this.renderAddToCartButton()}
 					<Text style={styles.errorStyle}>{this.props.cart.errorMessage}</Text>
 				</ScrollView>
@@ -165,12 +174,18 @@ const mapStateToProps = state => {
 	console.log(product);
 	console.log(cart);
 
-	return { product, media, cart };
+	return {
+		product,
+		media,
+		cart,
+		qty: state.product.qtyInput
+	};
 };
 
 export default connect(mapStateToProps, {
 	getProductMedia,
 	createGuestCart,
 	addToCartLoading,
-	addToCart
+	addToCart,
+	updateProductQtyInput
 })(Product);

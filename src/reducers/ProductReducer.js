@@ -1,10 +1,12 @@
 import {
 	MAGENTO_CURRENT_PRODUCT,
-	MAGENTO_GET_PRODUCT_MEDIA
+	MAGENTO_GET_PRODUCT_MEDIA,
+	UI_PRODUCT_QTY_INPUT
 } from '../actions/types';
 
 const INITIAL_STATE = {
-	current: false
+	current: false,
+	qtyInput: 1
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -15,6 +17,8 @@ export default (state = INITIAL_STATE, action) => {
 			const current = { ...state.current, media: action.payload };
 			return { ...state, current };
 		}
+		case UI_PRODUCT_QTY_INPUT:
+			return { ...state, qtyInput: action.payload };
 		default:
 			return state;
 	}
