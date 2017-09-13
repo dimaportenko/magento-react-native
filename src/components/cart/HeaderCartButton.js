@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
 import { Image, TouchableOpacity, View, Text } from 'react-native';
 import { connect } from 'react-redux';
+import { goToScreen } from '../../actions';
+import { NAVIGATION_CART_PATH } from '../../navigators/types';
 
 class HeaderCartButton extends Component {
 
 	onPress() {
-
+		this.props.goToScreen({
+			routeName: NAVIGATION_CART_PATH,
+			params: { title: 'Cart' }
+		});
 	}
 
 	render() {
@@ -48,8 +53,8 @@ const styles = {
 };
 
 const mapStateToProps = ({ cart }) => {
-	const itemsCount = cart.items ? cart.items.length : 0;
+	const itemsCount = cart.cart ? cart.cart.items_qty : 0;
 	return { itemsCount };
 };
 
-export default connect(mapStateToProps)(HeaderCartButton);
+export default connect(mapStateToProps, { goToScreen })(HeaderCartButton);

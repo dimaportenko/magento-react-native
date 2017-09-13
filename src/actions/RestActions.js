@@ -11,7 +11,8 @@ import {
 	MAGENTO_GET_PRODUCT_MEDIA,
 	MAGENTO_CREATE_CART,
 	MAGENTO_ADD_TO_CART_LOADING,
-	MAGENTO_ADD_TO_CART
+	MAGENTO_ADD_TO_CART,
+	MAGENTO_GET_CART
 } from './types';
 
 export const initMagento = () => {
@@ -135,6 +136,7 @@ export const addToCart = ({ cartId, item }) => {
 		}
 		magento.createGuestCart()
 				.then(guestCartId => {
+					dispatch({ type: MAGENTO_CREATE_CART, payload: guestCartId });
 					const updatedItem = item;
 					updatedItem.cartItem.quoteId = guestCartId;
 					return dispatchAddToCart(dispatch, guestCartId, updatedItem);
@@ -149,6 +151,17 @@ const dispatchAddToCart = (dispatch, cartId, item) => {
 	return magento.addItemToCart(cartId, item)
 			.then(data => {
 				dispatch({ type: MAGENTO_ADD_TO_CART, payload: data });
+				dispatchGetGuestCart(dispatch, cartId);
+			})
+			.catch(error => {
+				console.log(error);
+			});
+};
+
+const dispatchGetGuestCart = (dispatch, cartId) => {
+	return magento.getGuestCart(cartId)
+			.then(data => {
+				dispatch({ type: MAGENTO_GET_CART, payload: data });
 			})
 			.catch(error => {
 				console.log(error);

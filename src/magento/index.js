@@ -222,6 +222,22 @@ class Magento {
 					});
 		});
 	}
+
+	getGuestCart(cartId) {
+		// GET /V1/guest-carts/{cartId}
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
 }
 
 export const magento = new Magento();
