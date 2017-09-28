@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { View, Text, Image, ScrollView, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
-import ModalSelector from 'react-native-modal-selector';
 import {
 	getProductMedia,
 	createGuestCart,
@@ -13,6 +12,7 @@ import {
 import { magento } from '../../magento';
 import { Spinner } from '../common';
 import HeaderCartButton from '../cart/HeaderCartButton';
+import Options from './Options';
 import { getProductCustomAttribute } from '../../helper/product';
 
 class Product extends Component {
@@ -112,40 +112,11 @@ class Product extends Component {
 		}
 	}
 
-	list = [
-		'test 1',
-		'test 2',
-		'test 3'
-	];
-
 	renderOptions() {
-		let index = 0;
-		const data = [
-			{ key: index++, section: true, label: 'Fruits' },
-			{ key: index++, label: 'Red Apples' },
-			{ key: index++, label: 'Cherries' },
-			{ key: index++, label: 'Cranberries' },
-			{ key: index++, label: 'Vegetable', customKey: 'Not a fruit' }
-		];
-
 		return (
-				<View style={{ flex: 1, justifyContent: 'space-around', padding: 50 }} >
-
-					<ModalSelector
-							data={data}
-							initValue="Select something yummy!"
-							onChange={(option) => { this.setState({ textInputValue: option.label }); }}
-					>
-
-						<TextInput
-								style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, height: 30 }}
-								editable={false}
-								placeholder="Select something yummy!"
-								value={this.props.textInputValue}
-						/>
-
-					</ModalSelector>
-				</View>
+				<Options
+					label="Select Size"
+				/>
 		);
 	}
 
@@ -234,8 +205,7 @@ const mapStateToProps = state => {
 		product,
 		media,
 		cart,
-		qty: state.product.qtyInput,
-		textInputValue: ''
+		qty: state.product.qtyInput
 	};
 };
 
