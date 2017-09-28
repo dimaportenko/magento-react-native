@@ -1,7 +1,8 @@
 import {
 	MAGENTO_CURRENT_PRODUCT,
 	MAGENTO_GET_PRODUCT_MEDIA,
-	UI_PRODUCT_QTY_INPUT
+	UI_PRODUCT_QTY_INPUT,
+	NAVIGATION_GO_TO_SCREEN
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -19,6 +20,8 @@ export default (state = INITIAL_STATE, action) => {
 		}
 		case UI_PRODUCT_QTY_INPUT:
 			return { ...state, qtyInput: action.payload };
+		case NAVIGATION_GO_TO_SCREEN:
+			return { ...state, qtyInput: INITIAL_STATE.qtyInput };
 		default:
 			return state;
 	}

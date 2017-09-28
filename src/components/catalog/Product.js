@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, ScrollView, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
+import ModalSelector from 'react-native-modal-selector';
 import {
 	getProductMedia,
 	createGuestCart,
@@ -24,9 +25,21 @@ class Product extends Component {
 	componentWillMount() {
 		const { product, media } = this.props;
 
+		magento.getConfigurableProductOptions(product.sku)
+				.then(data => {
+					console.log('product options');
+					console.log(data);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+
 		if (!media) {
 			this.props.getProductMedia({ sku: product.sku });
 		}
+	}
+
+	componentDidMount() {
 	}
 
 	onPressAddToCart() {
@@ -99,6 +112,43 @@ class Product extends Component {
 		}
 	}
 
+	list = [
+		'test 1',
+		'test 2',
+		'test 3'
+	];
+
+	renderOptions() {
+		let index = 0;
+		const data = [
+			{ key: index++, section: true, label: 'Fruits' },
+			{ key: index++, label: 'Red Apples' },
+			{ key: index++, label: 'Cherries' },
+			{ key: index++, label: 'Cranberries' },
+			{ key: index++, label: 'Vegetable', customKey: 'Not a fruit' }
+		];
+
+		return (
+				<View style={{ flex: 1, justifyContent: 'space-around', padding: 50 }} >
+
+					<ModalSelector
+							data={data}
+							initValue="Select something yummy!"
+							onChange={(option) => { this.setState({ textInputValue: option.label }); }}
+					>
+
+						<TextInput
+								style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, height: 30 }}
+								editable={false}
+								placeholder="Select something yummy!"
+								value={this.props.textInputValue}
+						/>
+
+					</ModalSelector>
+				</View>
+		);
+	}
+
 	renderAddToCartButton() {
 		const { cart } = this.props;
 		if (cart.addToCartLoading) {
@@ -133,6 +183,7 @@ class Product extends Component {
 							value={`${this.props.qty}`}
 							onChangeText={qty => this.props.updateProductQtyInput(qty)}
 					/>
+					{this.renderOptions()}
 					{this.renderAddToCartButton()}
 					<Text style={styles.errorStyle}>{this.props.cart.errorMessage}</Text>
 				</ScrollView>
@@ -165,6 +216,11 @@ const styles = {
 		padding: 10,
 		color: 'red'
 	},
+	dropDownContainer: {
+		flex: 1,
+		backgroundColor: '#333'
+	}
+
 };
 
 const mapStateToProps = state => {
@@ -178,7 +234,8 @@ const mapStateToProps = state => {
 		product,
 		media,
 		cart,
-		qty: state.product.qtyInput
+		qty: state.product.qtyInput,
+		textInputValue: ''
 	};
 };
 
