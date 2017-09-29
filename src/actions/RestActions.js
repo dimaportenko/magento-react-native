@@ -59,6 +59,20 @@ export const getProductsForCategory = ({ id, offset }) => {
   };
 };
 
+// TODO: add dispatch data
+export const getConfigurableProductOptions = (sku) => {
+	return (dispatch) => {
+		magento.getConfigurableProductOptions(sku)
+				.then(data => {
+					console.log('product options');
+					console.log(data);
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
 const updateConfigurableProductsPrices = (products, dispatch) => {
   products.forEach(product => {
     if (product.type_id === 'configurable') {

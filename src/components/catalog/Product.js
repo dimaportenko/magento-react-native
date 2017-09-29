@@ -7,6 +7,7 @@ import {
 	createGuestCart,
 	addToCartLoading,
 	addToCart,
+	getConfigurableProductOptions,
 	updateProductQtyInput
 } from '../../actions';
 import { magento } from '../../magento';
@@ -25,14 +26,15 @@ class Product extends Component {
 	componentWillMount() {
 		const { product, media } = this.props;
 
-		magento.getConfigurableProductOptions(product.sku)
-				.then(data => {
-					console.log('product options');
-					console.log(data);
-				})
-				.catch(error => {
-					console.log(error);
-				});
+		this.props.getConfigurableChildren(product.sku);
+		// magento.getConfigurableProductOptions(product.sku)
+		// 		.then(data => {
+		// 			console.log('product options');
+		// 			console.log(data);
+		// 		})
+		// 		.catch(error => {
+		// 			console.log(error);
+		// 		});
 
 		if (!media) {
 			this.props.getProductMedia({ sku: product.sku });
@@ -214,5 +216,6 @@ export default connect(mapStateToProps, {
 	createGuestCart,
 	addToCartLoading,
 	addToCart,
+	getConfigurableProductOptions,
 	updateProductQtyInput
 })(Product);
