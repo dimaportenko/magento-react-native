@@ -26,7 +26,7 @@ class Product extends Component {
 	componentWillMount() {
 		const { product, media } = this.props;
 
-		this.props.getConfigurableChildren(product.sku);
+		this.props.getConfigurableProductOptions(product.sku);
 		// magento.getConfigurableProductOptions(product.sku)
 		// 		.then(data => {
 		// 			console.log('product options');
@@ -115,11 +115,24 @@ class Product extends Component {
 	}
 
 	renderOptions() {
-		return (
-				<Options
-					label="Select Size"
-				/>
-		);
+		const { options } = this.props;
+		if (options) {
+			return options.map(option => {
+					const data = option.values.map(value => {
+							return {
+								label: value.value_index,
+								key: value.value_index
+							};
+					});
+					return (
+						<Options
+							key={option.id}
+							label={option.label}
+							data={data}
+						/>
+					);
+			});
+		}
 	}
 
 	renderAddToCartButton() {
@@ -197,7 +210,7 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-	const { product, media } = state.product.current;
+	const { product, media, options } = state.product.current;
 	const { cart } = state;
 	console.log('Product Component');
 	console.log(product);
@@ -207,6 +220,7 @@ const mapStateToProps = state => {
 		product,
 		media,
 		cart,
+		options,
 		qty: state.product.qtyInput
 	};
 };

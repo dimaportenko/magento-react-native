@@ -1,6 +1,7 @@
 import {
 	MAGENTO_CURRENT_PRODUCT,
 	MAGENTO_GET_PRODUCT_MEDIA,
+	MAGENTO_GET_CONF_OPTIONS,
 	UI_PRODUCT_QTY_INPUT,
 	NAVIGATION_GO_TO_SCREEN
 } from '../actions/types';
@@ -16,6 +17,10 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, current: action.payload };
 		case MAGENTO_GET_PRODUCT_MEDIA: {
 			const current = { ...state.current, media: action.payload };
+			return { ...state, current };
+		}
+		case MAGENTO_GET_CONF_OPTIONS: {
+			const current = { ...state.current, options: action.payload };
 			return { ...state, current };
 		}
 		case UI_PRODUCT_QTY_INPUT:

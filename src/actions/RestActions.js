@@ -6,6 +6,7 @@ import {
 	MAGENTO_CURRENT_CATEGORY,
 	MAGENTO_GET_CATEGORY_PRODUCTS,
 	MAGENTO_UPDATE_CONF_PRODUCT,
+	MAGENTO_GET_CONF_OPTIONS,
 	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
 	MAGENTO_CURRENT_PRODUCT,
 	MAGENTO_GET_PRODUCT_MEDIA,
@@ -66,6 +67,7 @@ export const getConfigurableProductOptions = (sku) => {
 				.then(data => {
 					console.log('product options');
 					console.log(data);
+					dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: data });
 				})
 				.catch(error => {
 					console.log(error);

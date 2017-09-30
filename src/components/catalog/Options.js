@@ -13,21 +13,16 @@ class Options extends Component {
 	}
 
 	render() {
-		let index = 0;
-		const data = [
-			{ key: index++, section: true, label: 'Fruits' },
-			{ key: index++, label: 'Red Apples' },
-			{ key: index++, label: 'Cherries' },
-			{ key: index++, label: 'Cranberries' },
-			{ key: index++, label: 'Vegetable', customKey: 'Not a fruit' }
-		];
+		const { data, label } = this.props;
 
 		return (
 				<View style={styles.containerStyle} >
 					<ModalSelector
 							data={data}
-							initValue={this.props.label}
-							onChange={(option) => { this.setState({ textInputValue: option.label }); }}
+							initValue={label}
+							onChange={(option) => {
+								this.setState({ ...this.state, textInputValue: `${label} : ${option.label}` });
+							}}
 					>
 						<TextInput
 								style={styles.inputStyle}
@@ -45,7 +40,9 @@ const styles = {
 	containerStyle: {
 		flex: 1,
 		justifyContent: 'space-around',
-		padding: 20
+		padding: 20,
+		paddingBottom: 5,
+		paddingTop: 0
 	},
 	selectorStyle: {
 
