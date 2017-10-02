@@ -148,7 +148,7 @@ class Product extends Component {
 						<Options
 							key={option.id}
 							label={option.label}
-							attribute={option.id}
+							attribute={option.attribute_id}
 							value={option.id}
 							data={data}
 							onChange={this.optionSelect}
