@@ -27,14 +27,6 @@ class Product extends Component {
 		const { product, media } = this.props;
 
 		this.props.getConfigurableProductOptions(product.sku);
-		// magento.getConfigurableProductOptions(product.sku)
-		// 		.then(data => {
-		// 			console.log('product options');
-		// 			console.log(data);
-		// 		})
-		// 		.catch(error => {
-		// 			console.log(error);
-		// 		});
 
 		if (!media) {
 			this.props.getProductMedia({ sku: product.sku });
@@ -47,6 +39,27 @@ class Product extends Component {
 	onPressAddToCart() {
 		console.log('onPressAddToCart');
 		const { cart, product, qty } = this.props;
+		const options = [];
+		Object.keys(selectedOptions).forEach(key => {
+			console.log(selectedOptions[key]);
+			options.push({
+				optionId: key,
+				optionValue: selectedOptions[key],
+				extensionAttributes: {}
+			});
+		});
+
+		let productOptions = {};
+		if (options.length) {
+			productOptions = {
+				productOption: {
+					extensionAttributes: {
+						configurableItemOptions: options
+					}
+				}
+			};
+		}
+
 		this.props.addToCartLoading(true);
 		this.props.addToCart({
 			cartId: cart.cartId,
@@ -55,17 +68,7 @@ class Product extends Component {
 					sku: product.sku,
 					qty,
 					quoteId: cart.cartId,
-					// productOption: {
-					// 	'extensionAttributes': {
-					// 		'configurableItemOptions': [
-					// 			{
-					// 				'optionId': '178',
-					// 				'optionValue': 45,
-					// 				'extensionAttributes': {}
-					// 			}
-					// 		]
-					// 	}
-					// }
+					...productOptions
 				}
 			}
 		});
@@ -114,6 +117,10 @@ class Product extends Component {
 		}
 	}
 
+	optionSelect(attributeId, optionValue) {
+		selectedOptions[attributeId] = optionValue;
+	}
+
 	renderOptions() {
 		const { options, attributes } = this.props;
 		// debugger;
@@ -124,22 +131,27 @@ class Product extends Component {
 
 						if (attributes && attributes[option.attribute_id]) {
 							const findedValue = attributes[option.attribute_id].find(optionData => {
-									return optionData.value == value.value_index;
+									return Number(optionData.value) === Number(value.value_index);
 							});
 							if (findedValue) {
 								optionLabel = findedValue.label;
 							}
 						}
-							return {
-								label: optionLabel,
-								key: value.value_index
-							};
+
+						return {
+							label: optionLabel,
+							key: value.value_index
+						};
 					});
+
 					return (
 						<Options
 							key={option.id}
 							label={option.label}
+							attribute={option.id}
+							value={option.id}
 							data={data}
+							onChange={this.optionSelect}
 						/>
 					);
 			});
@@ -187,6 +199,8 @@ class Product extends Component {
 		);
 	}
 }
+
+const selectedOptions = {};
 
 const styles = {
 	container: {

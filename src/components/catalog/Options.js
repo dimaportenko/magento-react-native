@@ -12,6 +12,19 @@ class Options extends Component {
 		};
 	}
 
+	onChange(option) {
+		const { label, onChange, value, attribute } = this.props;
+		// debugger;
+		this.setState({
+			...this.state,
+			textInputValue: `${label} : ${option.label}`
+		});
+
+		if (onChange) {
+			onChange(attribute, option.key);
+		}
+	}
+
 	render() {
 		const { data, label } = this.props;
 
@@ -20,9 +33,7 @@ class Options extends Component {
 					<ModalSelector
 							data={data}
 							initValue={label}
-							onChange={(option) => {
-								this.setState({ ...this.state, textInputValue: `${label} : ${option.label}` });
-							}}
+							onChange={option => this.onChange(option)}
 					>
 						<TextInput
 								style={styles.inputStyle}
