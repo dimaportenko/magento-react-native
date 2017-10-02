@@ -8,6 +8,7 @@ import {
 	MAGENTO_UPDATE_CONF_PRODUCT,
 	MAGENTO_GET_CONF_OPTIONS,
 	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
+	MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
 	MAGENTO_CURRENT_PRODUCT,
 	MAGENTO_GET_PRODUCT_MEDIA,
 	MAGENTO_CREATE_CART,
@@ -68,6 +69,23 @@ export const getConfigurableProductOptions = (sku) => {
 					console.log('product options');
 					console.log(data);
 					dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: data });
+					data.forEach(option => {
+						magento.getProductAttributesOptions(option.attribute_id)
+								.then(attributeOptions => {
+									console.log('option attribute');
+									console.log(attributeOptions);
+									dispatch({
+										type: MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
+										payload: {
+											attributeId: option.attribute_id,
+											options: attributeOptions
+										}
+									});
+								})
+								.catch(error => {
+									console.log(error);
+								});
+					});
 				})
 				.catch(error => {
 					console.log(error);

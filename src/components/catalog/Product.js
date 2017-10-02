@@ -115,12 +115,23 @@ class Product extends Component {
 	}
 
 	renderOptions() {
-		const { options } = this.props;
+		const { options, attributes } = this.props;
+		// debugger;
 		if (options) {
 			return options.map(option => {
 					const data = option.values.map(value => {
+						let optionLabel = value.value_index;
+
+						if (attributes && attributes[option.attribute_id]) {
+							const findedValue = attributes[option.attribute_id].find(optionData => {
+									return optionData.value == value.value_index;
+							});
+							if (findedValue) {
+								optionLabel = findedValue.label;
+							}
+						}
 							return {
-								label: value.value_index,
+								label: optionLabel,
 								key: value.value_index
 							};
 					});
@@ -211,9 +222,10 @@ const styles = {
 
 const mapStateToProps = state => {
 	const { product, media, options } = state.product.current;
+	const { attributes } = state.product;
 	const { cart } = state;
 	console.log('Product Component');
-	console.log(product);
+	console.log(state.product);
 	console.log(cart);
 
 	return {
@@ -221,6 +233,7 @@ const mapStateToProps = state => {
 		media,
 		cart,
 		options,
+		attributes,
 		qty: state.product.qtyInput
 	};
 };

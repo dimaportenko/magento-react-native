@@ -6,6 +6,7 @@ export const MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS = 'magento_load_more_category_p
 
 export const MAGENTO_UPDATE_CONF_PRODUCT = 'magento_update_conf_product';
 export const MAGENTO_GET_CONF_OPTIONS = 'magento_get_conf_options';
+export const MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS = 'magento_product_attribute_options';
 export const MAGENTO_CURRENT_PRODUCT = 'magento_current_product';
 export const MAGENTO_GET_PRODUCT_MEDIA = 'magento_get_product_media';
 
