@@ -74,6 +74,10 @@ class Product extends Component {
 		});
 	}
 
+	optionSelect(attributeId, optionValue) {
+		selectedOptions[attributeId] = optionValue;
+	}
+
 	renderMedia() {
 		const { media } = this.props;
 
@@ -117,14 +121,10 @@ class Product extends Component {
 		}
 	}
 
-	optionSelect(attributeId, optionValue) {
-		selectedOptions[attributeId] = optionValue;
-	}
-
 	renderOptions() {
 		const { options, attributes } = this.props;
 		// debugger;
-		if (options) {
+		if (Array.isArray(options)) {
 			return options.map(option => {
 					const data = option.values.map(value => {
 						let optionLabel = value.value_index;
@@ -231,7 +231,6 @@ const styles = {
 		flex: 1,
 		backgroundColor: '#333'
 	}
-
 };
 
 const mapStateToProps = state => {

@@ -13,8 +13,8 @@ class Options extends Component {
 	}
 
 	onChange(option) {
-		const { label, onChange, value, attribute } = this.props;
-		// debugger;
+		const { label, onChange, attribute } = this.props;
+
 		this.setState({
 			...this.state,
 			textInputValue: `${label} : ${option.label}`
