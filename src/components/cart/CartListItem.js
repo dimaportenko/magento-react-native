@@ -1,10 +1,15 @@
 import React, { Component } from 'react';
 import { View, Text, Image } from 'react-native';
+import { connect } from 'react-redux';
 import { magento } from '../../magento';
+import { getProductThumbnailFromAttribute } from '../../helper/product';
 
 class CartListItem extends Component {
 	image() {
-		// return getProductImageFromAttribute(this.props.product);
+		const { products, item } = this.props;
+		if (products[item.sku]) {
+			return getProductThumbnailFromAttribute(products[item.sku]);
+		}
 	}
 
 	render() {
@@ -56,4 +61,13 @@ const styles = {
 	}
 };
 
-export default CartListItem;
+const mapStateToProps = (state) => {
+	const { products } = state.cart;
+
+	console.log('cart products');
+	console.log(products);
+
+	return { products };
+};
+
+export default connect(mapStateToProps)(CartListItem);

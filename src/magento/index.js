@@ -142,6 +142,21 @@ class Magento {
     });
   }
 
+  getProductBySku(sku) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/products/${sku}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
   getConfigurableChildren(sku) {
 		return new Promise((resolve, reject) => {
 			const path = `/V1/configurable-products/${sku}/children`;

@@ -14,7 +14,8 @@ import {
 	MAGENTO_CREATE_CART,
 	MAGENTO_ADD_TO_CART_LOADING,
 	MAGENTO_ADD_TO_CART,
-	MAGENTO_GET_CART
+	MAGENTO_GET_CART,
+	MAGENTO_CART_ITEM_PRODUCT
 } from './types';
 
 export const initMagento = () => {
@@ -61,7 +62,6 @@ export const getProductsForCategory = ({ id, offset }) => {
   };
 };
 
-// TODO: add dispatch data
 export const getConfigurableProductOptions = (sku) => {
 	return (dispatch) => {
 		magento.getConfigurableProductOptions(sku)
@@ -200,4 +200,16 @@ const dispatchGetGuestCart = (dispatch, cartId) => {
 			.catch(error => {
 				console.log(error);
 			});
+};
+
+export const cartItemProduct = sku => {
+	return dispatch => {
+		magento.getProductBySku(sku)
+				.then(data => {
+					dispatch({ type: MAGENTO_CART_ITEM_PRODUCT, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
 };

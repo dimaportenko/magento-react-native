@@ -2,12 +2,26 @@ import React, { Component } from 'react';
 import { Text, View, Button } from 'react-native';
 import { connect } from 'react-redux';
 import CartList from './CartList';
+import { cartItemProduct } from '../../actions';
 
 class Cart extends Component {
 	static navigationOptions = {
 		title: 'Cart',
 		headerBackTitle: ' '
 	};
+
+	componentWillMount() {
+		const { items } = this.props.cart;
+		const { products } = this.props;
+
+		items.forEach(item => {
+			if (!item.thumbnail) {
+				if (!products[item.sku]) {
+					this.props.cartItemProduct(item.sku);
+				}
+			}
+		});
+	}
 
 	onPressAddToCheckout() {
 
@@ -18,7 +32,7 @@ class Cart extends Component {
 
 		let sum = 0;
 		items.forEach(item => {
-				sum += item.price;
+				sum += item.price * item.qty;
 		});
 
 		return sum.toFixed(2);
@@ -56,12 +70,12 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
-	const { cart } = state.cart;
+	const { cart, products } = state.cart;
 
 	console.log('cart');
 	console.log(cart);
 
-	return { cart };
+	return { cart, products };
 };
 
-export default connect(mapStateToProps)(Cart);
+export default connect(mapStateToProps, { cartItemProduct })(Cart);
