@@ -5,11 +5,15 @@ import { addNavigationHelpers, StackNavigator } from 'react-navigation';
 import ProductList from '../components/catalog/ProductList';
 import CategoryTree from '../components/CategoryTree';
 import Product from '../components/catalog/Product';
+import Cart from '../components/cart/Cart';
+import Checkout from '../components/checkout/Checkout';
 
 export const AppNavigator = StackNavigator({
 	CategoryTree: { screen: CategoryTree },
 	Category: { screen: ProductList },
-	Product: { screen: Product }
+	Product: { screen: Product },
+	Cart: { screen: Cart },
+	Checkout: { screen: Checkout }
 });
 
 const AppWithNavigationState = ({ dispatch, nav }) => (

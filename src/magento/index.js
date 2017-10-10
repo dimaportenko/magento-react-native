@@ -89,7 +89,7 @@ class Magento {
     }
 
     return new Promise((resolve, reject) => {
-      console.log({ uri, method, headers, ...params });
+      console.log({ uri, method, headers, data, ...params });
       fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => response.json())
         .then(responseData => {
@@ -142,9 +142,54 @@ class Magento {
     });
   }
 
+  getProductBySku(sku) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/products/${sku}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
   getConfigurableChildren(sku) {
 		return new Promise((resolve, reject) => {
 			const path = `/V1/configurable-products/${sku}/children`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getConfigurableProductOptions(sku) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/configurable-products/${sku}/options/all`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getProductAttributesOptions(attributeId) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/products/attributes/${attributeId}/options`;
 
 			this.get(path)
 					.then(data => {
@@ -191,6 +236,53 @@ class Magento {
 					});
 		});
   }
+
+  createGuestCart() {
+		return new Promise((resolve, reject) => {
+			const path = '/V1/guest-carts';
+
+			this.post(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	addItemToCart(cartId, item) {
+		// POST /V1/guest-carts/{cartId}/items
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/items`;
+
+			this.post(path, item)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getGuestCart(cartId) {
+		// GET /V1/guest-carts/{cartId}
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
 }
 
 export const magento = new Magento();

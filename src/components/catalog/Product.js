@@ -1,24 +1,81 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Button } from 'react-native';
+import { View, Text, Image, ScrollView, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
-import { getProductMedia } from '../../actions';
+import {
+	getProductMedia,
+	createGuestCart,
+	addToCartLoading,
+	addToCart,
+	getConfigurableProductOptions,
+	updateProductQtyInput
+} from '../../actions';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
+import HeaderCartButton from '../cart/HeaderCartButton';
+import Options from './Options';
 import { getProductCustomAttribute } from '../../helper/product';
 
 class Product extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.state.params.title,
-		headerBackTitle: ' '
+		headerBackTitle: ' ',
+		headerRight: <HeaderCartButton />
 	});
 
 	componentWillMount() {
 		const { product, media } = this.props;
 
+		this.props.getConfigurableProductOptions(product.sku);
+
 		if (!media) {
 			this.props.getProductMedia({ sku: product.sku });
 		}
+	}
+
+	componentDidMount() {
+	}
+
+	onPressAddToCart() {
+		console.log('onPressAddToCart');
+		const { cart, product, qty } = this.props;
+		const options = [];
+		Object.keys(selectedOptions).forEach(key => {
+			console.log(selectedOptions[key]);
+			options.push({
+				optionId: key,
+				optionValue: selectedOptions[key],
+				extensionAttributes: {}
+			});
+		});
+
+		let productOptions = {};
+		if (options.length) {
+			productOptions = {
+				productOption: {
+					extensionAttributes: {
+						configurableItemOptions: options
+					}
+				}
+			};
+		}
+
+		this.props.addToCartLoading(true);
+		this.props.addToCart({
+			cartId: cart.cartId,
+			item: {
+				cartItem: {
+					sku: product.sku,
+					qty,
+					quoteId: cart.cartId,
+					...productOptions
+				}
+			}
+		});
+	}
+
+	optionSelect(attributeId, optionValue) {
+		selectedOptions[attributeId] = optionValue;
 	}
 
 	renderMedia() {
@@ -64,8 +121,54 @@ class Product extends Component {
 		}
 	}
 
-	onPressAddToCart() {
-		console.log('onPressAddToCart');
+	renderOptions() {
+		const { options, attributes } = this.props;
+		// debugger;
+		if (Array.isArray(options)) {
+			return options.map(option => {
+					const data = option.values.map(value => {
+						let optionLabel = value.value_index;
+
+						if (attributes && attributes[option.attribute_id]) {
+							const findedValue = attributes[option.attribute_id].find(optionData => {
+									return Number(optionData.value) === Number(value.value_index);
+							});
+							if (findedValue) {
+								optionLabel = findedValue.label;
+							}
+						}
+
+						return {
+							label: optionLabel,
+							key: value.value_index
+						};
+					});
+
+					return (
+						<Options
+							key={option.id}
+							label={option.label}
+							attribute={option.attribute_id}
+							value={option.id}
+							data={data}
+							onChange={this.optionSelect}
+						/>
+					);
+			});
+		}
+	}
+
+	renderAddToCartButton() {
+		const { cart } = this.props;
+		if (cart.addToCartLoading) {
+			return <Spinner />;
+		}
+		return (
+				<Button
+						onPress={this.onPressAddToCart.bind(this)}
+						title="Add to Cart"
+				/>
+		);
 	}
 
 	render() {
@@ -81,15 +184,23 @@ class Product extends Component {
 						{this.props.product.price}
 					</Text>
 					{this.renderDescription()}
-					<Button
-							onPress={this.onPressAddToCart.bind(this)}
-							title="Add to Cart"
-							color="#841584"
+					<Text style={styles.textStyle}>Qty</Text>
+					<TextInput
+							autoCorrect={false}
+							style={styles.textStyle}
+							keyboardType='numeric'
+							value={`${this.props.qty}`}
+							onChangeText={qty => this.props.updateProductQtyInput(qty)}
 					/>
+					{this.renderOptions()}
+					{this.renderAddToCartButton()}
+					<Text style={styles.errorStyle}>{this.props.cart.errorMessage}</Text>
 				</ScrollView>
 		);
 	}
 }
+
+const selectedOptions = {};
 
 const styles = {
 	container: {
@@ -111,15 +222,40 @@ const styles = {
 	descriptionStyle: {
 		padding: 10,
 	},
+	errorStyle: {
+		textAlign: 'center',
+		padding: 10,
+		color: 'red'
+	},
+	dropDownContainer: {
+		flex: 1,
+		backgroundColor: '#333'
+	}
 };
 
 const mapStateToProps = state => {
-	const { product, media } = state.product.current;
+	const { product, media, options } = state.product.current;
+	const { attributes } = state.product;
+	const { cart } = state;
 	console.log('Product Component');
-	console.log(product);
-	console.log(media);
+	console.log(state.product);
+	console.log(cart);
 
-	return { product, media };
+	return {
+		product,
+		media,
+		cart,
+		options,
+		attributes,
+		qty: state.product.qtyInput
+	};
 };
 
-export default connect(mapStateToProps, { getProductMedia })(Product);
+export default connect(mapStateToProps, {
+	getProductMedia,
+	createGuestCart,
+	addToCartLoading,
+	addToCart,
+	getConfigurableProductOptions,
+	updateProductQtyInput
+})(Product);

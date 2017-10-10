@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { goToScreen, setCurrentProduct } from '../../actions';
 import { NAVIGATION_PRODUCT_PATH } from '../../navigators/types';
-import { getProductImageFromAttribute } from '../../helper/product';
+import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { magento } from '../../magento';
 
 class ProductListItem extends Component {
@@ -18,7 +18,7 @@ class ProductListItem extends Component {
 	}
 
 	image() {
-		return getProductImageFromAttribute(this.props.product);
+		return getProductThumbnailFromAttribute(this.props.product);
 	}
 
 	render() {
