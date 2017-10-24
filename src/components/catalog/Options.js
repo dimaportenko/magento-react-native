@@ -26,11 +26,12 @@ class Options extends Component {
 	}
 
 	render() {
-		const { data, label } = this.props;
+		const { data, label, disabled } = this.props;
 
 		return (
 				<View style={styles.containerStyle} >
 					<ModalSelector
+							disabled={disabled}
 							data={data}
 							initValue={label}
 							onChange={option => this.onChange(option)}

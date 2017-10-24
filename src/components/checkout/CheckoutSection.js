@@ -36,9 +36,12 @@ const styles = {
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
+	leftText: {
+		fontSize: 18
+	},
 	textStyle: {
 		color: '#fff',
-		fontSize: 12,
+		fontSize: 20,
 		textAlign: 'center',
 		backgroundColor: 'transparent'
 	}

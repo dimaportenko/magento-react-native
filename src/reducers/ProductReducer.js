@@ -28,7 +28,10 @@ export default (state = INITIAL_STATE, action) => {
 		case MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS: {
 			const attributes = {
 				...state.attributes,
-				[action.payload.attributeId]: action.payload.options
+				[action.payload.attributeId]: {
+					options: action.payload.options,
+					attributeCode: action.payload.attributeCode
+				}
 			};
 			return { ...state, attributes };
 		}

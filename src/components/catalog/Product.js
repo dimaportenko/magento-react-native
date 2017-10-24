@@ -122,15 +122,27 @@ class Product extends Component {
 	}
 
 	renderOptions() {
-		const { options, attributes } = this.props;
+		const { options, attributes, product } = this.props;
 		// debugger;
+		console.log('Render Options');
+		console.log(attributes);
+		console.log(options);
+		console.log(this.props.product.children);
+
 		if (Array.isArray(options)) {
+			const prevOptions = [];
+			let first = true;
 			return options.map(option => {
-					const data = option.values.map(value => {
+					// let disabled = false;
+					if (!attributes[option.attribute_id]) {
+						return <View key={option.id} />;
+					}
+
+					let data = option.values.map(value => {
 						let optionLabel = value.value_index;
 
 						if (attributes && attributes[option.attribute_id]) {
-							const findedValue = attributes[option.attribute_id].find(optionData => {
+							const findedValue = attributes[option.attribute_id].options.find(optionData => {
 									return Number(optionData.value) === Number(value.value_index);
 							});
 							if (findedValue) {
@@ -138,14 +150,44 @@ class Product extends Component {
 							}
 						}
 
-						return {
-							label: optionLabel,
-							key: value.value_index
-						};
+						const { attributeCode } = attributes[option.attribute_id];
+						prevOptions.push({
+							attributeCode,
+							value: value.value_index
+						});
+						if (first) {
+							// debugger;
+							return {
+								label: optionLabel,
+								key: value.value_index
+							};
+						}
+
+						const match = product.children.find(child => {
+							let found = true;
+							prevOptions.forEach(prevOption => {
+								const childOption = getProductCustomAttribute(child, prevOption.attributeCode);
+								if (Number(childOption.value) !== Number(prevOption.value)) {
+									found = false;
+								}
+							});
+							return found;
+						});
+
+						if (match) {
+							return {
+								label: optionLabel,
+								key: value.value_index
+							};
+						}
+						return false;
 					});
+					data = data.filter(object => object !== false);
+					first = false;
 
 					return (
 						<Options
+							disabled={data.length === 0}
 							key={option.id}
 							label={option.label}
 							attribute={option.attribute_id}

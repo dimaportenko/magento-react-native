@@ -70,7 +70,7 @@ export const getConfigurableProductOptions = (sku) => {
 					console.log(data);
 					dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: data });
 					data.forEach(option => {
-						magento.getProductAttributesOptions(option.attribute_id)
+						magento.getAttributeByCode(option.attribute_id)
 								.then(attributeOptions => {
 									console.log('option attribute');
 									console.log(attributeOptions);
@@ -78,7 +78,8 @@ export const getConfigurableProductOptions = (sku) => {
 										type: MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
 										payload: {
 											attributeId: option.attribute_id,
-											options: attributeOptions
+											options: attributeOptions.options,
+											attributeCode: attributeOptions.attribute_code
 										}
 									});
 								})

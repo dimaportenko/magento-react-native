@@ -187,9 +187,39 @@ class Magento {
 		});
 	}
 
+	getConfigurableProductOptionById(sku, id) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/configurable-products/${sku}/options/${id}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
 	getProductAttributesOptions(attributeId) {
 		return new Promise((resolve, reject) => {
 			const path = `/V1/products/attributes/${attributeId}/options`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getAttributeByCode(attributeCode) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/products/attributes/${attributeCode}`;
 
 			this.get(path)
 					.then(data => {
