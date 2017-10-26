@@ -8,7 +8,8 @@ import {
 	addToCartLoading,
 	addToCart,
 	getConfigurableProductOptions,
-	updateProductQtyInput
+	updateProductQtyInput,
+	uiProductUpdate
 } from '../../actions';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
@@ -38,7 +39,7 @@ class Product extends Component {
 
 	onPressAddToCart() {
 		console.log('onPressAddToCart');
-		const { cart, product, qty } = this.props;
+		const { cart, product, qty, selectedOptions } = this.props;
 		const options = [];
 		Object.keys(selectedOptions).forEach(key => {
 			console.log(selectedOptions[key]);
@@ -74,8 +75,11 @@ class Product extends Component {
 		});
 	}
 
+	// TODO: refactor action name
 	optionSelect(attributeId, optionValue) {
-		selectedOptions[attributeId] = optionValue;
+		const { selectedOptions } = this.props;
+		// this.props.selectedOptions[attributeId] = optionValue;
+		this.props.uiProductUpdateOptions({ ...selectedOptions, [attributeId]: optionValue });
 	}
 
 	renderMedia() {
@@ -122,7 +126,7 @@ class Product extends Component {
 	}
 
 	renderOptions() {
-		const { options, attributes, product } = this.props;
+		const { options, attributes, product, selectedOptions } = this.props;
 		// debugger;
 		console.log('Render Options');
 		console.log(attributes);
@@ -150,11 +154,6 @@ class Product extends Component {
 							}
 						}
 
-						const { attributeCode } = attributes[option.attribute_id];
-						prevOptions.push({
-							attributeCode,
-							value: value.value_index
-						});
 						if (first) {
 							// debugger;
 							return {
@@ -164,14 +163,22 @@ class Product extends Component {
 						}
 
 						const match = product.children.find(child => {
-							let found = true;
-							prevOptions.forEach(prevOption => {
-								const childOption = getProductCustomAttribute(child, prevOption.attributeCode);
-								if (Number(childOption.value) !== Number(prevOption.value)) {
-									found = false;
+							let found = 0;
+							prevOptions.every(prevOption => {
+								// debugger;
+								const { attributeCode } = attributes[prevOption.attribute_id];
+								const currentAttributeCode = attributes[option.attribute_id].attributeCode;
+								const childOption = getProductCustomAttribute(child, attributeCode);
+								const currentOption = getProductCustomAttribute(child, currentAttributeCode);
+								const selectedValue = selectedOptions[prevOption.attribute_id];
+								if (Number(childOption.value) === Number(selectedValue) &&
+										Number(currentOption.value) === Number(value.value_index)) {
+									found++;
+									return false;
 								}
+								return true;
 							});
-							return found;
+							return found === prevOptions.length;
 						});
 
 						if (match) {
@@ -184,8 +191,9 @@ class Product extends Component {
 					});
 					data = data.filter(object => object !== false);
 					first = false;
+					prevOptions.push(option);
 
-					return (
+				return (
 						<Options
 							disabled={data.length === 0}
 							key={option.id}
@@ -193,7 +201,7 @@ class Product extends Component {
 							attribute={option.attribute_id}
 							value={option.id}
 							data={data}
-							onChange={this.optionSelect}
+							onChange={this.optionSelect.bind(this)}
 						/>
 					);
 			});
@@ -214,6 +222,7 @@ class Product extends Component {
 	}
 
 	render() {
+		console.log('Product screen render');
 		return (
 				<ScrollView style={styles.container}>
 					<View style={styles.imageContainer}>
@@ -241,8 +250,6 @@ class Product extends Component {
 		);
 	}
 }
-
-const selectedOptions = {};
 
 const styles = {
 	container: {
@@ -277,7 +284,7 @@ const styles = {
 
 const mapStateToProps = state => {
 	const { product, media, options } = state.product.current;
-	const { attributes } = state.product;
+	const { attributes, selectedOptions } = state.product;
 	const { cart } = state;
 	console.log('Product Component');
 	console.log(state.product);
@@ -289,6 +296,7 @@ const mapStateToProps = state => {
 		cart,
 		options,
 		attributes,
+		selectedOptions,
 		qty: state.product.qtyInput
 	};
 };
@@ -299,5 +307,6 @@ export default connect(mapStateToProps, {
 	addToCartLoading,
 	addToCart,
 	getConfigurableProductOptions,
-	updateProductQtyInput
+	updateProductQtyInput,
+	uiProductUpdateOptions: uiProductUpdate
 })(Product);

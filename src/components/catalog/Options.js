@@ -48,6 +48,7 @@ class Options extends Component {
 	}
 }
 
+// TODO: add style for disabled element
 const styles = {
 	containerStyle: {
 		flex: 1,
