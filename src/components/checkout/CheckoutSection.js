@@ -3,14 +3,31 @@ import { View, Text } from 'react-native';
 
 class CheckoutSection extends Component {
 
+	renderExpanded() {
+		const { expanded, children } = this.props;
+		if (expanded) {
+			return (
+					<View style={styles.expandedStyle}>
+						{children}
+					</View>
+			);
+		}
+
+		return <View />;
+	}
 
 	render() {
+		const { expanded } = this.props;
+		const container = expanded ? styles.containerStyles : {};
 		return (
-				<View style={styles.containerStyles}>
-					<Text style={styles.leftText}>{this.props.title}</Text>
-					<View style={styles.textBackground}>
-						<Text style={styles.textStyle}>{this.props.number}</Text>
+				<View style={container}>
+					<View style={styles.headerStyles}>
+						<Text style={styles.leftText}>{this.props.title}</Text>
+						<View style={styles.textBackground}>
+							<Text style={styles.textStyle}>{this.props.number}</Text>
+						</View>
 					</View>
+					{this.renderExpanded()}
 				</View>
 		);
 	}
@@ -18,6 +35,9 @@ class CheckoutSection extends Component {
 
 const styles = {
 	containerStyles: {
+		flex: 1
+	},
+	headerStyles: {
 		borderBottomWidth: 1,
 		height: 50,
 		borderColor: '#ddd',
@@ -44,6 +64,9 @@ const styles = {
 		fontSize: 20,
 		textAlign: 'center',
 		backgroundColor: 'transparent'
+	},
+	expandedStyle: {
+		flex: 1
 	}
 };
 
