@@ -35,7 +35,7 @@ class CheckoutSection extends Component {
 
 const styles = {
 	containerStyles: {
-		flex: 1
+		flex: 1,
 	},
 	headerStyles: {
 		borderBottomWidth: 1,
@@ -46,6 +46,12 @@ const styles = {
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		paddingLeft: 10,
+		shadowColor: '#000',
+		shadowOffset: { width: 0, height: 2 },
+		shadowOpacity: 2,
+		shadowRadius: 2,
+		elevation: 1,
+		marginBottom: 4
 	},
 	textBackground: {
 		backgroundColor: '#999',
