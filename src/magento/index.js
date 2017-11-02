@@ -313,6 +313,38 @@ class Magento {
 					});
 		});
 	}
+
+	getCountries() {
+		// GET /V1/directory/countries
+		return new Promise((resolve, reject) => {
+			const path = '/V1/directory/countries';
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getCountriesByCountryId(countryId) {
+		// GET /V1/directory/countries/:countryId
+		return new Promise((resolve, reject) => {
+			const path = `/V1/directory/countries/${countryId}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
 }
 
 export const magento = new Magento();

@@ -1,4 +1,6 @@
 export const MAGENTO_INIT = 'magento_init';
+export const MAGENTO_GET_COUNTRIES = 'magento_get_countries';
+
 export const MAGENTO_GET_CATEGORY_TREE = 'magento_get_category_tree';
 export const MAGENTO_CURRENT_CATEGORY = 'magento_current_category';
 export const MAGENTO_GET_CATEGORY_PRODUCTS = 'magento_get_category_products';
@@ -22,3 +24,11 @@ export const UI_PRODUCT_QTY_INPUT = 'ui_product_qty_input';
 export const UI_PRODUCT_UPDATE_OPTIONS = 'ui_product_update';
 export const UI_CHECKOUT_EMAIL_CHANGED = 'ui_checkout_email_changed';
 export const UI_CHECKOUT_PASSWORD_CHANGED = 'ui_checkout_password_changed';
+export const UI_CHECKOUT_POSTCODE_CHANGED = 'ui_checkout_postcode_changed';
+export const UI_CHECKOUT_COUNTRY_CHANGED = 'ui_checkout_country_changed';
+export const UI_CHECKOUT_FIRSTNAME_CHANGED = 'ui_checkout_firstname_changed';
+export const UI_CHECKOUT_LASTNAME_CHANGED = 'ui_checkout_lastname_changed';
+export const UI_CHECKOUT_TELEPHONE_CHANGED = 'ui_checkout_telephone_changed';
+export const UI_CHECKOUT_CITY_CHANGED = 'ui_checkout_city_changed';
+export const UI_CHECKOUT_STREET_CHANGED = 'ui_checkout_street_changed';
+export const UI_CHECKOUT_REGION_CHANGED = 'ui_checkout_region_changed';

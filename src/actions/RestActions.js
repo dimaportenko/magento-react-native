@@ -15,7 +15,8 @@ import {
 	MAGENTO_ADD_TO_CART_LOADING,
 	MAGENTO_ADD_TO_CART,
 	MAGENTO_GET_CART,
-	MAGENTO_CART_ITEM_PRODUCT
+	MAGENTO_CART_ITEM_PRODUCT,
+	MAGENTO_GET_COUNTRIES
 } from './types';
 
 export const initMagento = () => {
@@ -208,6 +209,18 @@ export const cartItemProduct = sku => {
 		magento.getProductBySku(sku)
 				.then(data => {
 					dispatch({ type: MAGENTO_CART_ITEM_PRODUCT, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const getCountries = () => {
+	return dispatch => {
+		magento.getCountries()
+				.then(data => {
+					dispatch({ type: MAGENTO_GET_COUNTRIES, payload: data });
 				})
 				.catch(error => {
 					console.log(error);
