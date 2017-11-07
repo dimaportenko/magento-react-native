@@ -6,3 +6,4 @@ export * from './Input';
 export * from './Spinner';
 export * from './Confirm';
 export * from './ExpandButton';
+export * from './Options';

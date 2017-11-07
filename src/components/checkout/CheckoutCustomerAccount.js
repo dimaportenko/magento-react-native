@@ -12,10 +12,11 @@ import {
 	checkoutCustomerPostcodeChanged,
 	checkoutCustomerRegionChanged,
 	checkoutCustomerStreetChanged,
-	checkoutCustomerTelephoneChanged
+	checkoutCustomerTelephoneChanged,
+	checkoutCustomerCountryIdChanged
 	// loginUser
 } from '../../actions';
-import { CardSection, Input, Spinner } from '../common';
+import { CardSection, Input, Spinner, Options } from '../common';
 
 import { magento } from '../../magento';
 import { magentoOptions } from '../../config/magento';
@@ -105,6 +106,15 @@ class CheckoutCustomerAccount extends Component {
 		// this.props.loginUser({ email, password });
 	}
 
+	// TODO: refactor action name
+	optionSelect(attributeId, optionValue) {
+		this.props.checkoutCustomerCountryIdChanged(optionValue);
+	}
+
+	regionSelect(attributeId, optionValue) {
+		// this.props.checkoutCustomerCountryIdChanged(optionValue);
+	}
+
 	renderButton() {
 		if (this.props.loading) {
 			return <Spinner size="large" />;
@@ -113,6 +123,78 @@ class CheckoutCustomerAccount extends Component {
 				<Button
 						onPress={this.onNextPressed.bind(this)}
 						title="Next"
+				/>
+		);
+	}
+
+	renderRegions() {
+		const { countryId, countries } = this.props;
+		if (countryId && countryId.length) {
+			const country = countries.find(item => {
+				return item.id === countryId;
+			});
+			if (country.available_regions) {
+				const data = country.available_regions.map(value => {
+					return {
+						label: value.name,
+						key: value.code
+					};
+				});
+
+				return (
+						<Options
+								disabled={data.length === 0}
+								key='regions'
+								label='Region'
+								attribute='Region'
+								value='Region'
+								data={data}
+								onChange={this.regionSelect.bind(this)}
+						/>
+				);
+			}
+		}
+
+		return (
+				<Input
+						label="Region"
+						value={this.props.region}
+						placeholder="region"
+						onChangeText={this.onRegionChange.bind(this)}
+				/>
+		);
+	}
+
+	renderCountries() {
+		const { countries } = this.props;
+
+		if (!countries || !countries.length) {
+			return (
+					<Input
+							label="Country"
+							value={this.props.country}
+							placeholder="country"
+							onChangeText={this.onCountryChange.bind(this)}
+					/>
+			);
+		}
+
+		const data = countries.map(value => {
+			return {
+				label: value.full_name_locale,
+				key: value.id
+			};
+		});
+
+		return (
+				<Options
+						disabled={data.length === 0}
+						key='countries'
+						label='Country'
+						attribute='Country'
+						value='Country'
+						data={data}
+						onChange={this.optionSelect.bind(this)}
 				/>
 		);
 	}
@@ -158,21 +240,11 @@ class CheckoutCustomerAccount extends Component {
 					</CardSection>
 
 					<CardSection>
-						<Input
-								label="Region"
-								value={this.props.region}
-								placeholder="region"
-								onChangeText={this.onRegionChange.bind(this)}
-						/>
+						{this.renderRegions()}
 					</CardSection>
 
 					<CardSection>
-						<Input
-								label="Country"
-								value={this.props.country}
-								placeholder="country"
-								onChangeText={this.onCountryChange.bind(this)}
-						/>
+						{this.renderCountries()}
 					</CardSection>
 
 					<CardSection>
@@ -223,29 +295,6 @@ class CheckoutCustomerAccount extends Component {
 	}
 }
 
-// "customer": {
-// 	"email": "jdoe@example.com",
-// 			"firstname": "Jane",
-// 			"lastname": "Doe",
-// 			"addresses": [{
-// 		"defaultShipping": true,
-// 		"defaultBilling": true,
-// 		"firstname": "Jane",
-// 		"lastname": "Doe",
-// 		"region": {
-// 			"regionCode": "NY",
-// 			"region": "New York",
-// 			"regionId":43
-// 		},
-// 		"postcode": "10755",
-// 		"street": ["123 Oak Ave"],
-// 		"city": "Purchase",
-// 		"telephone": "512-555-1111",
-// 		"countryId": "US"
-// 	}]
-// },
-// "password": "Password1"
-
 const styles = {
 	errorTextStyle: {
 		color: 'red',
@@ -260,6 +309,7 @@ const mapStateToProps = ({ checkout }) => {
 			password,
 			postcode,
 			country,
+			countryId,
 			firstname,
 			lastname,
 			telephone,
@@ -270,17 +320,21 @@ const mapStateToProps = ({ checkout }) => {
 			loading
 	} = checkout.ui;
 
+	const { countries } = checkout;
+
 	return {
 			email,
 			password,
 			postcode,
 			country,
+			countryId,
 			firstname,
 			lastname,
 			telephone,
 			city,
 			street,
 			region,
+			countries,
 			error,
 			loading
 	};
@@ -298,7 +352,8 @@ export default connect(
 			checkoutCustomerPostcodeChanged,
 			checkoutCustomerRegionChanged,
 			checkoutCustomerStreetChanged,
-			checkoutCustomerTelephoneChanged
+			checkoutCustomerTelephoneChanged,
+			checkoutCustomerCountryIdChanged
 			// loginUser
 		}
 )(CheckoutCustomerAccount);

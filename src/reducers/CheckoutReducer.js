@@ -4,6 +4,7 @@ import {
 	UI_CHECKOUT_PASSWORD_CHANGED,
 	UI_CHECKOUT_POSTCODE_CHANGED,
 	UI_CHECKOUT_COUNTRY_CHANGED,
+	UI_CHECKOUT_COUNTRY_ID_CHANGED,
 	UI_CHECKOUT_FIRSTNAME_CHANGED,
 	UI_CHECKOUT_LASTNAME_CHANGED,
 	UI_CHECKOUT_TELEPHONE_CHANGED,
@@ -18,6 +19,7 @@ const INITIAL_STATE = {
 		password: '',
 		postcode: '',
 		country: '',
+		countryId: '',
 		firstname: '',
 		lastname: '',
 		telephone: '',
@@ -46,6 +48,10 @@ export default (state = INITIAL_STATE, action) => {
 		}
 		case UI_CHECKOUT_COUNTRY_CHANGED: {
 			const ui = { ...state.ui, country: action.payload };
+			return { ...state, ui };
+		}
+		case UI_CHECKOUT_COUNTRY_ID_CHANGED: {
+			const ui = { ...state.ui, countryId: action.payload };
 			return { ...state, ui };
 		}
 		case UI_CHECKOUT_FIRSTNAME_CHANGED: {

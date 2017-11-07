@@ -12,9 +12,8 @@ import {
 	uiProductUpdate
 } from '../../actions';
 import { magento } from '../../magento';
-import { Spinner } from '../common';
+import { Spinner, Options } from '../common';
 import HeaderCartButton from '../cart/HeaderCartButton';
-import Options from './Options';
 import { getProductCustomAttribute } from '../../helper/product';
 
 class Product extends Component {

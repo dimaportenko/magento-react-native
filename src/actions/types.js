@@ -26,6 +26,7 @@ export const UI_CHECKOUT_EMAIL_CHANGED = 'ui_checkout_email_changed';
 export const UI_CHECKOUT_PASSWORD_CHANGED = 'ui_checkout_password_changed';
 export const UI_CHECKOUT_POSTCODE_CHANGED = 'ui_checkout_postcode_changed';
 export const UI_CHECKOUT_COUNTRY_CHANGED = 'ui_checkout_country_changed';
+export const UI_CHECKOUT_COUNTRY_ID_CHANGED = 'ui_checkout_country_id_changed';
 export const UI_CHECKOUT_FIRSTNAME_CHANGED = 'ui_checkout_firstname_changed';
 export const UI_CHECKOUT_LASTNAME_CHANGED = 'ui_checkout_lastname_changed';
 export const UI_CHECKOUT_TELEPHONE_CHANGED = 'ui_checkout_telephone_changed';

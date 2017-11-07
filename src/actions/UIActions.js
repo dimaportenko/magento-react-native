@@ -5,6 +5,7 @@ import {
 	UI_CHECKOUT_PASSWORD_CHANGED,
 	UI_CHECKOUT_POSTCODE_CHANGED,
 	UI_CHECKOUT_COUNTRY_CHANGED,
+	UI_CHECKOUT_COUNTRY_ID_CHANGED,
 	UI_CHECKOUT_FIRSTNAME_CHANGED,
 	UI_CHECKOUT_LASTNAME_CHANGED,
 	UI_CHECKOUT_TELEPHONE_CHANGED,
@@ -51,6 +52,13 @@ export const checkoutCustomerPostcodeChanged = (text) => {
 export const checkoutCustomerCountryChanged = (text) => {
 	return {
 		type: UI_CHECKOUT_COUNTRY_CHANGED,
+		payload: text
+	};
+};
+
+export const checkoutCustomerCountryIdChanged = (text) => {
+	return {
+		type: UI_CHECKOUT_COUNTRY_ID_CHANGED,
 		payload: text
 	};
 };

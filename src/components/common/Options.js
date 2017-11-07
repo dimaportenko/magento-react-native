@@ -69,4 +69,4 @@ const styles = {
 	}
 };
 
-export default Options;
+export { Options };
