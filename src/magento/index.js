@@ -345,6 +345,22 @@ class Magento {
 					});
 		});
 	}
+
+	createCustomer(customer) {
+		// POST /V1/customers
+		return new Promise((resolve, reject) => {
+			const path = '/V1/customers';
+
+			this.post(path, customer)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
 }
 
 export const magento = new Magento();

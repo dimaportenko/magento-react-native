@@ -12,7 +12,7 @@ import {
 	uiProductUpdate
 } from '../../actions';
 import { magento } from '../../magento';
-import { Spinner, Options } from '../common';
+import { Spinner, ModalSelect } from '../common';
 import HeaderCartButton from '../cart/HeaderCartButton';
 import { getProductCustomAttribute } from '../../helper/product';
 
@@ -127,7 +127,7 @@ class Product extends Component {
 	renderOptions() {
 		const { options, attributes, product, selectedOptions } = this.props;
 		// debugger;
-		console.log('Render Options');
+		console.log('Render ModalSelect');
 		console.log(attributes);
 		console.log(options);
 		console.log(this.props.product.children);
@@ -193,7 +193,7 @@ class Product extends Component {
 					prevOptions.push(option);
 
 				return (
-						<Options
+						<ModalSelect
 							disabled={data.length === 0}
 							key={option.id}
 							label={option.label}

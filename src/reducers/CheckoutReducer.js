@@ -32,8 +32,10 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case MAGENTO_GET_COUNTRIES:
-			return { ...state, countries: action.payload };
+		case MAGENTO_GET_COUNTRIES: {
+			const ui = { ...state.ui, countryId: 'CA' };
+			return { ...state, ui, countries: action.payload };
+		}
 		case UI_CHECKOUT_EMAIL_CHANGED: {
 			const ui = { ...state.ui, email: action.payload };
 			return { ...state, ui };

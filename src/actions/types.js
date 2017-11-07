@@ -20,6 +20,8 @@ export const MAGENTO_CART_ITEM_PRODUCT = 'magento_cart_item_product';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
 
+export const MAGENTO_CREATE_CUSTOMER = 'magento_checkout_create_customer';
+
 export const UI_PRODUCT_QTY_INPUT = 'ui_product_qty_input';
 export const UI_PRODUCT_UPDATE_OPTIONS = 'ui_product_update';
 export const UI_CHECKOUT_EMAIL_CHANGED = 'ui_checkout_email_changed';

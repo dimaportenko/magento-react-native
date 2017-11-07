@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
-class Options extends Component {
+class ModalSelect extends Component {
 
 	constructor(props) {
 		super(props);
@@ -69,4 +69,4 @@ const styles = {
 	}
 };
 
-export { Options };
+export { ModalSelect };

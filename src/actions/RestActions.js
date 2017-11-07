@@ -16,7 +16,8 @@ import {
 	MAGENTO_ADD_TO_CART,
 	MAGENTO_GET_CART,
 	MAGENTO_CART_ITEM_PRODUCT,
-	MAGENTO_GET_COUNTRIES
+	MAGENTO_GET_COUNTRIES,
+	MAGENTO_CREATE_CUSTOMER
 } from './types';
 
 export const initMagento = () => {
@@ -221,6 +222,18 @@ export const getCountries = () => {
 		magento.getCountries()
 				.then(data => {
 					dispatch({ type: MAGENTO_GET_COUNTRIES, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const checkoutCreateCustomer = customer => {
+	return dispatch => {
+		magento.createCustomer(customer)
+				.then(data => {
+					dispatch({ type: MAGENTO_CREATE_CUSTOMER, payload: data });
 				})
 				.catch(error => {
 					console.log(error);

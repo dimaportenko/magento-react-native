@@ -13,10 +13,11 @@ import {
 	checkoutCustomerRegionChanged,
 	checkoutCustomerStreetChanged,
 	checkoutCustomerTelephoneChanged,
-	checkoutCustomerCountryIdChanged
+	checkoutCustomerCountryIdChanged,
+	checkoutCreateCustomer
 	// loginUser
 } from '../../actions';
-import { CardSection, Input, Spinner, Options } from '../common';
+import { CardSection, Input, Spinner, ModalSelect } from '../common';
 
 import { magento } from '../../magento';
 import { magentoOptions } from '../../config/magento';
@@ -90,7 +91,7 @@ class CheckoutCustomerAccount extends Component {
 	}
 
 	onCityChange(text) {
-		this.props.checkoutCustomerPasswordChanged(text);
+		this.props.checkoutCustomerCityChanged(text);
 	}
 
 	onTelephoneChange(text) {
@@ -102,17 +103,63 @@ class CheckoutCustomerAccount extends Component {
 	}
 
 	onNextPressed() {
-		// const { email, password } = this.props;
-		// this.props.loginUser({ email, password });
+		const {
+			email,
+			password,
+			postcode,
+			countryId,
+			firstname,
+			lastname,
+			telephone,
+			city,
+			street,
+			region,
+		} = this.props;
+
+		const customer = {
+			customer: {
+				email,
+				firstname,
+				lastname,
+				addresses: [{
+					defaultShipping: true,
+					defaultBilling: true,
+					firstname,
+					lastname,
+					region,
+					postcode,
+					street: [street],
+					city,
+					telephone,
+					countryId
+				}]
+			},
+			password
+		};
+
+		this.props.checkoutCreateCustomer(customer);
 	}
 
-	// TODO: refactor action name
-	optionSelect(attributeId, optionValue) {
+	countrySelect(attributeId, optionValue) {
 		this.props.checkoutCustomerCountryIdChanged(optionValue);
 	}
 
-	regionSelect(attributeId, optionValue) {
-		// this.props.checkoutCustomerCountryIdChanged(optionValue);
+	regionSelect(attributeId, selectedRegion) {
+		const { countryId, countries } = this.props;
+		if (countryId && countryId.length) {
+			const country = countries.find(item => {
+				return item.id === countryId;
+			});
+			const regionData = country.available_regions.find(item => {
+				return item.code === selectedRegion;
+			});
+			const region = {
+				regionCode: regionData.code,
+				region: regionData.name,
+				regionId: regionData.id
+			};
+			this.props.checkoutCustomerRegionChanged(region);
+		}
 	}
 
 	renderButton() {
@@ -142,7 +189,7 @@ class CheckoutCustomerAccount extends Component {
 				});
 
 				return (
-						<Options
+						<ModalSelect
 								disabled={data.length === 0}
 								key='regions'
 								label='Region'
@@ -166,7 +213,7 @@ class CheckoutCustomerAccount extends Component {
 	}
 
 	renderCountries() {
-		const { countries } = this.props;
+		const { countries, countryId } = this.props;
 
 		if (!countries || !countries.length) {
 			return (
@@ -186,15 +233,20 @@ class CheckoutCustomerAccount extends Component {
 			};
 		});
 
+		const country = countries.find(item => {
+			return item.id === countryId;
+		});
+		const label = country ? country.full_name_locale : 'Country';
+
 		return (
-				<Options
+				<ModalSelect
 						disabled={data.length === 0}
 						key='countries'
-						label='Country'
+						label={label}
 						attribute='Country'
 						value='Country'
 						data={data}
-						onChange={this.optionSelect.bind(this)}
+						onChange={this.countrySelect.bind(this)}
 				/>
 		);
 	}
@@ -353,7 +405,8 @@ export default connect(
 			checkoutCustomerRegionChanged,
 			checkoutCustomerStreetChanged,
 			checkoutCustomerTelephoneChanged,
-			checkoutCustomerCountryIdChanged
+			checkoutCustomerCountryIdChanged,
+			checkoutCreateCustomer
 			// loginUser
 		}
 )(CheckoutCustomerAccount);
