@@ -141,7 +141,7 @@ class CheckoutCustomerAccount extends Component {
 
 		const address = {
 			address: {
-				id: 0,
+				// id: 0,
 				region: region.region,
 				region_id: region.regionId,
 				region_code: region.regionCode,

@@ -17,6 +17,7 @@ export const MAGENTO_ADD_TO_CART_LOADING = 'magento_add_to_cart_loading';
 export const MAGENTO_ADD_TO_CART = 'magento_add_to_cart';
 export const MAGENTO_GET_CART = 'magento_get_cart';
 export const MAGENTO_ADD_CART_BILLING_ADDRESS = 'magento_add_cart_billing_address';
+export const MAGENTO_GET_CART_SHIPPING_METHODS = 'magento_get_cart_shipping_methods';
 export const MAGENTO_CART_ITEM_PRODUCT = 'magento_cart_item_product';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';

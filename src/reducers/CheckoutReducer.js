@@ -18,7 +18,7 @@ const INITIAL_STATE = {
 	ui: {
 		email: '',
 		password: '',
-		postcode: '',
+		postcode: 'T1A 7L4',
 		country: '',
 		countryId: '',
 		firstname: '',

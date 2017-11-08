@@ -14,6 +14,7 @@ import {
 	MAGENTO_CREATE_CART,
 	MAGENTO_ADD_TO_CART_LOADING,
 	MAGENTO_ADD_CART_BILLING_ADDRESS,
+	MAGENTO_GET_CART_SHIPPING_METHODS,
 	MAGENTO_ADD_TO_CART,
 	MAGENTO_GET_CART,
 	MAGENTO_CART_ITEM_PRODUCT,
@@ -224,7 +225,29 @@ export const addGuestCartBillingAddress = (cartId, address) => {
 		magento.addGuestCartBillingAddress(cartId, address)
 				.then(data => {
 					dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
+					// dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		magento.guestCartEstimateShippingMethods(cartId, address)
+				.then(data => {
+					// console.log('guestCartEstimateShippingMethods');
+					// console.log(data);
+					dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
 					dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const getGuestCartShippingMethods = cartId => {
+	return dispatch => {
+		magento.getGuestCartShippingMethods(cartId)
+				.then(data => {
+					dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
 				})
 				.catch(error => {
 					console.log(error);

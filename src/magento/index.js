@@ -333,6 +333,70 @@ class Magento {
 		});
 	}
 
+	guestCartEstimateShippingMethods(cartId, address) {
+		// POST /V1/guest-carts/:cartId/estimate-shipping-methods"
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/estimate-shipping-methods`;
+
+			this.post(path, address)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	addGuestCartShippingInfo(cartId, address) {
+		// POST /V1/guest-carts/{cartId}/shipping-information
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/shipping-information`;
+
+			this.post(path, address)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getGuestCartPaymentInfo(cartId) {
+		// GET /V1/guest-carts/{cartId}/payment-information
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/payment-information`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getGuestCartShippingMethods(cartId) {
+		// GET /V1/guest-carts/{cartId}/shipping-methods
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/shipping-methods`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
 	getCountries() {
 		// GET /V1/directory/countries
 		return new Promise((resolve, reject) => {
