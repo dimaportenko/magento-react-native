@@ -13,11 +13,13 @@ import {
 	MAGENTO_GET_PRODUCT_MEDIA,
 	MAGENTO_CREATE_CART,
 	MAGENTO_ADD_TO_CART_LOADING,
+	MAGENTO_ADD_CART_BILLING_ADDRESS,
 	MAGENTO_ADD_TO_CART,
 	MAGENTO_GET_CART,
 	MAGENTO_CART_ITEM_PRODUCT,
 	MAGENTO_GET_COUNTRIES,
-	MAGENTO_CREATE_CUSTOMER
+	MAGENTO_CREATE_CUSTOMER,
+	UI_CHECKOUT_ACTIVE_SECTION
 } from './types';
 
 export const initMagento = () => {
@@ -210,6 +212,19 @@ export const cartItemProduct = sku => {
 		magento.getProductBySku(sku)
 				.then(data => {
 					dispatch({ type: MAGENTO_CART_ITEM_PRODUCT, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const addGuestCartBillingAddress = (cartId, address) => {
+	return dispatch => {
+		magento.addGuestCartBillingAddress(cartId, address)
+				.then(data => {
+					dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
+					dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
 				})
 				.catch(error => {
 					console.log(error);

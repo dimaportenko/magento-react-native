@@ -14,6 +14,7 @@ import {
 	checkoutCustomerStreetChanged,
 	checkoutCustomerTelephoneChanged,
 	checkoutCustomerCountryIdChanged,
+	addGuestCartBillingAddress,
 	checkoutCreateCustomer
 	// loginUser
 } from '../../actions';
@@ -114,6 +115,7 @@ class CheckoutCustomerAccount extends Component {
 			city,
 			street,
 			region,
+			cartId
 		} = this.props;
 
 		const customer = {
@@ -137,7 +139,45 @@ class CheckoutCustomerAccount extends Component {
 			password
 		};
 
-		this.props.checkoutCreateCustomer(customer);
+		const address = {
+			address: {
+				id: 0,
+				region: region.region,
+				region_id: region.regionId,
+				region_code: region.regionCode,
+				country_id: countryId,
+				street: [street],
+				// company: 'test',
+				telephone,
+				// fax: 'test',
+				postcode,
+				city,
+				firstname,
+				lastname,
+				// middlename: 'test',
+				// prefix: 'test',
+				// suffix: 'string',
+				// vat_id: 'string',
+				// customer_id: 0,
+				email,
+				same_as_billing: 1,
+				// customer_address_id: 0,
+				// save_in_address_book: 0,
+				// "extension_attributes": {
+				// 	"gift_registry_id": 0
+				// },
+				// "custom_attributes": [
+				// 	{
+				// 		"attribute_code": "string",
+				// 		"value": "string"
+				// 	}
+				// ]
+			},
+			useForShipping: true
+		};
+
+		// this.props.checkoutCreateCustomer(customer);
+		this.props.addGuestCartBillingAddress(cartId, address);
 	}
 
 	countrySelect(attributeId, optionValue) {
@@ -355,7 +395,7 @@ const styles = {
 	}
 };
 
-const mapStateToProps = ({ checkout }) => {
+const mapStateToProps = ({ checkout, cart }) => {
 	const {
 			email,
 			password,
@@ -373,6 +413,7 @@ const mapStateToProps = ({ checkout }) => {
 	} = checkout.ui;
 
 	const { countries } = checkout;
+	const { cartId } = cart;
 
 	return {
 			email,
@@ -386,6 +427,7 @@ const mapStateToProps = ({ checkout }) => {
 			city,
 			street,
 			region,
+			cartId,
 			countries,
 			error,
 			loading
@@ -406,6 +448,7 @@ export default connect(
 			checkoutCustomerStreetChanged,
 			checkoutCustomerTelephoneChanged,
 			checkoutCustomerCountryIdChanged,
+			addGuestCartBillingAddress,
 			checkoutCreateCustomer
 			// loginUser
 		}

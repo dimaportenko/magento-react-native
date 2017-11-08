@@ -10,7 +10,8 @@ import {
 	UI_CHECKOUT_TELEPHONE_CHANGED,
 	UI_CHECKOUT_CITY_CHANGED,
 	UI_CHECKOUT_STREET_CHANGED,
-	UI_CHECKOUT_REGION_CHANGED
+	UI_CHECKOUT_REGION_CHANGED,
+	UI_CHECKOUT_ACTIVE_SECTION
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -27,6 +28,7 @@ const INITIAL_STATE = {
 		city: '',
 		region: ''
 	},
+	activeSection: 1,
 	countries: false
 };
 
@@ -80,6 +82,8 @@ export default (state = INITIAL_STATE, action) => {
 			const ui = { ...state.ui, region: action.payload };
 			return { ...state, ui };
 		}
+		case UI_CHECKOUT_ACTIVE_SECTION:
+			return { ...state, activeSection: action.payload };
 		default:
 			return state;
 	}

@@ -91,7 +91,10 @@ class Magento {
     return new Promise((resolve, reject) => {
       console.log({ uri, method, headers, data, ...params });
       fetch(uri, { method, headers, body: JSON.stringify(data) })
-        .then(response => response.json())
+        .then(response => {
+					console.log(response);
+					return response.json();
+				})
         .then(responseData => {
 					// TODO: check response code
 					// debugger;
@@ -304,6 +307,22 @@ class Magento {
 			const path = `/V1/guest-carts/${cartId}`;
 
 			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	addGuestCartBillingAddress(cartId, address) {
+		// POST /V1/guest-carts/{cartId}/billing-address
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/billing-address`;
+
+			this.post(path, address)
 					.then(data => {
 						resolve(data);
 					})
