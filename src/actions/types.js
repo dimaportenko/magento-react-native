@@ -37,5 +37,7 @@ export const UI_CHECKOUT_TELEPHONE_CHANGED = 'ui_checkout_telephone_changed';
 export const UI_CHECKOUT_CITY_CHANGED = 'ui_checkout_city_changed';
 export const UI_CHECKOUT_STREET_CHANGED = 'ui_checkout_street_changed';
 export const UI_CHECKOUT_REGION_CHANGED = 'ui_checkout_region_changed';
+export const UI_CHECKOUT_SHIPPING_SELECTED = 'ui_checkout_shipping_selected';
+export const UI_CHECKOUT_CUSTOMER_NEXT_LOADING = 'ui_checkout_customer_next_loading';
 
 export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';

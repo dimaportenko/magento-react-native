@@ -20,7 +20,8 @@ import {
 	MAGENTO_CART_ITEM_PRODUCT,
 	MAGENTO_GET_COUNTRIES,
 	MAGENTO_CREATE_CUSTOMER,
-	UI_CHECKOUT_ACTIVE_SECTION
+	UI_CHECKOUT_ACTIVE_SECTION,
+	UI_CHECKOUT_CUSTOMER_NEXT_LOADING
 } from './types';
 
 export const initMagento = () => {
@@ -236,6 +237,7 @@ export const addGuestCartBillingAddress = (cartId, address) => {
 					// console.log(data);
 					dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
 					dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
+					dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
 				})
 				.catch(error => {
 					console.log(error);

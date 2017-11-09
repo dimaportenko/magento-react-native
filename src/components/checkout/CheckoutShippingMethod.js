@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
-import { getGuestCartShippingMethods } from '../../actions';
+import RadioForm from 'react-native-simple-radio-button';
+import {
+	getGuestCartShippingMethods,
+	checkoutSelectedShippingChanged,
+} from '../../actions';
 
 class CheckoutShippingMethod extends Component {
 	componentWillMount() {
-		// const { cartId } = this.props;
-		// this.props.getGuestCartShippingMethods(cartId);
+		const { shipping, selectedShipping } = this.props;
+		if (!selectedShipping && shipping.length) {
+			this.props.checkoutSelectedShippingChanged(shipping[0]);
+		}
 	}
 
-	onShippingSelect(value) {
+	onShippingSelect(shipping) {
 		console.log('shipping selected');
-		console.log(value);
+		console.log(shipping);
+		this.props.checkoutSelectedShippingChanged(shipping);
 	}
 
 	renderShippingMethods() {
@@ -22,9 +28,6 @@ class CheckoutShippingMethod extends Component {
 			return <Text>Shipping methods not found for selected address</Text>;
 		}
 
-		// shipping.map
-		console.log('shipping');
-		console.log(shipping);
 		const radioProps = shipping.map(item => {
 			const label = `${item.carrier_title} - ${item.method_title} - ${item.amount}`;
 			return {
@@ -38,7 +41,7 @@ class CheckoutShippingMethod extends Component {
 						style={styles.radioWrap}
 						radio_props={radioProps}
 						initial={0}
-						onPress={(value) => { this.onShippingSelect({ value }); }}
+						onPress={value => { this.onShippingSelect(value); }}
 				/>
 		);
 	}
@@ -65,8 +68,11 @@ const styles = {
 
 const mapStateToProps = ({ cart, checkout }) => {
 	const { cartId } = cart;
-	const { shipping } = checkout;
-	return { cartId, shipping };
+	const { shipping, selectedShipping } = checkout;
+	return { cartId, shipping, selectedShipping };
 };
 
-export default connect(mapStateToProps, { getGuestCartShippingMethods })(CheckoutShippingMethod);
+export default connect(mapStateToProps, {
+	getGuestCartShippingMethods,
+	checkoutSelectedShippingChanged
+})(CheckoutShippingMethod);

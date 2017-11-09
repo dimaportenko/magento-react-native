@@ -15,7 +15,8 @@ import {
 	checkoutCustomerTelephoneChanged,
 	checkoutCustomerCountryIdChanged,
 	addGuestCartBillingAddress,
-	checkoutCreateCustomer
+	checkoutCreateCustomer,
+	checkoutCustomerNextLoading
 	// loginUser
 } from '../../actions';
 import { CardSection, Input, Spinner, ModalSelect } from '../common';
@@ -177,6 +178,7 @@ class CheckoutCustomerAccount extends Component {
 		};
 
 		// this.props.checkoutCreateCustomer(customer);
+		this.props.checkoutCustomerNextLoading(true);
 		this.props.addGuestCartBillingAddress(cartId, address);
 	}
 
@@ -207,10 +209,12 @@ class CheckoutCustomerAccount extends Component {
 			return <Spinner size="large" />;
 		}
 		return (
-				<Button
-						onPress={this.onNextPressed.bind(this)}
-						title="Next"
-				/>
+				<View style={styles.nextButtonStyle}>
+					<Button
+							onPress={this.onNextPressed.bind(this)}
+							title="Next"
+					/>
+				</View>
 		);
 	}
 
@@ -392,6 +396,10 @@ const styles = {
 		color: 'red',
 		fontSize: 20,
 		alignSelf: 'center'
+	},
+	nextButtonStyle: {
+		flex: 1,
+		alignSelf: 'center'
 	}
 };
 
@@ -449,7 +457,8 @@ export default connect(
 			checkoutCustomerTelephoneChanged,
 			checkoutCustomerCountryIdChanged,
 			addGuestCartBillingAddress,
-			checkoutCreateCustomer
+			checkoutCreateCustomer,
+			checkoutCustomerNextLoading
 			// loginUser
 		}
 )(CheckoutCustomerAccount);
