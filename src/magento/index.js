@@ -381,6 +381,22 @@ class Magento {
 		});
 	}
 
+	getGuestCartPaymentMethods(cartId) {
+		// GET /V1/guest-carts/{cartId}/payment-methods
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/payment-methods`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
 	getGuestCartShippingMethods(cartId) {
 		// GET /V1/guest-carts/{cartId}/shipping-methods
 		return new Promise((resolve, reject) => {

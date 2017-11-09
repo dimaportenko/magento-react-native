@@ -13,6 +13,7 @@ import {
 	UI_CHECKOUT_STREET_CHANGED,
 	UI_CHECKOUT_REGION_CHANGED,
 	UI_CHECKOUT_SHIPPING_SELECTED,
+	UI_CHECKOUT_PAYMENT_SELECTED,
 	UI_CHECKOUT_CUSTOMER_NEXT_LOADING
 } from './types';
 
@@ -111,6 +112,13 @@ export const checkoutSelectedShippingChanged = (shipping) => {
 	return {
 		type: UI_CHECKOUT_SHIPPING_SELECTED,
 		payload: shipping
+	};
+};
+
+export const checkoutSelectedPaymentChanged = (payment) => {
+	return {
+		type: UI_CHECKOUT_PAYMENT_SELECTED,
+		payload: payment
 	};
 };
 

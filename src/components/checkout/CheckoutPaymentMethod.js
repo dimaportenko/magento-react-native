@@ -4,23 +4,20 @@ import { connect } from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
 import { Spinner } from '../common';
 import {
-	getGuestCartShippingMethods,
-	checkoutSelectedShippingChanged,
+	checkoutSelectedPaymentChanged,
 	getGuestCartPaymentMethods
 } from '../../actions';
 
-class CheckoutShippingMethod extends Component {
+class CheckoutPaymentMethod extends Component {
 	componentWillMount() {
-		const { shipping, selectedShipping } = this.props;
-		if (!selectedShipping && shipping.length) {
-			this.props.checkoutSelectedShippingChanged(shipping[0]);
+		const { payments, selectedPayment } = this.props;
+		if (!selectedPayment && payments.length) {
+			this.props.checkoutSelectedPaymentChanged(payments[0]);
 		}
 	}
 
-	onShippingSelect(shipping) {
-		console.log('shipping selected');
-		console.log(shipping);
-		this.props.checkoutSelectedShippingChanged(shipping);
+	onPaymentSelect(payment) {
+		this.props.checkoutSelectedPaymentChanged(payment);
 	}
 
 	onNextPressed() {
@@ -29,16 +26,15 @@ class CheckoutShippingMethod extends Component {
 	}
 
 	renderShippingMethods() {
-		const { shipping } = this.props;
+		const { payments } = this.props;
 
-		if (!shipping || !shipping.length) {
-			return <Text>Shipping methods not found for selected address</Text>;
+		if (!payments || !payments.length) {
+			return <Text>Payment methods not found</Text>;
 		}
 
-		const radioProps = shipping.map(item => {
-			const label = `${item.carrier_title} - ${item.method_title} - ${item.amount}`;
+		const radioProps = payments.map(item => {
 			return {
-				label,
+				label: item.title,
 				value: item
 			};
 		});
@@ -48,14 +44,14 @@ class CheckoutShippingMethod extends Component {
 						style={styles.radioWrap}
 						radio_props={radioProps}
 						initial={0}
-						onPress={value => { this.onShippingSelect(value); }}
+						onPress={value => { this.onPaymentSelect(value); }}
 				/>
 		);
 	}
 
 	renderButton() {
-		const { shipping } = this.props;
-		if (!shipping.length) {
+		const { payments } = this.props;
+		if (!payments.length) {
 			return <View />;
 		}
 
@@ -99,12 +95,11 @@ const styles = {
 
 const mapStateToProps = ({ cart, checkout }) => {
 	const { cartId } = cart;
-	const { shipping, selectedShipping } = checkout;
-	return { cartId, shipping, selectedShipping };
+	const { payments, selectedPayment } = checkout;
+	return { cartId, payments, selectedPayment };
 };
 
 export default connect(mapStateToProps, {
-	getGuestCartShippingMethods,
-	checkoutSelectedShippingChanged,
+	checkoutSelectedPaymentChanged,
 	getGuestCartPaymentMethods
-})(CheckoutShippingMethod);
+})(CheckoutPaymentMethod);

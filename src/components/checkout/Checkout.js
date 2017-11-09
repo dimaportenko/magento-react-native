@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import CheckoutSection from './CheckoutSection';
 import CheckoutCustomerAccount from './CheckoutCustomerAccount';
 import CheckoutShippingMethod from './CheckoutShippingMethod';
+import CheckoutPaymentMethod from './CheckoutPaymentMethod';
 
 class Checkout extends Component {
 	static navigationOptions = {
@@ -21,7 +22,10 @@ class Checkout extends Component {
 				<CheckoutSection title="Shipping Method" number="2" expanded={activeSection === 2}>
 					<CheckoutShippingMethod />
 				</CheckoutSection>
-				<CheckoutSection title="Payment Method" number="3" expanded={activeSection === 3} />
+				<CheckoutSection title="Payment Method" number="3" expanded={activeSection === 3}>
+					<CheckoutPaymentMethod />
+				</CheckoutSection>
+				<CheckoutSection title="Summary" number="4" expanded={activeSection === 4} />
 			</ScrollView>
 		);
 	}
