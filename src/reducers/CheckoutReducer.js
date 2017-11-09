@@ -11,7 +11,8 @@ import {
 	UI_CHECKOUT_CITY_CHANGED,
 	UI_CHECKOUT_STREET_CHANGED,
 	UI_CHECKOUT_REGION_CHANGED,
-	UI_CHECKOUT_ACTIVE_SECTION
+	UI_CHECKOUT_ACTIVE_SECTION,
+	MAGENTO_GET_CART_SHIPPING_METHODS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -28,12 +29,15 @@ const INITIAL_STATE = {
 		city: '',
 		region: ''
 	},
+	shipping: false,
 	activeSection: 1,
 	countries: false
 };
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
+		case MAGENTO_GET_CART_SHIPPING_METHODS:
+			return { ...state, shipping: action.payload };
 		case MAGENTO_GET_COUNTRIES: {
 			const ui = { ...state.ui, countryId: 'CA' };
 			return { ...state, ui, countries: action.payload };
