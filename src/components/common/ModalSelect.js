@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, TextInput } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 
-class Options extends Component {
+class ModalSelect extends Component {
 
 	constructor(props) {
 		super(props);
@@ -26,11 +26,12 @@ class Options extends Component {
 	}
 
 	render() {
-		const { data, label } = this.props;
+		const { data, label, disabled } = this.props;
 
 		return (
 				<View style={styles.containerStyle} >
 					<ModalSelector
+							disabled={disabled}
 							data={data}
 							initValue={label}
 							onChange={option => this.onChange(option)}
@@ -47,6 +48,7 @@ class Options extends Component {
 	}
 }
 
+// TODO: add style for disabled element
 const styles = {
 	containerStyle: {
 		flex: 1,
@@ -67,4 +69,4 @@ const styles = {
 	}
 };
 
-export default Options;
+export { ModalSelect };

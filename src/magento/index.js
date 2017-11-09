@@ -91,7 +91,10 @@ class Magento {
     return new Promise((resolve, reject) => {
       console.log({ uri, method, headers, data, ...params });
       fetch(uri, { method, headers, body: JSON.stringify(data) })
-        .then(response => response.json())
+        .then(response => {
+					console.log(response);
+					return response.json();
+				})
         .then(responseData => {
 					// TODO: check response code
 					// debugger;
@@ -187,9 +190,39 @@ class Magento {
 		});
 	}
 
+	getConfigurableProductOptionById(sku, id) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/configurable-products/${sku}/options/${id}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
 	getProductAttributesOptions(attributeId) {
 		return new Promise((resolve, reject) => {
 			const path = `/V1/products/attributes/${attributeId}/options`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getAttributeByCode(attributeCode) {
+		return new Promise((resolve, reject) => {
+			const path = `/V1/products/attributes/${attributeCode}`;
 
 			this.get(path)
 					.then(data => {
@@ -274,6 +307,150 @@ class Magento {
 			const path = `/V1/guest-carts/${cartId}`;
 
 			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	addGuestCartBillingAddress(cartId, address) {
+		// POST /V1/guest-carts/{cartId}/billing-address
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/billing-address`;
+
+			this.post(path, address)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	guestCartEstimateShippingMethods(cartId, address) {
+		// POST /V1/guest-carts/:cartId/estimate-shipping-methods"
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/estimate-shipping-methods`;
+
+			this.post(path, address)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	addGuestCartShippingInfo(cartId, address) {
+		// POST /V1/guest-carts/{cartId}/shipping-information
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/shipping-information`;
+
+			this.post(path, address)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getGuestCartPaymentInfo(cartId) {
+		// GET /V1/guest-carts/{cartId}/payment-information
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/payment-information`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getGuestCartPaymentMethods(cartId) {
+		// GET /V1/guest-carts/{cartId}/payment-methods
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/payment-methods`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getGuestCartShippingMethods(cartId) {
+		// GET /V1/guest-carts/{cartId}/shipping-methods
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/shipping-methods`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getCountries() {
+		// GET /V1/directory/countries
+		return new Promise((resolve, reject) => {
+			const path = '/V1/directory/countries';
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	getCountriesByCountryId(countryId) {
+		// GET /V1/directory/countries/:countryId
+		return new Promise((resolve, reject) => {
+			const path = `/V1/directory/countries/${countryId}`;
+
+			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	createCustomer(customer) {
+		// POST /V1/customers
+		return new Promise((resolve, reject) => {
+			const path = '/V1/customers';
+
+			this.post(path, customer)
 					.then(data => {
 						resolve(data);
 					})

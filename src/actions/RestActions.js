@@ -13,9 +13,16 @@ import {
 	MAGENTO_GET_PRODUCT_MEDIA,
 	MAGENTO_CREATE_CART,
 	MAGENTO_ADD_TO_CART_LOADING,
+	MAGENTO_ADD_CART_BILLING_ADDRESS,
+	MAGENTO_GET_CART_SHIPPING_METHODS,
+	MAGENTO_GET_CART_PAYMENT_METHODS,
 	MAGENTO_ADD_TO_CART,
 	MAGENTO_GET_CART,
-	MAGENTO_CART_ITEM_PRODUCT
+	MAGENTO_CART_ITEM_PRODUCT,
+	MAGENTO_GET_COUNTRIES,
+	MAGENTO_CREATE_CUSTOMER,
+	UI_CHECKOUT_ACTIVE_SECTION,
+	UI_CHECKOUT_CUSTOMER_NEXT_LOADING
 } from './types';
 
 export const initMagento = () => {
@@ -70,7 +77,7 @@ export const getConfigurableProductOptions = (sku) => {
 					console.log(data);
 					dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: data });
 					data.forEach(option => {
-						magento.getProductAttributesOptions(option.attribute_id)
+						magento.getAttributeByCode(option.attribute_id)
 								.then(attributeOptions => {
 									console.log('option attribute');
 									console.log(attributeOptions);
@@ -78,7 +85,8 @@ export const getConfigurableProductOptions = (sku) => {
 										type: MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
 										payload: {
 											attributeId: option.attribute_id,
-											options: attributeOptions
+											options: attributeOptions.options,
+											attributeCode: attributeOptions.attribute_code
 										}
 									});
 								})
@@ -207,6 +215,79 @@ export const cartItemProduct = sku => {
 		magento.getProductBySku(sku)
 				.then(data => {
 					dispatch({ type: MAGENTO_CART_ITEM_PRODUCT, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const addGuestCartBillingAddress = (cartId, address) => {
+	return dispatch => {
+		magento.addGuestCartBillingAddress(cartId, address)
+				.then(data => {
+					dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
+					// dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+		magento.guestCartEstimateShippingMethods(cartId, address)
+				.then(data => {
+					// console.log('guestCartEstimateShippingMethods');
+					// console.log(data);
+					dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
+					dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
+					dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const getGuestCartShippingMethods = cartId => {
+	return dispatch => {
+		magento.getGuestCartShippingMethods(cartId)
+				.then(data => {
+					dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const getGuestCartPaymentMethods = cartId => {
+	return dispatch => {
+		magento.getGuestCartPaymentMethods(cartId)
+				.then(data => {
+					dispatch({ type: MAGENTO_GET_CART_PAYMENT_METHODS, payload: data });
+					dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 3 });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const getCountries = () => {
+	return dispatch => {
+		magento.getCountries()
+				.then(data => {
+					dispatch({ type: MAGENTO_GET_COUNTRIES, payload: data });
+				})
+				.catch(error => {
+					console.log(error);
+				});
+	};
+};
+
+export const checkoutCreateCustomer = customer => {
+	return dispatch => {
+		magento.createCustomer(customer)
+				.then(data => {
+					dispatch({ type: MAGENTO_CREATE_CUSTOMER, payload: data });
 				})
 				.catch(error => {
 					console.log(error);
