@@ -16,27 +16,30 @@ import {
 	UI_CHECKOUT_SHIPPING_SELECTED,
 	UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
 	MAGENTO_GET_CART_SHIPPING_METHODS,
-	MAGENTO_GET_CART_PAYMENT_METHODS
+	MAGENTO_GET_CART_PAYMENT_METHODS,
+	MAGENTO_ADD_SHIPPING_TO_CART
 } from '../actions/types';
 
 const INITIAL_STATE = {
 	ui: {
 		email: '',
 		password: '',
-		postcode: 'T1A 7L4',
+		// postcode: 'T1A 7L4',
+		postcode: '95608',
 		country: '',
 		countryId: '',
-		firstname: '',
-		lastname: '',
-		telephone: '',
-		street: '',
-		city: '',
+		firstname: 'Test',
+		lastname: 'Test',
+		telephone: '15417543010',
+		street: '7246 W. Windsor Dr. \n',
+		city: 'Carmichael',
 		region: ''
 	},
 	selectedShipping: false,
 	selectedPayment: false,
 	shipping: false,
 	payments: false,
+	totals: false,
 	countries: false,
 	activeSection: 1
 };
@@ -47,8 +50,15 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, shipping: action.payload };
 		case MAGENTO_GET_CART_PAYMENT_METHODS:
 			return { ...state, payments: action.payload };
+		case MAGENTO_ADD_SHIPPING_TO_CART: {
+			return {
+				...state,
+				payments: action.payload.payment_methods,
+				totals: action.payload.totals
+			};
+		}
 		case MAGENTO_GET_COUNTRIES: {
-			const ui = { ...state.ui, countryId: 'CA' };
+			const ui = { ...state.ui, countryId: 'US' };
 			return { ...state, ui, countries: action.payload };
 		}
 		case UI_CHECKOUT_EMAIL_CHANGED: {
