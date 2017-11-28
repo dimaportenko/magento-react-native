@@ -22,7 +22,7 @@ import {
 
 const INITIAL_STATE = {
 	ui: {
-		email: '',
+		email: 'test+17@test.com',
 		password: '',
 		// postcode: 'T1A 7L4',
 		postcode: '95608',

@@ -59,6 +59,10 @@ class Magento {
     return this.send(path, 'POST', null, params);
   }
 
+  put(path, params) {
+    return this.send(path, 'PUT', null, params);
+  }
+
   get(path, params, data) {
     return this.send(path, 'GET', params, data);
   }
@@ -406,6 +410,23 @@ class Magento {
 			const path = `/V1/guest-carts/${cartId}/shipping-methods`;
 
 			this.get(path)
+					.then(data => {
+						resolve(data);
+					})
+					.catch(e => {
+						console.log(e);
+						reject(e);
+					});
+		});
+	}
+
+	placeGuestCartOrder(cartId, payment) {
+		// PUT /V1/guest-carts/{cartId}/order
+
+		return new Promise((resolve, reject) => {
+			const path = `/V1/guest-carts/${cartId}/order`;
+
+			this.put(path, payment)
 					.then(data => {
 						resolve(data);
 					})

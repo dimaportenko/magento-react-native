@@ -109,7 +109,11 @@ class CheckoutShippingMethod extends Component {
 		}
 
 		if (this.props.loading) {
-			return <Spinner size="large" />;
+			return (
+					<View style={styles.nextButtonStyle}>
+						<Spinner size="large" />
+					</View>
+			);
 		}
 		return (
 				<View style={styles.nextButtonStyle}>
@@ -159,6 +163,7 @@ const mapStateToProps = ({ cart, checkout }) => {
 		city,
 		street,
 		region,
+		loading
 	} = checkout.ui;
 
 	const { shipping, selectedShipping } = checkout;
@@ -177,6 +182,7 @@ const mapStateToProps = ({ cart, checkout }) => {
 		street,
 		region,
 		cartId,
+		loading,
 		shipping,
 		selectedShipping
 	};

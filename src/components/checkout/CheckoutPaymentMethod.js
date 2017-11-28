@@ -5,7 +5,8 @@ import RadioForm from 'react-native-simple-radio-button';
 import { Spinner } from '../common';
 import {
 	checkoutSelectedPaymentChanged,
-	getGuestCartPaymentMethods
+	checkoutSetActiveSection,
+	placeGuestCartOrder
 } from '../../actions';
 
 class CheckoutPaymentMethod extends Component {
@@ -21,11 +22,26 @@ class CheckoutPaymentMethod extends Component {
 	}
 
 	onNextPressed() {
-		const { cartId } = this.props;
-		this.props.getGuestCartPaymentMethods(cartId);
+		// const { cartId, selectedPayment } = this.props;
+		// const payment = {
+		// 	paymentMethod: {
+		// 		// po_number: selectedPayment.code,
+		// 		method: selectedPayment.code
+		// 		// additional_data: [
+		// 		// 	"string"
+		// 		// ],
+		// 		// extension_attributes: {
+		// 		// 	agreement_ids: [
+		// 		// 		"string"
+		// 		// 	]
+		// 		// }
+		// 	}
+		// };
+		// this.props.placeGuestCartOrder(cartId, payment);
+		this.props.checkoutSetActiveSection(4);
 	}
 
-	renderShippingMethods() {
+	renderPaymentMethods() {
 		const { payments } = this.props;
 
 		if (!payments || !payments.length) {
@@ -71,7 +87,7 @@ class CheckoutPaymentMethod extends Component {
 	render() {
 		return (
 				<View style={styles.container}>
-					{this.renderShippingMethods()}
+					{this.renderPaymentMethods()}
 					{this.renderButton()}
 				</View>
 		);
@@ -101,5 +117,6 @@ const mapStateToProps = ({ cart, checkout }) => {
 
 export default connect(mapStateToProps, {
 	checkoutSelectedPaymentChanged,
-	getGuestCartPaymentMethods
+	checkoutSetActiveSection,
+	placeGuestCartOrder
 })(CheckoutPaymentMethod);
