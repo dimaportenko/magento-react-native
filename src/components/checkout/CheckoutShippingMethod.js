@@ -6,7 +6,8 @@ import { Spinner } from '../common';
 import {
 	getGuestCartShippingMethods,
 	checkoutSelectedShippingChanged,
-	getGuestCartPaymentMethods
+	addGuestCartShippingInfo,
+	checkoutCustomerNextLoading
 } from '../../actions';
 
 class CheckoutShippingMethod extends Component {
@@ -24,8 +25,56 @@ class CheckoutShippingMethod extends Component {
 	}
 
 	onNextPressed() {
-		const { cartId } = this.props;
-		this.props.getGuestCartPaymentMethods(cartId);
+		const {
+			email,
+			postcode,
+			countryId,
+			firstname,
+			lastname,
+			telephone,
+			city,
+			street,
+			region,
+			cartId,
+			selectedShipping
+		} = this.props;
+
+		const address = {
+			addressInformation: {
+				shipping_address: {
+					region: region.region,
+					region_id: region.regionId,
+					region_code: region.regionCode,
+					country_id: countryId,
+					street: [street],
+					telephone,
+					postcode,
+					city,
+					firstname,
+					lastname,
+					email,
+				},
+				billing_address: {
+					region: region.region,
+					region_id: region.regionId,
+					region_code: region.regionCode,
+					country_id: countryId,
+					street: [street],
+					telephone,
+					postcode,
+					city,
+					firstname,
+					lastname,
+					email,
+				},
+				shipping_method_code: selectedShipping.method_code,
+				shipping_carrier_code: selectedShipping.carrier_code,
+				extension_attributes: {},
+			}
+		};
+
+		this.props.checkoutCustomerNextLoading(true);
+		this.props.addGuestCartShippingInfo(cartId, address);
 	}
 
 	renderShippingMethods() {
@@ -60,7 +109,11 @@ class CheckoutShippingMethod extends Component {
 		}
 
 		if (this.props.loading) {
-			return <Spinner size="large" />;
+			return (
+					<View style={styles.nextButtonStyle}>
+						<Spinner size="large" />
+					</View>
+			);
 		}
 		return (
 				<View style={styles.nextButtonStyle}>
@@ -98,13 +151,46 @@ const styles = {
 };
 
 const mapStateToProps = ({ cart, checkout }) => {
-	const { cartId } = cart;
+	const {
+		email,
+		password,
+		postcode,
+		country,
+		countryId,
+		firstname,
+		lastname,
+		telephone,
+		city,
+		street,
+		region,
+		loading
+	} = checkout.ui;
+
 	const { shipping, selectedShipping } = checkout;
-	return { cartId, shipping, selectedShipping };
+	const { cartId } = cart;
+
+	return {
+		email,
+		password,
+		postcode,
+		country,
+		countryId,
+		firstname,
+		lastname,
+		telephone,
+		city,
+		street,
+		region,
+		cartId,
+		loading,
+		shipping,
+		selectedShipping
+	};
 };
 
 export default connect(mapStateToProps, {
 	getGuestCartShippingMethods,
 	checkoutSelectedShippingChanged,
-	getGuestCartPaymentMethods
+	addGuestCartShippingInfo,
+	checkoutCustomerNextLoading
 })(CheckoutShippingMethod);

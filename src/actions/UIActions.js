@@ -10,6 +10,7 @@ import {
 	UI_CHECKOUT_LASTNAME_CHANGED,
 	UI_CHECKOUT_TELEPHONE_CHANGED,
 	UI_CHECKOUT_CITY_CHANGED,
+	UI_CHECKOUT_ACTIVE_SECTION,
 	UI_CHECKOUT_STREET_CHANGED,
 	UI_CHECKOUT_REGION_CHANGED,
 	UI_CHECKOUT_SHIPPING_SELECTED,
@@ -126,5 +127,12 @@ export const checkoutCustomerNextLoading = (loading) => {
 	return {
 		type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
 		payload: loading
+	};
+};
+
+export const checkoutSetActiveSection = (section) => {
+	return {
+		type: UI_CHECKOUT_ACTIVE_SECTION,
+		payload: section
 	};
 };

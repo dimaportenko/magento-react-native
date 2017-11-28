@@ -5,6 +5,7 @@ import CheckoutSection from './CheckoutSection';
 import CheckoutCustomerAccount from './CheckoutCustomerAccount';
 import CheckoutShippingMethod from './CheckoutShippingMethod';
 import CheckoutPaymentMethod from './CheckoutPaymentMethod';
+import CheckoutTotals from './CheckoutTotals';
 
 class Checkout extends Component {
 	static navigationOptions = {
@@ -25,7 +26,9 @@ class Checkout extends Component {
 				<CheckoutSection title="Payment Method" number="3" expanded={activeSection === 3}>
 					<CheckoutPaymentMethod />
 				</CheckoutSection>
-				<CheckoutSection title="Summary" number="4" expanded={activeSection === 4} />
+				<CheckoutSection title="Summary" number="4" expanded={activeSection === 4}>
+					<CheckoutTotals />
+				</CheckoutSection>
 			</ScrollView>
 		);
 	}
