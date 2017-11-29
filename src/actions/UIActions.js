@@ -1,4 +1,5 @@
 import {
+	MAGENTO_PLACE_GUEST_CART_ORDER,
 	UI_PRODUCT_QTY_INPUT,
 	UI_PRODUCT_UPDATE_OPTIONS,
 	UI_CHECKOUT_EMAIL_CHANGED,
@@ -134,5 +135,12 @@ export const checkoutSetActiveSection = (section) => {
 	return {
 		type: UI_CHECKOUT_ACTIVE_SECTION,
 		payload: section
+	};
+};
+
+export const checkoutOrderPopupShown = () => {
+	return {
+		type: MAGENTO_PLACE_GUEST_CART_ORDER,
+		payload: false
 	};
 };

@@ -17,6 +17,7 @@ import {
 	UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
 	MAGENTO_GET_CART_SHIPPING_METHODS,
 	MAGENTO_GET_CART_PAYMENT_METHODS,
+	MAGENTO_PLACE_GUEST_CART_ORDER,
 	MAGENTO_ADD_SHIPPING_TO_CART
 } from '../actions/types';
 
@@ -41,6 +42,7 @@ const INITIAL_STATE = {
 	payments: false,
 	totals: false,
 	countries: false,
+	orderId: false,
 	activeSection: 1
 };
 
@@ -57,6 +59,8 @@ export default (state = INITIAL_STATE, action) => {
 				totals: action.payload.totals
 			};
 		}
+		case MAGENTO_PLACE_GUEST_CART_ORDER:
+			return { ...state, orderId: action.payload };
 		case MAGENTO_GET_COUNTRIES: {
 			const ui = { ...state.ui, countryId: 'US' };
 			return { ...state, ui, countries: action.payload };

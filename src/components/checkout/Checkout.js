@@ -14,7 +14,7 @@ class Checkout extends Component {
 	};
 
 	render() {
-		const { activeSection } = this.props;
+		const activeSection = Number(this.props.activeSection);
 		return (
 			<ScrollView style={styles.container} >
 				<CheckoutSection title="Customer Account" number="1" expanded={activeSection === 1}>

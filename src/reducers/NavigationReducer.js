@@ -1,6 +1,7 @@
 import { NavigationActions } from 'react-navigation';
 import {
-	NAVIGATION_GO_TO_SCREEN
+	NAVIGATION_GO_TO_SCREEN,
+	NAVIGATION_GO_HOME
 } from '../actions/types';
 import {
 	NAVIGATION_CATEGORY_TREE_PATH
@@ -25,6 +26,9 @@ export default (state = INITIAL_STATE, action) => {
 			);
 			break;
 		}
+		case NAVIGATION_GO_HOME:
+			nextState = AppNavigator.router.getStateForAction(action, INITIAL_STATE);
+			break;
     default:
       nextState = AppNavigator.router.getStateForAction(action, state);
       break;

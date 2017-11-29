@@ -6,7 +6,8 @@ import { Spinner } from '../common';
 import {
 	checkoutSelectedPaymentChanged,
 	checkoutSetActiveSection,
-	placeGuestCartOrder
+	getGuestCartPaymentMethods,
+	checkoutCustomerNextLoading
 } from '../../actions';
 
 class CheckoutPaymentMethod extends Component {
@@ -22,7 +23,7 @@ class CheckoutPaymentMethod extends Component {
 	}
 
 	onNextPressed() {
-		// const { cartId, selectedPayment } = this.props;
+		const { cartId, selectedPayment } = this.props;
 		// const payment = {
 		// 	paymentMethod: {
 		// 		// po_number: selectedPayment.code,
@@ -38,7 +39,15 @@ class CheckoutPaymentMethod extends Component {
 		// 	}
 		// };
 		// this.props.placeGuestCartOrder(cartId, payment);
-		this.props.checkoutSetActiveSection(4);
+		this.props.checkoutCustomerNextLoading(true);
+		// setTimeout(
+		// 	() => {
+				// this.props.checkoutCustomerNextLoading(false);
+				this.props.getGuestCartPaymentMethods(cartId);
+		// 	},
+		// 	1000
+		// );
+		// this.props.checkoutSetActiveSection(4);
 	}
 
 	renderPaymentMethods() {
@@ -118,5 +127,6 @@ const mapStateToProps = ({ cart, checkout }) => {
 export default connect(mapStateToProps, {
 	checkoutSelectedPaymentChanged,
 	checkoutSetActiveSection,
-	placeGuestCartOrder
+	getGuestCartPaymentMethods,
+	checkoutCustomerNextLoading
 })(CheckoutPaymentMethod);

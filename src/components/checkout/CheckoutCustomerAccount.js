@@ -193,7 +193,7 @@ class CheckoutCustomerAccount extends Component {
 				return item.id === countryId;
 			});
 			const regionData = country.available_regions.find(item => {
-				return item.code === selectedRegion;
+				return item.id === selectedRegion;
 			});
 			const region = {
 				regionCode: regionData.code,
@@ -228,7 +228,7 @@ class CheckoutCustomerAccount extends Component {
 				const data = country.available_regions.map(value => {
 					return {
 						label: value.name,
-						key: value.code
+						key: value.id
 					};
 				});
 

@@ -279,7 +279,8 @@ export const getGuestCartPaymentMethods = cartId => {
 		magento.getGuestCartPaymentMethods(cartId)
 				.then(data => {
 					dispatch({ type: MAGENTO_GET_CART_PAYMENT_METHODS, payload: data });
-					dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 3 });
+					dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+					dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 4 });
 				})
 				.catch(error => {
 					console.log(error);

@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { Alert, View, Text, Button } from 'react-native';
 import { connect } from 'react-redux';
 import { Spinner } from '../common';
 import {
 	checkoutSelectedPaymentChanged,
 	checkoutCustomerNextLoading,
-	placeGuestCartOrder
+	checkoutOrderPopupShown,
+	placeGuestCartOrder,
+	goHome
 } from '../../actions';
 
 class CheckoutTotals extends Component {
@@ -65,11 +67,28 @@ class CheckoutTotals extends Component {
 		);
 	}
 
+	renderPopup() {
+		const { orderId } = this.props;
+		if (orderId && !this.orderPopup) {
+			this.orderPopup = true;
+			// this.props.checkoutOrderPopupShown();
+			Alert.alert(
+					'Order',
+					'Order placed successfully',
+					[
+						{ text: 'OK', onPress: () => this.props.goHome() },
+					],
+					{ cancelable: false }
+			);
+		}
+	}
+
 	render() {
 		return (
 				<View style={styles.container}>
 					{this.renderTotals()}
 					{this.renderButton()}
+					{this.renderPopup()}
 				</View>
 		);
 	}
@@ -97,12 +116,14 @@ const styles = {
 const mapStateToProps = ({ cart, checkout }) => {
 	const { cartId } = cart;
 	const { loading } = checkout.ui;
-	const { payments, selectedPayment, totals } = checkout;
-	return { cartId, payments, selectedPayment, totals, loading };
+	const { payments, selectedPayment, totals, orderId } = checkout;
+	return { cartId, payments, selectedPayment, totals, loading, orderId };
 };
 
 export default connect(mapStateToProps, {
 	checkoutSelectedPaymentChanged,
 	checkoutCustomerNextLoading,
-	placeGuestCartOrder
+	checkoutOrderPopupShown,
+	placeGuestCartOrder,
+	goHome
 })(CheckoutTotals);

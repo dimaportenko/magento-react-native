@@ -24,6 +24,7 @@ export const MAGENTO_CART_ITEM_PRODUCT = 'magento_cart_item_product';
 export const MAGENTO_PLACE_GUEST_CART_ORDER = 'magento_place_guest_cart_order';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
+export const NAVIGATION_GO_HOME = 'navigation_go_home';
 
 export const MAGENTO_CREATE_CUSTOMER = 'magento_checkout_create_customer';
 
