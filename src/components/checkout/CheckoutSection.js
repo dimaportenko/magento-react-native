@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux';
+import { checkoutSetActiveSection } from '../../actions';
 
 class CheckoutSection extends Component {
+
+	onPress() {
+		console.log('Checkout section press');
+		console.log(this.props.number);
+		this.props.checkoutSetActiveSection(this.props.number);
+	}
 
 	renderExpanded() {
 		const { expanded, children } = this.props;
@@ -21,12 +29,12 @@ class CheckoutSection extends Component {
 		const container = expanded ? styles.containerStyles : {};
 		return (
 				<View style={container}>
-					<View style={styles.headerStyles}>
+					<TouchableOpacity style={styles.headerStyles} onPress={this.onPress.bind(this)}>
 						<Text style={styles.leftText}>{this.props.title}</Text>
 						<View style={styles.textBackground}>
 							<Text style={styles.textStyle}>{this.props.number}</Text>
 						</View>
-					</View>
+					</TouchableOpacity>
 					{this.renderExpanded()}
 				</View>
 		);
@@ -38,6 +46,7 @@ const styles = {
 		flex: 1,
 	},
 	headerStyles: {
+		opacity: 1,
 		borderBottomWidth: 1,
 		height: 50,
 		borderColor: '#ddd',
@@ -76,4 +85,4 @@ const styles = {
 	}
 };
 
-export default CheckoutSection;
+export default connect(null, { checkoutSetActiveSection })(CheckoutSection);
