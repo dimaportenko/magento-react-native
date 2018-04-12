@@ -1,9 +1,12 @@
 # magento-react-native
 React Native mobile app for Magento 2.x
 
-I'm interesting in working on React Native projects.
+# Demo
+![Demo](docs/gifs/demo.gif)
 
 ## You can contact me
+
+I'm interested in working on React Native projects.
 
 troublesohard@gmail.com
 
