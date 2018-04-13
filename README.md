@@ -26,7 +26,9 @@ I'm interested in working on React Native projects.
 
 troublesohard@gmail.com
 
-https://www.linkedin.com/in/dmitry-portenko-712ab84a/
+[upwork](https://www.upwork.com/o/profiles/users/_~019a1afcd3f56e9469/)
+
+[linkedin](https://www.linkedin.com/in/dmitry-portenko-712ab84a/)
 
 ## License
 [MIT License](LICENSE.md) Copyright (c) 2017-2018 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
