@@ -6,8 +6,8 @@ import {
 	TouchableOpacity,
 	LayoutAnimation
 } from 'react-native';
+import { Icon } from 'react-native-elements';
 import CategoryTreeList from './CategoryTreeList';
-import { ExpandButton } from './common';
 import { goToScreen, setCurrentCategory } from '../actions';
 import { NAVIGATION_CATEGORY_PATH } from '../navigators/types';
 
@@ -43,8 +43,16 @@ class CategoryTreeListItem extends Component {
 		const { category } = this.props;
 		const { expanded } = this.state;
 		if (category.children_data.length) {
-			const title = expanded ? '-' : '+';
-			return <ExpandButton onPress={this.onExpandPress.bind(this)}>{title}</ExpandButton>;
+			const icon = expanded ? 'ios-arrow-dropdown-outline' : 'ios-arrow-dropright-outline';
+			return (
+				<Icon
+					iconStyle={styles.dropIcon}
+					name={icon}
+					type='ionicon'
+					color='#999'
+					onPress={this.onExpandPress.bind(this)}
+				/>
+			);
 		}
 	}
 
@@ -53,6 +61,7 @@ class CategoryTreeListItem extends Component {
 		const titleStyle = {
 			fontSize: 18,
 			alignSelf: 'flex-start',
+      fontWeight: '300',
 			paddingLeft: 10 * category.level
 		};
 
@@ -95,6 +104,10 @@ const styles = {
 		borderColor: '#ddd',
 		paddingTop: 10,
 		paddingBottom: 10
+	},
+	dropIcon: {
+		height: 24,
+		paddingRight: 15
 	}
 };
 
