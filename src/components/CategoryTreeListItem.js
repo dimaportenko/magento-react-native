@@ -47,6 +47,7 @@ class CategoryTreeListItem extends Component {
 			return (
 				<Icon
 					iconStyle={styles.dropIcon}
+					size={20}
 					name={icon}
 					type='ionicon'
 					color='#999'
@@ -107,6 +108,7 @@ const styles = {
 	},
 	dropIcon: {
 		height: 24,
+		padding: 2,
 		paddingRight: 15
 	}
 };

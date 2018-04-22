@@ -9,12 +9,27 @@ import Cart from '../components/cart/Cart';
 import Checkout from '../components/checkout/Checkout';
 
 export const AppNavigator = StackNavigator({
-	CategoryTree: { screen: CategoryTree },
-	Category: { screen: ProductList },
-	Product: { screen: Product },
-	Cart: { screen: Cart },
-	Checkout: { screen: Checkout }
-});
+		CategoryTree: { screen: CategoryTree },
+		Category: { screen: ProductList },
+		Product: { screen: Product },
+		Cart: { screen: Cart },
+		Checkout: { screen: Checkout }
+	},
+  {
+    initialRouteName: 'Home',
+    navigationOptions: {
+      headerStyle: {
+        // backgroundColor: '#f4511e',
+      },
+      // headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: '500',
+				fontSize: 18,
+        alignSelf: 'center'
+      },
+    },
+  }
+);
 
 const AppWithNavigationState = ({ dispatch, nav }) => (
   <AppNavigator navigation={addNavigationHelpers({ dispatch, state: nav })} />
