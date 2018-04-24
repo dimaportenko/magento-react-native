@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Button, TextInput } from 'react-native';
+import { View, Text, ScrollView, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
-import Swiper from 'react-native-swiper';
 import {
 	getProductMedia,
 	createGuestCart,
@@ -15,10 +14,12 @@ import { magento } from '../../magento';
 import { Spinner, ModalSelect } from '../common';
 import HeaderCartButton from '../cart/HeaderCartButton';
 import { getProductCustomAttribute } from '../../helper/product';
+import { priceSignByCode } from '../../helper/price';
+import ProductMedia from './ProductMedia';
 
 class Product extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		title: navigation.state.params.title,
+		title: navigation.state.params.title.toUpperCase(),
 		headerBackTitle: ' ',
 		headerRight: <HeaderCartButton />
 	});
@@ -31,9 +32,6 @@ class Product extends Component {
 		if (!media) {
 			this.props.getProductMedia({ sku: product.sku });
 		}
-	}
-
-	componentDidMount() {
 	}
 
 	onPressAddToCart() {
@@ -81,45 +79,15 @@ class Product extends Component {
 		this.props.uiProductUpdateOptions({ ...selectedOptions, [attributeId]: optionValue });
 	}
 
-	renderMedia() {
-		const { media } = this.props;
-
-		if (!media) {
-			return <Spinner />;
-		}
-		return (
-				<Swiper
-						showsPagination
-						pagingEnabled
-						autoplay={false}
-				>
-					{this.renderMediaItems()}
-				</Swiper>
-		);
-	}
-
-	renderMediaItems() {
-		const { media } = this.props;
-
-		return media.map(item => {
-			return (
-				<Image
-						key={item.id}
-						style={styles.imageStyle}
-						resizeMode="contain"
-						source={{ uri: magento.getProductMediaUrl() + item.file }}
-				/>
-			);
-		});
-	}
-
 	renderDescription() {
 		const { product } = this.props;
-		const attribute = getProductCustomAttribute(product, 'short_description');
+		const attribute = getProductCustomAttribute(product, 'description');
 
 		if (attribute) {
 			return (
-					<Text style={styles.descriptionStyle}>{attribute.value}</Text>
+					<Text style={styles.descriptionStyle}>
+						{decodeURI(attribute.value.replace(/<\/?[^>]+(>|$)/g, ''))}
+					</Text>
 			);
 		}
 	}
@@ -224,13 +192,10 @@ class Product extends Component {
 		console.log('Product screen render');
 		return (
 				<ScrollView style={styles.container}>
-					<View style={styles.imageContainer}>
-						{this.renderMedia()}
-					</View>
+					<ProductMedia />
 					<Text style={styles.textStyle}>{this.props.product.name}</Text>
 					<Text style={styles.textStyle}>
-						{magento.storeConfig.default_display_currency_code}
-						{' '}
+						{priceSignByCode(magento.storeConfig.default_display_currency_code)}
 						{this.props.product.price}
 					</Text>
 					{this.renderDescription()}
@@ -255,13 +220,6 @@ const styles = {
 		flex: 1,
 		backgroundColor: '#fff'
 	},
-	imageContainer: {
-		height: 300,
-	},
-	imageStyle: {
-		height: 290,
-		top: 0
-	},
 	textStyle: {
 		padding: 10,
 		textAlign: 'center',
@@ -269,6 +227,10 @@ const styles = {
 	},
 	descriptionStyle: {
 		padding: 10,
+		paddingLeft: 20,
+		paddingRight: 20,
+		fontWeight: '300',
+		lineHeight: 25
 	},
 	errorStyle: {
 		textAlign: 'center',
@@ -282,7 +244,7 @@ const styles = {
 };
 
 const mapStateToProps = state => {
-	const { product, media, options } = state.product.current;
+	const { product, options } = state.product.current;
 	const { attributes, selectedOptions } = state.product;
 	const { cart } = state;
 	console.log('Product Component');
@@ -291,7 +253,6 @@ const mapStateToProps = state => {
 
 	return {
 		product,
-		media,
 		cart,
 		options,
 		attributes,

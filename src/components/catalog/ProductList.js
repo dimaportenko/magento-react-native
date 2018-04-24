@@ -7,7 +7,7 @@ import { Spinner } from '../common';
 
 class ProductList extends Component {
 	static navigationOptions = ({ navigation }) => ({
-		title: navigation.state.params.title,
+		title: navigation.state.params.title.toUpperCase(),
 		headerBackTitle: ' '
 	});
 
