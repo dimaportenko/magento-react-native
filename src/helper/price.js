@@ -9,5 +9,6 @@ export const priceSignByCode = (code) => {
 };
 
 const codes = {
-  USD: '$'
+  USD: '$',
+  EUR: '€'
 };
