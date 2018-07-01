@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import ReduxThunk from 'redux-thunk';
-import reducers from './reducers';
-import AppWithNavigationState from './navigators/AppNavigator';
+import store from './store';
+import { Navigator } from './navigation/Navigator';
+import NavigationService from './navigation/NavigationService';
 
 
 class App extends Component {
   render() {
-    const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     return (
       <Provider store={store}>
-        <AppWithNavigationState />
+        <Navigator
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
       </Provider>
     );
   }

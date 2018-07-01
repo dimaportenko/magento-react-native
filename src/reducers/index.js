@@ -1,6 +1,5 @@
  import { combineReducers } from 'redux';
  import CategoryTreeReducer from './CategoryTreeReducer';
- import NavigationReducer from './NavigationReducer';
  import CategoryReducer from './CategoryReducer';
  import CheckoutReducer from './CheckoutReducer';
  import MagentoReducer from './MagentoReducer';
@@ -13,6 +12,5 @@
    checkout: CheckoutReducer,
    product: ProductReducer,
    magento: MagentoReducer,
-   nav: NavigationReducer,
    cart: CartReducer
  });
