@@ -6,7 +6,7 @@ export default magento => {
       return new Promise((resolve, reject) => {
         const path = '/V1/store/storeConfigs';
 
-        magento.get(path, null, null, ADMIN_TYPE)
+        magento.get(path, undefined, undefined, ADMIN_TYPE)
           .then(data => {
             resolve(data);
             magento.setStoreConfig(data[0]);

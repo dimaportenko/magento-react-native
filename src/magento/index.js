@@ -68,7 +68,6 @@ class Magento {
   }
 
   get(path, params, data, type = ADMIN_TYPE) {
-		debugger;
     return this.send(path, 'GET', params, data, type);
   }
 
