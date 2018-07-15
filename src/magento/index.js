@@ -1,3 +1,6 @@
+import admin from './lib/admin';
+import { ADMIN_TYPE, CUSTOMER_TYPE, GUEST_TYPE } from './types';
+
 const defaultOptions = {
   url: null,
   store: 'default',
@@ -22,6 +25,7 @@ class Magento {
 		this.configuration = { ...defaultOptions, ...options };
 		this.base_url = this.configuration.url;
 		this.root_path = `rest/${this.configuration.store}`;
+		this.admin = admin(this);
 	}
 
   init() {
@@ -55,19 +59,20 @@ class Magento {
     });
   }
 
-  post(path, params) {
-    return this.send(path, 'POST', null, params);
+  post(path, params, type = ADMIN_TYPE) {
+    return this.send(path, 'POST', null, params, type);
   }
 
-  put(path, params) {
-    return this.send(path, 'PUT', null, params);
+  put(path, params, type = ADMIN_TYPE) {
+    return this.send(path, 'PUT', null, params, type);
   }
 
-  get(path, params, data) {
-    return this.send(path, 'GET', params, data);
+  get(path, params, data, type = ADMIN_TYPE) {
+		debugger;
+    return this.send(path, 'GET', params, data, type);
   }
 
-  send(url, method, params, data) {
+  send(url, method, params, data, type) {
     let uri = `${this.base_url}${this.root_path}${url}`;
 
     if (params) {
@@ -88,7 +93,7 @@ class Magento {
       'User-Agent': this.configuration.userAgent,
       'Content-Type': 'application/json'
     };
-    if (this.access_token) {
+    if (this.access_token && type === ADMIN_TYPE) {
       headers.Authorization = `Bearer ${this.access_token}`;
     }
 
@@ -111,6 +116,10 @@ class Magento {
         });
     });
   }
+
+  setStoreConfig(config) {
+    this.storeConfig = config;
+	}
 
   getCategoriesTree() {
     return new Promise((resolve, reject) => {
@@ -259,22 +268,6 @@ class Magento {
 
   getProductMediaUrl() {
     return `${this.storeConfig.base_media_url}catalog/product`;
-  }
-
-  getStoreConfig() {
-		return new Promise((resolve, reject) => {
-			const path = '/V1/store/storeConfigs';
-
-			this.get(path)
-					.then(data => {
-						resolve(data);
-						this.storeConfig = data[0];
-					})
-					.catch(e => {
-						console.log(e);
-						reject(e);
-					});
-		});
   }
 
   createGuestCart() {
