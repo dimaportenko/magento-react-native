@@ -7,7 +7,7 @@ import {
 
 const INITIAL_STATE = {
   current: false,
-  products: {},
+  products: [],
 	totalCount: false,
 	loadingMore: false
 };
