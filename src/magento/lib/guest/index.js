@@ -167,6 +167,56 @@ export default magento => {
             reject(e);
           });
       });
+    },
+
+    getCountries: () => {
+      // GET /V1/directory/countries
+      return new Promise((resolve, reject) => {
+        const path = '/V1/directory/countries';
+
+        magento
+          .get(path, undefined, undefined, GUEST_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
+    getCountriesByCountryId: (countryId) => {
+      // GET /V1/directory/countries/:countryId
+      return new Promise((resolve, reject) => {
+        const path = `/V1/directory/countries/${countryId}`;
+
+        magento
+          .get(path, undefined, undefined, GUEST_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
+    createCustomer: (customer) => {
+      // POST /V1/customers
+      return new Promise((resolve, reject) => {
+        const path = '/V1/customers';
+
+        magento.post(path, customer, GUEST_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
     }
   };
 };

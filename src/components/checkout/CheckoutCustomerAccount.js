@@ -49,7 +49,7 @@ class CheckoutCustomerAccount extends Component {
 					// 			console.log('error');
 					// 			console.log(error);
 					// 		});
-					// magento.getCountriesByCountryId('US')
+					// magento.guest.getCountriesByCountryId('US')
 					// 		.then(data => {
 					// 			console.log('country');
 					// 			console.log(data);

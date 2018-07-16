@@ -290,7 +290,7 @@ export const getGuestCartPaymentMethods = cartId => {
 
 export const getCountries = () => {
 	return dispatch => {
-		magento.getCountries()
+		magento.guest.getCountries()
 				.then(data => {
 					dispatch({ type: MAGENTO_GET_COUNTRIES, payload: data });
 				})
@@ -315,7 +315,7 @@ export const placeGuestCartOrder = (cartId, payment) => {
 
 export const checkoutCreateCustomer = customer => {
 	return dispatch => {
-		magento.createCustomer(customer)
+		magento.guest.createCustomer(customer)
 				.then(data => {
 					dispatch({ type: MAGENTO_CREATE_CUSTOMER, payload: data });
 				})
