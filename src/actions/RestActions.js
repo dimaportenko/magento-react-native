@@ -44,7 +44,7 @@ export const initMagento = () => {
 
 export const getCategoryTree = () => {
   return (dispatch) => {
-    magento.getCategoriesTree()
+    magento.admin.getCategoriesTree()
       .then(payload => {
         dispatch({ type: MAGENTO_GET_CATEGORY_TREE, payload });
       })
@@ -59,7 +59,7 @@ export const getProductsForCategory = ({ id, offset }) => {
 		if (offset) {
 			dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
 		}
-    magento.getProducts(id, 10, offset)
+    magento.admin.getProducts(id, 10, offset)
         .then(payload => {
 					dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
 					dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
@@ -73,13 +73,13 @@ export const getProductsForCategory = ({ id, offset }) => {
 
 export const getConfigurableProductOptions = (sku) => {
 	return (dispatch) => {
-		magento.getConfigurableProductOptions(sku)
+		magento.admin.getConfigurableProductOptions(sku)
 				.then(data => {
 					console.log('product options');
 					console.log(data);
 					dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: data });
 					data.forEach(option => {
-						magento.getAttributeByCode(option.attribute_id)
+						magento.admin.getAttributeByCode(option.attribute_id)
 								.then(attributeOptions => {
 									console.log('option attribute');
 									console.log(attributeOptions);
@@ -113,7 +113,7 @@ const updateConfigurableProductsPrices = (products, dispatch) => {
 
 const updateConfigurableProductPrice = (product, dispatch) => {
   const { sku } = product;
-	magento.getConfigurableChildren(sku)
+	magento.admin.getConfigurableChildren(sku)
 			.then(data => {
 				dispatch({
           type: MAGENTO_UPDATE_CONF_PRODUCT,
@@ -130,7 +130,7 @@ const updateConfigurableProductPrice = (product, dispatch) => {
 
 export const getProductMedia = ({ sku }) => {
 	return dispatch => {
-		magento.getProductMedia(sku)
+		magento.admin.getProductMedia(sku)
 				.then(data => {
 					dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: data });
 				})
@@ -156,7 +156,7 @@ export const setCurrentProduct = product => {
 
 export const createGuestCart = () => {
   return dispatch => {
-		magento.createGuestCart()
+		magento.guest.createGuestCart()
 				.then(cartId => {
 					dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
 				})
@@ -178,7 +178,7 @@ export const addToCart = ({ cartId, item }) => {
 		if (cartId) {
 			return dispatchAddToCart(dispatch, cartId, item);
 		}
-		magento.createGuestCart()
+		magento.guest.createGuestCart()
 				.then(guestCartId => {
 					dispatch({ type: MAGENTO_CREATE_CART, payload: guestCartId });
 					const updatedItem = item;
@@ -192,7 +192,7 @@ export const addToCart = ({ cartId, item }) => {
 };
 
 const dispatchAddToCart = (dispatch, cartId, item) => {
-	return magento.addItemToCart(cartId, item)
+	return magento.guest.addItemToCart(cartId, item)
 			.then(data => {
 				dispatch({ type: MAGENTO_ADD_TO_CART, payload: data });
 				dispatchGetGuestCart(dispatch, cartId);
@@ -203,7 +203,7 @@ const dispatchAddToCart = (dispatch, cartId, item) => {
 };
 
 const dispatchGetGuestCart = (dispatch, cartId) => {
-	return magento.getGuestCart(cartId)
+	return magento.guest.getGuestCart(cartId)
 			.then(data => {
 				dispatch({ type: MAGENTO_GET_CART, payload: data });
 			})
@@ -214,7 +214,7 @@ const dispatchGetGuestCart = (dispatch, cartId) => {
 
 export const cartItemProduct = sku => {
 	return dispatch => {
-		magento.getProductBySku(sku)
+		magento.admin.getProductBySku(sku)
 				.then(data => {
 					dispatch({ type: MAGENTO_CART_ITEM_PRODUCT, payload: data });
 				})
@@ -226,7 +226,7 @@ export const cartItemProduct = sku => {
 
 export const addGuestCartBillingAddress = (cartId, address) => {
 	return dispatch => {
-		magento.addGuestCartBillingAddress(cartId, address)
+		magento.guest.addGuestCartBillingAddress(cartId, address)
 				.then(data => {
 					dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
 					// dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
@@ -234,7 +234,7 @@ export const addGuestCartBillingAddress = (cartId, address) => {
 				.catch(error => {
 					console.log(error);
 				});
-		magento.guestCartEstimateShippingMethods(cartId, address)
+		magento.guest.guestCartEstimateShippingMethods(cartId, address)
 				.then(data => {
 					// console.log('guestCartEstimateShippingMethods');
 					// console.log(data);
@@ -250,7 +250,7 @@ export const addGuestCartBillingAddress = (cartId, address) => {
 
 export const getGuestCartShippingMethods = cartId => {
 	return dispatch => {
-		magento.getGuestCartShippingMethods(cartId)
+		magento.guest.getGuestCartShippingMethods(cartId)
 				.then(data => {
 					dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
 				})
@@ -262,7 +262,7 @@ export const getGuestCartShippingMethods = cartId => {
 
 export const addGuestCartShippingInfo = (cartId, address) => {
 	return dispatch => {
-		magento.addGuestCartShippingInfo(cartId, address)
+		magento.guest.addGuestCartShippingInfo(cartId, address)
 				.then(data => {
 					dispatch({ type: MAGENTO_ADD_SHIPPING_TO_CART, payload: data });
 					dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
@@ -276,7 +276,7 @@ export const addGuestCartShippingInfo = (cartId, address) => {
 
 export const getGuestCartPaymentMethods = cartId => {
 	return dispatch => {
-		magento.getGuestCartPaymentMethods(cartId)
+		magento.guest.getGuestCartPaymentMethods(cartId)
 				.then(data => {
 					dispatch({ type: MAGENTO_GET_CART_PAYMENT_METHODS, payload: data });
 					dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
@@ -302,7 +302,7 @@ export const getCountries = () => {
 
 export const placeGuestCartOrder = (cartId, payment) => {
 	return dispatch => {
-		magento.placeGuestCartOrder(cartId, payment)
+		magento.guest.placeGuestCartOrder(cartId, payment)
 				.then(data => {
 					dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
 					dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
