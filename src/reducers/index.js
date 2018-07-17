@@ -1,5 +1,6 @@
  import { combineReducers } from 'redux';
  import CategoryTreeReducer from './CategoryTreeReducer';
+ import CustomerAuthReducer from './CustomerAuthReducer';
  import CategoryReducer from './CategoryReducer';
  import CheckoutReducer from './CheckoutReducer';
  import MagentoReducer from './MagentoReducer';
@@ -8,6 +9,7 @@
 
  export default combineReducers({
    categoryTree: CategoryTreeReducer,
+   customerAuth: CustomerAuthReducer,
    category: CategoryReducer,
    checkout: CheckoutReducer,
    product: ProductReducer,

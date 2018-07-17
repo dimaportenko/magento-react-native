@@ -217,6 +217,27 @@ export default magento => {
             reject(e);
           });
       });
+    },
+
+    auth: (username, password) => {
+      return new Promise((resolve, reject) => {
+        if (username) {
+          const path = '/V1/integration/customer/token';
+
+          magento
+            .post(path, { username, password }, GUEST_TYPE)
+            .then(token => {
+              console.log('token');
+              magento.setCustomerToken(token);
+
+              resolve(token);
+            })
+            .catch(e => {
+              console.log(e);
+              reject(e);
+            });
+        }
+      });
     }
   };
 };

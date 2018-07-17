@@ -1,5 +1,6 @@
 import admin from './lib/admin';
 import guest from './lib/guest';
+import customer from './lib/customer';
 import { ADMIN_TYPE, CUSTOMER_TYPE, GUEST_TYPE } from './types';
 
 const defaultOptions = {
@@ -22,13 +23,14 @@ const defaultOptions = {
 };
 
 class Magento {
-	setOptions(options) {
-		this.configuration = { ...defaultOptions, ...options };
-		this.base_url = this.configuration.url;
-		this.root_path = `rest/${this.configuration.store}`;
-		this.admin = admin(this);
-		this.guest = guest(this);
-	}
+  setOptions(options) {
+    this.configuration = { ...defaultOptions, ...options };
+    this.base_url = this.configuration.url;
+    this.root_path = `rest/${this.configuration.store}`;
+    this.admin = admin(this);
+    this.guest = guest(this);
+    this.customer = customer(this);
+  }
 
   init() {
     return new Promise((resolve, reject) => {
@@ -36,7 +38,11 @@ class Magento {
         this.access_token = this.configuration.authentication.integration.access_token;
         resolve(this);
       } else if (this.configuration.authentication.login) {
-        const { username, password, type } = this.configuration.authentication.login;
+        const {
+          username,
+          password,
+          type
+        } = this.configuration.authentication.login;
         if (username) {
           let path;
           if (type === 'admin') {
@@ -87,7 +93,9 @@ class Magento {
     //check if there's any missing parameters
     const missingFields = uri.match(/(\{[a-zA-Z0-9_]+\})/g);
     if (missingFields && missingFields.length > 0) {
-      return Promise.reject(`URL missing parameters: ${missingFields.join(', ')}`);
+      return Promise.reject(
+        `URL missing parameters: ${missingFields.join(', ')}`
+      );
     }
 
     const headers = {
@@ -96,18 +104,20 @@ class Magento {
     };
     if (this.access_token && type === ADMIN_TYPE) {
       headers.Authorization = `Bearer ${this.access_token}`;
+    } else if (this.customerToken && type === CUSTOMER_TYPE) {
+      headers.Authorization = `Bearer ${this.customerToken}`;
     }
 
     return new Promise((resolve, reject) => {
       console.log({ uri, method, headers, data, ...params });
       fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => {
-					console.log(response);
-					return response.json();
-				})
+          console.log(response);
+          return response.json();
+        })
         .then(responseData => {
-					// TODO: check response code
-					// debugger;
+          // TODO: check response code
+          // debugger;
           console.log(responseData);
           resolve(responseData);
         })
@@ -120,7 +130,11 @@ class Magento {
 
   setStoreConfig(config) {
     this.storeConfig = config;
-	}
+  }
+
+  setCustomerToken(token) {
+    this.customerToken = token;
+  }
 
   getProductMediaUrl() {
     return `${this.storeConfig.base_media_url}catalog/product`;

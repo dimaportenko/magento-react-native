@@ -28,6 +28,13 @@ export const NAVIGATION_GO_HOME = 'navigation_go_home';
 
 export const MAGENTO_CREATE_CUSTOMER = 'magento_checkout_create_customer';
 
+export const MAGENTO_AUTH = 'magento_auth';
+export const MAGENTO_LOGOUT = 'magento_logout';
+export const MAGENTO_AUTH_ERROR = 'magento_auth_error';
+export const MAGENTO_AUTH_LOADING = 'magento_auth_loading';
+export const MAGENTO_PASSWORD_RESET_LOADING = 'magento_password_reset_loading';
+export const MAGENTO_SUCCESS_MESSAGE = 'magento_success_message';
+
 export const UI_PRODUCT_QTY_INPUT = 'ui_product_qty_input';
 export const UI_PRODUCT_UPDATE_OPTIONS = 'ui_product_update';
 export const UI_CHECKOUT_EMAIL_CHANGED = 'ui_checkout_email_changed';

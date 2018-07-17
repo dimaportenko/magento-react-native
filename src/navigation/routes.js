@@ -3,3 +3,7 @@ export const NAVIGATION_CATEGORY_PATH = 'Category';
 export const NAVIGATION_PRODUCT_PATH = 'Product';
 export const NAVIGATION_CART_PATH = 'Cart';
 export const NAVIGATION_CHECKOUT_PATH = 'Checkout';
+export const NAVIGATION_HOME_STACK_PATH = 'Home';
+export const NAVIGATION_ACCOUNT_PATH = 'Account';
+export const NAVIGATION_LOGIN_PATH = 'Login';
+export const NAVIGATION_AUTH_STACK_PATH = 'Auth';
