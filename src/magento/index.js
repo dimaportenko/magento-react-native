@@ -1,7 +1,7 @@
 import admin from './lib/admin';
 import guest from './lib/guest';
 import customer from './lib/customer';
-import { ADMIN_TYPE, CUSTOMER_TYPE, GUEST_TYPE } from './types';
+import { ADMIN_TYPE, CUSTOMER_TYPE } from './types';
 
 const defaultOptions = {
   url: null,
@@ -134,6 +134,10 @@ class Magento {
 
   setCustomerToken(token) {
     this.customerToken = token;
+  }
+
+  setAccessToken(token) {
+    this.access_token = token;
   }
 
   getProductMediaUrl() {

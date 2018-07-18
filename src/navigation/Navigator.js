@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   createStackNavigator,
+  createSwitchNavigator,
   createBottomTabNavigator
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
@@ -11,6 +12,8 @@ import Product from '../components/catalog/Product';
 import Cart from '../components/cart/Cart';
 import Checkout from '../components/checkout/Checkout';
 import Login from '../components/account/Login';
+import Account from '../components/account/Account';
+import AuthLoading from '../components/account/AuthLoading';
 
 import {
   NAVIGATION_CATEGORY_TREE_PATH,
@@ -20,6 +23,10 @@ import {
   NAVIGATION_CART_PATH,
   NAVIGATION_HOME_STACK_PATH,
   NAVIGATION_LOGIN_PATH,
+  NAVIGATION_ACCOUNT_PATH,
+  NAVIGATION_ACCOUNT_STACK_PATH,
+  NAVIGATION_LOGIN_STACK_PATH,
+  NAVIGATION_AUTH_LOADING_SWITCH,
   NAVIGATION_AUTH_STACK_PATH
 } from './routes';
 
@@ -51,6 +58,16 @@ const AuthStack = createStackNavigator({
   [NAVIGATION_LOGIN_PATH]: Login
 });
 
+const AccountStack = createStackNavigator({
+  [NAVIGATION_ACCOUNT_PATH]: Account
+});
+
+const AccountSwitch = createSwitchNavigator({
+  [NAVIGATION_AUTH_LOADING_SWITCH]: AuthLoading,
+  [NAVIGATION_LOGIN_STACK_PATH]: AuthStack,
+  [NAVIGATION_ACCOUNT_STACK_PATH]: AccountStack
+});
+
 export const Navigator = createBottomTabNavigator(
   {
     [NAVIGATION_HOME_STACK_PATH]: {
@@ -62,7 +79,7 @@ export const Navigator = createBottomTabNavigator(
       })
     },
     [NAVIGATION_AUTH_STACK_PATH]: {
-      screen: AuthStack,
+      screen: AccountSwitch,
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => {
           return <Icon name="md-person" type="ionicon" color={tintColor} />;
