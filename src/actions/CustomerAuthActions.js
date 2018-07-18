@@ -3,10 +3,14 @@ import { magento } from '../magento';
 import {
   MAGENTO_AUTH_LOADING,
   MAGENTO_AUTH,
+  MAGENTO_LOGOUT,
   MAGENTO_AUTH_ERROR
 } from './types';
 import NavigationService from '../navigation/NavigationService';
-import { NAVIGATION_ACCOUNT_STACK_PATH } from '../navigation/routes';
+import {
+  NAVIGATION_ACCOUNT_STACK_PATH,
+  NAVIGATION_LOGIN_STACK_PATH
+} from '../navigation/routes';
 
 export const auth = (username, password) => {
   return async dispatch => {
@@ -43,4 +47,13 @@ const authFail = (dispatch, message) => {
 
 export const errorMessage = error => {
   return { type: MAGENTO_AUTH_ERROR, payload: error };
+};
+
+export const logout = () => {
+  return dispatch => {
+    dispatch({ type: MAGENTO_AUTH, payload: '' });
+    dispatch({ type: MAGENTO_LOGOUT });
+    NavigationService.navigate(NAVIGATION_LOGIN_STACK_PATH);
+    AsyncStorage.setItem('customerToken', '');
+  };
 };

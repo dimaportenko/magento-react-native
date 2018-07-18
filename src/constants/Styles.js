@@ -5,20 +5,16 @@ import Fonts from './Fonts';
 
 export const buttonStyles = StyleSheet.create({
   button: {
-    // borderWidth: 1,
-    // backgroundColor: Colors.GOLD,
-    // borderColor: Colors.GOLD,
-    // width: Sizes.convert(230),
-    // height: Sizes.convert(40),
-    // borderRadius: Sizes.convert(5),
-    // justifyContent: 'center'
+    borderWidth: 1,
+    backgroundColor: Colors.BORDER_GRAY,
+    borderColor: Colors.BORDER_GRAY,
+    width: Sizes.WINDOW_WIDTH * 0.7,
+    height: 40,
+    justifyContent: 'center'
   },
   title: {
-    // ...Fonts.TREBUCHET_MS,
-    // fontSize: Sizes.convert(14),
-    // color: 'white',
-    // alignSelf: 'center',
-    // fontWeight: '700'
+    color: 'white',
+    alignSelf: 'center'
   }
 });
 
