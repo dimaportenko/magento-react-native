@@ -4,7 +4,7 @@ import { View, StatusBar, StyleSheet, AsyncStorage } from 'react-native';
 import { Spinner } from './../common';
 import {
   NAVIGATION_ACCOUNT_STACK_PATH,
-  NAVIGATION_AUTH_STACK_PATH
+  NAVIGATION_LOGIN_STACK_PATH
 } from '../../navigation/routes';
 import { magento } from '../../magento';
 import { orderProducts, errorMessage, customerUpdate } from '../../actions';
@@ -27,11 +27,11 @@ class AuthLoading extends Component {
       this.props.navigation.navigate(
         customerToken
           ? NAVIGATION_ACCOUNT_STACK_PATH
-          : NAVIGATION_AUTH_STACK_PATH
+          : NAVIGATION_LOGIN_STACK_PATH
       );
     } catch (e) {
       // TODO: add error screen via switch navigation
-      this.props.navigation.navigate(NAVIGATION_AUTH_STACK_PATH);
+      this.props.navigation.navigate(NAVIGATION_LOGIN_STACK_PATH);
     }
   };
 

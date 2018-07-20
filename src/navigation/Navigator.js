@@ -12,6 +12,7 @@ import Product from '../components/catalog/Product';
 import Cart from '../components/cart/Cart';
 import Checkout from '../components/checkout/Checkout';
 import Login from '../components/account/Login';
+import Signin from '../components/account/Signin';
 import Account from '../components/account/Account';
 import AuthLoading from '../components/account/AuthLoading';
 
@@ -23,6 +24,7 @@ import {
   NAVIGATION_CART_PATH,
   NAVIGATION_HOME_STACK_PATH,
   NAVIGATION_LOGIN_PATH,
+  NAVIGATION_SIGNIN_PATH,
   NAVIGATION_ACCOUNT_PATH,
   NAVIGATION_ACCOUNT_STACK_PATH,
   NAVIGATION_LOGIN_STACK_PATH,
@@ -55,7 +57,8 @@ const HomeStack = createStackNavigator(
 );
 
 const AuthStack = createStackNavigator({
-  [NAVIGATION_LOGIN_PATH]: Login
+  [NAVIGATION_LOGIN_PATH]: Login,
+  [NAVIGATION_SIGNIN_PATH]: Signin
 });
 
 const AccountStack = createStackNavigator({

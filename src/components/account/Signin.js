@@ -11,12 +11,10 @@ import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import { Spinner } from '../common/Spinner';
 import { auth } from '../../actions/CustomerAuthActions';
-import NavigationService from '../../navigation/NavigationService';
-import { NAVIGATION_SIGNIN_PATH } from '../../navigation/routes';
 
-class Login extends Component {
+class Signin extends Component {
   static navigationOptions = {
-    title: 'Login'
+    title: 'Sign In'
   };
 
   componentWillMount() {
@@ -31,10 +29,6 @@ class Login extends Component {
     this.props.auth(email, password);
   };
 
-  onSigninPress = () => {
-    this.props.navigation.navigate(NAVIGATION_SIGNIN_PATH);
-  };
-
   renderButtons() {
     if (this.props.loading) {
       return <Spinner style={{ marginTop: 30 }} />;
@@ -44,9 +38,6 @@ class Login extends Component {
       <View>
         <TouchableOpacity onPress={this.onLoginPress} style={styles.button}>
           <Text style={styles.buttonTitle}>LOG IN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.onSigninPress} style={[styles.button, styles.buttonMargin]}>
-          <Text style={styles.buttonTitle}>SIGN IN</Text>
         </TouchableOpacity>
       </View>
     );
@@ -131,9 +122,6 @@ const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center'
   },
-  buttonMargin: {
-    marginTop: 20
-  },
   error: {
     color: 'red',
     width: Sizes.WINDOW_WIDTH * 0.85,
@@ -158,4 +146,4 @@ const mapStateToProps = ({ customerAuth }) => {
   return { error, success, loading };
 };
 
-export default connect(mapStateToProps, { auth })(Login);
+export default connect(mapStateToProps, { auth })(Signin);
