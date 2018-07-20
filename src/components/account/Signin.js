@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import { Spinner } from '../common/Spinner';
-import { auth } from '../../actions/CustomerAuthActions';
+import { createCustomer } from '../../actions';
 
 class Signin extends Component {
   static navigationOptions = {
@@ -19,14 +19,27 @@ class Signin extends Component {
 
   componentWillMount() {
     this.setState({
-      email: 'test@test.com',
-      password: 'Test1234'
+      firstname: 'Dmytro',
+      lastname: 'Portenko',
+      email: 'test+1@test.com',
+      password: 'Test1234',
+      confirmPassword: 'Test1234'
     });
   }
 
-  onLoginPress = () => {
-    const { email, password } = this.state;
-    this.props.auth(email, password);
+  onCreateAccountPress = () => {
+    const { email, password, firstname, lastname, confirmPassword } = this.state;
+
+    const customer = {
+      customer: {
+        email,
+        firstname,
+        lastname,
+      },
+      password
+    };
+
+    this.props.createCustomer(customer);
   };
 
   renderButtons() {
@@ -36,8 +49,8 @@ class Signin extends Component {
 
     return (
       <View>
-        <TouchableOpacity onPress={this.onLoginPress} style={styles.button}>
-          <Text style={styles.buttonTitle}>LOG IN</Text>
+        <TouchableOpacity onPress={this.onCreateAccountPress} style={styles.button}>
+          <Text style={styles.buttonTitle}>CREATE ACCOUNT</Text>
         </TouchableOpacity>
       </View>
     );
@@ -61,6 +74,28 @@ class Signin extends Component {
           <TextInput
             autoCapitalize="none"
             underlineColorAndroid="transparent"
+            placeholder="Firstname"
+            autoCorrect={false}
+            style={styles.input}
+            value={this.state.firstname}
+            onChangeText={value => this.setState({ firstname: value })}
+          />
+        </View>
+        <View style={[styles.inputContainer]}>
+          <TextInput
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            placeholder="Lastname"
+            autoCorrect={false}
+            style={styles.input}
+            value={this.state.lastname}
+            onChangeText={value => this.setState({ lastname: value })}
+          />
+        </View>
+        <View style={[styles.inputContainer]}>
+          <TextInput
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
             placeholder="Email"
             autoCorrect={false}
             style={styles.input}
@@ -78,6 +113,18 @@ class Signin extends Component {
             style={styles.input}
             value={this.state.password}
             onChangeText={value => this.setState({ password: value })}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            secureTextEntry
+            placeholder="Confirm Password"
+            autoCorrect={false}
+            style={styles.input}
+            value={this.state.confirmPassword}
+            onChangeText={value => this.setState({ confirmPassword: value })}
           />
         </View>
         {this.renderButtons()}
@@ -108,7 +155,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   offsetTop: {
-    marginTop: Sizes.WINDOW_HEIGHT * 0.2
+    marginTop: Sizes.WINDOW_HEIGHT * 0.1
   },
   button: {
     borderWidth: 1,
@@ -146,4 +193,4 @@ const mapStateToProps = ({ customerAuth }) => {
   return { error, success, loading };
 };
 
-export default connect(mapStateToProps, { auth })(Signin);
+export default connect(mapStateToProps, { createCustomer })(Signin);

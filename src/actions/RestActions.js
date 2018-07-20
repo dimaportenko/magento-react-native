@@ -313,7 +313,7 @@ export const placeGuestCartOrder = (cartId, payment) => {
 	};
 };
 
-export const checkoutCreateCustomer = customer => {
+export const createCustomer = customer => {
 	return dispatch => {
 		magento.guest.createCustomer(customer)
 				.then(data => {
