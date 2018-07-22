@@ -42,9 +42,9 @@ export default magento => {
           'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
           'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
           'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
-          'searchCriteria[filterGroups][0][filters][1][field]': 'visibility',
-          'searchCriteria[filterGroups][0][filters][1][value]': '4',
-          'searchCriteria[filterGroups][0][filters][1][conditionType]': 'eq',
+          'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
+          'searchCriteria[filterGroups][1][filters][0][value]': '4',
+          'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
           'searchCriteria[pageSize]': pageSize,
           'searchCriteria[currentPage]': currentPage
         };

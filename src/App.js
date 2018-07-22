@@ -3,7 +3,9 @@ import { Provider } from 'react-redux';
 import store from './store';
 import { Navigator } from './navigation/Navigator';
 import NavigationService from './navigation/NavigationService';
+import { initMagento } from './actions';
 
+store.dispatch(initMagento());
 
 class App extends Component {
   render() {

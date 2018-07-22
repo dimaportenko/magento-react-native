@@ -15,7 +15,7 @@ import {
 	checkoutCustomerTelephoneChanged,
 	checkoutCustomerCountryIdChanged,
 	addGuestCartBillingAddress,
-	checkoutCreateCustomer,
+	createCustomer,
 	checkoutCustomerNextLoading
 	// loginUser
 } from '../../actions';
@@ -177,7 +177,7 @@ class CheckoutCustomerAccount extends Component {
 			useForShipping: true
 		};
 
-		// this.props.checkoutCreateCustomer(customer);
+		// this.props.createCustomer(customer);
 		this.props.checkoutCustomerNextLoading(true);
 		this.props.addGuestCartBillingAddress(cartId, address);
 	}
@@ -457,7 +457,7 @@ export default connect(
 			checkoutCustomerTelephoneChanged,
 			checkoutCustomerCountryIdChanged,
 			addGuestCartBillingAddress,
-			checkoutCreateCustomer,
+			checkoutCreateCustomer: createCustomer,
 			checkoutCustomerNextLoading
 			// loginUser
 		}

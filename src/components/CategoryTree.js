@@ -12,15 +12,7 @@ class CategoryTree extends Component {
 	};
 
   componentWillMount() {
-    if (!this.props.magento) {
-      this.props.initMagento();
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (!this.props.magento && nextProps.magento) {
-      this.props.getCategoryTree(nextProps.magento);
-    }
+    this.props.getCategoryTree();
   }
 
   renderContent() {
