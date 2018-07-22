@@ -236,6 +236,8 @@ export default magento => {
               console.log(e);
               reject(e);
             });
+        } else {
+          reject('Email is required!');
         }
       });
     }

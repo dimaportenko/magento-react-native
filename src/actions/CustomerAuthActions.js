@@ -1,6 +1,8 @@
 import { AsyncStorage } from 'react-native';
 import { magento } from '../magento';
 import {
+  MAGENTO_CURRENT_CUSTOMER,
+  MAGENTO_CREATE_CUSTOMER,
   MAGENTO_AUTH_LOADING,
   MAGENTO_AUTH,
   MAGENTO_LOGOUT,
@@ -11,6 +13,32 @@ import {
   NAVIGATION_ACCOUNT_STACK_PATH,
   NAVIGATION_LOGIN_STACK_PATH
 } from '../navigation/routes';
+
+export const signIn = customer => {
+  return async dispatch => {
+    try {
+      const response = await magento.guest.createCustomer(customer);
+      dispatch({ type: MAGENTO_CREATE_CUSTOMER, payload: response });
+      if (response.id && response.group_id) {
+        const token = await magento.guest.auth(
+          customer.customer.email,
+          customer.password
+        );
+        if (token.message) {
+          authFail(dispatch, token.message);
+        } else {
+          authSuccess(dispatch, token);
+        }
+      } else if (response.message) {
+        authFail(dispatch, response.message);
+      } else {
+        authFail(dispatch, 'Something went wrong. Pleas try again later.');
+      }
+    } catch (e) {
+      authFail(dispatch, e.message);
+    }
+  };
+};
 
 export const auth = (username, password) => {
   return async dispatch => {
@@ -55,5 +83,19 @@ export const logout = () => {
     dispatch({ type: MAGENTO_LOGOUT });
     NavigationService.navigate(NAVIGATION_LOGIN_STACK_PATH);
     AsyncStorage.setItem('customerToken', '');
+  };
+};
+
+export const currentCustomer = () => {
+  return async dispatch => {
+    try {
+      const customer = await magento.customer.getCurrentCustomer();
+      dispatch({
+        type: MAGENTO_CURRENT_CUSTOMER,
+        payload: customer
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };

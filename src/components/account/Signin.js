@@ -10,7 +10,7 @@ import { connect } from 'react-redux';
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import { Spinner } from '../common/Spinner';
-import { createCustomer } from '../../actions';
+import { signIn } from '../../actions';
 
 class Signin extends Component {
   static navigationOptions = {
@@ -29,6 +29,7 @@ class Signin extends Component {
 
   onCreateAccountPress = () => {
     const { email, password, firstname, lastname, confirmPassword } = this.state;
+    // TODO: add password check
 
     const customer = {
       customer: {
@@ -39,7 +40,7 @@ class Signin extends Component {
       password
     };
 
-    this.props.createCustomer(customer);
+    this.props.signIn(customer);
   };
 
   renderButtons() {
@@ -115,18 +116,18 @@ class Signin extends Component {
             onChangeText={value => this.setState({ password: value })}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            secureTextEntry
-            placeholder="Confirm Password"
-            autoCorrect={false}
-            style={styles.input}
-            value={this.state.confirmPassword}
-            onChangeText={value => this.setState({ confirmPassword: value })}
-          />
-        </View>
+        {/*<View style={styles.inputContainer}>*/}
+          {/*<TextInput*/}
+            {/*autoCapitalize="none"*/}
+            {/*underlineColorAndroid="transparent"*/}
+            {/*secureTextEntry*/}
+            {/*placeholder="Confirm Password"*/}
+            {/*autoCorrect={false}*/}
+            {/*style={styles.input}*/}
+            {/*value={this.state.confirmPassword}*/}
+            {/*onChangeText={value => this.setState({ confirmPassword: value })}*/}
+          {/*/>*/}
+        {/*</View>*/}
         {this.renderButtons()}
         {this.renderMessages()}
         <View />
@@ -193,4 +194,4 @@ const mapStateToProps = ({ customerAuth }) => {
   return { error, success, loading };
 };
 
-export default connect(mapStateToProps, { createCustomer })(Signin);
+export default connect(mapStateToProps, { signIn })(Signin);

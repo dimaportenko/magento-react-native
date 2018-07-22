@@ -27,6 +27,7 @@ export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
 export const NAVIGATION_GO_HOME = 'navigation_go_home';
 
 export const MAGENTO_CREATE_CUSTOMER = 'magento_checkout_create_customer';
+export const MAGENTO_CURRENT_CUSTOMER = 'magento_current_customer';
 
 export const MAGENTO_AUTH = 'magento_auth';
 export const MAGENTO_LOGOUT = 'magento_logout';
