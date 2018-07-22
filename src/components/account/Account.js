@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ActivityIndicator
+} from 'react-native';
 import { buttonStyles } from '../../constants/Styles';
 import { logout, currentCustomer } from '../../actions';
-import { Spinner } from '../common';
 
 class Account extends Component {
   static navigationOptions = {
@@ -22,15 +27,17 @@ class Account extends Component {
 
   renderCustomerData() {
     if (!this.props.customer) {
-      return <Spinner />;
+      return <ActivityIndicator size="large" style={styles.activity} />;
     }
-    
+
     const { email, firstname, lastname } = this.props.customer;
     return (
-      <View>
-        <Text>Contact Information</Text>
-        <Text>{firstname} {lastname}</Text>
-        <Text>{email}</Text>
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>Contact Information</Text>
+        <Text style={styles.text}>
+          {firstname} {lastname}
+        </Text>
+        <Text style={styles.text}>{email}</Text>
       </View>
     );
   }
@@ -56,6 +63,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     alignItems: 'center',
     paddingTop: 20
+  },
+  activity: {
+    padding: 10
+  },
+  title: {
+    fontWeight: '700',
+    textAlign: 'center',
+    fontSize: 16
+  },
+  text: {
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  textContainer: {
+    marginBottom: 15
   }
 });
 

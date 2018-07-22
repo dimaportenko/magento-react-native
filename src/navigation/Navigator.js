@@ -15,6 +15,7 @@ import Login from '../components/account/Login';
 import Signin from '../components/account/Signin';
 import Account from '../components/account/Account';
 import AuthLoading from '../components/account/AuthLoading';
+import PasswordReset from '../components/account/PasswordReset';
 
 import {
   NAVIGATION_CATEGORY_TREE_PATH,
@@ -29,6 +30,7 @@ import {
   NAVIGATION_ACCOUNT_STACK_PATH,
   NAVIGATION_LOGIN_STACK_PATH,
   NAVIGATION_AUTH_LOADING_SWITCH,
+  NAVIGATION_RESET_PASSWORD_PATH,
   NAVIGATION_AUTH_STACK_PATH
 } from './routes';
 
@@ -58,7 +60,8 @@ const HomeStack = createStackNavigator(
 
 const AuthStack = createStackNavigator({
   [NAVIGATION_LOGIN_PATH]: Login,
-  [NAVIGATION_SIGNIN_PATH]: Signin
+  [NAVIGATION_SIGNIN_PATH]: Signin,
+  [NAVIGATION_RESET_PASSWORD_PATH]: PasswordReset
 });
 
 const AccountStack = createStackNavigator({
@@ -91,7 +94,7 @@ export const Navigator = createBottomTabNavigator(
     }
   },
   {
-    initialRouteName: NAVIGATION_AUTH_STACK_PATH,
+    // initialRouteName: NAVIGATION_AUTH_STACK_PATH,
     tabBarOptions: {
       showLabel: false
     }

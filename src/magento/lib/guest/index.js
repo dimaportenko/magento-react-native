@@ -91,7 +91,8 @@ export default magento => {
       return new Promise((resolve, reject) => {
         const path = `/V1/guest-carts/${cartId}/shipping-information`;
 
-        magento.post(path, address, GUEST_TYPE)
+        magento
+          .post(path, address, GUEST_TYPE)
           .then(data => {
             resolve(data);
           })
@@ -158,7 +159,8 @@ export default magento => {
       return new Promise((resolve, reject) => {
         const path = `/V1/guest-carts/${cartId}/order`;
 
-        magento.put(path, payment, GUEST_TYPE)
+        magento
+          .put(path, payment, GUEST_TYPE)
           .then(data => {
             resolve(data);
           })
@@ -186,7 +188,7 @@ export default magento => {
       });
     },
 
-    getCountriesByCountryId: (countryId) => {
+    getCountriesByCountryId: countryId => {
       // GET /V1/directory/countries/:countryId
       return new Promise((resolve, reject) => {
         const path = `/V1/directory/countries/${countryId}`;
@@ -203,12 +205,13 @@ export default magento => {
       });
     },
 
-    createCustomer: (customer) => {
+    createCustomer: customer => {
       // POST /V1/customers
       return new Promise((resolve, reject) => {
         const path = '/V1/customers';
 
-        magento.post(path, customer, GUEST_TYPE)
+        magento
+          .post(path, customer, GUEST_TYPE)
           .then(data => {
             resolve(data);
           })
@@ -239,6 +242,29 @@ export default magento => {
         } else {
           reject('Email is required!');
         }
+      });
+    },
+
+    initiatePasswordReset: email => {
+      // PUT /V1/customers/password
+      const data = {
+        email,
+        template: 'email_reset',
+        websiteId: magento.configuration.websiteId
+      };
+
+      return new Promise((resolve, reject) => {
+        const path = '/V1/customers/password';
+
+        magento
+          .put(path, data, GUEST_TYPE)
+          .then(response => {
+            resolve(response);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
       });
     }
   };

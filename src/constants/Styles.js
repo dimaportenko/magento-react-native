@@ -20,17 +20,16 @@ export const buttonStyles = StyleSheet.create({
 
 export const inputStyles = StyleSheet.create({
   input: {
-    // ...Fonts.TREBUCHET_MS,
-    // color: '#000',
-    // paddingRight: 5,
-    // paddingLeft: 5,
-    // fontSize: Sizes.convert(14)
+    color: '#000',
+    paddingRight: 5,
+    paddingLeft: 5
   },
   container: {
-    // borderWidth: 1,
-    // borderColor: Colors.BORDER_GRAY,
-    // width: Sizes.convert(230),
-    // height: Sizes.convert(40),
-    // justifyContent: 'center'
-  }
+    borderWidth: 1,
+    borderColor: Colors.BORDER_GRAY,
+    width: Sizes.WINDOW_WIDTH * 0.7,
+    height: 40,
+    justifyContent: 'center',
+    marginBottom: 20
+  },
 });
