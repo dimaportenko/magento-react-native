@@ -11,8 +11,10 @@ import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
 import { Spinner } from '../common/Spinner';
 import { auth } from '../../actions/CustomerAuthActions';
-import NavigationService from '../../navigation/NavigationService';
-import { NAVIGATION_SIGNIN_PATH } from '../../navigation/routes';
+import {
+  NAVIGATION_SIGNIN_PATH,
+  NAVIGATION_RESET_PASSWORD_PATH
+} from '../../navigation/routes';
 
 class Login extends Component {
   static navigationOptions = {
@@ -35,6 +37,10 @@ class Login extends Component {
     this.props.navigation.navigate(NAVIGATION_SIGNIN_PATH);
   };
 
+  passwordForget = () => {
+    this.props.navigation.navigate(NAVIGATION_RESET_PASSWORD_PATH);
+  };
+
   renderButtons() {
     if (this.props.loading) {
       return <Spinner style={{ marginTop: 30 }} />;
@@ -45,8 +51,14 @@ class Login extends Component {
         <TouchableOpacity onPress={this.onLoginPress} style={styles.button}>
           <Text style={styles.buttonTitle}>LOG IN</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.onSigninPress} style={[styles.button, styles.buttonMargin]}>
+        <TouchableOpacity
+          onPress={this.onSigninPress}
+          style={[styles.button, styles.buttonMargin]}
+        >
           <Text style={styles.buttonTitle}>SIGN IN</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={this.passwordForget} style={styles.link}>
+          <Text style={styles.linkTitle}>Forget password?</Text>
         </TouchableOpacity>
       </View>
     );
@@ -150,6 +162,14 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 20
   },
+  link: {
+    marginTop: 20
+  },
+  linkTitle: {
+    color: '#797979',
+    textAlign: 'center',
+    fontSize: 14
+  }
 });
 
 const mapStateToProps = ({ customerAuth }) => {
