@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, ListView } from 'react-native';
+import { View, ListView, Text } from 'react-native';
 import { getProductsForCategory } from '../../actions/index';
 import ProductListItem from './ProductListItem';
 import { Spinner } from '../common';
@@ -57,6 +57,11 @@ class ProductList extends Component {
 	}
 
 	renderContent() {
+
+		if (!this.props.products) {
+      return <Spinner />;
+    }
+
 		if (this.props.products.length) {
 			return (
 					<ListView
@@ -70,7 +75,10 @@ class ProductList extends Component {
 			);
 		}
 
-		return <Spinner />;
+		return (
+			<Text>No products found</Text>
+		);
+
 	}
 
 	render() {

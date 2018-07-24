@@ -7,7 +7,7 @@ import {
 
 const INITIAL_STATE = {
   current: false,
-  products: [],
+  products: false,
 	totalCount: false,
 	loadingMore: false
 };
@@ -16,12 +16,14 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case MAGENTO_CURRENT_CATEGORY:
       return { ...INITIAL_STATE, current: action.payload };
-		case MAGENTO_GET_CATEGORY_PRODUCTS:
+		case MAGENTO_GET_CATEGORY_PRODUCTS: {
+			const products = state.products ? state.products : [];
       return {
         ...state,
-        products: [...state.products, ...action.payload.items],
+        products: [...products, ...action.payload.items],
 				totalCount: action.payload.total_count
       };
+		}
 		case MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS:
 			return {
 					...state,
