@@ -23,7 +23,7 @@ React Native mobile app for Magento 2.x
 
 ## You can contact me
 
-I'm interested in working on React Native projects.
+I open to any discussion. I have [Slack](https://magento-react-native.slack.com/) workspace so ping me via email if you want to join. 
 
 troublesohard@gmail.com
 
