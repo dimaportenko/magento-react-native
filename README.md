@@ -1,6 +1,8 @@
 # magento-react-native
 React Native mobile app for Magento 2.x
 
+<img src="https://github.com/troublediehard/magento-react-native/blob/master/android/app/src/main/ic_launcher-web.png" alt="Logo" width="250px"/>
+
 # Setup
 **Magento Admin**
 * System > Intergrations > Add New Intergration
