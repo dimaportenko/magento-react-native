@@ -165,15 +165,13 @@ export const setCurrentProduct = product => {
 };
 
 export const getCart = () => {
-  return dispatch => {
-    magento
-      .getCart()
-      .then(cartId => {
-        dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  return async dispatch => {
+    try {
+      const cart = await magento.getCart();
+      dispatch({ type: MAGENTO_GET_CART, payload: cart });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
@@ -184,52 +182,58 @@ export const addToCartLoading = isLoading => {
   };
 };
 
-export const addToCart = ({ cartId, item }) => {
+export const addToCart = ({ cartId, item, customer }) => {
   return async dispatch => {
     try {
+      if (cartId) {
+        return dispatchAddToCart(dispatch, cartId, item);
+      }
+
       const updatedItem = item;
       if (magento.isCustomerLogin()) {
-				const cart = await magento.customer.getCustomerCart();
-        dispatch({ type: MAGENTO_GET_CART, payload: cart });
-        updatedItem.cartId = cart.id;
-				const result = await magento.customer.addItemToCart(updatedItem);
-        // newCartId = cart.id;
-			} else {
-        if (cartId) {
-          return dispatchAddToCart(dispatch, cartId, item);
-        }
-        const guestCartId = await magento.guest.createGuestCart();
-        dispatch({ type: MAGENTO_CREATE_CART, payload: guestCartId });
-        updatedItem.cartItem.quoteId = guestCartId;
-        return dispatchAddToCart(dispatch, guestCartId, updatedItem);
+        const customerCartId = await magento.admin.getCart(customer.id);
+        dispatch({ type: MAGENTO_CREATE_CART, payload: customerCartId });
+        updatedItem.cartItem.quoteId = customerCartId;
+        return dispatchAddToCart(dispatch, customerCartId, updatedItem);
 			}
+
+      const guestCartId = await magento.guest.createGuestCart();
+      dispatch({ type: MAGENTO_CREATE_CART, payload: guestCartId });
+      updatedItem.cartItem.quoteId = guestCartId;
+      return dispatchAddToCart(dispatch, guestCartId, updatedItem);
     } catch (error) {
       console.log(error);
     }
   };
 };
 
-const dispatchAddToCart = (dispatch, cartId, item) => {
-  return magento.guest
-    .addItemToCart(cartId, item)
-    .then(data => {
-      dispatch({ type: MAGENTO_ADD_TO_CART, payload: data });
-      dispatchGetGuestCart(dispatch, cartId);
-    })
-    .catch(error => {
-      console.log(error);
-    });
+const dispatchAddToCart = async (dispatch, cartId, item) => {
+  try {
+    let result;
+    if (magento.isCustomerLogin()) {
+      result = await magento.customer.addItemToCart(item);
+    } else {
+      result = await magento.guest.addItemToCart(cartId, item);
+    }
+    dispatch({ type: MAGENTO_ADD_TO_CART, payload: result });
+    dispatchGetGuestCart(dispatch, cartId);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
-const dispatchGetGuestCart = (dispatch, cartId) => {
-  return magento.guest
-    .getGuestCart(cartId)
-    .then(data => {
-      dispatch({ type: MAGENTO_GET_CART, payload: data });
-    })
-    .catch(error => {
-      console.log(error);
-    });
+const dispatchGetGuestCart = async (dispatch, cartId) => {
+  try {
+    let data;
+    if (magento.isCustomerLogin()) {
+      data = await magento.customer.getCustomerCart();
+    } else {
+      data = await magento.guest.getGuestCart(cartId);
+    }
+    dispatch({ type: MAGENTO_GET_CART, payload: data });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const cartItemProduct = sku => {
@@ -246,71 +250,84 @@ export const cartItemProduct = sku => {
 };
 
 export const addGuestCartBillingAddress = (cartId, address) => {
-  return dispatch => {
-    magento.guest
-      .addGuestCartBillingAddress(cartId, address)
-      .then(data => {
-        dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
-        // dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-    magento.guest
-      .guestCartEstimateShippingMethods(cartId, address)
-      .then(data => {
-        // console.log('guestCartEstimateShippingMethods');
-        // console.log(data);
-        dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
-        dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
-        dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  return async dispatch => {
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.addCartBillingAddress(address);
+      } else {
+        data = await magento.guest.addGuestCartBillingAddress(cartId, address);
+      }
+      dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.cartEstimateShippingMethods(address);
+      } else {
+        data = await magento.guest.guestCartEstimateShippingMethods(cartId, address);
+      }
+      dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
+      dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
+      dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
 export const getGuestCartShippingMethods = cartId => {
-  return dispatch => {
-    magento.guest
-      .getGuestCartShippingMethods(cartId)
-      .then(data => {
-        dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  return async dispatch => {
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.getCartShippingMethods();
+      } else {
+        data = await magento.guest.getGuestCartShippingMethods(cartId);
+      }
+      dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
 export const addGuestCartShippingInfo = (cartId, address) => {
-  return dispatch => {
-    magento.guest
-      .addGuestCartShippingInfo(cartId, address)
-      .then(data => {
-        dispatch({ type: MAGENTO_ADD_SHIPPING_TO_CART, payload: data });
-        dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
-        dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 3 });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  return async dispatch => {
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.addCartShippingInfo(address);
+      } else {
+        data = await magento.guest.addGuestCartShippingInfo(cartId, address);
+      }
+      dispatch({ type: MAGENTO_ADD_SHIPPING_TO_CART, payload: data });
+      dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+      dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 3 });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
 export const getGuestCartPaymentMethods = cartId => {
-  return dispatch => {
-    magento.guest
-      .getGuestCartPaymentMethods(cartId)
-      .then(data => {
-        dispatch({ type: MAGENTO_GET_CART_PAYMENT_METHODS, payload: data });
-        dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
-        dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 4 });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  return async dispatch => {
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.getCartPaymentMethods();
+      } else {
+        data = await magento.guest.getGuestCartPaymentMethods(cartId);
+      }
+      dispatch({ type: MAGENTO_GET_CART_PAYMENT_METHODS, payload: data });
+      dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+      dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 4 });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
@@ -328,16 +345,19 @@ export const getCountries = () => {
 };
 
 export const placeGuestCartOrder = (cartId, payment) => {
-  return dispatch => {
-    magento.guest
-      .placeGuestCartOrder(cartId, payment)
-      .then(data => {
-        dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
-        dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  return async dispatch => {
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.placeCartOrder(payment);
+      } else {
+        data = await magento.guest.placeGuestCartOrder(cartId, payment);
+      }
+      dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
+      dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 

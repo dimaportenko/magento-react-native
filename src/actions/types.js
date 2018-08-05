@@ -38,19 +38,9 @@ export const MAGENTO_SUCCESS_MESSAGE = 'magento_success_message';
 
 export const UI_PRODUCT_QTY_INPUT = 'ui_product_qty_input';
 export const UI_PRODUCT_UPDATE_OPTIONS = 'ui_product_update';
-export const UI_CHECKOUT_EMAIL_CHANGED = 'ui_checkout_email_changed';
-export const UI_CHECKOUT_PASSWORD_CHANGED = 'ui_checkout_password_changed';
-export const UI_CHECKOUT_POSTCODE_CHANGED = 'ui_checkout_postcode_changed';
-export const UI_CHECKOUT_COUNTRY_CHANGED = 'ui_checkout_country_changed';
-export const UI_CHECKOUT_COUNTRY_ID_CHANGED = 'ui_checkout_country_id_changed';
-export const UI_CHECKOUT_FIRSTNAME_CHANGED = 'ui_checkout_firstname_changed';
-export const UI_CHECKOUT_LASTNAME_CHANGED = 'ui_checkout_lastname_changed';
-export const UI_CHECKOUT_TELEPHONE_CHANGED = 'ui_checkout_telephone_changed';
-export const UI_CHECKOUT_CITY_CHANGED = 'ui_checkout_city_changed';
-export const UI_CHECKOUT_STREET_CHANGED = 'ui_checkout_street_changed';
-export const UI_CHECKOUT_REGION_CHANGED = 'ui_checkout_region_changed';
 export const UI_CHECKOUT_SHIPPING_SELECTED = 'ui_checkout_shipping_selected';
 export const UI_CHECKOUT_PAYMENT_SELECTED = 'ui_checkout_payment_selected';
 export const UI_CHECKOUT_CUSTOMER_NEXT_LOADING = 'ui_checkout_customer_next_loading';
+export const UI_CHECKOUT_UPDATE = 'ui_checkout_update';
 
 export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';

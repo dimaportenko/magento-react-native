@@ -7,7 +7,7 @@ import {
   NAVIGATION_LOGIN_STACK_PATH
 } from '../../navigation/routes';
 import { magento } from '../../magento';
-import { orderProducts, errorMessage, customerUpdate } from '../../actions';
+import { orderProducts, errorMessage, customerUpdate, getCart } from '../../actions';
 
 class AuthLoading extends Component {
   constructor(props) {
@@ -22,6 +22,7 @@ class AuthLoading extends Component {
 
       if (customerToken) {
         const customer = await magento.customer.getCurrentCustomer();
+        this.props.getCart();
       }
 
       this.props.navigation.navigate(
@@ -53,6 +54,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(null, { orderProducts, errorMessage, customerUpdate })(
+export default connect(null, { orderProducts, errorMessage, customerUpdate, getCart })(
   AuthLoading
 );

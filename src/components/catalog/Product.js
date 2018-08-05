@@ -37,7 +37,7 @@ class Product extends Component {
 
 	onPressAddToCart() {
 		console.log('onPressAddToCart');
-		const { cart, product, qty, selectedOptions } = this.props;
+		const { cart, product, qty, selectedOptions, customer } = this.props;
 		const options = [];
 		Object.keys(selectedOptions).forEach(key => {
 			console.log(selectedOptions[key]);
@@ -69,7 +69,8 @@ class Product extends Component {
 					quoteId: cart.cartId,
 					...productOptions
 				}
-			}
+			},
+			customer
 		});
 	}
 
@@ -242,7 +243,7 @@ const styles = {
 const mapStateToProps = state => {
 	const { product, options } = state.product.current;
 	const { attributes, selectedOptions } = state.product;
-	const { cart } = state;
+	const { cart, account } = state;
 	console.log('Product Component');
 	console.log(state.product);
 	console.log(cart);
@@ -253,6 +254,7 @@ const mapStateToProps = state => {
 		options,
 		attributes,
 		selectedOptions,
+		customer: account.customer,
 		qty: state.product.qtyInput
 	};
 };
