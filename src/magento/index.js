@@ -136,12 +136,26 @@ class Magento {
     this.customerToken = token;
   }
 
+  isCustomerLogin() {
+    if (this.customerToken) {
+      return true;
+    }
+    return false;
+  }
+
   setAccessToken(token) {
     this.access_token = token;
   }
 
   getProductMediaUrl() {
     return `${this.storeConfig.base_media_url}catalog/product`;
+  }
+
+  getCart() {
+    if (this.isCustomerLogin()) {
+      return this.customer.getCustomerCart();
+    }
+    return this.guest.createGuestCart();
   }
 }
 

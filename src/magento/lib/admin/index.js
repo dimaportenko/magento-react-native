@@ -34,6 +34,21 @@ export default magento => {
       });
     },
 
+    getCategory: id => {
+      return new Promise((resolve, reject) => {
+        const path = `/V1/categories/${id}`;
+        magento
+          .get(path, undefined, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
     getProducts: (categoryId, pageSize = 5, offset = 0) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
       return new Promise((resolve, reject) => {
@@ -163,7 +178,23 @@ export default magento => {
             reject(e);
           });
       });
-    }
+    },
+
+    getCart: customerId => {
+      return new Promise((resolve, reject) => {
+        const path = `/V1/customers/${customerId}/carts`;
+
+        magento
+          .post(path, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
 
 
   };

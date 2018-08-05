@@ -2,463 +2,343 @@ import React, { Component } from 'react';
 import { View, Text, Button } from 'react-native';
 import { connect } from 'react-redux';
 import {
-	getCountries,
-	checkoutCustomerEmailChanged,
-	checkoutCustomerPasswordChanged,
-	checkoutCustomerCityChanged,
-	checkoutCustomerCountryChanged,
-	checkoutCustomerFirstnameChanged,
-	checkoutCustomerLastnameChanged,
-	checkoutCustomerPostcodeChanged,
-	checkoutCustomerRegionChanged,
-	checkoutCustomerStreetChanged,
-	checkoutCustomerTelephoneChanged,
-	checkoutCustomerCountryIdChanged,
-	addGuestCartBillingAddress,
-	createCustomer,
-	checkoutCustomerNextLoading
-	// loginUser
+  getCountries,
+  addGuestCartBillingAddress,
+  createCustomer,
+  updateCheckoutUI,
+  checkoutCustomerNextLoading,
 } from '../../actions';
 import { CardSection, Input, Spinner, ModalSelect } from '../common';
 
-import { magento } from '../../magento';
-import { magentoOptions } from '../../config/magento';
 
 class CheckoutCustomerAccount extends Component {
+  componentWillMount() {
+    this.props.getCountries();
+  }
 
-	componentWillMount() {
-		magento.setOptions(magentoOptions);
-		magento.init()
-				.then(() => {
-					this.props.getCountries();
-					// magento.getCountries()
-					// 		.then(data => {
-					// 			console.log('country');
-					// 			console.log(data);
-					// 		})
-					// 		.catch(error => {
-					// 			console.log('error');
-					// 			console.log(error);
-					// 		});
-					// magento.getStoreConfig()
-					// 		.then(data => {
-					// 			console.log('country');
-					// 			console.log(data);
-					// 		})
-					// 		.catch(error => {
-					// 			console.log('error');
-					// 			console.log(error);
-					// 		});
-					// magento.guest.getCountriesByCountryId('US')
-					// 		.then(data => {
-					// 			console.log('country');
-					// 			console.log(data);
-					// 		})
-					// 		.catch(error => {
-					// 			console.log('error');
-					// 			console.log(error);
-					// 		});
-				})
-				.catch(error => {
-					console.log(error);
-				});
-	}
+  onNextPressed() {
+    const {
+      email,
+      password,
+      postcode,
+      countryId,
+      firstname,
+      lastname,
+      telephone,
+      city,
+      street,
+      region,
+      cartId,
+    } = this.props;
 
-	onEmailChange(text) {
-		this.props.checkoutCustomerEmailChanged(text);
-	}
+    const customer = {
+      customer: {
+        email,
+        firstname,
+        lastname,
+        addresses: [
+          {
+            defaultShipping: true,
+            defaultBilling: true,
+            firstname,
+            lastname,
+            region,
+            postcode,
+            street: [street],
+            city,
+            telephone,
+            countryId,
+          },
+        ],
+      },
+      password,
+    };
 
-	onPasswordChange(text) {
-		this.props.checkoutCustomerPasswordChanged(text);
-	}
+    const address = {
+      address: {
+        // id: 0,
+        region: region.region,
+        region_id: region.regionId,
+        region_code: region.regionCode,
+        country_id: countryId,
+        street: [street],
+        // company: 'test',
+        telephone,
+        // fax: 'test',
+        postcode,
+        city,
+        firstname,
+        lastname,
+        // middlename: 'test',
+        // prefix: 'test',
+        // suffix: 'string',
+        // vat_id: 'string',
+        // customer_id: 0,
+        email,
+        same_as_billing: 1,
+        // customer_address_id: 0,
+        // save_in_address_book: 0,
+        // "extension_attributes": {
+        // 	"gift_registry_id": 0
+        // },
+        // "custom_attributes": [
+        // 	{
+        // 		"attribute_code": "string",
+        // 		"value": "string"
+        // 	}
+        // ]
+      },
+      useForShipping: true,
+    };
 
-	onFirstnameChange(text) {
-		this.props.checkoutCustomerFirstnameChanged(text);
-	}
+    // this.props.createCustomer(customer);
+    this.props.checkoutCustomerNextLoading(true);
+    this.props.addGuestCartBillingAddress(cartId, address);
+  }
 
-	onLastnameChange(text) {
-		this.props.checkoutCustomerLastnameChanged(text);
-	}
+  updateUI = (key, value) => {
+    this.props.updateCheckoutUI(key, value);
+  };
 
-	onRegionChange(text) {
-		this.props.checkoutCustomerRegionChanged(text);
-	}
+  countrySelect(attributeId, optionValue) {
+    this.props.updateCheckoutUI('countryId', optionValue);
+  }
 
-	onCountryChange(text) {
-		this.props.checkoutCustomerCountryChanged(text);
-	}
+  regionSelect(attributeId, selectedRegion) {
+    const { countryId, countries } = this.props;
+    if (countryId && countryId.length) {
+      const country = countries.find(item => {
+        return item.id === countryId;
+      });
+      const regionData = country.available_regions.find(item => {
+        return item.id === selectedRegion;
+      });
+      const region = {
+        regionCode: regionData.code,
+        region: regionData.name,
+        regionId: regionData.id,
+      };
+      this.updateUI('region', region);
+    }
+  }
 
-	onPostcodeChange(text) {
-		this.props.checkoutCustomerPostcodeChanged(text);
-	}
+  renderButton() {
+    if (this.props.loading) {
+      return <Spinner size="large" />;
+    }
+    return (
+      <View style={styles.nextButtonStyle}>
+        <Button onPress={this.onNextPressed.bind(this)} title="Next" />
+      </View>
+    );
+  }
 
-	onCityChange(text) {
-		this.props.checkoutCustomerCityChanged(text);
-	}
+  renderRegions() {
+    const { countryId, countries } = this.props;
+    if (countryId && countryId.length) {
+      const country = countries.find(item => {
+        return item.id === countryId;
+      });
+      if (country.available_regions) {
+        const data = country.available_regions.map(value => {
+          return {
+            label: value.name,
+            key: value.id,
+          };
+        });
 
-	onTelephoneChange(text) {
-		this.props.checkoutCustomerTelephoneChanged(text);
-	}
+        return (
+          <ModalSelect
+            disabled={data.length === 0}
+            key="regions"
+            label="Region"
+            attribute="Region"
+            value="Region"
+            data={data}
+            onChange={this.regionSelect.bind(this)}
+          />
+        );
+      }
+    }
 
-	onStreetChange(text) {
-		this.props.checkoutCustomerStreetChanged(text);
-	}
+    return (
+      <Input
+        label="Region"
+        value={this.props.region}
+        placeholder="region"
+        onChangeText={value => this.updateUI('region', value)}
+      />
+    );
+  }
 
-	onNextPressed() {
-		const {
-			email,
-			password,
-			postcode,
-			countryId,
-			firstname,
-			lastname,
-			telephone,
-			city,
-			street,
-			region,
-			cartId
-		} = this.props;
+  renderCountries() {
+    const { countries, countryId } = this.props;
 
-		const customer = {
-			customer: {
-				email,
-				firstname,
-				lastname,
-				addresses: [{
-					defaultShipping: true,
-					defaultBilling: true,
-					firstname,
-					lastname,
-					region,
-					postcode,
-					street: [street],
-					city,
-					telephone,
-					countryId
-				}]
-			},
-			password
-		};
+    if (!countries || !countries.length) {
+      return (
+        <Input
+          label="Country"
+          value={this.props.country}
+          placeholder="country"
+          onChangeText={value => this.updateUI('country', value)}
+        />
+      );
+    }
 
-		const address = {
-			address: {
-				// id: 0,
-				region: region.region,
-				region_id: region.regionId,
-				region_code: region.regionCode,
-				country_id: countryId,
-				street: [street],
-				// company: 'test',
-				telephone,
-				// fax: 'test',
-				postcode,
-				city,
-				firstname,
-				lastname,
-				// middlename: 'test',
-				// prefix: 'test',
-				// suffix: 'string',
-				// vat_id: 'string',
-				// customer_id: 0,
-				email,
-				same_as_billing: 1,
-				// customer_address_id: 0,
-				// save_in_address_book: 0,
-				// "extension_attributes": {
-				// 	"gift_registry_id": 0
-				// },
-				// "custom_attributes": [
-				// 	{
-				// 		"attribute_code": "string",
-				// 		"value": "string"
-				// 	}
-				// ]
-			},
-			useForShipping: true
-		};
+    const data = countries.map(value => {
+      return {
+        label: value.full_name_locale,
+        key: value.id,
+      };
+    });
 
-		// this.props.createCustomer(customer);
-		this.props.checkoutCustomerNextLoading(true);
-		this.props.addGuestCartBillingAddress(cartId, address);
-	}
+    const country = countries.find(item => {
+      return item.id === countryId;
+    });
+    const label = country ? country.full_name_locale : 'Country';
 
-	countrySelect(attributeId, optionValue) {
-		this.props.checkoutCustomerCountryIdChanged(optionValue);
-	}
+    return (
+      <ModalSelect
+        disabled={data.length === 0}
+        key="countries"
+        label={label}
+        attribute="Country"
+        value="Country"
+        data={data}
+        onChange={this.countrySelect.bind(this)}
+      />
+    );
+  }
 
-	regionSelect(attributeId, selectedRegion) {
-		const { countryId, countries } = this.props;
-		if (countryId && countryId.length) {
-			const country = countries.find(item => {
-				return item.id === countryId;
-			});
-			const regionData = country.available_regions.find(item => {
-				return item.id === selectedRegion;
-			});
-			const region = {
-				regionCode: regionData.code,
-				region: regionData.name,
-				regionId: regionData.id
-			};
-			this.props.checkoutCustomerRegionChanged(region);
-		}
-	}
+  renderUser() {
+    if (this.props.customer) {
+      return;
+    }
 
-	renderButton() {
-		if (this.props.loading) {
-			return <Spinner size="large" />;
-		}
-		return (
-				<View style={styles.nextButtonStyle}>
-					<Button
-							onPress={this.onNextPressed.bind(this)}
-							title="Next"
-					/>
-				</View>
-		);
-	}
+    return (
+      <View>
+        <CardSection>
+          <Input
+            label="Email"
+            value={this.props.email}
+            placeholder="email@gmail.com"
+            onChangeText={value => this.updateUI('email', value)}
+          />
+        </CardSection>
 
-	renderRegions() {
-		const { countryId, countries } = this.props;
-		if (countryId && countryId.length) {
-			const country = countries.find(item => {
-				return item.id === countryId;
-			});
-			if (country.available_regions) {
-				const data = country.available_regions.map(value => {
-					return {
-						label: value.name,
-						key: value.id
-					};
-				});
+        <CardSection>
+          <Input
+            secureTextEntry
+            label="Password"
+            value={this.props.password}
+            placeholder="password"
+            onChangeText={value => this.updateUI('password', value)}
+          />
+        </CardSection>
 
-				return (
-						<ModalSelect
-								disabled={data.length === 0}
-								key='regions'
-								label='Region'
-								attribute='Region'
-								value='Region'
-								data={data}
-								onChange={this.regionSelect.bind(this)}
-						/>
-				);
-			}
-		}
+        <CardSection>
+          <Input
+            label="Firstname"
+            value={this.props.firstname}
+            placeholder="firstname"
+            onChangeText={value => this.updateUI('firstname', value)}
+          />
+        </CardSection>
 
-		return (
-				<Input
-						label="Region"
-						value={this.props.region}
-						placeholder="region"
-						onChangeText={this.onRegionChange.bind(this)}
-				/>
-		);
-	}
+        <CardSection>
+          <Input
+            label="Lastname"
+            value={this.props.lastname}
+            placeholder="lastname"
+            onChangeText={value => this.updateUI('lastname', value)}
+          />
+        </CardSection>
+      </View>
+    );
+  }
 
-	renderCountries() {
-		const { countries, countryId } = this.props;
+  render() {
+    return (
+      <View>
+        {this.renderUser()}
 
-		if (!countries || !countries.length) {
-			return (
-					<Input
-							label="Country"
-							value={this.props.country}
-							placeholder="country"
-							onChangeText={this.onCountryChange.bind(this)}
-					/>
-			);
-		}
+        <CardSection>{this.renderCountries()}</CardSection>
 
-		const data = countries.map(value => {
-			return {
-				label: value.full_name_locale,
-				key: value.id
-			};
-		});
+        <CardSection>{this.renderRegions()}</CardSection>
 
-		const country = countries.find(item => {
-			return item.id === countryId;
-		});
-		const label = country ? country.full_name_locale : 'Country';
+        <CardSection>
+          <Input
+            label="Postcode"
+            value={this.props.postcode}
+            placeholder="postcode"
+            onChangeText={value => this.updateUI('postcode', value)}
+          />
+        </CardSection>
 
-		return (
-				<ModalSelect
-						disabled={data.length === 0}
-						key='countries'
-						label={label}
-						attribute='Country'
-						value='Country'
-						data={data}
-						onChange={this.countrySelect.bind(this)}
-				/>
-		);
-	}
+        <CardSection>
+          <Input
+            label="Street"
+            value={this.props.street}
+            placeholder="street"
+            onChangeText={value => this.updateUI('street', value)}
+          />
+        </CardSection>
 
-	render() {
-		return (
-				<View>
-					<CardSection>
-						<Input
-								label="Email"
-								value={this.props.email}
-								placeholder="email@gmail.com"
-								onChangeText={this.onEmailChange.bind(this)}
-						/>
-					</CardSection>
+        <CardSection>
+          <Input
+            label="City"
+            value={this.props.city}
+            placeholder="city"
+            onChangeText={value => this.updateUI('city', value)}
+          />
+        </CardSection>
 
-					<CardSection>
-						<Input
-								secureTextEntry
-								label="Password"
-								value={this.props.password}
-								placeholder="password"
-								onChangeText={this.onPasswordChange.bind(this)}
-						/>
-					</CardSection>
+        <CardSection>
+          <Input
+            label="Telephone"
+            value={this.props.telephone}
+            placeholder="telephone"
+            onChangeText={value => this.updateUI('telephone', value)}
+          />
+        </CardSection>
 
-					<CardSection>
-						<Input
-								label="Firstname"
-								value={this.props.firstname}
-								placeholder="firstname"
-								onChangeText={this.onFirstnameChange.bind(this)}
-						/>
-					</CardSection>
+        <Text style={styles.errorTextStyle}>{this.props.error}</Text>
 
-					<CardSection>
-						<Input
-								label="Lastname"
-								value={this.props.lastname}
-								placeholder="lastname"
-								onChangeText={this.onLastnameChange.bind(this)}
-						/>
-					</CardSection>
-
-					<CardSection>
-						{this.renderRegions()}
-					</CardSection>
-
-					<CardSection>
-						{this.renderCountries()}
-					</CardSection>
-
-					<CardSection>
-						<Input
-								label="Postcode"
-								value={this.props.postcode}
-								placeholder="postcode"
-								onChangeText={this.onPostcodeChange.bind(this)}
-						/>
-					</CardSection>
-
-					<CardSection>
-						<Input
-								label="Street"
-								value={this.props.street}
-								placeholder="street"
-								onChangeText={this.onStreetChange.bind(this)}
-						/>
-					</CardSection>
-
-					<CardSection>
-						<Input
-								label="City"
-								value={this.props.city}
-								placeholder="city"
-								onChangeText={this.onCityChange.bind(this)}
-						/>
-					</CardSection>
-
-					<CardSection>
-						<Input
-								label="Telephone"
-								value={this.props.telephone}
-								placeholder="telephone"
-								onChangeText={this.onTelephoneChange.bind(this)}
-						/>
-					</CardSection>
-
-					<Text style={styles.errorTextStyle}>
-						{this.props.error}
-					</Text>
-
-					<CardSection>
-						{this.renderButton()}
-					</CardSection>
-				</View>
-		);
-	}
+        <CardSection>{this.renderButton()}</CardSection>
+      </View>
+    );
+  }
 }
 
 const styles = {
-	errorTextStyle: {
-		color: 'red',
-		fontSize: 20,
-		alignSelf: 'center'
-	},
-	nextButtonStyle: {
-		flex: 1,
-		alignSelf: 'center'
-	}
+  errorTextStyle: {
+    color: 'red',
+    fontSize: 20,
+    alignSelf: 'center',
+  },
+  nextButtonStyle: {
+    flex: 1,
+    alignSelf: 'center',
+  },
 };
 
-const mapStateToProps = ({ checkout, cart }) => {
-	const {
-			email,
-			password,
-			postcode,
-			country,
-			countryId,
-			firstname,
-			lastname,
-			telephone,
-			city,
-			street,
-			region,
-			error,
-			loading
-	} = checkout.ui;
+const mapStateToProps = ({ checkout, cart, account }) => {
+  const { countries } = checkout;
+  const { cartId } = cart;
+  const { customer } = account;
 
-	const { countries } = checkout;
-	const { cartId } = cart;
-
-	return {
-			email,
-			password,
-			postcode,
-			country,
-			countryId,
-			firstname,
-			lastname,
-			telephone,
-			city,
-			street,
-			region,
-			cartId,
-			countries,
-			error,
-			loading
-	};
+  return {
+    ...checkout.ui,
+    cartId,
+    countries,
+    customer,
+  };
 };
 
-export default connect(
-		mapStateToProps, {
-			getCountries,
-			checkoutCustomerEmailChanged,
-			checkoutCustomerPasswordChanged,
-			checkoutCustomerCityChanged,
-			checkoutCustomerCountryChanged,
-			checkoutCustomerFirstnameChanged,
-			checkoutCustomerLastnameChanged,
-			checkoutCustomerPostcodeChanged,
-			checkoutCustomerRegionChanged,
-			checkoutCustomerStreetChanged,
-			checkoutCustomerTelephoneChanged,
-			checkoutCustomerCountryIdChanged,
-			addGuestCartBillingAddress,
-			checkoutCreateCustomer: createCustomer,
-			checkoutCustomerNextLoading
-			// loginUser
-		}
-)(CheckoutCustomerAccount);
+export default connect(mapStateToProps, {
+  getCountries,
+  updateCheckoutUI,
+  addGuestCartBillingAddress,
+  checkoutCreateCustomer: createCustomer,
+  checkoutCustomerNextLoading,
+})(CheckoutCustomerAccount);

@@ -3,7 +3,6 @@ import { View, Text, ScrollView, Button, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import {
 	getProductMedia,
-	createGuestCart,
 	addToCartLoading,
 	addToCart,
 	getConfigurableProductOptions,
@@ -27,7 +26,9 @@ class Product extends Component {
 	componentWillMount() {
 		const { product, media } = this.props;
 
-		this.props.getConfigurableProductOptions(product.sku);
+		if (product.type_id === 'configurable') {
+			this.props.getConfigurableProductOptions(product.sku);
+		}
 
 		if (!media) {
 			this.props.getProductMedia({ sku: product.sku });
@@ -36,7 +37,7 @@ class Product extends Component {
 
 	onPressAddToCart() {
 		console.log('onPressAddToCart');
-		const { cart, product, qty, selectedOptions } = this.props;
+		const { cart, product, qty, selectedOptions, customer } = this.props;
 		const options = [];
 		Object.keys(selectedOptions).forEach(key => {
 			console.log(selectedOptions[key]);
@@ -68,7 +69,8 @@ class Product extends Component {
 					quoteId: cart.cartId,
 					...productOptions
 				}
-			}
+			},
+			customer
 		});
 	}
 
@@ -94,11 +96,6 @@ class Product extends Component {
 
 	renderOptions() {
 		const { options, attributes, product, selectedOptions } = this.props;
-		// debugger;
-		console.log('Render ModalSelect');
-		console.log(attributes);
-		console.log(options);
-		console.log(this.props.product.children);
 
 		if (Array.isArray(options)) {
 			const prevOptions = [];
@@ -246,7 +243,7 @@ const styles = {
 const mapStateToProps = state => {
 	const { product, options } = state.product.current;
 	const { attributes, selectedOptions } = state.product;
-	const { cart } = state;
+	const { cart, account } = state;
 	console.log('Product Component');
 	console.log(state.product);
 	console.log(cart);
@@ -257,13 +254,13 @@ const mapStateToProps = state => {
 		options,
 		attributes,
 		selectedOptions,
+		customer: account.customer,
 		qty: state.product.qtyInput
 	};
 };
 
 export default connect(mapStateToProps, {
 	getProductMedia,
-	createGuestCart,
 	addToCartLoading,
 	addToCart,
 	getConfigurableProductOptions,
