@@ -12,7 +12,9 @@ class ProductList extends Component {
 	});
 
 	componentWillMount() {
-		this.createDataSource(this.props);
+		if (this.props.products) {
+			this.createDataSource(this.props);
+		}
 		this.props.getProductsForCategory({
 			id: this.props.category.id
 		});
@@ -78,7 +80,6 @@ class ProductList extends Component {
 		return (
 			<Text>No products found</Text>
 		);
-
 	}
 
 	render() {
