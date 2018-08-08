@@ -22,7 +22,8 @@ class AuthLoading extends Component {
 
       if (customerToken) {
         const customer = await magento.customer.getCurrentCustomer();
-        this.props.getCart();
+        await this.props.getCart(customer.id);
+        await this.props.getCart();
       }
 
       this.props.navigation.navigate(

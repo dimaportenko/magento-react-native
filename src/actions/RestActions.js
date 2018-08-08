@@ -164,10 +164,15 @@ export const setCurrentProduct = product => {
   };
 };
 
-export const getCart = () => {
+export const getCart = (customerId) => {
   return async dispatch => {
     try {
-      const cart = await magento.getCart();
+      let cart;
+      if (customerId) {
+        cart = await magento.admin.getCart(customerId);
+      } else {
+        cart = await magento.getCart();
+      }
       dispatch({ type: MAGENTO_GET_CART, payload: cart });
     } catch (error) {
       console.log(error);
