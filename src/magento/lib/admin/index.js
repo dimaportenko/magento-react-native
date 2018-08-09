@@ -49,6 +49,46 @@ export default magento => {
       });
     },
 
+    getCategoryAttributes: attributeCode => {
+      // GET /V1/categories/attributes/:attributeCode
+      return new Promise((resolve, reject) => {
+        const path = `/V1/categories/attributes/${attributeCode}`;
+        magento
+          .get(path, undefined, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
+    getCategoriesList: () => {
+      // GET /V1/categories/list
+      return new Promise((resolve, reject) => {
+        const path = '/V1/categories/list';
+        const params = {
+          'searchCriteria[filterGroups][0][filters][0][field]': 'name',
+          'searchCriteria[filterGroups][0][filters][0][value]': 'Woman',
+          'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
+          'searchCriteria[pageSize]': 20,
+          'searchCriteria[currentPage]': 1
+        };
+
+        magento
+          .get(path, params, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
     getProducts: (categoryId, pageSize = 5, offset = 0) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
       return new Promise((resolve, reject) => {

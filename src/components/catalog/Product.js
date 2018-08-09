@@ -81,18 +81,20 @@ class Product extends Component {
 		this.props.uiProductUpdateOptions({ ...selectedOptions, [attributeId]: optionValue });
 	}
 
-	renderDescription() {
-		const { product } = this.props;
-		const attribute = getProductCustomAttribute(product, 'description');
+  renderDescription() {
+    const { product } = this.props;
+    const attribute = getProductCustomAttribute(product, 'description');
+    if (attribute) {
+			let description = attribute.value.replace(/<\/?[^>]+(>|$)/g, '');
+			try {
+				description = decodeURI(description);
+			} catch (e) {
+				// console.log(e);
+			}
 
-		if (attribute) {
-			return (
-					<Text style={styles.descriptionStyle}>
-						{decodeURI(attribute.value.replace(/<\/?[^>]+(>|$)/g, ''))}
-					</Text>
-			);
-		}
-	}
+      return <Text style={styles.descriptionStyle}>{description}</Text>;
+    }
+  }
 
 	renderOptions() {
 		const { options, attributes, product, selectedOptions } = this.props;
