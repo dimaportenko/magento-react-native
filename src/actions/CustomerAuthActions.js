@@ -118,3 +118,10 @@ export const currentCustomer = () => {
     }
   };
 };
+
+export const setCurrentCustomer = customer => {
+ return {
+   type: MAGENTO_CURRENT_CUSTOMER,
+   payload: customer
+ };
+};
