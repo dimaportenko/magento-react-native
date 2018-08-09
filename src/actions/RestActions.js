@@ -164,6 +164,15 @@ export const setCurrentProduct = product => {
   };
 };
 
+export const createCustomerCart = customerId => {
+  return async dispatch => {
+    if (customerId) {
+      const cartId = await magento.admin.getCart(customerId);
+      dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
+    }
+  };
+};
+
 export const getCart = (customerId) => {
   return async dispatch => {
     try {
