@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import { Text, View, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
 import CategoryTreeList from './CategoryTreeList';
-import { setCurrentCategory } from '../actions';
-import { NAVIGATION_CATEGORY_PATH } from '../navigation/routes';
-import NavigationService from '../navigation/NavigationService';
+import { setCurrentCategory } from '../../actions/index';
+import { NAVIGATION_CATEGORY_PATH } from '../../navigation/routes';
+import NavigationService from '../../navigation/NavigationService';
 
 class CategoryTreeListItem extends Component {
   state = { expanded: false };

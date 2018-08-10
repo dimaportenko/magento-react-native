@@ -6,7 +6,8 @@ import { ADMIN_TYPE, CUSTOMER_TYPE } from './types';
 const defaultOptions = {
   url: null,
   store: 'default',
-  userAgent: 'Interactiavated Magento Library',
+  userAgent: 'Dmytro Portenko Magento Library',
+  home_cms_block_id: '',
   authentication: {
     login: {
       type: 'admin',
@@ -147,6 +148,10 @@ class Magento {
     this.access_token = token;
   }
 
+  getMediaUrl() {
+    return this.storeConfig.base_media_url;
+  }
+
   getProductMediaUrl() {
     return `${this.storeConfig.base_media_url}catalog/product`;
   }
@@ -156,6 +161,13 @@ class Magento {
       return this.customer.getCustomerCart();
     }
     return this.guest.createGuestCart();
+  }
+
+  getHomeData() {
+    if (this.configuration.home_cms_block_id) {
+      return this.admin.getCmsBlock(this.configuration.home_cms_block_id);
+    }
+    return false;
   }
 }
 

@@ -26,6 +26,7 @@ import {
   MAGENTO_CREATE_CUSTOMER,
   UI_CHECKOUT_ACTIVE_SECTION,
   UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
+  HOME_SCREEN_DATA,
 } from './types';
 
 export const initMagento = () => {
@@ -43,6 +44,18 @@ export const initMagento = () => {
       .catch(error => {
         console.log(error);
       });
+  };
+};
+
+export const getHomeData = () => {
+  return async dispatch => {
+    try {
+      const value = await magento.getHomeData();
+      const payload = JSON.parse(value.content);
+      dispatch({ type: HOME_SCREEN_DATA, payload });
+    } catch (e) {
+      console.log(e);
+    }
   };
 };
 

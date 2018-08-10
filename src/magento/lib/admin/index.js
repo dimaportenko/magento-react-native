@@ -267,6 +267,22 @@ export default magento => {
       });
     },
 
+    getCmsBlock: id => {
+      return new Promise((resolve, reject) => {
+        // GET /V1/cmsBlock/:blockId
+        const path = `/V1/cmsBlock/${id}`;
+
+        magento
+          .get(path, undefined, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
 
   };
 };

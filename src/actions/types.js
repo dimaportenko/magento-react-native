@@ -24,7 +24,6 @@ export const MAGENTO_CART_ITEM_PRODUCT = 'magento_cart_item_product';
 export const MAGENTO_PLACE_GUEST_CART_ORDER = 'magento_place_guest_cart_order';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
-export const NAVIGATION_GO_HOME = 'navigation_go_home';
 
 export const MAGENTO_CREATE_CUSTOMER = 'magento_checkout_create_customer';
 export const MAGENTO_CURRENT_CUSTOMER = 'magento_current_customer';
@@ -44,3 +43,5 @@ export const UI_CHECKOUT_CUSTOMER_NEXT_LOADING = 'ui_checkout_customer_next_load
 export const UI_CHECKOUT_UPDATE = 'ui_checkout_update';
 
 export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';
+
+export const HOME_SCREEN_DATA = 'home_screen_data';
