@@ -4,7 +4,8 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Text
+  Text,
+  KeyboardAvoidingView,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Colors from '../../constants/Colors';
@@ -24,7 +25,8 @@ class Login extends Component {
   componentWillMount() {
     this.setState({
       email: 'test@test.com',
-      password: 'Test1234'
+      password: 'Test1234',
+      number: ''
     });
   }
 
@@ -39,6 +41,10 @@ class Login extends Component {
 
   passwordForget = () => {
     this.props.navigation.navigate(NAVIGATION_RESET_PASSWORD_PATH);
+  };
+
+  passwordInputFocus = () => {
+    this.passwordInput.focus();
   };
 
   renderButtons() {
@@ -77,16 +83,19 @@ class Login extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <View style={[styles.inputContainer, styles.offsetTop]}>
           <TextInput
             autoCapitalize="none"
             underlineColorAndroid="transparent"
             placeholder="Email"
+            keyboardType="email-address"
+            returnKeyType="next"
             autoCorrect={false}
             style={styles.input}
             value={this.state.email}
             onChangeText={value => this.setState({ email: value })}
+            onSubmitEditing={this.passwordInputFocus}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -99,12 +108,14 @@ class Login extends Component {
             style={styles.input}
             value={this.state.password}
             onChangeText={value => this.setState({ password: value })}
+            onSubmitEditing={this.onLoginPress}
+            ref={input => { this.passwordInput = input; }}
           />
         </View>
         {this.renderButtons()}
         {this.renderMessages()}
         <View />
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

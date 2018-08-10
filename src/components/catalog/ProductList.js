@@ -59,7 +59,6 @@ class ProductList extends Component {
 	}
 
 	renderContent() {
-
 		if (!this.props.products) {
       return <Spinner />;
     }
@@ -78,7 +77,9 @@ class ProductList extends Component {
 		}
 
 		return (
-			<Text>No products found</Text>
+			<View style={styles.notFoundTextWrap}>
+				<Text style={styles.notFoundText}>No products found</Text>
+			</View>
 		);
 	}
 
@@ -94,8 +95,15 @@ class ProductList extends Component {
 const styles = {
 	containerStyle: {
 		flex: 1,
-		backgroundColor: '#fff'
-	}
+		backgroundColor: '#fff',
+	},
+	notFoundTextWrap: {
+		flex: 1,
+		justifyContent: 'center',
+	},
+	notFoundText: {
+		textAlign: 'center'
+	},
 };
 
 const mapStateToProps = state => {

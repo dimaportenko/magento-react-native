@@ -51,10 +51,12 @@ class PasswordReset extends Component {
             <TextInput
               autoCapitalize="none"
               underlineColorAndroid="transparent"
+              keyboardType="email-address"
               placeholder="Email"
               autoCorrect={false}
               style={inputStyles.input}
               value={this.state.email}
+              onSubmitEditing={this.onResetPress}
               onChangeText={email => this.setState({ email })}
             />
           </View>

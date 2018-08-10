@@ -10,8 +10,8 @@ import { magento } from '../../magento';
 
 
 class AuthLoading extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.bootstrapAsync();
   }
 

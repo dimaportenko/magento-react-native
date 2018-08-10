@@ -77,9 +77,11 @@ class Signin extends Component {
             underlineColorAndroid="transparent"
             placeholder="Firstname"
             autoCorrect={false}
+            returnKeyType="next"
             style={styles.input}
             value={this.state.firstname}
             onChangeText={value => this.setState({ firstname: value })}
+            onSubmitEditing={() => { this.lastnameInput.focus(); }}
           />
         </View>
         <View style={[styles.inputContainer]}>
@@ -88,9 +90,12 @@ class Signin extends Component {
             underlineColorAndroid="transparent"
             placeholder="Lastname"
             autoCorrect={false}
+            returnKeyType="next"
             style={styles.input}
             value={this.state.lastname}
             onChangeText={value => this.setState({ lastname: value })}
+            ref={input => { this.lastnameInput = input; }}
+            onSubmitEditing={() => { this.emailInput.focus(); }}
           />
         </View>
         <View style={[styles.inputContainer]}>
@@ -98,10 +103,14 @@ class Signin extends Component {
             autoCapitalize="none"
             underlineColorAndroid="transparent"
             placeholder="Email"
+            keyboardType="email-address"
+            returnKeyType="next"
             autoCorrect={false}
             style={styles.input}
             value={this.state.email}
             onChangeText={value => this.setState({ email: value })}
+            ref={input => { this.emailInput = input; }}
+            onSubmitEditing={() => { this.passwordInput.focus(); }}
           />
         </View>
         <View style={styles.inputContainer}>
@@ -114,20 +123,10 @@ class Signin extends Component {
             style={styles.input}
             value={this.state.password}
             onChangeText={value => this.setState({ password: value })}
+            ref={input => { this.passwordInput = input; }}
+            onSubmitEditing={this.onCreateAccountPress}
           />
         </View>
-        {/*<View style={styles.inputContainer}>*/}
-          {/*<TextInput*/}
-            {/*autoCapitalize="none"*/}
-            {/*underlineColorAndroid="transparent"*/}
-            {/*secureTextEntry*/}
-            {/*placeholder="Confirm Password"*/}
-            {/*autoCorrect={false}*/}
-            {/*style={styles.input}*/}
-            {/*value={this.state.confirmPassword}*/}
-            {/*onChangeText={value => this.setState({ confirmPassword: value })}*/}
-          {/*/>*/}
-        {/*</View>*/}
         {this.renderButtons()}
         {this.renderMessages()}
         <View />
