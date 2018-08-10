@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Alert, View, Text, Button } from 'react-native';
+import { Alert, View, Text, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Spinner } from '../common';
 import NavigationService from '../../navigation/NavigationService';
@@ -32,6 +32,12 @@ class CheckoutTotals extends Component {
     this.props.placeGuestCartOrder(cartId, payment);
   }
 
+  goHome = () => {
+    NavigationService.navigate(NAVIGATION_CATEGORY_TREE_PATH, {
+      title: 'Categories'
+    });
+  };
+
   renderTotals() {
     const { totals } = this.props;
 
@@ -56,25 +62,23 @@ class CheckoutTotals extends Component {
       return <View />;
     }
 
-    if (this.props.loading) {
-      return (
-        <View style={styles.nextButtonStyle}>
-          <Spinner size="large" />
-        </View>
-      );
-    }
+    // if (this.props.loading) {
+    //   return (
+    //     <View style={styles.nextButtonStyle}>
+    //       <Spinner size="large" />
+    //     </View>
+    //   );
+    // }
     return (
       <View style={styles.nextButtonStyle}>
-        <Button onPress={this.onPlacePressed.bind(this)} title="Place Order" />
+        <Button
+          onPress={this.onPlacePressed.bind(this)}
+          title="Place Order"
+          disable={this.props.loading}
+        />
       </View>
     );
   }
-
-  goHome = () => {
-    NavigationService.navigate(NAVIGATION_CATEGORY_TREE_PATH, {
-      title: 'Categories'
-    });
-  };
 
   renderPopup() {
     const { orderId } = this.props;
@@ -101,7 +105,7 @@ class CheckoutTotals extends Component {
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     margin: 15,
     alignItems: 'flex-start'
@@ -118,7 +122,7 @@ const styles = {
     alignItems: 'flex-end',
     alignSelf: 'flex-end'
   }
-};
+});
 
 const mapStateToProps = ({ cart, checkout }) => {
   const { cartId } = cart;
