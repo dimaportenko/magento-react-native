@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import {
   getCountries,
@@ -310,7 +310,7 @@ class CheckoutCustomerAccount extends Component {
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   errorTextStyle: {
     color: 'red',
     fontSize: 20,
@@ -318,9 +318,9 @@ const styles = {
   },
   nextButtonStyle: {
     flex: 1,
-    alignSelf: 'center',
+    alignItems: 'center',
   },
-};
+});
 
 const mapStateToProps = ({ checkout, cart, account }) => {
   const { countries } = checkout;

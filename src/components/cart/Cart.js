@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import CartList from './CartList';
 import { cartItemProduct } from '../../actions';
@@ -68,7 +68,7 @@ class Cart extends Component {
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff'
@@ -83,9 +83,10 @@ const styles = {
   },
   cartList: {},
   footer: {
+    alignItems: 'center',
     height: 50
   }
-};
+});
 
 const mapStateToProps = state => {
   const { cart, products } = state.cart;

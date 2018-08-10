@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Button, TextInput } from 'react-native';
+import { View, Text, ScrollView, Button, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import {
 	getProductMedia,
@@ -180,10 +180,12 @@ class Product extends Component {
 			return <Spinner />;
 		}
 		return (
+			<View style={styles.buttonWrap}>
 				<Button
 						onPress={this.onPressAddToCart.bind(this)}
 						title="Add to Cart"
 				/>
+			</View>
 		);
 	}
 
@@ -214,7 +216,7 @@ class Product extends Component {
 	}
 }
 
-const styles = {
+const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: '#fff'
@@ -239,8 +241,11 @@ const styles = {
 	dropDownContainer: {
 		flex: 1,
 		backgroundColor: '#333'
+	},
+	buttonWrap: {
+		alignItems: 'center'
 	}
-};
+});
 
 const mapStateToProps = state => {
 	const { product, options } = state.product.current;
