@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, ListView, Text } from 'react-native';
-import { getProductsForCategory } from '../../actions/index';
+import { getProductsForCategoryOrChild } from '../../actions/index';
 import ProductListItem from './ProductListItem';
 import { Spinner } from '../common';
 
@@ -15,9 +15,7 @@ class ProductList extends Component {
 		if (this.props.products) {
 			this.createDataSource(this.props);
 		}
-		this.props.getProductsForCategory({
-			id: this.props.category.id
-		});
+		this.props.getProductsForCategoryOrChild(this.props.category);
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -33,10 +31,7 @@ class ProductList extends Component {
 		} = this.props;
 
 		if (!loadingMore && canLoadMoreContent) {
-			this.props.getProductsForCategory({
-				id: category.id,
-				offset: products.length
-			});
+			this.props.getProductsForCategoryOrChild(category, products.length);
 		}
 	}
 
@@ -114,4 +109,4 @@ const mapStateToProps = state => {
 	return { category, products, totalCount, canLoadMoreContent, loadingMore };
 };
 
-export default connect(mapStateToProps, { getProductsForCategory })(ProductList);
+export default connect(mapStateToProps, { getProductsForCategoryOrChild })(ProductList);

@@ -77,6 +77,23 @@ export const getProductsForCategory = ({ id, offset }) => {
   };
 };
 
+export const getProductsForCategoryOrChild = (category, offset) => {
+  return async dispatch => {
+    if (offset) {
+      dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
+    }
+
+    try {
+      const payload = await magento.admin.getSearchCreteriaForCategoryAndChild(category, 10, offset);
+      dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
+      dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
+      updateConfigurableProductsPrices(payload.items, dispatch);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
+
 export const getConfigurableProductOptions = sku => {
   return dispatch => {
     magento.admin

@@ -89,22 +89,53 @@ export default magento => {
       });
     },
 
+    getSearchCreteriaForCategoryAndChild: (category, pageSize = 10, offset = 1) => {
+      let level = 0;
+      const currentPage = parseInt(offset / pageSize, 10) + 1;
+      let result = {
+        'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
+        'searchCriteria[filterGroups][1][filters][0][value]': '4',
+        'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
+        'searchCriteria[pageSize]': pageSize,
+        'searchCriteria[currentPage]': currentPage,
+      };
+
+      const getForCategory = (cat) => {
+        result[`searchCriteria[filterGroups][0][filters][${level}][field]`] = 'category_id';
+        result[`searchCriteria[filterGroups][0][filters][${level}][value]`] = cat.id;
+        result[`searchCriteria[filterGroups][0][filters][${level}][conditionType]`] = 'eq';
+        level++;
+        cat.children_data.forEach(childCategory => {
+          getForCategory(childCategory);
+        });
+      };
+
+      getForCategory(category);
+
+      return magento.admin.getProductsWithSearchCritaria(result);
+    },
+
     getProducts: (categoryId, pageSize = 5, offset = 0) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
+      const params = {
+        'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
+        'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
+        'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
+        'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
+        'searchCriteria[filterGroups][1][filters][0][value]': '4',
+        'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
+        'searchCriteria[pageSize]': pageSize,
+        'searchCriteria[currentPage]': currentPage
+      };
+
+      return this.getProductsWithSearchCritaria(params);
+    },
+
+    getProductsWithSearchCritaria: (searchCriteria) => {
       return new Promise((resolve, reject) => {
         const path = '/V1/products';
-        const params = {
-          'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
-          'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
-          'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
-          'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
-          'searchCriteria[filterGroups][1][filters][0][value]': '4',
-          'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
-          'searchCriteria[pageSize]': pageSize,
-          'searchCriteria[currentPage]': currentPage
-        };
 
-        magento.get(path, params, undefined, ADMIN_TYPE)
+        magento.get(path, searchCriteria, undefined, ADMIN_TYPE)
           .then(data => {
             resolve(data);
           })
