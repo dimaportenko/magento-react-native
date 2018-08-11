@@ -12,7 +12,7 @@ const INITIAL_STATE = {
 	addToCartLoading: false,
 	items: false,
 	errorMessage: false,
-	cart: false,
+	cart: {},
 	products: {}
 };
 

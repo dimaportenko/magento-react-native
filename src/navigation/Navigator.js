@@ -7,7 +7,7 @@ import {
 import { Icon } from 'react-native-elements';
 
 import ProductList from '../components/catalog/ProductList';
-import CategoryTree from '../components/CategoryTree';
+import CategoryTree from '../components/catalog/CategoryTree';
 import Product from '../components/catalog/Product';
 import Cart from '../components/cart/Cart';
 import Checkout from '../components/checkout/Checkout';
@@ -16,6 +16,7 @@ import Signin from '../components/account/Signin';
 import Account from '../components/account/Account';
 import AuthLoading from '../components/account/AuthLoading';
 import PasswordReset from '../components/account/PasswordReset';
+import HomeScreen from '../components/home/HomeScreen';
 
 import {
   NAVIGATION_CATEGORY_TREE_PATH,
@@ -31,11 +32,13 @@ import {
   NAVIGATION_LOGIN_STACK_PATH,
   NAVIGATION_AUTH_LOADING_SWITCH,
   NAVIGATION_RESET_PASSWORD_PATH,
-  NAVIGATION_AUTH_STACK_PATH
+  NAVIGATION_AUTH_STACK_PATH,
+  NAVIGATION_HOME_SCREEN_PATH
 } from './routes';
 
 const HomeStack = createStackNavigator(
   {
+    [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
     [NAVIGATION_CATEGORY_TREE_PATH]: CategoryTree,
     [NAVIGATION_CATEGORY_PATH]: ProductList,
     [NAVIGATION_PRODUCT_PATH]: Product,
@@ -43,7 +46,7 @@ const HomeStack = createStackNavigator(
     [NAVIGATION_CHECKOUT_PATH]: Checkout
   },
   {
-    initialRouteName: NAVIGATION_CATEGORY_TREE_PATH,
+    initialRouteName: NAVIGATION_HOME_SCREEN_PATH,
     navigationOptions: {
       headerStyle: {
         // backgroundColor: '#f4511e',

@@ -115,7 +115,7 @@ export default magento => {
       return magento.admin.getProductsWithSearchCritaria(result);
     },
 
-    getProducts: (categoryId, pageSize = 5, offset = 0) => {
+    getProducts: (categoryId, pageSize = 10, offset = 0) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
       const params = {
         'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
@@ -128,7 +128,7 @@ export default magento => {
         'searchCriteria[currentPage]': currentPage
       };
 
-      return this.getProductsWithSearchCritaria(params);
+      return magento.admin.getProductsWithSearchCritaria(params);
     },
 
     getProductsWithSearchCritaria: (searchCriteria) => {
@@ -267,6 +267,22 @@ export default magento => {
       });
     },
 
+    getCmsBlock: id => {
+      return new Promise((resolve, reject) => {
+        // GET /V1/cmsBlock/:blockId
+        const path = `/V1/cmsBlock/${id}`;
+
+        magento
+          .get(path, undefined, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
 
   };
 };

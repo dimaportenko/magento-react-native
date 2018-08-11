@@ -1,5 +1,9 @@
 {
-  "extends": "rallycoding",
+  "extends": [
+    "rallycoding",
+//    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "rules": {
     "arrow-body-style": 0
   },

@@ -21,3 +21,20 @@ export const getProductCustomAttribute = (product, key) => {
 	}
 	return false;
 };
+
+export const getPriceFromChildren = products => {
+  if (products) {
+    const newPrice = products.reduce((minPrice, child) => {
+      if (!minPrice) {
+        return child.price;
+      } else if (minPrice > child.price) {
+        return child.price;
+      }
+      return minPrice;
+    }, false);
+
+    return newPrice;
+  }
+
+  return 0;
+};

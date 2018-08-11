@@ -7,6 +7,7 @@
  import ProductReducer from './ProductReducer';
  import AccountReducer from './AccountReducer';
  import CartReducer from './CartReducer';
+ import HomeReducer from './HomeReducer';
 
  export default combineReducers({
    categoryTree: CategoryTreeReducer,
@@ -16,5 +17,6 @@
    product: ProductReducer,
    magento: MagentoReducer,
    account: AccountReducer,
-   cart: CartReducer
+   cart: CartReducer,
+   home: HomeReducer,
  });

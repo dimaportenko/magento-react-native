@@ -4,9 +4,11 @@ export const MAGENTO_GET_COUNTRIES = 'magento_get_countries';
 export const MAGENTO_GET_CATEGORY_TREE = 'magento_get_category_tree';
 export const MAGENTO_CURRENT_CATEGORY = 'magento_current_category';
 export const MAGENTO_GET_CATEGORY_PRODUCTS = 'magento_get_category_products';
+export const MAGENTO_GET_FEATURED_PRODUCTS = 'magento_get_featured_products';
 export const MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS = 'magento_load_more_category_products';
 
 export const MAGENTO_UPDATE_CONF_PRODUCT = 'magento_update_conf_product';
+export const MAGENTO_UPDATE_FEATURED_CONF_PRODUCT = 'magento_update_featured_conf_product';
 export const MAGENTO_GET_CONF_OPTIONS = 'magento_get_conf_options';
 export const MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS = 'magento_product_attribute_options';
 export const MAGENTO_CURRENT_PRODUCT = 'magento_current_product';
@@ -24,7 +26,6 @@ export const MAGENTO_CART_ITEM_PRODUCT = 'magento_cart_item_product';
 export const MAGENTO_PLACE_GUEST_CART_ORDER = 'magento_place_guest_cart_order';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
-export const NAVIGATION_GO_HOME = 'navigation_go_home';
 
 export const MAGENTO_CREATE_CUSTOMER = 'magento_checkout_create_customer';
 export const MAGENTO_CURRENT_CUSTOMER = 'magento_current_customer';
@@ -44,3 +45,5 @@ export const UI_CHECKOUT_CUSTOMER_NEXT_LOADING = 'ui_checkout_customer_next_load
 export const UI_CHECKOUT_UPDATE = 'ui_checkout_update';
 
 export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';
+
+export const HOME_SCREEN_DATA = 'home_screen_data';

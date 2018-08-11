@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Text, View, Button, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import CartList from './CartList';
@@ -10,6 +11,17 @@ class Cart extends Component {
   static navigationOptions = {
     title: 'Cart',
     headerBackTitle: ' '
+  };
+
+  static propTypes = {
+    cart: PropTypes.object,
+    products: PropTypes.object,
+    cartItemProduct: PropTypes.func,
+  };
+
+  static defaultProps = {
+    cart: {},
+    products: {},
   };
 
   componentWillMount() {

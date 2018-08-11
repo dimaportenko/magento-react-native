@@ -1,0 +1,20 @@
+{
+  "slider": [
+    {
+      "title": "New Luma Yoga Collection",
+      "image": "wysiwyg/home/home-main.jpg"
+    },
+    {
+      "title": "Even more ways to mix and match",
+      "image": "wysiwyg/home/home-t-shirts.png"
+    },
+    {
+      "title": "Find conscientious, comfy clothing in our eco-friendly collection",
+      "image": "wysiwyg/home/home-eco.jpg"
+    }
+  ],
+  "featuredCategories": {
+    "30": { "title": "Woman Sale"},
+    "31": { "title": "Man Sale"}
+  }
+}
