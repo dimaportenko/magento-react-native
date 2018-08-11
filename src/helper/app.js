@@ -13,6 +13,6 @@ export const onAppStart = async (store) => {
     const customer = await magento.customer.getCurrentCustomer();
     store.dispatch(setCurrentCustomer(customer));
     store.dispatch(createCustomerCart(customer.id));
-    store.dispatch(getCart());
   }
+  store.dispatch(getCart());
 };

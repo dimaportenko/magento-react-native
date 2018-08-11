@@ -7,6 +7,7 @@
 		"test": "jest"
 	},
 	"dependencies": {
+		"lodash": "^4.17.10",
 		"prop-types": "^15.5.10",
 		"react": "16.4.1",
 		"react-native": "0.56.0",
@@ -25,6 +26,7 @@
 		"babel-jest": "20.0.3",
 		"babel-preset-react-native": "5.0.0",
 		"eslint-config-rallycoding": "^3.2.0",
+		"eslint-plugin-react": "^7.10.0",
 		"jest": "20.0.4",
 		"react-test-renderer": "16.0.0-alpha.12"
 	},

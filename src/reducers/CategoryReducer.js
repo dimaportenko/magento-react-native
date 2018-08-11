@@ -1,3 +1,4 @@
+import { getPriceFromChildren } from '../helper/product';
 import {
 	MAGENTO_CURRENT_CATEGORY,
 	MAGENTO_GET_CATEGORY_PRODUCTS,
@@ -49,21 +50,4 @@ export default (state = INITIAL_STATE, action) => {
     default:
       return state;
   }
-};
-
-const getPriceFromChildren = products => {
-	if (products) {
-		const newPrice = products.reduce((minPrice, child) => {
-			if (!minPrice) {
-				return child.price;
-			} else if (minPrice > child.price) {
-				return child.price;
-			}
-			return minPrice;
-		}, false);
-
-		return newPrice;
-	}
-
-	return 0;
 };

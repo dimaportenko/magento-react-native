@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native';
+import _ from 'lodash';
 import { magento } from '../magento';
 import { magentoOptions } from '../config/magento';
 import {
@@ -27,36 +28,58 @@ import {
   UI_CHECKOUT_ACTIVE_SECTION,
   UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
   HOME_SCREEN_DATA,
+  MAGENTO_GET_FEATURED_PRODUCTS,
+  MAGENTO_UPDATE_FEATURED_CONF_PRODUCT,
 } from './types';
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
 
-  return dispatch => {
-    magento
-      .init()
-      .then(async () => {
-        dispatch({ type: MAGENTO_INIT, payload: magento });
-        magento.admin.getStoreConfig();
-        const customerToken = await AsyncStorage.getItem('customerToken');
-        magento.setCustomerToken(customerToken);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  return async dispatch => {
+    try {
+      await magento.init();
+      dispatch({ type: MAGENTO_INIT, payload: magento });
+      magento.admin.getStoreConfig();
+      const customerToken = await AsyncStorage.getItem('customerToken');
+      magento.setCustomerToken(customerToken);
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
 export const getHomeData = () => {
   return async dispatch => {
     try {
+      await magento.admin.getStoreConfig();
       const value = await magento.getHomeData();
-      const payload = JSON.parse(value.content);
+      const payload = JSON.parse(value.content.replace(/<\/?[^>]+(>|$)/g, ''));
       dispatch({ type: HOME_SCREEN_DATA, payload });
+
+      _.forEach(payload.featuredCategories, (details, categoryId) =>
+        getFeaturedCategoryProducts(categoryId, dispatch)
+      );
     } catch (e) {
       console.log(e);
     }
   };
+};
+
+const getFeaturedCategoryProducts = async (categoryId, dispatch) => {
+  try {
+    const products = await magento.admin.getProducts(categoryId);
+    dispatch({
+      type: MAGENTO_GET_FEATURED_PRODUCTS,
+      payload: { categoryId, products },
+    });
+    updateConfigurableProductsPrices(
+      products.items,
+      dispatch,
+      MAGENTO_UPDATE_FEATURED_CONF_PRODUCT
+    );
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getCategoryTree = () => {
@@ -97,7 +120,8 @@ export const getProductsForCategoryOrChild = (category, offset) => {
     }
 
     try {
-      const payload = await magento.admin.getSearchCreteriaForCategoryAndChild(category, 10, offset);
+      const payload = await magento.admin
+        .getSearchCreteriaForCategoryAndChild(category, 10, offset);
       dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(payload.items, dispatch);
@@ -112,15 +136,11 @@ export const getConfigurableProductOptions = sku => {
     magento.admin
       .getConfigurableProductOptions(sku)
       .then(data => {
-        console.log('product options');
-        console.log(data);
         dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: data });
         data.forEach(option => {
           magento.admin
             .getAttributeByCode(option.attribute_id)
             .then(attributeOptions => {
-              console.log('option attribute');
-              console.log(attributeOptions);
               dispatch({
                 type: MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
                 payload: {
@@ -141,30 +161,26 @@ export const getConfigurableProductOptions = sku => {
   };
 };
 
-const updateConfigurableProductsPrices = (products, dispatch) => {
+const updateConfigurableProductsPrices = (products, dispatch, type) => {
   products.forEach(product => {
     if (product.type_id === 'configurable') {
-      updateConfigurableProductPrice(product, dispatch);
+      updateConfigurableProductPrice(product, dispatch, type);
     }
   });
 };
 
-const updateConfigurableProductPrice = (product, dispatch) => {
+const updateConfigurableProductPrice = async (
+  product,
+  dispatch,
+  type = MAGENTO_UPDATE_CONF_PRODUCT
+) => {
   const { sku } = product;
-  magento.admin
-    .getConfigurableChildren(sku)
-    .then(data => {
-      dispatch({
-        type: MAGENTO_UPDATE_CONF_PRODUCT,
-        payload: {
-          sku,
-          children: data,
-        },
-      });
-    })
-    .catch(error => {
-      console.log(error);
-    });
+  try {
+    const data = await magento.admin.getConfigurableChildren(sku);
+    dispatch({ type, payload: { sku, children: data } });
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getProductMedia = ({ sku }) => {
@@ -203,14 +219,15 @@ export const createCustomerCart = customerId => {
   };
 };
 
-export const getCart = (customerId) => {
+export const getCart = customerId => {
   return async dispatch => {
     try {
       let cart;
       if (customerId) {
         cart = await magento.admin.getCart(customerId);
       } else {
-        cart = await magento.getCart();
+        const cartId = await magento.getCart();
+        cart = await magento.guest.getGuestCart(cartId);
       }
       dispatch({ type: MAGENTO_GET_CART, payload: cart });
     } catch (error) {
@@ -239,7 +256,7 @@ export const addToCart = ({ cartId, item, customer }) => {
         dispatch({ type: MAGENTO_CREATE_CART, payload: customerCartId });
         updatedItem.cartItem.quoteId = customerCartId;
         return dispatchAddToCart(dispatch, customerCartId, updatedItem);
-			}
+      }
 
       const guestCartId = await magento.guest.createGuestCart();
       dispatch({ type: MAGENTO_CREATE_CART, payload: guestCartId });
@@ -312,7 +329,10 @@ export const addGuestCartBillingAddress = (cartId, address) => {
       if (magento.isCustomerLogin()) {
         data = await magento.customer.cartEstimateShippingMethods(address);
       } else {
-        data = await magento.guest.guestCartEstimateShippingMethods(cartId, address);
+        data = await magento.guest.guestCartEstimateShippingMethods(
+          cartId,
+          address
+        );
       }
       dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
       dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
