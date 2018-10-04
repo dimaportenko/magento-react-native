@@ -13,17 +13,17 @@ import {
 
 const INITIAL_STATE = {
 	ui: {
-		email: 'test+17@test.com',
+		email: '',
 		password: '',
 		// postcode: 'T1A 7L4',
-		postcode: '95608',
+		postcode: '',
 		country: '',
 		countryId: '',
-		firstname: 'Test',
-		lastname: 'Test',
-		telephone: '15417543010',
-		street: '7246 W. Windsor Dr. \n',
-		city: 'Carmichael',
+		firstname: '',
+		lastname: '',
+		telephone: '',
+		street: '',
+		city: '',
 		region: ''
 	},
 	selectedShipping: false,
@@ -56,8 +56,7 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, ui };
 		}
 		case MAGENTO_GET_COUNTRIES: {
-			const ui = { ...state.ui, countryId: 'US' };
-			return { ...state, ui, countries: action.payload };
+			return { ...state, countries: action.payload };
 		}
 		case UI_CHECKOUT_CUSTOMER_NEXT_LOADING: {
 			const ui = { ...state.ui, loading: action.payload };
