@@ -109,23 +109,24 @@ class Magento {
       headers.Authorization = `Bearer ${this.customerToken}`;
     }
 
-    console.log({ uri, method, headers, data, ...params });
-    return fetch(uri, { method, headers, body: JSON.stringify(data) })
-      .then(response => {
-        if (!response.ok) {
-          return response.json()
-            .catch(() => {
-              throw new Error(response.status);
-            })
-            .then(({ message }) => {
-              throw new Error(message || response.statusText || response.status);
-            });
-        }
-        return response.json();
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    return new Promise((resolve, reject) => {
+      console.log({ uri, method, headers, data, ...params });
+      fetch(uri, { method, headers, body: JSON.stringify(data) })
+        .then(response => {
+          console.log(response);
+          return response.json();
+        })
+        .then(responseData => {
+          // TODO: check response code
+          // debugger;
+          console.log(responseData);
+          resolve(responseData);
+        })
+        .catch(error => {
+          console.log(error);
+          reject(error);
+        });
+    });
   }
 
   setStoreConfig(config) {
