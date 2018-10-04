@@ -24,8 +24,8 @@ class Login extends Component {
 
   componentWillMount() {
     this.setState({
-      email: 'test@test.com',
-      password: 'Test1234',
+      email: '',
+      password: '',
       number: ''
     });
   }

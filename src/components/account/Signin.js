@@ -19,11 +19,11 @@ class Signin extends Component {
 
   componentWillMount() {
     this.setState({
-      firstname: 'Dmytro',
-      lastname: 'Portenko',
-      email: 'test+1@test.com',
-      password: 'Test1234',
-      confirmPassword: 'Test1234'
+      firstname: '',
+      lastname: '',
+      email: '',
+      password: '',
+      confirmPassword: ''
     });
   }
 
