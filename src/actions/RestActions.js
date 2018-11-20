@@ -53,6 +53,7 @@ export const getHomeData = () => {
     try {
       await magento.admin.getStoreConfig();
       const value = await magento.getHomeData();
+      console.log('home', value);
       const payload = JSON.parse(value.content.replace(/<\/?[^>]+(>|$)/g, ''));
       dispatch({ type: HOME_SCREEN_DATA, payload });
 
@@ -82,18 +83,16 @@ const getFeaturedCategoryProducts = async (categoryId, dispatch) => {
   }
 };
 
-export const getCategoryTree = () => {
-  return dispatch => {
-    magento.admin
-      .getCategoriesTree()
-      .then(payload => {
-        dispatch({ type: MAGENTO_GET_CATEGORY_TREE, payload });
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-};
+export const getCategoryTree = () => dispatch => (
+  magento.admin
+    .getCategoriesTree()
+    .then(payload => {
+      dispatch({ type: MAGENTO_GET_CATEGORY_TREE, payload });
+    })
+    .catch(error => {
+      console.log(error);
+    })
+);
 
 export const getProductsForCategory = ({ id, offset }) => {
   return dispatch => {
