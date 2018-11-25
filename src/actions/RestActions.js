@@ -218,12 +218,12 @@ export const createCustomerCart = customerId => {
   };
 };
 
-export const getCart = customerId => {
+export const getCart = () => {
   return async dispatch => {
     try {
       let cart;
-      if (customerId) {
-        cart = await magento.admin.getCart(customerId);
+      if (magento.isCustomerLogin()) {
+        cart = await magento.customer.getCustomerCart();
       } else {
         const cartId = await magento.getCart();
         cart = await magento.guest.getGuestCart(cartId);
