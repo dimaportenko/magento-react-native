@@ -101,9 +101,9 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  const { cart, products } = state.cart;
+  const { products } = state.cart;
 
-  return { cart, products };
+  return { cart: state.cart.quote, products };
 };
 
 export default connect(mapStateToProps, { cartItemProduct })(Cart);

@@ -300,5 +300,22 @@ export default magento => {
       });
     },
 
+    removeItemFromCart: (cartId, itemId) => {
+      // DELETE /V1/carts/mine/items
+      return new Promise((resolve, reject) => {
+        const path = `/V1/carts/${cartId}/items/${itemId}`;
+
+        magento
+          .delete(path, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
   };
 };

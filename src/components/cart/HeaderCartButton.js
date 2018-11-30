@@ -68,7 +68,7 @@ const styles = {
 };
 
 const mapStateToProps = ({ cart }) => {
-  const itemsCount = cart.cart ? cart.cart.items_qty : 0;
+  const itemsCount = cart.quote ? cart.quote.items_qty : 0;
   return { itemsCount };
 };
 

@@ -30,6 +30,8 @@ import {
   HOME_SCREEN_DATA,
   MAGENTO_GET_FEATURED_PRODUCTS,
   MAGENTO_UPDATE_FEATURED_CONF_PRODUCT,
+  MAGENTO_REMOVE_FROM_CART,
+  MAGENTO_REMOVE_FROM_CART_LOADING,
 } from './types';
 
 export const initMagento = () => {
@@ -435,4 +437,53 @@ export const createCustomer = customer => {
         console.log(error);
       });
   };
+};
+
+export const removeFromCartLoading = isLoading => {
+  return {
+    type: MAGENTO_REMOVE_FROM_CART_LOADING,
+    payload: isLoading,
+  };
+};
+
+export const removeFromCart = ({ cart, item }) => {
+  return async dispatch => {
+    try {
+      console.log('removeFromCart', cart, item);
+      if (cart.quote) {
+        dispatchRemoveFromCart(dispatch, cart, item);
+      }
+    } catch (error) {
+      console.log(error);
+      dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: error.message });
+    }
+  };
+};
+
+const dispatchRemoveFromCart = async (dispatch, cart, item) => {
+  try {
+    const result = await magento.admin.removeItemFromCart(cart.quote.id, item.item_id);
+    dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: result });
+    dispatchGetCart(dispatch, cart.cartId);
+    dispatch({ type: MAGENTO_REMOVE_FROM_CART_LOADING, payload: false });
+  } catch (e) {
+    //TODO: handle error
+    dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: e.message });
+    dispatch({ type: MAGENTO_REMOVE_FROM_CART_LOADING, payload: false });
+    console.log(e);
+  }
+};
+
+const dispatchGetCart = async (dispatch, cartId) => {
+  try {
+    let data;
+    if (magento.isCustomerLogin()) {
+      data = await magento.customer.getCustomerCart();
+    } else {
+      data = await magento.guest.getGuestCart(cartId);
+    }
+    dispatch({ type: MAGENTO_GET_CART, payload: data });
+  } catch (e) {
+    console.log(e);
+  }
 };

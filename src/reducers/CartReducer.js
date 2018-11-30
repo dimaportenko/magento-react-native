@@ -4,7 +4,9 @@ import {
 	NAVIGATION_GO_TO_SCREEN,
 	MAGENTO_ADD_TO_CART_LOADING,
 	MAGENTO_GET_CART,
-	MAGENTO_CART_ITEM_PRODUCT
+	MAGENTO_CART_ITEM_PRODUCT,
+  MAGENTO_REMOVE_FROM_CART_LOADING,
+  MAGENTO_REMOVE_FROM_CART
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -21,7 +23,7 @@ export default (state = INITIAL_STATE, action) => {
 		case MAGENTO_ADD_TO_CART_LOADING:
 			return { ...state, addToCartLoading: action.payload };
 		case MAGENTO_CREATE_CART:
-			return { ...state, cartId: action.payload };
+			return { ...state, cartId: action.payload, quote: { items: [] } };
 		case MAGENTO_CART_ITEM_PRODUCT: {
 			const products = { ...state.products, [action.payload.sku]: action.payload };
 			return { ...state, products };
@@ -31,8 +33,12 @@ export default (state = INITIAL_STATE, action) => {
 		case NAVIGATION_GO_TO_SCREEN:
 			return { ...state, errorMessage: false };
 		case MAGENTO_GET_CART:
-			return { ...state, cart: action.payload };
-		default:
+			return { ...state, quote: action.payload };
+    case MAGENTO_REMOVE_FROM_CART_LOADING:
+      return { ...state, addToCartLoading: action.payload };
+    case MAGENTO_REMOVE_FROM_CART:
+      return { ...state, errorMessage: action.payload.message };
+    default:
 			return state;
 	}
 };
