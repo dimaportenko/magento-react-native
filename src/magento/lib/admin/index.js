@@ -317,5 +317,25 @@ export default magento => {
       });
     },
 
+    getOrderList: (customerId) => {
+      return new Promise((resolve, reject) => {
+        const path = '/V1/orders';
+        const params = {
+          'searchCriteria[filterGroups][0][filters][0][field]': 'customer_id',
+          'searchCriteria[filterGroups][0][filters][0][value]': customerId
+        };
+
+        magento
+          .get(path, params, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
   };
 };
