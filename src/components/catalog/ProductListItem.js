@@ -29,20 +29,22 @@ class ProductListItem extends Component {
       infoStyle,
       priceStyle
     } = styles;
+
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <TouchableOpacity
-          style={containerStyle}
+          style={[containerStyle, this.props.mainContainerStyle]}
           onPress={this.onRowPress.bind(this)}
         >
+
           <Image
-            style={imageStyle}
+            style={[imageStyle, this.props.imageStyle]}
             resizeMode="contain"
             source={{ uri: this.image() }}
           />
-          <View style={infoStyle}>
-            <Text style={textStyle}>{this.props.product.name}</Text>
-            <Text style={priceStyle}>
+          <View style={[infoStyle, this.props.infoStyle]}>
+            <Text style={[textStyle, this.props.textStyle]}>{this.props.product.name}</Text>
+            <Text style={[priceStyle, this.props.priceStyle]}>
               {priceSignByCode(
                 magento.storeConfig.default_display_currency_code
               )}
@@ -61,7 +63,8 @@ const styles = {
     flex: 1,
     borderColor: '#ddd',
     borderBottomWidth: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
+    margin: 1
   },
   infoStyle: {
     flexDirection: 'column',
@@ -85,7 +88,6 @@ const styles = {
   },
   imageStyle: {
     height: 100,
-    flex: 1,
     margin: 10,
     borderWidth: 1,
     borderColor: '#ddd',
