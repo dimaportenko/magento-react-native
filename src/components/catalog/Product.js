@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Button, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import {
 	getProductMedia,
 	addToCartLoading,
@@ -23,7 +24,11 @@ class Product extends Component {
 		headerRight: <HeaderCartButton />
 	});
 
-	componentWillMount() {
+	state = {
+		selectedProduct: null
+	}
+
+	componentDidMount() {
 		const { product, media } = this.props;
 
 		if (product.type_id === 'configurable') {
@@ -79,6 +84,8 @@ class Product extends Component {
 		const { selectedOptions } = this.props;
 		// this.props.selectedOptions[attributeId] = optionValue;
 		this.props.uiProductUpdateOptions({ ...selectedOptions, [attributeId]: optionValue });
+
+		this.updateSelectedProduct();
 	}
 
   renderDescription() {
@@ -100,6 +107,7 @@ class Product extends Component {
 		const { options, attributes, product, selectedOptions } = this.props;
 
 		if (Array.isArray(options)) {
+			// debugger;
 			const prevOptions = [];
 			let first = true;
 			return options.map(option => {
@@ -188,6 +196,45 @@ class Product extends Component {
 			</View>
 		);
 	}
+	// 93(pin): 53
+	// 142(pin): 169
+	updateSelectedProduct = () => {
+		const { selectedOptions, product } = this.props;
+		const selectedKeys = Object.keys(selectedOptions);
+
+		if (!product.children || !selectedKeys.length) return;
+
+		if (selectedKeys.length === this.props.options.length) {
+			// return this.props.product.children;
+
+			const searchOption = {};
+			selectedKeys.forEach(attribute_id => {
+				const code = this.props.attributes[attribute_id].attributeCode;
+				searchOption[code] = selectedOptions[attribute_id];
+			});
+
+			const selectedProduct = product.children.find(child => {
+					// debugger;
+				const found = _.every(searchOption, (value, code) => {
+					const childOption = getProductCustomAttribute(child, code);
+					return Number(childOption.value) === Number(value);
+				})
+				return found;
+			});
+
+			if (selectedProduct) {
+				this.setState({ selectedProduct });
+			}
+		}
+	}
+
+	renderPrice = () => {
+		const { selectedProduct } = this.state;
+		if (selectedProduct) {
+			return selectedProduct.price;
+		}
+		return this.props.product.price;
+	}
 
 	render() {
 		console.log('Product screen render');
@@ -197,7 +244,7 @@ class Product extends Component {
 					<Text style={styles.textStyle}>{this.props.product.name}</Text>
 					<Text style={styles.textStyle}>
 						{priceSignByCode(magento.storeConfig.default_display_currency_code)}
-						{this.props.product.price}
+						{this.renderPrice()}
 					</Text>
 					{this.renderDescription()}
 					<Text style={styles.textStyle}>Qty</Text>
