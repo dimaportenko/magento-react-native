@@ -82,7 +82,6 @@ class Product extends Component {
 	// TODO: refactor action name
 	optionSelect(attributeId, optionValue) {
 		const { selectedOptions } = this.props;
-		// this.props.selectedOptions[attributeId] = optionValue;
 		this.props.uiProductUpdateOptions({ ...selectedOptions, [attributeId]: optionValue });
 
 		this.updateSelectedProduct();
@@ -107,11 +106,9 @@ class Product extends Component {
 		const { options, attributes, product, selectedOptions } = this.props;
 
 		if (Array.isArray(options)) {
-			// debugger;
 			const prevOptions = [];
 			let first = true;
 			return options.map(option => {
-					// let disabled = false;
 					if (!attributes[option.attribute_id]) {
 						return <View key={option.id} />;
 					}
@@ -129,7 +126,6 @@ class Product extends Component {
 						}
 
 						if (first) {
-							// debugger;
 							return {
 								label: optionLabel,
 								key: value.value_index
@@ -139,7 +135,6 @@ class Product extends Component {
 						const match = product.children.find(child => {
 							let found = 0;
 							prevOptions.every(prevOption => {
-								// debugger;
 								const { attributeCode } = attributes[prevOption.attribute_id];
 								const currentAttributeCode = attributes[option.attribute_id].attributeCode;
 								const childOption = getProductCustomAttribute(child, attributeCode);
@@ -196,8 +191,7 @@ class Product extends Component {
 			</View>
 		);
 	}
-	// 93(pin): 53
-	// 142(pin): 169
+
 	updateSelectedProduct = () => {
 		const { selectedOptions, product } = this.props;
 		const selectedKeys = Object.keys(selectedOptions);
@@ -205,7 +199,6 @@ class Product extends Component {
 		if (!product.children || !selectedKeys.length) return;
 
 		if (selectedKeys.length === this.props.options.length) {
-			// return this.props.product.children;
 
 			const searchOption = {};
 			selectedKeys.forEach(attribute_id => {
@@ -214,7 +207,6 @@ class Product extends Component {
 			});
 
 			const selectedProduct = product.children.find(child => {
-					// debugger;
 				const found = _.every(searchOption, (value, code) => {
 					const childOption = getProductCustomAttribute(child, code);
 					return Number(childOption.value) === Number(value);
