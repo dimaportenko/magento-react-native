@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Swiper from 'react-native-swiper';
 import { View, Image } from 'react-native';
-import { connect } from 'react-redux';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
 
@@ -61,10 +60,4 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ product }) => {
-  const { media } = product.current;
-
-  return { media };
-};
-
-export default connect(mapStateToProps)(ProductMedia);
+export default ProductMedia;

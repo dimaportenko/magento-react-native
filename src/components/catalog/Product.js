@@ -29,13 +29,13 @@ class Product extends Component {
 	}
 
 	componentDidMount() {
-		const { product, media } = this.props;
+		const { product, medias } = this.props;
 
 		if (product.type_id === 'configurable') {
 			this.props.getConfigurableProductOptions(product.sku);
 		}
 
-		if (!media) {
+		if (!medias || !medias[product.sku]) {
 			this.props.getProductMedia({ sku: product.sku });
 		}
 	}
@@ -82,9 +82,10 @@ class Product extends Component {
 	// TODO: refactor action name
 	optionSelect(attributeId, optionValue) {
 		const { selectedOptions } = this.props;
-		this.props.uiProductUpdateOptions({ ...selectedOptions, [attributeId]: optionValue });
+		const updatedOptions = { ...selectedOptions, [attributeId]: optionValue };
+		this.props.uiProductUpdateOptions(updatedOptions);
 
-		this.updateSelectedProduct();
+		this.updateSelectedProduct(updatedOptions);
 	}
 
   renderDescription() {
@@ -192,14 +193,13 @@ class Product extends Component {
 		);
 	}
 
-	updateSelectedProduct = () => {
-		const { selectedOptions, product } = this.props;
+	updateSelectedProduct = (selectedOptions) => {
+		const { product } = this.props;
 		const selectedKeys = Object.keys(selectedOptions);
 
 		if (!product.children || !selectedKeys.length) return;
 
 		if (selectedKeys.length === this.props.options.length) {
-
 			const searchOption = {};
 			selectedKeys.forEach(attribute_id => {
 				const code = this.props.attributes[attribute_id].attributeCode;
@@ -210,7 +210,7 @@ class Product extends Component {
 				const found = _.every(searchOption, (value, code) => {
 					const childOption = getProductCustomAttribute(child, code);
 					return Number(childOption.value) === Number(value);
-				})
+				});
 				return found;
 			});
 
@@ -228,11 +228,23 @@ class Product extends Component {
 		return this.props.product.price;
 	}
 
+	renderProductMedia = () => {
+		const { medias, product } = this.props;
+		if (!medias) {
+			return (
+				<ProductMedia media={null} />
+			);
+		}
+		return (
+			<ProductMedia media={medias[product.sku]} />
+		);
+	}
+
 	render() {
 		console.log('Product screen render');
 		return (
 				<ScrollView style={styles.container}>
-					<ProductMedia />
+					{this.renderProductMedia()}
 					<Text style={styles.textStyle}>{this.props.product.name}</Text>
 					<Text style={styles.textStyle}>
 						{priceSignByCode(magento.storeConfig.default_display_currency_code)}
@@ -287,15 +299,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-	const { product, options } = state.product.current;
+	const { product, options, medias } = state.product.current;
 	const { attributes, selectedOptions } = state.product;
 	const { cart, account } = state;
 	console.log('Product Component');
 	console.log(state.product);
 	console.log(cart);
-
 	return {
 		product,
+		medias,
 		cart,
 		options,
 		attributes,
