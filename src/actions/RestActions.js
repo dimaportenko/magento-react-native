@@ -188,8 +188,8 @@ export const getProductMedia = ({ sku }) => {
   return dispatch => {
     magento.admin
       .getProductMedia(sku)
-      .then(data => {
-        dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: data });
+      .then(media => {
+        dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: { sku, media } });
       })
       .catch(error => {
         console.log(error);

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, ScrollView, Button, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import {
 	getProductMedia,
 	addToCartLoading,
@@ -23,14 +24,18 @@ class Product extends Component {
 		headerRight: <HeaderCartButton />
 	});
 
-	componentWillMount() {
-		const { product, media } = this.props;
+	state = {
+		selectedProduct: null
+	}
+
+	componentDidMount() {
+		const { product, medias } = this.props;
 
 		if (product.type_id === 'configurable') {
 			this.props.getConfigurableProductOptions(product.sku);
 		}
 
-		if (!media) {
+		if (!medias || !medias[product.sku]) {
 			this.props.getProductMedia({ sku: product.sku });
 		}
 	}
@@ -77,8 +82,10 @@ class Product extends Component {
 	// TODO: refactor action name
 	optionSelect(attributeId, optionValue) {
 		const { selectedOptions } = this.props;
-		// this.props.selectedOptions[attributeId] = optionValue;
-		this.props.uiProductUpdateOptions({ ...selectedOptions, [attributeId]: optionValue });
+		const updatedOptions = { ...selectedOptions, [attributeId]: optionValue };
+		this.props.uiProductUpdateOptions(updatedOptions);
+
+		this.updateSelectedProduct(updatedOptions);
 	}
 
   renderDescription() {
@@ -103,7 +110,6 @@ class Product extends Component {
 			const prevOptions = [];
 			let first = true;
 			return options.map(option => {
-					// let disabled = false;
 					if (!attributes[option.attribute_id]) {
 						return <View key={option.id} />;
 					}
@@ -121,7 +127,6 @@ class Product extends Component {
 						}
 
 						if (first) {
-							// debugger;
 							return {
 								label: optionLabel,
 								key: value.value_index
@@ -131,7 +136,6 @@ class Product extends Component {
 						const match = product.children.find(child => {
 							let found = 0;
 							prevOptions.every(prevOption => {
-								// debugger;
 								const { attributeCode } = attributes[prevOption.attribute_id];
 								const currentAttributeCode = attributes[option.attribute_id].attributeCode;
 								const childOption = getProductCustomAttribute(child, attributeCode);
@@ -189,15 +193,73 @@ class Product extends Component {
 		);
 	}
 
+	updateSelectedProduct = (selectedOptions) => {
+		const { product } = this.props;
+		const selectedKeys = Object.keys(selectedOptions);
+
+		if (!product.children || !selectedKeys.length) return;
+
+		if (selectedKeys.length === this.props.options.length) {
+			const searchOption = {};
+			selectedKeys.forEach(attribute_id => {
+				const code = this.props.attributes[attribute_id].attributeCode;
+				searchOption[code] = selectedOptions[attribute_id];
+			});
+
+			const selectedProduct = product.children.find(child => {
+				const found = _.every(searchOption, (value, code) => {
+					const childOption = getProductCustomAttribute(child, code);
+					return Number(childOption.value) === Number(value);
+				});
+				return found;
+			});
+
+			if (selectedProduct) {
+				const { medias } = this.props;
+				this.setState({ selectedProduct });
+				if (!medias || !medias[selectedProduct.sku]) {
+					this.props.getProductMedia({ sku: selectedProduct.sku });
+				}
+			}
+		}
+	}
+
+	renderPrice = () => {
+		const { selectedProduct } = this.state;
+		if (selectedProduct) {
+			return selectedProduct.price;
+		}
+		return this.props.product.price;
+	}
+
+	renderProductMedia = () => {
+		const { medias, product } = this.props;
+		const { selectedProduct } = this.state;
+		if (!medias) {
+			return (
+				<ProductMedia media={null} />
+			);
+		}
+		if (selectedProduct && medias[selectedProduct.sku]) {
+			return (
+				<ProductMedia media={medias[selectedProduct.sku]} />
+			);
+		}
+		return (
+			<ProductMedia media={medias[product.sku]} />
+
+		);
+	}
+
 	render() {
 		console.log('Product screen render');
 		return (
 				<ScrollView style={styles.container}>
-					<ProductMedia />
+					{this.renderProductMedia()}
 					<Text style={styles.textStyle}>{this.props.product.name}</Text>
 					<Text style={styles.textStyle}>
 						{priceSignByCode(magento.storeConfig.default_display_currency_code)}
-						{this.props.product.price}
+						{this.renderPrice()}
 					</Text>
 					{this.renderDescription()}
 					<Text style={styles.textStyle}>Qty</Text>
@@ -248,15 +310,15 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-	const { product, options } = state.product.current;
+	const { product, options, medias } = state.product.current;
 	const { attributes, selectedOptions } = state.product;
 	const { cart, account } = state;
 	console.log('Product Component');
 	console.log(state.product);
 	console.log(cart);
-
 	return {
 		product,
+		medias,
 		cart,
 		options,
 		attributes,
