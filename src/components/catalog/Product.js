@@ -215,7 +215,11 @@ class Product extends Component {
 			});
 
 			if (selectedProduct) {
+				const { medias } = this.props;
 				this.setState({ selectedProduct });
+				if (!medias || !medias[selectedProduct.sku]) {
+					this.props.getProductMedia({ sku: selectedProduct.sku });
+				}
 			}
 		}
 	}
@@ -230,13 +234,20 @@ class Product extends Component {
 
 	renderProductMedia = () => {
 		const { medias, product } = this.props;
+		const { selectedProduct } = this.state;
 		if (!medias) {
 			return (
 				<ProductMedia media={null} />
 			);
 		}
+		if (selectedProduct && medias[selectedProduct.sku]) {
+			return (
+				<ProductMedia media={medias[selectedProduct.sku]} />
+			);
+		}
 		return (
 			<ProductMedia media={medias[product.sku]} />
+
 		);
 	}
 
