@@ -6,8 +6,8 @@ import Fonts from './Fonts';
 export const buttonStyles = StyleSheet.create({
   button: {
     borderWidth: 1,
-    backgroundColor: Colors.BORDER_GRAY,
-    borderColor: Colors.BORDER_GRAY,
+    backgroundColor: Colors.GRAY,
+    borderColor: Colors.GRAY,
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
     justifyContent: 'center'
@@ -26,7 +26,7 @@ export const inputStyles = StyleSheet.create({
   },
   container: {
     borderWidth: 1,
-    borderColor: Colors.BORDER_GRAY,
+    borderColor: Colors.GRAY,
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
     justifyContent: 'center',

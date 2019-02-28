@@ -32,6 +32,7 @@ import {
   MAGENTO_UPDATE_FEATURED_CONF_PRODUCT,
   MAGENTO_REMOVE_FROM_CART,
   MAGENTO_REMOVE_FROM_CART_LOADING,
+  MAGENTO_GET_SEARCH_PRODUCTS
 } from './types';
 
 export const initMagento = () => {
@@ -126,6 +127,18 @@ export const getProductsForCategoryOrChild = (category, offset) => {
       dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(payload.items, dispatch);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+};
+
+export const getSearchProducts = (searchInput, offset) => {
+  return async dispatch => {
+    try {
+      const payload = await magento.admin
+          .getProductsWithAttribute('name', searchInput, 10, offset);
+      dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload });
     } catch (e) {
       console.log(e);
     }

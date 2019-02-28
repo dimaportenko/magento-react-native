@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     borderWidth: 1,
-    borderColor: Colors.BORDER_GRAY,
+    borderColor: Colors.GRAY,
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
     justifyContent: 'center',
@@ -144,8 +144,8 @@ const styles = StyleSheet.create({
   },
   button: {
     borderWidth: 1,
-    backgroundColor: Colors.BORDER_GRAY,
-    borderColor: Colors.BORDER_GRAY,
+    backgroundColor: Colors.GRAY,
+    borderColor: Colors.GRAY,
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
     justifyContent: 'center'

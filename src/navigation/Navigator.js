@@ -17,6 +17,7 @@ import Account from '../components/account/Account';
 import AuthLoading from '../components/account/AuthLoading';
 import PasswordReset from '../components/account/PasswordReset';
 import HomeScreen from '../components/home/HomeScreen';
+import SearchScreen from '../components/search/SearchScreen';
 
 import {
   NAVIGATION_CATEGORY_TREE_PATH,
@@ -33,20 +34,20 @@ import {
   NAVIGATION_AUTH_LOADING_SWITCH,
   NAVIGATION_RESET_PASSWORD_PATH,
   NAVIGATION_AUTH_STACK_PATH,
-  NAVIGATION_HOME_SCREEN_PATH
+  NAVIGATION_SEARCH_SCREEN_PATH
 } from './routes';
 
 const HomeStack = createStackNavigator(
   {
-    [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
+    [NAVIGATION_HOME_STACK_PATH]: HomeScreen,
     [NAVIGATION_CATEGORY_TREE_PATH]: CategoryTree,
     [NAVIGATION_CATEGORY_PATH]: ProductList,
     [NAVIGATION_PRODUCT_PATH]: Product,
     [NAVIGATION_CART_PATH]: Cart,
-    [NAVIGATION_CHECKOUT_PATH]: Checkout
+    [NAVIGATION_CHECKOUT_PATH]: Checkout,
   },
   {
-    initialRouteName: NAVIGATION_HOME_SCREEN_PATH,
+    initialRouteName: NAVIGATION_HOME_STACK_PATH,
     navigationOptions: {
       headerStyle: {
         // backgroundColor: '#f4511e',
@@ -77,8 +78,20 @@ const AccountSwitch = createSwitchNavigator({
   [NAVIGATION_ACCOUNT_STACK_PATH]: AccountStack
 });
 
+const SearchStack = createStackNavigator({
+  [NAVIGATION_SEARCH_SCREEN_PATH]: SearchScreen
+});
+
 export const Navigator = createBottomTabNavigator(
   {
+    [NAVIGATION_SEARCH_SCREEN_PATH]: {
+      screen: SearchStack,
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => {
+          return <Icon name="md-search" type="ionicon" color={tintColor} />;
+        }
+      })
+    },
     [NAVIGATION_HOME_STACK_PATH]: {
       screen: HomeStack,
       navigationOptions: () => ({
@@ -94,7 +107,7 @@ export const Navigator = createBottomTabNavigator(
           return <Icon name="md-person" type="ionicon" color={tintColor} />;
         }
       })
-    }
+    },
   },
   {
     // initialRouteName: NAVIGATION_AUTH_STACK_PATH,
