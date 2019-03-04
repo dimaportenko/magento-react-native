@@ -8,6 +8,7 @@
  import AccountReducer from './AccountReducer';
  import CartReducer from './CartReducer';
  import HomeReducer from './HomeReducer';
+ import SearchReducer from './SearchReducer';
 
  export default combineReducers({
    categoryTree: CategoryTreeReducer,
@@ -19,4 +20,5 @@
    account: AccountReducer,
    cart: CartReducer,
    home: HomeReducer,
+   search: SearchReducer,
  });

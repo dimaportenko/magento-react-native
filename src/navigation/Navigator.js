@@ -26,6 +26,7 @@ import {
   NAVIGATION_PRODUCT_PATH,
   NAVIGATION_CART_PATH,
   NAVIGATION_HOME_STACK_PATH,
+  NAVIGATION_HOME_SCREEN_PATH,
   NAVIGATION_LOGIN_PATH,
   NAVIGATION_SIGNIN_PATH,
   NAVIGATION_ACCOUNT_PATH,
@@ -39,7 +40,7 @@ import {
 
 const HomeStack = createStackNavigator(
   {
-    [NAVIGATION_HOME_STACK_PATH]: HomeScreen,
+    [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
     [NAVIGATION_CATEGORY_TREE_PATH]: CategoryTree,
     [NAVIGATION_CATEGORY_PATH]: ProductList,
     [NAVIGATION_PRODUCT_PATH]: Product,
@@ -47,7 +48,7 @@ const HomeStack = createStackNavigator(
     [NAVIGATION_CHECKOUT_PATH]: Checkout,
   },
   {
-    initialRouteName: NAVIGATION_HOME_STACK_PATH,
+    initialRouteName: NAVIGATION_HOME_SCREEN_PATH,
     navigationOptions: {
       headerStyle: {
         // backgroundColor: '#f4511e',

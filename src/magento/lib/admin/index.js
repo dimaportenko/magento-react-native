@@ -141,7 +141,7 @@ export default magento => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
       const params = {
         'searchCriteria[filterGroups][0][filters][0][field]': attributeCode,
-        'searchCriteria[filterGroups][0][filters][0][value]': attributeValue,
+        'searchCriteria[filterGroups][0][filters][0][value]': `%${attributeValue}%`,
         'searchCriteria[filterGroups][0][filters][0][conditionType]': conditionType,
         'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
         'searchCriteria[filterGroups][1][filters][0][value]': '4',

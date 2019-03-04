@@ -32,7 +32,9 @@ import {
   MAGENTO_UPDATE_FEATURED_CONF_PRODUCT,
   MAGENTO_REMOVE_FROM_CART,
   MAGENTO_REMOVE_FROM_CART_LOADING,
-  MAGENTO_GET_SEARCH_PRODUCTS
+  MAGENTO_GET_SEARCH_PRODUCTS,
+  MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
+  MAGENTO_LOAD_MORE_SEARCH_PRODUCTS
 } from './types';
 
 export const initMagento = () => {
@@ -135,10 +137,19 @@ export const getProductsForCategoryOrChild = (category, offset) => {
 
 export const getSearchProducts = (searchInput, offset) => {
   return async dispatch => {
+    if (offset) {
+      dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: true });
+    }
     try {
-      const payload = await magento.admin
-          .getProductsWithAttribute('name', searchInput, 10, offset);
-      dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload });
+      const data = await magento.admin
+        .getProductsWithAttribute('name', searchInput, 10, offset);
+      dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload: { searchInput, data } });
+      dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: false });
+      updateConfigurableProductsPrices(
+        data.items,
+        dispatch,
+        MAGENTO_UPDATE_SEARCH_CONF_PRODUCT
+        );
     } catch (e) {
       console.log(e);
     }
