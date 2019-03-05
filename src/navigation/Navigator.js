@@ -6,7 +6,7 @@ import {
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import ProductList from '../components/catalog/ProductList';
+import ProductList from '../components/catalog/CategoryList';
 import CategoryTree from '../components/catalog/CategoryTree';
 import Product from '../components/catalog/Product';
 import Cart from '../components/cart/Cart';
@@ -17,6 +17,7 @@ import Account from '../components/account/Account';
 import AuthLoading from '../components/account/AuthLoading';
 import PasswordReset from '../components/account/PasswordReset';
 import HomeScreen from '../components/home/HomeScreen';
+import SearchScreen from '../components/search/SearchScreen';
 
 import {
   NAVIGATION_CATEGORY_TREE_PATH,
@@ -25,6 +26,7 @@ import {
   NAVIGATION_PRODUCT_PATH,
   NAVIGATION_CART_PATH,
   NAVIGATION_HOME_STACK_PATH,
+  NAVIGATION_HOME_SCREEN_PATH,
   NAVIGATION_LOGIN_PATH,
   NAVIGATION_SIGNIN_PATH,
   NAVIGATION_ACCOUNT_PATH,
@@ -33,7 +35,7 @@ import {
   NAVIGATION_AUTH_LOADING_SWITCH,
   NAVIGATION_RESET_PASSWORD_PATH,
   NAVIGATION_AUTH_STACK_PATH,
-  NAVIGATION_HOME_SCREEN_PATH
+  NAVIGATION_SEARCH_SCREEN_PATH
 } from './routes';
 
 const HomeStack = createStackNavigator(
@@ -43,7 +45,7 @@ const HomeStack = createStackNavigator(
     [NAVIGATION_CATEGORY_PATH]: ProductList,
     [NAVIGATION_PRODUCT_PATH]: Product,
     [NAVIGATION_CART_PATH]: Cart,
-    [NAVIGATION_CHECKOUT_PATH]: Checkout
+    [NAVIGATION_CHECKOUT_PATH]: Checkout,
   },
   {
     initialRouteName: NAVIGATION_HOME_SCREEN_PATH,
@@ -77,6 +79,10 @@ const AccountSwitch = createSwitchNavigator({
   [NAVIGATION_ACCOUNT_STACK_PATH]: AccountStack
 });
 
+const SearchStack = createStackNavigator({
+  [NAVIGATION_SEARCH_SCREEN_PATH]: SearchScreen
+});
+
 export const Navigator = createBottomTabNavigator(
   {
     [NAVIGATION_HOME_STACK_PATH]: {
@@ -87,6 +93,14 @@ export const Navigator = createBottomTabNavigator(
         }
       })
     },
+    [NAVIGATION_SEARCH_SCREEN_PATH]: {
+      screen: SearchStack,
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => {
+          return <Icon name="md-search" type="ionicon" color={tintColor} />;
+        }
+      })
+    },
     [NAVIGATION_AUTH_STACK_PATH]: {
       screen: AccountSwitch,
       navigationOptions: () => ({
@@ -94,7 +108,7 @@ export const Navigator = createBottomTabNavigator(
           return <Icon name="md-person" type="ionicon" color={tintColor} />;
         }
       })
-    }
+    },
   },
   {
     // initialRouteName: NAVIGATION_AUTH_STACK_PATH,

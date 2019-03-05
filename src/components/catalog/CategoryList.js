@@ -12,7 +12,7 @@ import { getProductsForCategoryOrChild } from '../../actions';
 import ProductListItem from './ProductListItem';
 import { Spinner } from '../common';
 
-class ProductList extends Component {
+class CategoryList extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.state.params.title.toUpperCase(),
 		headerBackTitle: ' '
@@ -109,7 +109,7 @@ class ProductList extends Component {
 						renderItem={this.state.gridColumnsValue ? this.renderItemRow : this.renderItemColumn}
 						keyExtractor={(item, index) => index.toString()}
 						onEndReached={this.onEndReached}
-						onEndReachedThreshold={10}
+						onEndReachedThreshold={0}
 						ListHeaderComponent={this.renderHeader}
 						ListFooterComponent={this.renderFooter}
 						numColumns={this.state.gridColumnsValue ? 1 : 2}
@@ -194,4 +194,4 @@ const mapStateToProps = state => {
 	return { category, products, totalCount, canLoadMoreContent, loadingMore };
 };
 
-export default connect(mapStateToProps, { getProductsForCategoryOrChild })(ProductList);
+export default connect(mapStateToProps, { getProductsForCategoryOrChild })(CategoryList);

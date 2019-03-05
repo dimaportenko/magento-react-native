@@ -38,8 +38,8 @@ class CategoryTreeListItem extends Component {
     const { expanded } = this.state;
     if (category.children_data.length) {
       const icon = expanded
-        ? 'ios-arrow-dropdown-outline'
-        : 'ios-arrow-dropright-outline';
+        ? 'ios-arrow-dropdown'
+        : 'ios-arrow-dropright';
       return (
         <Icon
           iconStyle={styles.dropIcon}

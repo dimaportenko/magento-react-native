@@ -131,12 +131,18 @@ export default magento => {
       return magento.admin.getProductsWithSearchCritaria(params);
     },
 
-    getProductsWithAttribute: (attributeCode, attributeValue, pageSize = 10, offset = 0) => {
+    getProductsWithAttribute: (
+      attributeCode,
+      attributeValue,
+      pageSize = 10,
+      offset = 0,
+      conditionType = 'like'
+    ) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
       const params = {
         'searchCriteria[filterGroups][0][filters][0][field]': attributeCode,
-        'searchCriteria[filterGroups][0][filters][0][value]': attributeValue,
-        'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
+        'searchCriteria[filterGroups][0][filters][0][value]': `%${attributeValue}%`,
+        'searchCriteria[filterGroups][0][filters][0][conditionType]': conditionType,
         'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
         'searchCriteria[filterGroups][1][filters][0][value]': '4',
         'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
