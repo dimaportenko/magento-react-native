@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import Sizes from '../../constants/Sizes';
 import { getSearchProducts } from '../../actions';
 import ProductListItem from '../catalog/ProductListItem';
+import { Spinner } from '../common';
 
 class SearchScreen extends Component {
   static navigationOptions = {
@@ -16,35 +17,45 @@ class SearchScreen extends Component {
     input: '',
   };
 
+  onEndReached = () => {
+    const {
+      canLoadMoreContent,
+      loadingMore,
+      products
+    } = this.props;
+
+    if (!loadingMore && canLoadMoreContent) {
+      this.props.getSearchProducts(this.state.input, products.length);
+    }
+  }
+
   updateSearch = input => {
     this.setState({ input });
-    this.props.getSearchProducts(this.state.input);
+    this.props.getSearchProducts(input);
   };
 
   renderItem = (products) => {
     return <ProductListItem imageStyle={{ flex: 1 }} product={products.item} />;
   };
 
+  renderFooter = () => {
+    if (this.props.canLoadMoreContent) {
+      return <Spinner style={{ padding: 15 }} />;
+    }
+
+    return null;
+  }
+
   renderContent = () => {
-      if (!this.props.products) {
-        return;
-      }
-
-      if (this.props.products.length) {
-        return (
-          <FlatList
-            renderItem={this.renderItem}
-            data={this.props.products}
-            keyExtractor={(item, index) => index.toString()}
-            onEndReachedThreshold={10}
-          />
-        );
-      }
-
-      return (
-      <View style={styles.notFoundTextWrap}>
-        <Text style={styles.notFoundText}>No products found</Text>
-      </View>
+    return (
+      <FlatList
+        renderItem={this.renderItem}
+        data={this.props.products}
+        keyExtractor={(item, index) => index.toString()}
+        onEndReached={this.onEndReached}
+        onEndReachedThreshold={0}
+        ListFooterComponent={this.renderFooter}
+      />
       );
   };
 
@@ -92,6 +103,13 @@ const styles = {
     height: 55,
     width: Sizes.WINDOW_WIDTH * 0.9,
   },
+  notFoundTextWrap: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  notFoundText: {
+    textAlign: 'center'
+  },
 };
 
 const mapStateToProps = ({ search }) => {
@@ -99,7 +117,6 @@ const mapStateToProps = ({ search }) => {
   const canLoadMoreContent = products.length < totalCount;
 
   return { products, totalCount, canLoadMoreContent, loadingMore };
-  return { products: search.products };
 };
 
 

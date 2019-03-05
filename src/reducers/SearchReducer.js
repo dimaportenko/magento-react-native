@@ -6,7 +6,7 @@ import {
 import { getPriceFromChildren } from '../helper/product';
 
 const INITIAL_STATE = {
-  products: null,
+  products: [],
   searchInput: null,
   totalCount: null,
   loadingMore: null,
@@ -15,10 +15,17 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case MAGENTO_GET_SEARCH_PRODUCTS: {
+      if (state.searchInput === action.payload.searchInput) {
+        return {
+          searchInput: action.payload.searchInput,
+          products: [...state.products, ...action.payload.data.items],
+          totalCount: action.payload.data.total_count
+        };
+      }
       return {
         searchInput: action.payload.searchInput,
         products: [...action.payload.data.items],
-        totalCount: action.payload.total_count
+        totalCount: action.payload.data.total_count
       };
     }
     case MAGENTO_UPDATE_SEARCH_CONF_PRODUCT: {

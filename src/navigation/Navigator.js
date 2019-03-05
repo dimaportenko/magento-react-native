@@ -6,7 +6,7 @@ import {
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import ProductList from '../components/catalog/ProductList';
+import ProductList from '../components/catalog/CategoryList';
 import CategoryTree from '../components/catalog/CategoryTree';
 import Product from '../components/catalog/Product';
 import Cart from '../components/cart/Cart';
