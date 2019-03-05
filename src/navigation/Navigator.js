@@ -85,19 +85,19 @@ const SearchStack = createStackNavigator({
 
 export const Navigator = createBottomTabNavigator(
   {
-    [NAVIGATION_SEARCH_SCREEN_PATH]: {
-      screen: SearchStack,
-      navigationOptions: () => ({
-        tabBarIcon: ({ tintColor }) => {
-          return <Icon name="md-search" type="ionicon" color={tintColor} />;
-        }
-      })
-    },
     [NAVIGATION_HOME_STACK_PATH]: {
       screen: HomeStack,
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => {
           return <Icon name="md-home" type="ionicon" color={tintColor} />;
+        }
+      })
+    },
+    [NAVIGATION_SEARCH_SCREEN_PATH]: {
+      screen: SearchStack,
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => {
+          return <Icon name="md-search" type="ionicon" color={tintColor} />;
         }
       })
     },
