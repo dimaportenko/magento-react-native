@@ -116,32 +116,26 @@ export default magento => {
     },
 
     getProducts: (categoryId, pageSize = 10, offset = 0) => {
-      const currentPage = parseInt(offset / pageSize, 10) + 1;
-      const params = {
-        'searchCriteria[filterGroups][0][filters][0][field]': 'category_id',
-        'searchCriteria[filterGroups][0][filters][0][value]': categoryId,
-        'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
-        'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
-        'searchCriteria[filterGroups][1][filters][0][value]': '4',
-        'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
-        'searchCriteria[pageSize]': pageSize,
-        'searchCriteria[currentPage]': currentPage
-      };
-
-      return magento.admin.getProductsWithSearchCritaria(params);
+      return magento.admin.getProductsWithAttribute(
+        'category_id',
+        categoryId,
+        pageSize,
+        offset,
+        'eq');
     },
 
-    getProductsWithAttribute: (
-      attributeCode,
-      attributeValue,
-      pageSize = 10,
-      offset = 0,
-      conditionType = 'like'
-    ) => {
+  getProductsWithAttribute: (
+  attributeCode,
+  attributeValue,
+  pageSize = 10,
+  offset = 0,
+  conditionType = 'like'
+  ) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
+      const currentAttributeValue = conditionType === 'eq' ? attributeValue : `%${attributeValue}%`;
       const params = {
         'searchCriteria[filterGroups][0][filters][0][field]': attributeCode,
-        'searchCriteria[filterGroups][0][filters][0][value]': `%${attributeValue}%`,
+        'searchCriteria[filterGroups][0][filters][0][value]': currentAttributeValue,
         'searchCriteria[filterGroups][0][filters][0][conditionType]': conditionType,
         'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
         'searchCriteria[filterGroups][1][filters][0][value]': '4',
@@ -149,7 +143,6 @@ export default magento => {
         'searchCriteria[pageSize]': pageSize,
         'searchCriteria[currentPage]': currentPage
       };
-
       return magento.admin.getProductsWithSearchCritaria(params);
     },
 

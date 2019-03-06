@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import Sizes from '../../constants/Sizes';
 import { getSearchProducts } from '../../actions';
 import { ProductList } from '../common';
@@ -29,7 +30,7 @@ class SearchScreen extends Component {
   }
 
   updateSearch = input => {
-    this.setState({ input });
+    _.debounce(() => this.setState({ input }), 2000);
     this.props.getSearchProducts(input);
   };
 
@@ -41,7 +42,7 @@ class SearchScreen extends Component {
         canLoadMoreContent={this.props.canLoadMoreContent}
         searchIndicator
       />
-      );
+    );
   };
 
   render() {
@@ -58,6 +59,7 @@ class SearchScreen extends Component {
             containerStyle={searchStyle}
             inputStyle={{ backgroundColor: '#DAE2EA' }}
             inputContainerStyle={{ backgroundColor: '#DAE2EA' }}
+            showLoading={this.props.loadingMore}
           />
         </View>
         <View style={{ flex: 1 }}>
