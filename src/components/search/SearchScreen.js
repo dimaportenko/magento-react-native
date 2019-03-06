@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import { View, FlatList } from 'react-native';
+import { View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import Sizes from '../../constants/Sizes';
 import { getSearchProducts } from '../../actions';
-import ProductListItem from '../catalog/ProductListItem';
-import { Spinner } from '../common';
+import { ProductList } from '../common';
 
 class SearchScreen extends Component {
   static navigationOptions = {
@@ -30,33 +30,19 @@ class SearchScreen extends Component {
   }
 
   updateSearch = input => {
-    this.setState({ input });
+    _.debounce(() => this.setState({ input }), 2000);
     this.props.getSearchProducts(input);
   };
 
-  renderItem = (products) => {
-    return <ProductListItem imageStyle={{ flex: 1 }} product={products.item} />;
-  };
-
-  renderFooter = () => {
-    if (this.props.canLoadMoreContent) {
-      return <Spinner style={{ padding: 15 }} />;
-    }
-
-    return null;
-  }
-
   renderContent = () => {
     return (
-      <FlatList
-        renderItem={this.renderItem}
-        data={this.props.products}
-        keyExtractor={(item, index) => index.toString()}
+      <ProductList
+        products={this.props.products}
         onEndReached={this.onEndReached}
-        onEndReachedThreshold={0}
-        ListFooterComponent={this.renderFooter}
+        canLoadMoreContent={this.props.canLoadMoreContent}
+        searchIndicator
       />
-      );
+    );
   };
 
   render() {
@@ -73,6 +59,7 @@ class SearchScreen extends Component {
             containerStyle={searchStyle}
             inputStyle={{ backgroundColor: '#DAE2EA' }}
             inputContainerStyle={{ backgroundColor: '#DAE2EA' }}
+            showLoading={this.props.loadingMore}
           />
         </View>
         <View style={{ flex: 1 }}>

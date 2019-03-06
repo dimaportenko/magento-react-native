@@ -1,16 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Icon } from 'react-native-elements';
 import {
 	View,
-	FlatList,
 	Text,
 	Platform,
-	TouchableOpacity
 } from 'react-native';
 import { getProductsForCategoryOrChild } from '../../actions';
-import ProductListItem from './ProductListItem';
-import { Spinner } from '../common';
+import { Spinner, ProductList } from '../common';
 
 class CategoryList extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -18,14 +14,6 @@ class CategoryList extends Component {
 		headerBackTitle: ' '
 	});
 
-	constructor() {
-    super();
-
-    this.state = {
-      gridColumnsValue: true,
-			defaultButtonView: 'md-grid'
-		};
-  }
 
 	componentWillMount() {
 		this.props.getProductsForCategoryOrChild(this.props.category);
@@ -43,86 +31,14 @@ class CategoryList extends Component {
 			this.props.getProductsForCategoryOrChild(category, products.length);
 		}
 	}
-
-	changeGridValueFunction = () => {
-    if (this.state.gridColumnsValue === true) {
-      this.setState({
-        gridColumnsValue: false,
-				defaultButtonView: 'md-list'
-      });
-		} else {
-      this.setState({
-        gridColumnsValue: true,
-				defaultButtonView: 'md-grid'
-			});
-		}
-  }
-
-	renderItemRow = (product) => {
-		return <ProductListItem imageStyle={styles.imageStyle} product={product.item} />;
-	}
-
-	renderItemColumn = (product) => {
-		return (
-			<ProductListItem
-				mainContainerStyle={{ flexDirection: 'column' }}
-				textStyle={styles.textStyle}
-				infoStyle={styles.infoStyle}
-				priceStyle={styles.priceStyle}
-				product={product.item}
-			/>
-		);
-	}
-
-	renderHeader = () => {
-		return (
-			<View style={{ alignItems: 'flex-end' }}>
-				<TouchableOpacity
-					style={styles.iconStyle}
-	        onPress={this.changeGridValueFunction}
-				>
-	        <View style={styles.iconWrapper}>
-	          <Icon name={this.state.defaultButtonView} type="ionicon" />
-	        </View>
-	      </TouchableOpacity>
-			</View>
-		);
-	}
-
-	renderFooter = () => {
-		if (this.props.canLoadMoreContent) {
-			return <Spinner style={{ padding: 15 }} />;
-		}
-
-		return null;
-	}
-
 	renderContent = () => {
-		if (!this.props.products) {
-      return <Spinner />;
-    }
-
-		if (this.props.products.length) {
-			return (
-					<FlatList
-						data={this.props.products}
-						renderItem={this.state.gridColumnsValue ? this.renderItemRow : this.renderItemColumn}
-						keyExtractor={(item, index) => index.toString()}
-						onEndReached={this.onEndReached}
-						onEndReachedThreshold={0}
-						ListHeaderComponent={this.renderHeader}
-						ListFooterComponent={this.renderFooter}
-						numColumns={this.state.gridColumnsValue ? 1 : 2}
-						key={(this.state.gridColumnsValue) ? 'ONE COLUMN' : 'TWO COLUMNS'}
-					/>
-			);
-		}
-
-		return (
-			<View style={styles.notFoundTextWrap}>
-				<Text style={styles.notFoundText}>No products found</Text>
-			</View>
-		);
+	  return (
+	    <ProductList
+        products={this.props.products}
+        onEndReached={this.onEndReached}
+        canLoadMoreContent={this.props.canLoadMoreContent}
+	    />
+    );
 	}
 
 	render() {
