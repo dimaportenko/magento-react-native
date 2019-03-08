@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import { ScrollView, View, StyleSheet, Button } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { NAVIGATION_CATEGORY_TREE_PATH, NAVIGATION_PRODUCT_PATH } from '../../navigation/routes';
+import {
+  NAVIGATION_CATEGORY_TREE_PATH,
+  NAVIGATION_HOME_PRODUCT_PATH
+} from '../../navigation/routes';
 import { getHomeData, setCurrentProduct } from '../../actions';
 import HomeSlider from './HomeSlider';
 import FeaturedProducts from './FeaturedProducts';
@@ -33,7 +36,7 @@ class HomeScreen extends Component {
 
   onProductPress = product => {
     this.props.setCurrentProduct({ product });
-    NavigationService.navigate(NAVIGATION_PRODUCT_PATH, {
+    NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name
     });
   };

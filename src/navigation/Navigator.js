@@ -19,11 +19,13 @@ import PasswordReset from '../components/account/PasswordReset';
 import HomeScreen from '../components/home/HomeScreen';
 import SearchScreen from '../components/search/SearchScreen';
 
+import CartBadge from '../components/cart/CartBadge';
+
 import {
   NAVIGATION_CATEGORY_TREE_PATH,
   NAVIGATION_CATEGORY_PATH,
   NAVIGATION_CHECKOUT_PATH,
-  NAVIGATION_PRODUCT_PATH,
+  NAVIGATION_HOME_PRODUCT_PATH,
   NAVIGATION_CART_PATH,
   NAVIGATION_HOME_STACK_PATH,
   NAVIGATION_HOME_SCREEN_PATH,
@@ -35,7 +37,8 @@ import {
   NAVIGATION_AUTH_LOADING_SWITCH,
   NAVIGATION_RESET_PASSWORD_PATH,
   NAVIGATION_AUTH_STACK_PATH,
-  NAVIGATION_SEARCH_SCREEN_PATH
+  NAVIGATION_SEARCH_SCREEN_PATH,
+  NAVIGATION_SEARCH_PRODUCT_PATH,
 } from './routes';
 
 const HomeStack = createStackNavigator(
@@ -43,9 +46,7 @@ const HomeStack = createStackNavigator(
     [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
     [NAVIGATION_CATEGORY_TREE_PATH]: CategoryTree,
     [NAVIGATION_CATEGORY_PATH]: ProductList,
-    [NAVIGATION_PRODUCT_PATH]: Product,
-    [NAVIGATION_CART_PATH]: Cart,
-    [NAVIGATION_CHECKOUT_PATH]: Checkout,
+    [NAVIGATION_HOME_PRODUCT_PATH]: Product,
   },
   {
     initialRouteName: NAVIGATION_HOME_SCREEN_PATH,
@@ -80,7 +81,13 @@ const AccountSwitch = createSwitchNavigator({
 });
 
 const SearchStack = createStackNavigator({
-  [NAVIGATION_SEARCH_SCREEN_PATH]: SearchScreen
+  [NAVIGATION_SEARCH_SCREEN_PATH]: SearchScreen,
+  [NAVIGATION_SEARCH_PRODUCT_PATH]: Product,
+});
+
+const CartStack = createStackNavigator({
+  [NAVIGATION_CART_PATH]: Cart,
+  [NAVIGATION_CHECKOUT_PATH]: Checkout,
 });
 
 export const Navigator = createBottomTabNavigator(
@@ -106,6 +113,14 @@ export const Navigator = createBottomTabNavigator(
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => {
           return <Icon name="md-person" type="ionicon" color={tintColor} />;
+        }
+      })
+    },
+    [NAVIGATION_CART_PATH]: {
+      screen: CartStack,
+      navigationOptions: () => ({
+        tabBarIcon: ({ tintColor }) => {
+          return <CartBadge color={tintColor} />;
         }
       })
     },

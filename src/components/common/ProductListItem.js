@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
-import { setCurrentProduct } from '../../actions';
-import NavigationService from '../../navigation/NavigationService';
-import { NAVIGATION_PRODUCT_PATH } from '../../navigation/routes';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { magento } from '../../magento';
 import { priceSignByCode } from '../../helper/price';
 
 class ProductListItem extends Component {
-  onRowPress() {
-    const { product } = this.props;
-    this.props.setCurrentProduct({ product });
-    NavigationService.navigate(NAVIGATION_PRODUCT_PATH, {
-      title: product.name
-    });
-  }
 
   image() {
     return getProductThumbnailFromAttribute(this.props.product);
@@ -30,11 +19,12 @@ class ProductListItem extends Component {
       priceStyle
     } = styles;
 
+
     return (
       <View style={{ flex: 1 }}>
         <TouchableOpacity
           style={[containerStyle, this.props.mainContainerStyle]}
-          onPress={this.onRowPress.bind(this)}
+          onPress={() => { this.props.onRowPress(this.props.product)}}
         >
 
           <Image
@@ -95,4 +85,4 @@ const styles = {
   }
 };
 
-export default connect(null, { setCurrentProduct })(ProductListItem);
+export { ProductListItem };

@@ -6,7 +6,7 @@ import {
   Platform,
   TouchableOpacity, Text
 } from 'react-native';
-import ProductListItem from '../catalog/ProductListItem';
+import { ProductListItem } from './';
 import { Spinner } from './';
 
 class ProductList extends Component {
@@ -34,7 +34,13 @@ class ProductList extends Component {
   }
 
   renderItemRow = (product) => {
-    return <ProductListItem imageStyle={styles.imageStyle} product={product.item} />;
+    return (
+      <ProductListItem
+      imageStyle={styles.imageStyle}
+      product={product.item}
+      onRowPress={this.props.onRowPress}
+      />
+    );
   }
 
   renderItemColumn = (product) => {
@@ -45,6 +51,7 @@ class ProductList extends Component {
         infoStyle={styles.infoStyle}
         priceStyle={styles.priceStyle}
         product={product.item}
+        onRowPress={this.props.onRowPress}
       />
     );
   }

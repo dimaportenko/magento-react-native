@@ -4,8 +4,13 @@ import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import Sizes from '../../constants/Sizes';
-import { getSearchProducts } from '../../actions';
-import { ProductList } from '../common';
+import {
+  getSearchProducts,
+  setCurrentProduct
+} from '../../actions';
+import { ProductList } from '../common/ProductList';
+import NavigationService from '../../navigation/NavigationService';
+import { NAVIGATION_SEARCH_PRODUCT_PATH } from '../../navigation/routes';
 
 class SearchScreen extends Component {
   static navigationOptions = {
@@ -16,6 +21,13 @@ class SearchScreen extends Component {
   state = {
     input: '',
   };
+
+  onRowPress = (product) => {
+    this.props.setCurrentProduct({ product });
+    NavigationService.navigate(NAVIGATION_SEARCH_PRODUCT_PATH, {
+      title: product.name
+    });
+  }
 
   onEndReached = () => {
     const {
@@ -41,6 +53,7 @@ class SearchScreen extends Component {
         onEndReached={this.onEndReached}
         canLoadMoreContent={this.props.canLoadMoreContent}
         searchIndicator
+        onRowPress={this.onRowPress}
       />
     );
   };
@@ -107,4 +120,7 @@ const mapStateToProps = ({ search }) => {
 };
 
 
-export default connect(mapStateToProps, { getSearchProducts })(SearchScreen);
+export default connect(mapStateToProps, {
+  getSearchProducts,
+  setCurrentProduct
+})(SearchScreen);
