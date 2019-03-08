@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
 	View,
-	Text,
 	Platform,
 } from 'react-native';
-import { getProductsForCategoryOrChild } from '../../actions';
-import { Spinner, ProductList } from '../common';
+import {
+  getProductsForCategoryOrChild,
+  setCurrentProduct,
+} from '../../actions';
+import { ProductList } from '../common/ProductList';
+import NavigationService from '../../navigation/NavigationService';
+import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
+
 
 class CategoryList extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -18,6 +23,13 @@ class CategoryList extends Component {
 	componentWillMount() {
 		this.props.getProductsForCategoryOrChild(this.props.category);
 	}
+
+  onRowPress = (product) => {
+    this.props.setCurrentProduct({ product });
+    NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
+      title: product.name
+    });
+  }
 
 	onEndReached = () => {
 		const {
@@ -37,6 +49,7 @@ class CategoryList extends Component {
         products={this.props.products}
         onEndReached={this.onEndReached}
         canLoadMoreContent={this.props.canLoadMoreContent}
+        onRowPress={this.onRowPress}
 	    />
     );
 	}
@@ -110,4 +123,7 @@ const mapStateToProps = state => {
 	return { category, products, totalCount, canLoadMoreContent, loadingMore };
 };
 
-export default connect(mapStateToProps, { getProductsForCategoryOrChild })(CategoryList);
+export default connect(mapStateToProps, {
+  getProductsForCategoryOrChild,
+  setCurrentProduct
+})(CategoryList);

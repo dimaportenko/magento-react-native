@@ -12,7 +12,6 @@ import {
 } from '../../actions';
 import { magento } from '../../magento';
 import { Spinner, ModalSelect } from '../common';
-import HeaderCartButton from '../cart/HeaderCartButton';
 import { getProductCustomAttribute } from '../../helper/product';
 import { priceSignByCode } from '../../helper/price';
 import ProductMedia from './ProductMedia';
@@ -21,7 +20,6 @@ class Product extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.state.params.title.toUpperCase(),
 		headerBackTitle: ' ',
-		headerRight: <HeaderCartButton />
 	});
 
 	state = {
