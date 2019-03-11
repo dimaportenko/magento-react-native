@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, View, StyleSheet, Button } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
@@ -11,6 +11,8 @@ import { getHomeData, setCurrentProduct } from '../../actions';
 import HomeSlider from './HomeSlider';
 import FeaturedProducts from './FeaturedProducts';
 import NavigationService from '../../navigation/NavigationService';
+import { Button } from '../common';
+import Sizes from '../../constants/Sizes';
 
 class HomeScreen extends Component {
   static navigationOptions = {
@@ -63,8 +65,10 @@ class HomeScreen extends Component {
       <ScrollView style={styles.container}>
         <HomeSlider slider={this.props.slider} />
         {this.renderFeatured()}
-        <View style={styles.button} >
-          <Button title="All Categories" onPress={this.allCategories} />
+        <View style={styles.button}>
+          <Button style={styles.buttonStyle} onPress={this.allCategories}>
+            All Categories
+          </Button>
         </View>
       </ScrollView>
     );
@@ -78,6 +82,12 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 10,
+  },
+  buttonStyle: {
+    marginTop: 10,
+    alignSelf: 'center',
+    width: Sizes.WINDOW_WIDTH * 0.9,
+    marginBottom: 3,
   }
 });
 

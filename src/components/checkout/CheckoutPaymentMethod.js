@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
-import { Spinner } from '../common';
+import { Spinner, Button } from '../common';
 import {
 	checkoutSelectedPaymentChanged,
 	checkoutSetActiveSection,
 	getGuestCartPaymentMethods,
 	checkoutCustomerNextLoading
 } from '../../actions';
+import Sizes from '../../constants/Sizes';
 
 class CheckoutPaymentMethod extends Component {
 	componentWillMount() {
@@ -22,7 +23,7 @@ class CheckoutPaymentMethod extends Component {
 		this.props.checkoutSelectedPaymentChanged(payment);
 	}
 
-	onNextPressed() {
+	onNextPressed = () => {
 		const { cartId, selectedPayment } = this.props;
 		// const payment = {
 		// 	paymentMethod: {
@@ -86,9 +87,11 @@ class CheckoutPaymentMethod extends Component {
 		return (
 				<View style={styles.nextButtonStyle}>
 					<Button
-							onPress={this.onNextPressed.bind(this)}
-							title="Next"
-					/>
+            onPress={this.onNextPressed}
+            style={styles.buttonStyle}
+          >
+            Next
+          </Button>
 				</View>
 		);
 	}
@@ -114,8 +117,14 @@ const styles = {
 	},
 	nextButtonStyle: {
 		flex: 1,
-		alignSelf: 'center'
-	}
+		alignSelf: 'center',
+	},
+  buttonStyle: {
+    marginTop: 10,
+    alignSelf: 'center',
+    width: Sizes.WINDOW_WIDTH * 0.9,
+    marginBottom: 20,
+  }
 };
 
 const mapStateToProps = ({ cart, checkout }) => {

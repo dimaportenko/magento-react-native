@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux';
 import Colors from '../../constants/Colors';
 import Sizes from '../../constants/Sizes';
-import { Spinner } from '../common/Spinner';
+import { Spinner, Button } from '../common';
 import { auth } from '../../actions/CustomerAuthActions';
 import {
   NAVIGATION_SIGNIN_PATH,
@@ -54,15 +54,15 @@ class Login extends Component {
 
     return (
       <View>
-        <TouchableOpacity onPress={this.onLoginPress} style={styles.button}>
-          <Text style={styles.buttonTitle}>LOG IN</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        <Button onPress={this.onLoginPress}>
+          LOG IN
+        </Button>
+        <Button
           onPress={this.onSigninPress}
-          style={[styles.button, styles.buttonMargin]}
+          style={styles.buttonMargin}
         >
-          <Text style={styles.buttonTitle}>SIGN IN</Text>
-        </TouchableOpacity>
+          SIGN IN
+        </Button>
         <TouchableOpacity onPress={this.passwordForget} style={styles.link}>
           <Text style={styles.linkTitle}>Forget password?</Text>
         </TouchableOpacity>
@@ -141,18 +141,6 @@ const styles = StyleSheet.create({
   },
   offsetTop: {
     marginTop: Sizes.WINDOW_HEIGHT * 0.2
-  },
-  button: {
-    borderWidth: 1,
-    backgroundColor: Colors.GRAY,
-    borderColor: Colors.GRAY,
-    width: Sizes.WINDOW_WIDTH * 0.7,
-    height: 40,
-    justifyContent: 'center'
-  },
-  buttonTitle: {
-    color: 'white',
-    alignSelf: 'center'
   },
   buttonMargin: {
     marginTop: 20
