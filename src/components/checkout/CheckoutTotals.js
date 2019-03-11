@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Alert, View, Text, Button, StyleSheet } from 'react-native';
+import { Alert, View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { Spinner } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import {
   checkoutSelectedPaymentChanged,
@@ -10,9 +9,11 @@ import {
   placeGuestCartOrder
 } from '../../actions';
 import { NAVIGATION_CATEGORY_TREE_PATH } from '../../navigation/routes';
+import { Button } from '../common';
+import Sizes from '../../constants/Sizes';
 
 class CheckoutTotals extends Component {
-  onPlacePressed() {
+  onPlacePressed = () => {
     const { cartId, selectedPayment } = this.props;
     const payment = {
       paymentMethod: {
@@ -72,10 +73,12 @@ class CheckoutTotals extends Component {
     return (
       <View style={styles.nextButtonStyle}>
         <Button
-          onPress={this.onPlacePressed.bind(this)}
-          title="Place Order"
+          onPress={this.onPlacePressed}
           disable={this.props.loading}
-        />
+          style={styles.buttonStyle}
+        >
+          Place Order
+        </Button>
       </View>
     );
   }
@@ -121,6 +124,12 @@ const styles = StyleSheet.create({
   totalsStyle: {
     alignItems: 'flex-end',
     alignSelf: 'flex-end'
+  },
+  buttonStyle: {
+    marginTop: 10,
+    alignSelf: 'center',
+    width: Sizes.WINDOW_WIDTH * 0.9,
+    marginBottom: 10,
   }
 });
 

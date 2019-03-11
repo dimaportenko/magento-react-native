@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, Button, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import CartList from './CartList';
 import { cartItemProduct } from '../../actions';
 import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_CHECKOUT_PATH } from '../../navigation/routes';
+import { Button } from '../common';
+import Sizes from '../../constants/Sizes';
 
 class Cart extends Component {
   static navigationOptions = {
@@ -41,7 +43,7 @@ class Cart extends Component {
     });
   }
 
-  onPressAddToCheckout() {
+  onPressAddToCheckout = () => {
     NavigationService.navigate(NAVIGATION_CHECKOUT_PATH, {
       title: 'Cart'
     });
@@ -71,9 +73,11 @@ class Cart extends Component {
         </View>
         <View style={styles.footer}>
           <Button
-            onPress={this.onPressAddToCheckout.bind(this)}
-            title="Go to Checkout"
-          />
+            onPress={this.onPressAddToCheckout}
+            style={styles.buttonStyle}
+          >
+            Go to Checkout
+          </Button>
         </View>
       </View>
     );
@@ -97,6 +101,11 @@ const styles = StyleSheet.create({
   footer: {
     alignItems: 'center',
     height: 50
+  },
+  buttonStyle: {
+    alignSelf: 'center',
+    width: Sizes.WINDOW_WIDTH * 0.9,
+    marginBottom: 50,
   }
 });
 

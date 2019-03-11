@@ -1,12 +1,18 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, TouchableOpacity } from 'react-native';
+import Colors from '../../constants/Colors';
+import Sizes from '../../constants/Sizes';
 
-const Button = ({ onPress, children, style }) => {
-  const { buttonStyle, textStyle } = styles;
+const Button = ({ onPress, children, style, disabled }) => {
+  const { buttonStyle, buttonTitle } = styles;
   return (
-    <TouchableOpacity onPress={onPress} style={[buttonStyle, style]}>
-      <Text style={textStyle}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[buttonStyle, style]}
+      disable={disabled}
+    >
+      <Text style={buttonTitle}>
         {children}
       </Text>
     </TouchableOpacity>
@@ -14,24 +20,18 @@ const Button = ({ onPress, children, style }) => {
 };
 
 const styles = StyleSheet.create({
-  textStyle: {
-    alignSelf: 'center',
-    color: '#007aff',
-    fontSize: 16,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10
-  },
   buttonStyle: {
-    flex: 1,
-    alignSelf: 'stretch',
-    backgroundColor: '#fff',
-    borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#007aff',
-    marginLeft: 5,
-    marginRight: 5
-  }
+    backgroundColor: Colors.GRAY,
+    borderColor: Colors.GRAY,
+    width: Sizes.WINDOW_WIDTH * 0.7,
+    height: 40,
+    justifyContent: 'center'
+  },
+  buttonTitle: {
+    color: 'white',
+    alignSelf: 'center'
+  },
 });
 
 export { Button };

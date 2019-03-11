@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, ScrollView, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TextInput, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
@@ -11,10 +11,11 @@ import {
 	uiProductUpdate
 } from '../../actions';
 import { magento } from '../../magento';
-import { Spinner, ModalSelect } from '../common';
+import { Spinner, ModalSelect, Button } from '../common';
 import { getProductCustomAttribute } from '../../helper/product';
 import { priceSignByCode } from '../../helper/price';
 import ProductMedia from './ProductMedia';
+import Sizes from '../../constants/Sizes';
 
 class Product extends Component {
 	static navigationOptions = ({ navigation }) => ({
@@ -38,7 +39,7 @@ class Product extends Component {
 		}
 	}
 
-	onPressAddToCart() {
+	onPressAddToCart = () => {
 		console.log('onPressAddToCart');
 		const { cart, product, qty, selectedOptions, customer } = this.props;
 		const options = [];
@@ -78,7 +79,7 @@ class Product extends Component {
 	}
 
 	// TODO: refactor action name
-	optionSelect(attributeId, optionValue) {
+	optionSelect = (attributeId, optionValue) => {
 		const { selectedOptions } = this.props;
 		const updatedOptions = { ...selectedOptions, [attributeId]: optionValue };
 		this.props.uiProductUpdateOptions(updatedOptions);
@@ -169,7 +170,7 @@ class Product extends Component {
 							attribute={option.attribute_id}
 							value={option.id}
 							data={data}
-							onChange={this.optionSelect.bind(this)}
+							onChange={this.optionSelect}
 						/>
 					);
 			});
@@ -183,10 +184,9 @@ class Product extends Component {
 		}
 		return (
 			<View style={styles.buttonWrap}>
-				<Button
-						onPress={this.onPressAddToCart.bind(this)}
-						title="Add to Cart"
-				/>
+				<Button style={styles.buttonStyle} onPress={this.onPressAddToCart}>
+          Add to Cart
+        </Button>
 			</View>
 		);
 	}
@@ -304,7 +304,11 @@ const styles = StyleSheet.create({
 	},
 	buttonWrap: {
 		alignItems: 'center'
-	}
+	},
+  buttonStyle: {
+	  marginTop: 10,
+    width: Sizes.WINDOW_WIDTH * 0.9
+  }
 });
 
 const mapStateToProps = state => {

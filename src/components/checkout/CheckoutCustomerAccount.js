@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import {
   getCountries,
@@ -8,7 +8,8 @@ import {
   updateCheckoutUI,
   checkoutCustomerNextLoading,
 } from '../../actions';
-import { CardSection, Input, Spinner, ModalSelect } from '../common';
+import { CardSection, Input, Spinner, ModalSelect, Button } from '../common';
+import Sizes from '../../constants/Sizes';
 
 
 class CheckoutCustomerAccount extends Component {
@@ -16,7 +17,7 @@ class CheckoutCustomerAccount extends Component {
     this.props.getCountries();
   }
 
-  onNextPressed() {
+  onNextPressed = () => {
     const {
       email,
       password,
@@ -128,7 +129,12 @@ class CheckoutCustomerAccount extends Component {
     }
     return (
       <View style={styles.nextButtonStyle}>
-        <Button onPress={this.onNextPressed.bind(this)} title="Next" />
+        <Button
+          onPress={this.onNextPressed}
+          style={styles.buttonStyle}
+        >
+          Next
+        </Button>
       </View>
     );
   }
@@ -320,6 +326,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  buttonStyle: {
+    marginTop: 10,
+    alignSelf: 'center',
+    width: Sizes.WINDOW_WIDTH * 0.9,
+    marginBottom: 10,
+  }
 });
 
 const mapStateToProps = ({ checkout, cart, account }) => {

@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, Button } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
-import { Spinner } from '../common';
+import { Spinner, Button } from '../common';
 import {
 	getGuestCartShippingMethods,
 	checkoutSelectedShippingChanged,
 	addGuestCartShippingInfo,
 	checkoutCustomerNextLoading
 } from '../../actions';
+import Sizes from '../../constants/Sizes';
 
 class CheckoutShippingMethod extends Component {
 	componentWillMount() {
@@ -24,7 +25,7 @@ class CheckoutShippingMethod extends Component {
 		this.props.checkoutSelectedShippingChanged(shipping);
 	}
 
-	onNextPressed() {
+	onNextPressed = () => {
 		const {
 			email,
 			postcode,
@@ -118,9 +119,11 @@ class CheckoutShippingMethod extends Component {
 		return (
 				<View style={styles.nextButtonStyle}>
 					<Button
-							onPress={this.onNextPressed.bind(this)}
-							title="Next"
-					/>
+            onPress={this.onNextPressed}
+            style={styles.buttonStyle}
+          >
+            Next
+          </Button>
 				</View>
 		);
 	}
@@ -147,7 +150,13 @@ const styles = {
 	nextButtonStyle: {
 		flex: 1,
 		alignSelf: 'center'
-	}
+	},
+  buttonStyle: {
+    marginTop: 10,
+    alignSelf: 'center',
+    width: Sizes.WINDOW_WIDTH * 0.9,
+    marginBottom: 10,
+  }
 };
 
 const mapStateToProps = ({ cart, checkout }) => {
