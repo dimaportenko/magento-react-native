@@ -32,8 +32,10 @@ class HomeScreen extends Component {
     slider: [],
   };
 
-  componentWillMount() {
-    this.props.getHomeData();
+  componentDidMount() {
+    if (this.props.slider.length === 0) {
+      this.props.getHomeData();
+    }
   }
 
   onProductPress = product => {

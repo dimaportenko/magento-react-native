@@ -34,7 +34,8 @@ import {
   MAGENTO_REMOVE_FROM_CART_LOADING,
   MAGENTO_GET_SEARCH_PRODUCTS,
   MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
-  MAGENTO_LOAD_MORE_SEARCH_PRODUCTS
+  MAGENTO_LOAD_MORE_SEARCH_PRODUCTS,
+  MAGENTO_STORE_CONFIG,
 } from './types';
 
 export const initMagento = () => {
@@ -44,7 +45,8 @@ export const initMagento = () => {
     try {
       await magento.init();
       dispatch({ type: MAGENTO_INIT, payload: magento });
-      magento.admin.getStoreConfig();
+      const storeConfig = await magento.admin.getStoreConfig();
+      dispatch({ type: MAGENTO_STORE_CONFIG, payload: storeConfig });
       const customerToken = await AsyncStorage.getItem('customerToken');
       magento.setCustomerToken(customerToken);
     } catch (error) {
