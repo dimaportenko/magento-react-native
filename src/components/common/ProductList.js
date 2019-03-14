@@ -6,8 +6,8 @@ import {
   Platform,
   TouchableOpacity, Text
 } from 'react-native';
-import { ProductListItem } from './';
-import { Spinner } from './';
+import { ProductListItem, Spinner } from './';
+import Sizes from '../../constants/Sizes';
 
 class ProductList extends Component {
   constructor(props) {
@@ -37,6 +37,7 @@ class ProductList extends Component {
     return (
       <ProductListItem
       imageStyle={styles.imageStyle}
+      viewContainerStyle={{ flex: 1 }}
       product={product.item}
       onRowPress={this.props.onRowPress}
       />
@@ -44,12 +45,20 @@ class ProductList extends Component {
   }
 
   renderItemColumn = (product) => {
+    const {
+      textStyle,
+      infoStyle,
+      priceStyle,
+      columnContainerStyle
+    } = styles;
+
     return (
       <ProductListItem
-        mainContainerStyle={{ flexDirection: 'column' }}
-        textStyle={styles.textStyle}
-        infoStyle={styles.infoStyle}
-        priceStyle={styles.priceStyle}
+        viewContainerStyle={{ width: Sizes.WINDOW_WIDTH / 2 }}
+        columnContainerStyle={columnContainerStyle}
+        textStyle={textStyle}
+        infoStyle={infoStyle}
+        priceStyle={priceStyle}
         product={product.item}
         onRowPress={this.props.onRowPress}
       />
@@ -169,6 +178,10 @@ const styles = {
   iconWrapper: {
     marginTop: 5,
     marginRight: 10
+  },
+  columnContainerStyle: {
+    flexDirection: 'column',
+    borderBottomWidth: 0,
   },
 };
 
