@@ -57,3 +57,5 @@ buck-out/
 
 # Magento configuration file
 src/config/magento.js
+
+coverage
