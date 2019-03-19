@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import CartList from './CartList';
 import { cartItemProduct } from '../../actions';
 import NavigationService from '../../navigation/NavigationService';
-import { NAVIGATION_CHECKOUT_PATH } from '../../navigation/routes';
+import {
+  NAVIGATION_CHECKOUT_PATH,
+  NAVIGATION_HOME_SCREEN_PATH
+} from '../../navigation/routes';
 import { Button } from '../common';
 import Sizes from '../../constants/Sizes';
 
@@ -26,14 +29,13 @@ class Cart extends Component {
     products: {},
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { items } = this.props.cart;
     const { products } = this.props;
 
     if (!items) {
       return;
     }
-
     items.forEach(item => {
       if (!item.thumbnail) {
         if (!products[item.sku]) {
@@ -59,7 +61,42 @@ class Cart extends Component {
       });
     }
 
-    return sum.toFixed(2);
+    if (sum > 0) {
+      return (
+        <Text style={styles.totals}>
+          Totals {sum.toFixed(2)}
+        </Text>
+      );
+    }
+
+    return (
+      <View style={styles.containerStyle}>
+        <Text style={styles.totals}>
+          Your cart is empty
+        </Text>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate(NAVIGATION_HOME_SCREEN_PATH)}
+        >
+          <Text style={styles.buttonTextStyle}>
+            Continue Shopping
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  renderButton = () => {
+    const { items } = this.props.cart;
+    if (items && items.length) {
+      return (
+        <Button
+          onPress={this.onPressAddToCheckout}
+          style={styles.buttonStyle}
+        >
+          Go to Checkout
+        </Button>
+      );
+    }
   }
 
   render() {
@@ -69,15 +106,10 @@ class Cart extends Component {
           <View style={styles.cartList}>
             <CartList items={this.props.cart.items} />
           </View>
-          <Text style={styles.totals}>Totals {this.renderTotals()}</Text>
+          {this.renderTotals()}
         </View>
         <View style={styles.footer}>
-          <Button
-            onPress={this.onPressAddToCheckout}
-            style={styles.buttonStyle}
-          >
-            Go to Checkout
-          </Button>
+          {this.renderButton()}
         </View>
       </View>
     );
@@ -89,6 +121,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   },
+  containerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   content: {
     flex: 1
   },
@@ -96,6 +133,12 @@ const styles = StyleSheet.create({
     padding: 14,
     fontSize: 20,
     top: 0
+  },
+  buttonTextStyle: {
+    padding: 14,
+    fontSize: 20,
+    top: 0,
+    color: '#3478f6',
   },
   cartList: {},
   footer: {
