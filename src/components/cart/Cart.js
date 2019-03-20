@@ -53,6 +53,7 @@ class Cart extends Component {
 
   renderTotals() {
     const { items } = this.props.cart;
+    const { totals } = styles;
 
     let sum = 0;
     if (items) {
@@ -63,56 +64,75 @@ class Cart extends Component {
 
     if (sum > 0) {
       return (
-        <Text style={styles.totals}>
+        <Text style={totals}>
           Totals {sum.toFixed(2)}
         </Text>
       );
     }
+  }
+
+  renderEmptyCart = () => {
+    const { navigate } = this.props.navigation;
+    const {
+      containerStyle,
+      totals,
+      buttonTextStyle
+    } = styles;
+
 
     return (
-      <View style={styles.containerStyle}>
-        <Text style={styles.totals}>
+      <View style={containerStyle}>
+        <Text style={totals}>
           Your cart is empty
         </Text>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate(NAVIGATION_HOME_SCREEN_PATH)}
+          onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
         >
-          <Text style={styles.buttonTextStyle}>
+          <Text style={buttonTextStyle}>
             Continue Shopping
           </Text>
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  renderButton = () => {
+  renderCart = () => {
     const { items } = this.props.cart;
-    if (items && items.length) {
-      return (
-        <Button
-          onPress={this.onPressAddToCheckout}
-          style={styles.buttonStyle}
-        >
-          Go to Checkout
-        </Button>
-      );
-    }
-  }
+    const {
+      container,
+      content,
+      cartList,
+      footer,
+      buttonStyle
+    } = styles;
 
-  render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.cartList}>
-            <CartList items={this.props.cart.items} />
+      <View style={container}>
+        <View style={content}>
+          <View style={cartList}>
+            <CartList items={items} />
           </View>
           {this.renderTotals()}
         </View>
-        <View style={styles.footer}>
-          {this.renderButton()}
+        <View style={footer}>
+          <Button
+            onPress={this.onPressAddToCheckout}
+            style={buttonStyle}
+          >
+            Go to Checkout
+          </Button>
         </View>
       </View>
     );
+  };
+
+  render() {
+      const { items } = this.props.cart;
+
+      if (items && items.length) {
+        return this.renderCart();
+      }
+      return this.renderEmptyCart();
   }
 }
 
