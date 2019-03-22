@@ -53,3 +53,5 @@ export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';
 export const HOME_SCREEN_DATA = 'home_screen_data';
 export const MAGENTO_UPDATE_SEARCH_CONF_PRODUCT = 'magento_update_search_conf_product';
 export const MAGENTO_LOAD_MORE_SEARCH_PRODUCTS = 'magento_load_more_search_products';
+
+export const MAGENTO_GET_ORDER_PRODUCT_LIST = 'MAGENTO_GET_ORDER_PRODUCT_LIST';

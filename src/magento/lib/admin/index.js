@@ -317,6 +317,8 @@ export default magento => {
     },
 
     getOrderList: (customerId) => {
+      console.log('getting orders for: ', customerId);
+      // GET /V1/orders/mine/?searchCriteria[filterGroups][][filters][][field]=customer_email&searchCriteria[filterGroups][0][filters][0][value]=someone@test.com
       return new Promise((resolve, reject) => {
         const path = '/V1/orders';
         const params = {
@@ -327,6 +329,7 @@ export default magento => {
         magento
           .get(path, params, undefined, ADMIN_TYPE)
           .then(data => {
+            console.log('getOrderList response:', data);
             resolve(data);
           })
           .catch(e => {

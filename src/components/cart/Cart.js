@@ -112,9 +112,9 @@ class Cart extends Component {
           <View style={cartList}>
             <CartList items={items} />
           </View>
-          {this.renderTotals()}
         </View>
         <View style={footer}>
+          {this.renderTotals()}
           <Button
             onPress={this.onPressAddToCheckout}
             style={buttonStyle}
@@ -150,9 +150,8 @@ const styles = StyleSheet.create({
     flex: 1
   },
   totals: {
-    padding: 14,
     fontSize: 20,
-    top: 0
+    paddingTop: 7,
   },
   buttonTextStyle: {
     padding: 14,
@@ -162,14 +161,14 @@ const styles = StyleSheet.create({
   },
   cartList: {},
   footer: {
-    alignItems: 'center',
-    height: 50
+    padding: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   buttonStyle: {
-    alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 50,
-  }
+    width: Sizes.WINDOW_WIDTH * 0.5,
+  },
+
 });
 
 const mapStateToProps = state => {
