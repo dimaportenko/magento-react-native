@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Button } from '../common';
 import { logout, currentCustomer } from '../../actions';
-import { NAVIGATION_ORDER_PRODUCT_PATH } from '../../navigation/routes';
+import { NAVIGATION_ORDERS_PATH } from '../../navigation/routes';
 
 class Account extends Component {
   static navigationOptions = {
@@ -42,8 +42,8 @@ class Account extends Component {
     );
   }
 
-  renderOrderList = () => {
-    this.props.navigation.navigate(NAVIGATION_ORDER_PRODUCT_PATH);
+  openOrders = () => {
+    this.props.navigation.navigate(NAVIGATION_ORDERS_PATH);
   };
 
   render() {
@@ -53,7 +53,7 @@ class Account extends Component {
         <Button onPress={this.onLogoutPress}>
           LOG OUT
         </Button>
-        <Button onPress={this.renderOrderList} style={styles.buttonMargin}>
+        <Button onPress={this.openOrders} style={styles.buttonMargin}>
           My Orders
         </Button>
       </View>

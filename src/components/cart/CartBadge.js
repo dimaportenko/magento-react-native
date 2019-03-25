@@ -58,7 +58,6 @@ const styles = {
 
 const mapStateToProps = ({ cart }) => {
   const itemsCount = cart.quote && cart.quote.items_qty ? cart.quote.items_qty : 0;
-  console.log(`Cart total count: ${itemsCount}`);
   return { itemsCount };
 };
 

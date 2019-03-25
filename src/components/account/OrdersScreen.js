@@ -7,7 +7,7 @@ import {
   FlatList,
 } from 'react-native';
 import {
-  getOrderProductList,
+  getOrdersForCustomer,
   setCurrentProduct,
 } from '../../actions';
 import OrderListItem from './OrderListItem';
@@ -23,7 +23,7 @@ class OrdersScreen extends Component {
 
 
   componentDidMount() {
-    this.props.getOrderProductList(this.props.customerId);
+    this.props.getOrdersForCustomer(this.props.customerId);
   }
 
   renderItem = (orderItem) => {
@@ -35,7 +35,7 @@ class OrdersScreen extends Component {
   renderOrderList = () => {
     return (
       <FlatList
-        data={this.props.items}
+        data={this.props.orders}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -68,9 +68,9 @@ class OrdersScreen extends Component {
   };
 
   render() {
-    const { items } = this.props;
+    const { orders } = this.props;
 
-    if (items && items.length) {
+    if (orders && orders.length) {
       return (
         <View style={styles.containerStyle}>
           {this.renderOrderList()}
@@ -104,13 +104,15 @@ const styles = {
 };
 
 const mapStateToProps = ({ account }) => {
+  const customerId = account.customer ? account.customer.id : null;
+  const orders = account.orderData ? account.orderData.items : [];
   return {
-    customerId: account.customer.id,
-    items: account.data.items,
+    customerId,
+    orders,
   };
 };
 
 export default connect(mapStateToProps, {
-  getOrderProductList,
+  getOrdersForCustomer,
   setCurrentProduct
 })(OrdersScreen);

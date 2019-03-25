@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { priceSignByCode } from '../../helper/price';
 
-class OrderItemsScreen extends Component {
+class OrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: `Order # ${navigation.state.params.item.increment_id}`
   });
@@ -75,4 +75,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OrderItemsScreen;
+export default OrderScreen;

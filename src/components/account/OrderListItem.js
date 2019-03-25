@@ -6,13 +6,13 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { priceSignByCode } from '../../helper/price';
-import { NAVIGATION_ORDER_LIST_ITEM_PATH } from '../../navigation/routes';
+import { NAVIGATION_ORDER_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 
 class OrderListItem extends Component {
 
   openOrdersScreen = (item) => {
-    NavigationService.navigate(NAVIGATION_ORDER_LIST_ITEM_PATH, {
+    NavigationService.navigate(NAVIGATION_ORDER_PATH, {
       item,
     });
   };

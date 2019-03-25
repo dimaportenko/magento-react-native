@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import CartList from './CartList';
 import { cartItemProduct } from '../../actions';
+import CartListItem from './CartListItem';
 import NavigationService from '../../navigation/NavigationService';
 import {
   NAVIGATION_CHECKOUT_PATH,
@@ -96,12 +96,15 @@ class Cart extends Component {
     );
   };
 
+  renderItem(items) {
+    return <CartListItem item={items.item} expanded={false} />;
+  }
+
   renderCart = () => {
     const { items } = this.props.cart;
     const {
       container,
       content,
-      cartList,
       footer,
       buttonStyle
     } = styles;
@@ -109,9 +112,11 @@ class Cart extends Component {
     return (
       <View style={container}>
         <View style={content}>
-          <View style={cartList}>
-            <CartList items={items} />
-          </View>
+          <FlatList
+            data={items}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
         <View style={footer}>
           {this.renderTotals()}
@@ -127,12 +132,12 @@ class Cart extends Component {
   };
 
   render() {
-      const { items } = this.props.cart;
+    const { items } = this.props.cart;
 
-      if (items && items.length) {
-        return this.renderCart();
-      }
-      return this.renderEmptyCart();
+    if (items && items.length) {
+      return this.renderCart();
+    }
+    return this.renderEmptyCart();
   }
 }
 
@@ -159,7 +164,6 @@ const styles = StyleSheet.create({
     top: 0,
     color: '#3478f6',
   },
-  cartList: {},
   footer: {
     padding: 14,
     flexDirection: 'row',
@@ -168,13 +172,11 @@ const styles = StyleSheet.create({
   buttonStyle: {
     width: Sizes.WINDOW_WIDTH * 0.5,
   },
-
 });
 
-const mapStateToProps = state => {
-  const { products } = state.cart;
-
-  return { cart: state.cart.quote, products };
+const mapStateToProps = ({ cart }) => {
+  const { products } = cart;
+  return { cart: cart.quote, products };
 };
 
 export default connect(mapStateToProps, { cartItemProduct })(Cart);

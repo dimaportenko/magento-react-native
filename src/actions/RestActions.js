@@ -36,7 +36,7 @@ import {
   MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
   MAGENTO_LOAD_MORE_SEARCH_PRODUCTS,
   MAGENTO_STORE_CONFIG,
-  MAGENTO_GET_ORDER_PRODUCT_LIST,
+  MAGENTO_GET_ORDERS,
 } from './types';
 
 export const initMagento = () => {
@@ -152,7 +152,7 @@ export const getSearchProducts = (searchInput, offset) => {
         data.items,
         dispatch,
         MAGENTO_UPDATE_SEARCH_CONF_PRODUCT
-        );
+      );
     } catch (e) {
       console.log(e);
     }
@@ -338,12 +338,12 @@ export const cartItemProduct = sku => {
   };
 };
 
-export const getOrderProductList = customerId => {
+export const getOrdersForCustomer = customerId => {
   return dispatch => {
     magento.admin
       .getOrderList(customerId)
       .then(data => {
-        dispatch({ type: MAGENTO_GET_ORDER_PRODUCT_LIST, payload: data });
+        dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
       })
       .catch(error => {
         console.log(error);
