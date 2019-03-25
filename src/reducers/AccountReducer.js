@@ -9,7 +9,7 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_CURRENT_CUSTOMER:
       return { ...state, customer: action.payload };
     case MAGENTO_GET_ORDER_PRODUCT_LIST:
-      return { ...state, customerId: action.payload };
+      return { ...state, data: action.payload };
     default:
       return state;
   }

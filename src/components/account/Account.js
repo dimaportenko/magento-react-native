@@ -44,7 +44,7 @@ class Account extends Component {
 
   renderOrderList = () => {
     this.props.navigation.navigate(NAVIGATION_ORDER_PRODUCT_PATH);
-  }
+  };
 
   render() {
     return (

@@ -19,6 +19,7 @@ import PasswordReset from '../components/account/PasswordReset';
 import HomeScreen from '../components/home/HomeScreen';
 import SearchScreen from '../components/search/SearchScreen';
 import OrdersScreen from '../components/account/OrdersScreen';
+import OrderItemsScreen from '../components/account/OrderItemsScreen';
 
 import CartBadge from '../components/cart/CartBadge';
 
@@ -41,6 +42,7 @@ import {
   NAVIGATION_SEARCH_SCREEN_PATH,
   NAVIGATION_SEARCH_PRODUCT_PATH,
   NAVIGATION_ORDER_PRODUCT_PATH,
+  NAVIGATION_ORDER_LIST_ITEM_PATH,
 } from './routes';
 
 const HomeStack = createStackNavigator(
@@ -75,6 +77,7 @@ const AuthStack = createStackNavigator({
 const AccountStack = createStackNavigator({
   [NAVIGATION_ACCOUNT_PATH]: Account,
   [NAVIGATION_ORDER_PRODUCT_PATH]: OrdersScreen,
+  [NAVIGATION_ORDER_LIST_ITEM_PATH]: OrderItemsScreen,
 });
 
 const AccountSwitch = createSwitchNavigator({

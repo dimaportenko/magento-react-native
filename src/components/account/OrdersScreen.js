@@ -1,41 +1,43 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, TouchableOpacity, View } from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  FlatList,
+} from 'react-native';
 import {
   getOrderProductList,
   setCurrentProduct,
 } from '../../actions';
-import { ProductList } from '../common/ProductList';
-import NavigationService from '../../navigation/NavigationService';
-import {
-  NAVIGATION_HOME_SCREEN_PATH,
-  NAVIGATION_ORDER_PRODUCT_PATH
-} from '../../navigation/routes';
+import OrderListItem from './OrderListItem';
+
+import { NAVIGATION_HOME_SCREEN_PATH } from '../../navigation/routes';
 
 
-class CategoryList extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: 'Orders', /*navigation.state.params.title.toUpperCase(),*/
+class OrdersScreen extends Component {
+  static navigationOptions = () => ({
+    title: 'Orders',
     headerBackTitle: ' '
   });
 
 
   componentDidMount() {
-    this.props.getOrderProductList(this.props);
+    this.props.getOrderProductList(this.props.customerId);
   }
 
-  onItemPress = (product) => {
-    this.props.setCurrentProduct({ product });
-    NavigationService.navigate(NAVIGATION_ORDER_PRODUCT_PATH, {
-      title: product.name
-    });
+  renderItem = (orderItem) => {
+    return (
+      <OrderListItem item={orderItem.item} />
+    );
   };
 
   renderOrderList = () => {
     return (
-      <ProductList
-        products={this.props.items}
-        onRowPress={this.onItemPress}
+      <FlatList
+        data={this.props.items}
+        renderItem={this.renderItem}
+        keyExtractor={(item, index) => index.toString()}
       />
     );
   };
@@ -101,11 +103,14 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ customerId }) => {
-  return { customerId };
+const mapStateToProps = ({ account }) => {
+  return {
+    customerId: account.customer.id,
+    items: account.data.items,
+  };
 };
 
 export default connect(mapStateToProps, {
   getOrderProductList,
   setCurrentProduct
-})(CategoryList);
+})(OrdersScreen);
