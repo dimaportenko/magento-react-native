@@ -6,7 +6,7 @@ import {
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
-import ProductList from '../components/catalog/CategoryList';
+import CategoryList from '../components/catalog/CategoryList';
 import CategoryTree from '../components/catalog/CategoryTree';
 import Product from '../components/catalog/Product';
 import Cart from '../components/cart/Cart';
@@ -18,6 +18,8 @@ import AuthLoading from '../components/account/AuthLoading';
 import PasswordReset from '../components/account/PasswordReset';
 import HomeScreen from '../components/home/HomeScreen';
 import SearchScreen from '../components/search/SearchScreen';
+import OrdersScreen from '../components/account/OrdersScreen';
+import OrderItemsScreen from '../components/account/OrderItemsScreen';
 
 import CartBadge from '../components/cart/CartBadge';
 
@@ -39,13 +41,15 @@ import {
   NAVIGATION_AUTH_STACK_PATH,
   NAVIGATION_SEARCH_SCREEN_PATH,
   NAVIGATION_SEARCH_PRODUCT_PATH,
+  NAVIGATION_ORDER_PRODUCT_PATH,
+  NAVIGATION_ORDER_LIST_ITEM_PATH,
 } from './routes';
 
 const HomeStack = createStackNavigator(
   {
     [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
     [NAVIGATION_CATEGORY_TREE_PATH]: CategoryTree,
-    [NAVIGATION_CATEGORY_PATH]: ProductList,
+    [NAVIGATION_CATEGORY_PATH]: CategoryList,
     [NAVIGATION_HOME_PRODUCT_PATH]: Product,
   },
   {
@@ -67,11 +71,13 @@ const HomeStack = createStackNavigator(
 const AuthStack = createStackNavigator({
   [NAVIGATION_LOGIN_PATH]: Login,
   [NAVIGATION_SIGNIN_PATH]: Signin,
-  [NAVIGATION_RESET_PASSWORD_PATH]: PasswordReset
+  [NAVIGATION_RESET_PASSWORD_PATH]: PasswordReset,
 });
 
 const AccountStack = createStackNavigator({
-  [NAVIGATION_ACCOUNT_PATH]: Account
+  [NAVIGATION_ACCOUNT_PATH]: Account,
+  [NAVIGATION_ORDER_PRODUCT_PATH]: OrdersScreen,
+  [NAVIGATION_ORDER_LIST_ITEM_PATH]: OrderItemsScreen,
 });
 
 const AccountSwitch = createSwitchNavigator({

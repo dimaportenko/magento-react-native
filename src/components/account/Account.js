@@ -4,18 +4,18 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   ActivityIndicator
 } from 'react-native';
-import { buttonStyles } from '../../constants/Styles';
+import { Button } from '../common';
 import { logout, currentCustomer } from '../../actions';
+import { NAVIGATION_ORDER_PRODUCT_PATH } from '../../navigation/routes';
 
 class Account extends Component {
   static navigationOptions = {
     title: 'Account'
   };
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.customer) {
       this.props.currentCustomer();
     }
@@ -42,16 +42,20 @@ class Account extends Component {
     );
   }
 
+  renderOrderList = () => {
+    this.props.navigation.navigate(NAVIGATION_ORDER_PRODUCT_PATH);
+  };
+
   render() {
     return (
       <View style={styles.container}>
         {this.renderCustomerData()}
-        <TouchableOpacity
-          onPress={this.onLogoutPress}
-          style={buttonStyles.button}
-        >
-          <Text style={buttonStyles.title}>LOG OUT</Text>
-        </TouchableOpacity>
+        <Button onPress={this.onLogoutPress}>
+          LOG OUT
+        </Button>
+        <Button onPress={this.renderOrderList} style={styles.buttonMargin}>
+          My Orders
+        </Button>
       </View>
     );
   }
@@ -78,7 +82,10 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     marginBottom: 15
-  }
+  },
+  buttonMargin: {
+    marginTop: 20
+  },
 });
 
 const mapStateToProps = ({ account }) => {
