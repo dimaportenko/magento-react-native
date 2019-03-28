@@ -18,10 +18,13 @@ class SearchScreen extends Component {
     headerBackTitle: ' '
   };
 
-  state = {
-    input: '',
-  };
-
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: '',
+    };
+    this.getSearchProducts = _.debounce(this.props.getSearchProducts, 1000);
+  }
   onRowPress = (product) => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_SEARCH_PRODUCT_PATH, {
@@ -43,7 +46,7 @@ class SearchScreen extends Component {
 
   updateSearch = input => {
     this.setState({ input }, () => {
-      this.props.getSearchProducts(input);
+      this.getSearchProducts(input);
     });
   };
 
@@ -68,7 +71,7 @@ class SearchScreen extends Component {
         <View style={searchInputStyle}>
           <SearchBar
             placeholder="Type here..."
-            onChangeText={_.debounce(this.updateSearch, 1000)}
+            onChangeText={this.updateSearch}
             value={input}
             containerStyle={searchStyle}
             inputStyle={{ backgroundColor: '#DAE2EA' }}
