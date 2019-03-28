@@ -17,6 +17,33 @@ class CheckoutCustomerAccount extends Component {
     this.props.getCountries();
   }
 
+  componentDidMount() {
+    // Hardcode US
+    this.props.updateCheckoutUI('countryId', 'US');
+    // Clear the error
+    this.props.updateCheckoutUI('error', false);
+    // Clear loading
+    this.props.checkoutCustomerNextLoading(false);
+
+    if (this.props.customer && this.props.customer.addresses && this.props.customer.addresses.length) {
+      const address = this.props.customer.addresses[0];
+      const regionData = address.region;
+      const region = {
+        regionCode: regionData.region_code,
+        region: regionData.region,
+        regionId: regionData.region_id,
+      };
+      this.updateUI('region', region);
+      this.updateUI('firstname', address.firstname);
+      this.updateUI('lastname', address.lastname);
+      this.updateUI('email', this.props.customer.email);
+      this.updateUI('street', address.street.length ? address.street[0] : '');
+      this.updateUI('city', address.city);
+      this.updateUI('postcode', address.postcode);
+      this.updateUI('telephone', address.telephone);
+    }
+  }
+
   onNextPressed = () => {
     const {
       email,
@@ -141,7 +168,7 @@ class CheckoutCustomerAccount extends Component {
 
   renderRegions() {
     const { countryId, countries } = this.props;
-    if (countryId && countryId.length) {
+    if (countryId && countryId.length && countries.length) {
       const country = countries.find(item => {
         return item.id === countryId;
       });
