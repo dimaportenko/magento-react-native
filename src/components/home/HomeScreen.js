@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
@@ -32,6 +32,13 @@ class HomeScreen extends Component {
     slider: [],
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
+
   componentDidMount() {
     if (this.props.slider.length === 0) {
       this.props.getHomeData();
@@ -43,6 +50,12 @@ class HomeScreen extends Component {
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name
     });
+  };
+
+  onRefresh = async () => {
+    this.setState({ refreshing: true });
+    await this.props.getHomeData();
+    this.setState({ refreshing: false });
   };
 
   allCategories = () => {
@@ -64,7 +77,15 @@ class HomeScreen extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+      >
         <HomeSlider slider={this.props.slider} />
         {this.renderFeatured()}
         <View style={styles.button}>

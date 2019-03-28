@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-	View,
-	Platform,
+  View,
+  Platform,
+  RefreshControl,
 } from 'react-native';
 import {
   getProductsForCategoryOrChild,
@@ -19,7 +20,14 @@ class Category extends Component {
 		headerBackTitle: ' '
 	});
 
-	componentWillMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
+
+	componentDidMount() {
 		this.props.getProductsForCategoryOrChild(this.props.category);
 	}
 
@@ -28,7 +36,13 @@ class Category extends Component {
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name
     });
-  }
+  };
+
+  onRefresh = async () => {
+    this.setState({ refreshing: true });
+    await this.props.getProductsForCategoryOrChild(this.props.category);
+    this.setState({ refreshing: false });
+  };
 
 	onEndReached = () => {
 		const {
@@ -47,6 +61,12 @@ class Category extends Component {
 		return (
 			<View style={styles.containerStyle}>
 				<ProductList
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
 					products={this.props.products}
 					onEndReached={this.onEndReached}
 					canLoadMoreContent={this.props.canLoadMoreContent}

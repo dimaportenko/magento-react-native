@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl
+} from 'react-native';
 import { connect } from 'react-redux';
 import { cartItemProduct } from '../../actions';
 import CartListItem from './CartListItem';
@@ -29,13 +36,39 @@ class Cart extends Component {
     products: {},
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
+
   componentDidMount() {
     const { items } = this.props.cart;
-    const { products } = this.props;
 
     if (!items) {
       return;
     }
+    this.getCartItemProduct(items);
+  }
+
+  onPressAddToCheckout = () => {
+    NavigationService.navigate(NAVIGATION_CHECKOUT_PATH, {
+      title: 'Cart'
+    });
+  };
+
+  onRefresh = async () => {
+    const { items } = this.props.cart;
+
+    this.setState({ refreshing: true });
+    await this.getCartItemProduct(items);
+    this.setState({ refreshing: false });
+  };
+
+  getCartItemProduct = (items) => {
+    const { products } = this.props;
+
     items.forEach(item => {
       if (!item.thumbnail) {
         if (!products[item.sku]) {
@@ -43,13 +76,7 @@ class Cart extends Component {
         }
       }
     });
-  }
-
-  onPressAddToCheckout = () => {
-    NavigationService.navigate(NAVIGATION_CHECKOUT_PATH, {
-      title: 'Cart'
-    });
-  }
+  };
 
   renderTotals() {
     const { items } = this.props.cart;
@@ -113,6 +140,12 @@ class Cart extends Component {
       <View style={container}>
         <View style={content}>
           <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this.onRefresh}
+              />
+            }
             data={items}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}

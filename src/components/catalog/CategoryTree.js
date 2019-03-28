@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { RefreshControl, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Spinner } from '../common/index';
 import { initMagento, getCategoryTree } from '../../actions/index';
@@ -11,14 +11,37 @@ class CategoryTree extends Component {
 		headerBackTitle: ' '
 	};
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
+
   componentWillMount() {
     this.props.getCategoryTree();
   }
 
+  onRefresh = async () => {
+    this.setState({ refreshing: true });
+    await this.props.getCategoryTree();
+    this.setState({ refreshing: false });
+  };
+
   renderContent() {
     const { categoryTree } = this.props;
     if (this.props.categoryTree) {
-      return <CategoryTreeList categories={categoryTree.children_data} />;
+      return (
+      <CategoryTreeList
+        categories={categoryTree.children_data}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+      />
+    );
     }
 
     return <Spinner />;

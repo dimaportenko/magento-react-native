@@ -10,6 +10,7 @@ class CategoryTreeList extends Component {
 	render() {
 		return (
 				<FlatList
+          refreshControl={this.props.refreshControl}
 					data={this.props.categories}
 					renderItem={this.renderItem}
 					keyExtractor={(item, index) => index.toString()}

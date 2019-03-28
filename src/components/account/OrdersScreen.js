@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   View,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {
   getOrdersForCustomer,
@@ -21,10 +22,22 @@ class OrdersScreen extends Component {
     headerBackTitle: ' '
   });
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      refreshing: false,
+    };
+  }
 
   componentDidMount() {
     this.props.getOrdersForCustomer(this.props.customerId);
   }
+
+  onRefresh = async () => {
+    this.setState({ refreshing: true });
+    await this.props.getOrdersForCustomer(this.props.customerId);
+    this.setState({ refreshing: false });
+  };
 
   renderItem = (orderItem) => {
     return (
@@ -35,6 +48,12 @@ class OrdersScreen extends Component {
   renderOrderList = () => {
     return (
       <FlatList
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
         data={this.props.orders}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
