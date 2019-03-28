@@ -39,11 +39,12 @@ class SearchScreen extends Component {
     if (!loadingMore && canLoadMoreContent) {
       this.props.getSearchProducts(this.state.input, products.length);
     }
-  }
+  };
 
   updateSearch = input => {
-    _.debounce(() => this.setState({ input }), 2000);
-    this.props.getSearchProducts(input);
+    this.setState({ input }, () => {
+      this.props.getSearchProducts(input);
+    });
   };
 
   renderContent = () => {
@@ -67,7 +68,7 @@ class SearchScreen extends Component {
         <View style={searchInputStyle}>
           <SearchBar
             placeholder="Type here..."
-            onChangeText={this.updateSearch}
+            onChangeText={_.debounce(this.updateSearch, 1000)}
             value={input}
             containerStyle={searchStyle}
             inputStyle={{ backgroundColor: '#DAE2EA' }}
