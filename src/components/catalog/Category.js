@@ -13,12 +13,11 @@ import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
 
 
-class CategoryList extends Component {
+class Category extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.state.params.title.toUpperCase(),
 		headerBackTitle: ' '
 	});
-
 
 	componentWillMount() {
 		this.props.getProductsForCategoryOrChild(this.props.category);
@@ -42,23 +41,18 @@ class CategoryList extends Component {
 		if (!loadingMore && canLoadMoreContent) {
 			this.props.getProductsForCategoryOrChild(category, products.length);
 		}
-	}
-	renderContent = () => {
-	  return (
-	    <ProductList
-        products={this.props.products}
-        onEndReached={this.onEndReached}
-        canLoadMoreContent={this.props.canLoadMoreContent}
-        onRowPress={this.onRowPress}
-	    />
-    );
-	}
+	};
 
 	render() {
 		return (
-				<View style={styles.containerStyle}>
-					{this.renderContent()}
-				</View>
+			<View style={styles.containerStyle}>
+				<ProductList
+					products={this.props.products}
+					onEndReached={this.onEndReached}
+					canLoadMoreContent={this.props.canLoadMoreContent}
+					onRowPress={this.onRowPress}
+				/>
+			</View>
 		);
 	}
 }
@@ -126,4 +120,4 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   getProductsForCategoryOrChild,
   setCurrentProduct
-})(CategoryList);
+})(Category);

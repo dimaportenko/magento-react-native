@@ -25,6 +25,7 @@ class CartBadge extends Component {
           <Text style={styles.textStyle}>{this.props.itemsCount}</Text>
         }
         IconBadgeStyle={styles.iconBadgeStyle}
+        Hidden={this.props.itemsCount === 0}
       />
     );
   }
@@ -51,12 +52,12 @@ const styles = {
   iconBadgeStyle: {
     minWidth: 15,
     height: 15,
-    backgroundColor: '#999'
+    backgroundColor: 'red'
   }
 };
 
 const mapStateToProps = ({ cart }) => {
-  const itemsCount = cart.quote ? cart.quote.items_qty : 0;
+  const itemsCount = cart.quote && cart.quote.items_qty ? cart.quote.items_qty : 0;
   return { itemsCount };
 };
 

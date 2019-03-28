@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { connect } from 'react-redux';
-import CartList from './CartList';
 import { cartItemProduct } from '../../actions';
+import CartListItem from './CartListItem';
 import NavigationService from '../../navigation/NavigationService';
-import { NAVIGATION_CHECKOUT_PATH } from '../../navigation/routes';
+import {
+  NAVIGATION_CHECKOUT_PATH,
+  NAVIGATION_HOME_SCREEN_PATH
+} from '../../navigation/routes';
 import { Button } from '../common';
 import Sizes from '../../constants/Sizes';
 
@@ -26,14 +29,13 @@ class Cart extends Component {
     products: {},
   };
 
-  componentWillMount() {
+  componentDidMount() {
     const { items } = this.props.cart;
     const { products } = this.props;
 
     if (!items) {
       return;
     }
-
     items.forEach(item => {
       if (!item.thumbnail) {
         if (!products[item.sku]) {
@@ -51,6 +53,7 @@ class Cart extends Component {
 
   renderTotals() {
     const { items } = this.props.cart;
+    const { totals } = styles;
 
     let sum = 0;
     if (items) {
@@ -59,28 +62,82 @@ class Cart extends Component {
       });
     }
 
-    return sum.toFixed(2);
+    if (sum > 0) {
+      return (
+        <Text style={totals}>
+          Totals {sum.toFixed(2)}
+        </Text>
+      );
+    }
   }
 
-  render() {
+  renderEmptyCart = () => {
+    const { navigate } = this.props.navigation;
+    const {
+      containerStyle,
+      totals,
+      buttonTextStyle
+    } = styles;
+
+
     return (
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <View style={styles.cartList}>
-            <CartList items={this.props.cart.items} />
-          </View>
-          <Text style={styles.totals}>Totals {this.renderTotals()}</Text>
+      <View style={containerStyle}>
+        <Text style={totals}>
+          Your cart is empty
+        </Text>
+        <TouchableOpacity
+          onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
+        >
+          <Text style={buttonTextStyle}>
+            Continue Shopping
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  renderItem(items) {
+    return <CartListItem item={items.item} expanded={false} />;
+  }
+
+  renderCart = () => {
+    const { items } = this.props.cart;
+    const {
+      container,
+      content,
+      footer,
+      buttonStyle
+    } = styles;
+
+    return (
+      <View style={container}>
+        <View style={content}>
+          <FlatList
+            data={items}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => index.toString()}
+          />
         </View>
-        <View style={styles.footer}>
+        <View style={footer}>
+          {this.renderTotals()}
           <Button
             onPress={this.onPressAddToCheckout}
-            style={styles.buttonStyle}
+            style={buttonStyle}
           >
             Go to Checkout
           </Button>
         </View>
       </View>
     );
+  };
+
+  render() {
+    const { items } = this.props.cart;
+
+    if (items && items.length) {
+      return this.renderCart();
+    }
+    return this.renderEmptyCart();
   }
 }
 
@@ -89,30 +146,37 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff'
   },
+  containerStyle: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   content: {
     flex: 1
   },
   totals: {
+    fontSize: 20,
+    paddingTop: 7,
+  },
+  buttonTextStyle: {
     padding: 14,
     fontSize: 20,
-    top: 0
+    top: 0,
+    color: '#3478f6',
   },
-  cartList: {},
   footer: {
-    alignItems: 'center',
-    height: 50
+    padding: 14,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
   buttonStyle: {
-    alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 50,
-  }
+    width: Sizes.WINDOW_WIDTH * 0.5,
+  },
 });
 
-const mapStateToProps = state => {
-  const { products } = state.cart;
-
-  return { cart: state.cart.quote, products };
+const mapStateToProps = ({ cart }) => {
+  const { products } = cart;
+  return { cart: cart.quote, products };
 };
 
 export default connect(mapStateToProps, { cartItemProduct })(Cart);

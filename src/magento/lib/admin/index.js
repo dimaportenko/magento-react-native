@@ -317,6 +317,7 @@ export default magento => {
     },
 
     getOrderList: (customerId) => {
+      console.log('getting orders for: ', customerId);
       return new Promise((resolve, reject) => {
         const path = '/V1/orders';
         const params = {
@@ -327,6 +328,7 @@ export default magento => {
         magento
           .get(path, params, undefined, ADMIN_TYPE)
           .then(data => {
+            console.log('getOrderList response:', data);
             resolve(data);
           })
           .catch(e => {

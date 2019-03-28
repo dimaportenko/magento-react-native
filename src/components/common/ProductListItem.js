@@ -16,14 +16,14 @@ class ProductListItem extends Component {
       containerStyle,
       textStyle,
       infoStyle,
-      priceStyle
+      priceStyle,
     } = styles;
 
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={this.props.viewContainerStyle}>
         <TouchableOpacity
-          style={[containerStyle, this.props.mainContainerStyle]}
+          style={[containerStyle, this.props.columnContainerStyle]}
           onPress={() => { this.props.onRowPress(this.props.product)}}
         >
 
@@ -82,7 +82,7 @@ const styles = {
     borderWidth: 1,
     borderColor: '#ddd',
     width: null
-  }
+  },
 };
 
 export { ProductListItem };
