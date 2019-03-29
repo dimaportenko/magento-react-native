@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-	View,
-	Platform,
+  View,
+  Platform,
+  RefreshControl,
 } from 'react-native';
 import {
   getProductsForCategoryOrChild,
   setCurrentProduct,
+  updateProductsForCategoryOrChild,
 } from '../../actions';
 import { ProductList } from '../common/ProductList';
 import NavigationService from '../../navigation/NavigationService';
@@ -19,7 +21,7 @@ class Category extends Component {
 		headerBackTitle: ' '
 	});
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.getProductsForCategoryOrChild(this.props.category);
 	}
 
@@ -28,7 +30,11 @@ class Category extends Component {
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name
     });
-  }
+  };
+
+  onRefresh = () => {
+    this.props.updateProductsForCategoryOrChild(this.props.category, true);
+  };
 
 	onEndReached = () => {
 		const {
@@ -47,6 +53,12 @@ class Category extends Component {
 		return (
 			<View style={styles.containerStyle}>
 				<ProductList
+          refreshControl={
+            <RefreshControl
+              refreshing={this.props.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
 					products={this.props.products}
 					onEndReached={this.onEndReached}
 					canLoadMoreContent={this.props.canLoadMoreContent}
@@ -111,13 +123,14 @@ const styles = {
 
 const mapStateToProps = state => {
 	const { category } = state.category.current;
-	const { products, totalCount, loadingMore } = state.category;
+	const { products, totalCount, loadingMore, refreshing } = state.category;
 	const canLoadMoreContent = products.length < totalCount;
 
-	return { category, products, totalCount, canLoadMoreContent, loadingMore };
+	return { category, products, totalCount, canLoadMoreContent, loadingMore, refreshing };
 };
 
 export default connect(mapStateToProps, {
   getProductsForCategoryOrChild,
-  setCurrentProduct
+  updateProductsForCategoryOrChild,
+  setCurrentProduct,
 })(Category);

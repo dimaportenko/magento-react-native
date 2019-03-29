@@ -6,7 +6,8 @@ import {
 	MAGENTO_GET_CART,
 	MAGENTO_CART_ITEM_PRODUCT,
   MAGENTO_REMOVE_FROM_CART_LOADING,
-  MAGENTO_REMOVE_FROM_CART
+  MAGENTO_REMOVE_FROM_CART,
+  MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -15,7 +16,8 @@ const INITIAL_STATE = {
 	items: false,
 	errorMessage: false,
 	cart: {},
-	products: {}
+	products: {},
+  refreshing: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -38,6 +40,11 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, addToCartLoading: action.payload };
     case MAGENTO_REMOVE_FROM_CART:
       return { ...state, errorMessage: action.payload.message };
+    case MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT:
+      return {
+        ...state,
+        refreshing: action.payload,
+      };
     default:
 			return state;
 	}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import {
@@ -45,6 +45,10 @@ class HomeScreen extends Component {
     });
   };
 
+  onRefresh = () => {
+    this.props.getHomeData(true);
+  };
+
   allCategories = () => {
     this.props.navigation.navigate(NAVIGATION_CATEGORY_TREE_PATH);
   };
@@ -64,7 +68,15 @@ class HomeScreen extends Component {
 
   render() {
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.props.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+      >
         <HomeSlider slider={this.props.slider} />
         {this.renderFeatured()}
         <View style={styles.button}>
@@ -94,7 +106,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return { ...state.home };
+  const { refreshing } = state.home;
+  return { ...state.home, refreshing };
 };
 
 export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(HomeScreen);

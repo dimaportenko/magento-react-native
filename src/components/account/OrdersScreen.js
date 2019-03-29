@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import {
   Text,
   TouchableOpacity,
   View,
   FlatList,
+  RefreshControl,
 } from 'react-native';
 import {
   getOrdersForCustomer,
@@ -21,10 +23,13 @@ class OrdersScreen extends Component {
     headerBackTitle: ' '
   });
 
-
   componentDidMount() {
     this.props.getOrdersForCustomer(this.props.customerId);
   }
+
+  onRefresh = () => {
+    this.props.getOrdersForCustomer(this.props.customerId, true);
+  };
 
   renderItem = (orderItem) => {
     return (
@@ -33,9 +38,18 @@ class OrdersScreen extends Component {
   };
 
   renderOrderList = () => {
+    const data = this.props.orders.sort((b, a) =>
+      moment(a.created_at).diff(b.created_at));
+
     return (
       <FlatList
-        data={this.props.orders}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.props.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+        data={data}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -109,6 +123,7 @@ const mapStateToProps = ({ account }) => {
   return {
     customerId,
     orders,
+    refreshing: account.refreshing,
   };
 };
 

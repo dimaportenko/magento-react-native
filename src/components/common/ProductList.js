@@ -89,7 +89,7 @@ class ProductList extends Component {
   }
 
   renderContent = () => {
-    const { products, onEndReached } = this.props;
+    const { products, onEndReached, refreshControl } = this.props;
     const { gridColumnsValue } = this.state;
 
     if (!this.props.products) {
@@ -99,6 +99,7 @@ class ProductList extends Component {
     if (this.props.products.length) {
       return (
         <FlatList
+          refreshControl={refreshControl}
           data={products}
           renderItem={gridColumnsValue ? this.renderItemRow : this.renderItemColumn}
           keyExtractor={(item, index) => index.toString()}

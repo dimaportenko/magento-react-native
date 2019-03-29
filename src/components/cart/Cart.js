@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  FlatList,
+  RefreshControl
+} from 'react-native';
 import { connect } from 'react-redux';
-import { cartItemProduct } from '../../actions';
+import { cartItemProduct, getCart } from '../../actions';
 import CartListItem from './CartListItem';
 import NavigationService from '../../navigation/NavigationService';
 import {
@@ -31,25 +38,34 @@ class Cart extends Component {
 
   componentDidMount() {
     const { items } = this.props.cart;
-    const { products } = this.props;
 
     if (!items) {
       return;
     }
-    items.forEach(item => {
-      if (!item.thumbnail) {
-        if (!products[item.sku]) {
-          this.props.cartItemProduct(item.sku);
-        }
-      }
-    });
+    this.getCartItemProduct(items);
   }
 
   onPressAddToCheckout = () => {
     NavigationService.navigate(NAVIGATION_CHECKOUT_PATH, {
       title: 'Cart'
     });
-  }
+  };
+
+  onRefresh = () => {
+    this.props.getCart(true);
+  };
+
+  getCartItemProduct = (items, refreshing) => {
+    const { products } = this.props;
+
+    items.forEach(item => {
+      if (!item.thumbnail) {
+        if (!products[item.sku]) {
+          this.props.cartItemProduct(item.sku, refreshing);
+        }
+      }
+    });
+  };
 
   renderTotals() {
     const { items } = this.props.cart;
@@ -113,6 +129,12 @@ class Cart extends Component {
       <View style={container}>
         <View style={content}>
           <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.refreshing}
+                onRefresh={this.onRefresh}
+              />
+            }
             data={items}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
@@ -176,7 +198,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ cart }) => {
   const { products } = cart;
-  return { cart: cart.quote, products };
+  return {
+    cart: cart.quote,
+    refreshing: cart.refreshing,
+    products };
 };
 
-export default connect(mapStateToProps, { cartItemProduct })(Cart);
+export default connect(mapStateToProps, { cartItemProduct, getCart })(Cart);
