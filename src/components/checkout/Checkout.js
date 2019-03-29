@@ -27,7 +27,7 @@ class Checkout extends Component {
 					<CheckoutPaymentMethod />
 				</CheckoutSection>
 				<CheckoutSection title="Summary" number="4" expanded={activeSection === 4}>
-					<CheckoutTotals />
+					<CheckoutTotals navigation={this.props.navigation} />
 				</CheckoutSection>
 			</ScrollView>
 		);
