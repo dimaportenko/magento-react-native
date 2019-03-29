@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Alert, View, Text, StyleSheet } from 'react-native';
+import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
-import NavigationService from '../../navigation/NavigationService';
 import {
   checkoutSelectedPaymentChanged,
   checkoutCustomerNextLoading,
   checkoutOrderPopupShown,
-  placeGuestCartOrder
+  placeGuestCartOrder,
+  getCart,
 } from '../../actions';
-import { NAVIGATION_CATEGORY_TREE_PATH } from '../../navigation/routes';
+import { NAVIGATION_HOME_STACK_PATH } from '../../navigation/routes';
 import { Button } from '../common';
 import Sizes from '../../constants/Sizes';
 
@@ -34,9 +35,13 @@ class CheckoutTotals extends Component {
   }
 
   goHome = () => {
-    NavigationService.navigate(NAVIGATION_CATEGORY_TREE_PATH, {
-      title: 'Categories'
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: 'Cart' })]
     });
+
+    this.props.navigation.dispatch(resetAction);
+    this.props.navigation.navigate(NAVIGATION_HOME_STACK_PATH);
   };
 
   renderTotals() {
@@ -83,9 +88,16 @@ class CheckoutTotals extends Component {
     );
   }
 
-  renderPopup() {
+  componentDidUpdate(prevProps): void {
+    if (this.props.orderId && this.props.orderId !== prevProps.orderId) {
+      this.showPopup();
+    }
+  }
+
+  showPopup() {
     const { orderId } = this.props;
     if (orderId && !this.orderPopup) {
+      this.props.getCart();
       this.orderPopup = true;
       // this.props.checkoutOrderPopupShown();
       Alert.alert(
@@ -102,7 +114,7 @@ class CheckoutTotals extends Component {
       <View style={styles.container}>
         {this.renderTotals()}
         {this.renderButton()}
-        {this.renderPopup()}
+        {/*{this.renderPopup()}*/}
       </View>
     );
   }
@@ -144,5 +156,6 @@ export default connect(mapStateToProps, {
   checkoutSelectedPaymentChanged,
   checkoutCustomerNextLoading,
   checkoutOrderPopupShown,
-  placeGuestCartOrder
+  placeGuestCartOrder,
+  getCart,
 })(CheckoutTotals);
