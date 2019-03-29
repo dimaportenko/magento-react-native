@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import {
   Text,
@@ -22,21 +23,12 @@ class OrdersScreen extends Component {
     headerBackTitle: ' '
   });
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
-
   componentDidMount() {
     this.props.getOrdersForCustomer(this.props.customerId);
   }
 
-  onRefresh = async () => {
-    this.setState({ refreshing: true });
-    await this.props.getOrdersForCustomer(this.props.customerId);
-    this.setState({ refreshing: false });
+  onRefresh = () => {
+    this.props.getOrdersForCustomer(this.props.customerId, true);
   };
 
   renderItem = (orderItem) => {
@@ -46,15 +38,18 @@ class OrdersScreen extends Component {
   };
 
   renderOrderList = () => {
+    const data = this.props.orders.sort((b, a) =>
+      moment(a.created_at).diff(b.created_at));
+
     return (
       <FlatList
         refreshControl={
           <RefreshControl
-            refreshing={this.state.refreshing}
+            refreshing={this.props.refreshing}
             onRefresh={this.onRefresh}
           />
         }
-        data={this.props.orders}
+        data={data}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
@@ -128,6 +123,7 @@ const mapStateToProps = ({ account }) => {
   return {
     customerId,
     orders,
+    refreshing: account.refreshing,
   };
 };
 

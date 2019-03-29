@@ -4,11 +4,13 @@ import {
   HOME_SCREEN_DATA,
   MAGENTO_GET_FEATURED_PRODUCTS,
   MAGENTO_UPDATE_FEATURED_CONF_PRODUCT,
+  MAGENTO_UPDATE_REFRESHING_HOME_DATA,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   slider: [],
-  featuredProducts: {}
+  featuredProducts: {},
+  refreshing: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,6 +43,11 @@ export default (state = INITIAL_STATE, action) => {
     }
     case HOME_SCREEN_DATA:
       return { ...state, ...action.payload };
+    case MAGENTO_UPDATE_REFRESHING_HOME_DATA:
+      return {
+        ...state,
+        refreshing: action.payload,
+      };
     default:
       return state;
   }

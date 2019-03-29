@@ -9,7 +9,7 @@ import {
   RefreshControl
 } from 'react-native';
 import { connect } from 'react-redux';
-import { cartItemProduct } from '../../actions';
+import { cartItemProduct, getCart } from '../../actions';
 import CartListItem from './CartListItem';
 import NavigationService from '../../navigation/NavigationService';
 import {
@@ -36,13 +36,6 @@ class Cart extends Component {
     products: {},
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
-
   componentDidMount() {
     const { items } = this.props.cart;
 
@@ -58,21 +51,17 @@ class Cart extends Component {
     });
   };
 
-  onRefresh = async () => {
-    const { items } = this.props.cart;
-
-    this.setState({ refreshing: true });
-    await this.getCartItemProduct(items);
-    this.setState({ refreshing: false });
+  onRefresh = () => {
+    this.props.getCart(true);
   };
 
-  getCartItemProduct = (items) => {
+  getCartItemProduct = (items, refreshing) => {
     const { products } = this.props;
 
     items.forEach(item => {
       if (!item.thumbnail) {
         if (!products[item.sku]) {
-          this.props.cartItemProduct(item.sku);
+          this.props.cartItemProduct(item.sku, refreshing);
         }
       }
     });
@@ -142,7 +131,7 @@ class Cart extends Component {
           <FlatList
             refreshControl={
               <RefreshControl
-                refreshing={this.state.refreshing}
+                refreshing={this.props.refreshing}
                 onRefresh={this.onRefresh}
               />
             }
@@ -209,7 +198,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({ cart }) => {
   const { products } = cart;
-  return { cart: cart.quote, products };
+  return {
+    cart: cart.quote,
+    refreshing: cart.refreshing,
+    products };
 };
 
-export default connect(mapStateToProps, { cartItemProduct })(Cart);
+export default connect(mapStateToProps, { cartItemProduct, getCart })(Cart);

@@ -11,21 +11,12 @@ class CategoryTree extends Component {
 		headerBackTitle: ' '
 	};
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
-
-  componentWillMount() {
+  componentDidMount() {
     this.props.getCategoryTree();
   }
 
-  onRefresh = async () => {
-    this.setState({ refreshing: true });
-    await this.props.getCategoryTree();
-    this.setState({ refreshing: false });
+  onRefresh = () => {
+    this.props.getCategoryTree(true);
   };
 
   renderContent() {
@@ -36,7 +27,7 @@ class CategoryTree extends Component {
         categories={categoryTree.children_data}
         refreshControl={
           <RefreshControl
-            refreshing={this.state.refreshing}
+            refreshing={this.props.refreshing}
             onRefresh={this.onRefresh}
           />
         }
@@ -64,7 +55,7 @@ const styles = {
 };
 
 const mapStateToProps = ({ magento, categoryTree }) => {
-  return { magento, categoryTree };
+  return { magento, categoryTree, refreshing: categoryTree.refreshing };
 };
 
 export default connect(mapStateToProps, { initMagento, getCategoryTree })(CategoryTree);

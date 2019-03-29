@@ -8,6 +8,7 @@ import {
 import {
   getProductsForCategoryOrChild,
   setCurrentProduct,
+  updateProductsForCategoryOrChild,
 } from '../../actions';
 import { ProductList } from '../common/ProductList';
 import NavigationService from '../../navigation/NavigationService';
@@ -20,13 +21,6 @@ class Category extends Component {
 		headerBackTitle: ' '
 	});
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
-
 	componentDidMount() {
 		this.props.getProductsForCategoryOrChild(this.props.category);
 	}
@@ -38,10 +32,8 @@ class Category extends Component {
     });
   };
 
-  onRefresh = async () => {
-    this.setState({ refreshing: true });
-    await this.props.getProductsForCategoryOrChild(this.props.category);
-    this.setState({ refreshing: false });
+  onRefresh = () => {
+    this.props.updateProductsForCategoryOrChild(this.props.category, true);
   };
 
 	onEndReached = () => {
@@ -63,7 +55,7 @@ class Category extends Component {
 				<ProductList
           refreshControl={
             <RefreshControl
-              refreshing={this.state.refreshing}
+              refreshing={this.props.refreshing}
               onRefresh={this.onRefresh}
             />
           }
@@ -131,13 +123,14 @@ const styles = {
 
 const mapStateToProps = state => {
 	const { category } = state.category.current;
-	const { products, totalCount, loadingMore } = state.category;
+	const { products, totalCount, loadingMore, refreshing } = state.category;
 	const canLoadMoreContent = products.length < totalCount;
 
-	return { category, products, totalCount, canLoadMoreContent, loadingMore };
+	return { category, products, totalCount, canLoadMoreContent, loadingMore, refreshing };
 };
 
 export default connect(mapStateToProps, {
   getProductsForCategoryOrChild,
-  setCurrentProduct
+  updateProductsForCategoryOrChild,
+  setCurrentProduct,
 })(Category);

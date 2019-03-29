@@ -32,13 +32,6 @@ class HomeScreen extends Component {
     slider: [],
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      refreshing: false,
-    };
-  }
-
   componentDidMount() {
     if (this.props.slider.length === 0) {
       this.props.getHomeData();
@@ -52,10 +45,8 @@ class HomeScreen extends Component {
     });
   };
 
-  onRefresh = async () => {
-    this.setState({ refreshing: true });
-    await this.props.getHomeData();
-    this.setState({ refreshing: false });
+  onRefresh = () => {
+    this.props.getHomeData(true);
   };
 
   allCategories = () => {
@@ -81,7 +72,7 @@ class HomeScreen extends Component {
         style={styles.container}
         refreshControl={
           <RefreshControl
-            refreshing={this.state.refreshing}
+            refreshing={this.props.refreshing}
             onRefresh={this.onRefresh}
           />
         }
@@ -115,7 +106,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => {
-  return { ...state.home };
+  const { refreshing } = state.home;
+  return { ...state.home, refreshing };
 };
 
 export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(HomeScreen);
