@@ -42,6 +42,7 @@ import {
   MAGENTO_UPDATE_REFRESHING_HOME_DATA,
   MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE,
   MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
+  MAGENTO_ERROR_MESSAGE_CART_ORDER,
 } from './types';
 
 export const initMagento = () => {
@@ -497,7 +498,12 @@ export const placeGuestCartOrder = (cartId, payment) => {
       } else {
         data = await magento.guest.placeGuestCartOrder(cartId, payment);
       }
-      dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
+      if (!data.message) {
+        dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
+      } else {
+        const message = magento.getErrorMessageForResponce(data);
+        dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: message });
+      }
       dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
     } catch (error) {
       console.log(error);

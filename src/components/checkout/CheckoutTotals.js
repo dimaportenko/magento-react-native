@@ -90,23 +90,22 @@ class CheckoutTotals extends Component {
 
   componentDidUpdate(prevProps): void {
     if (this.props.orderId && this.props.orderId !== prevProps.orderId) {
-      this.showPopup();
+      this.showPopup('Order', 'Order placed successfully');
+    }
+    if (this.props.errorMessage && this.props.errorMessage !== prevProps.errorMessage) {
+      this.showPopup('Error', this.props.errorMessage);
     }
   }
 
-  showPopup() {
-    const { orderId } = this.props;
-    if (orderId && !this.orderPopup) {
-      this.props.getCart();
-      this.orderPopup = true;
-      // this.props.checkoutOrderPopupShown();
-      Alert.alert(
-        'Order',
-        'Order placed successfully',
-        [{ text: 'OK', onPress: () => this.goHome() }],
-        { cancelable: false }
+  showPopup(title, message) {
+    this.props.getCart();
+    // this.props.checkoutOrderPopupShown();
+    Alert.alert(
+      title,
+      message,
+      [{ text: 'OK', onPress: () => this.goHome() }],
+      { cancelable: false }
       );
-    }
   }
 
   render() {
@@ -148,8 +147,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ cart, checkout }) => {
   const { cartId } = cart;
   const { loading } = checkout.ui;
-  const { payments, selectedPayment, totals, orderId } = checkout;
-  return { cartId, payments, selectedPayment, totals, loading, orderId };
+  const { payments, selectedPayment, totals, orderId, errorMessage } = checkout;
+  return { cartId, payments, selectedPayment, totals, loading, orderId, errorMessage };
 };
 
 export default connect(mapStateToProps, {
