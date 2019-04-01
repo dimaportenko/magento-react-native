@@ -6,6 +6,7 @@ import {
 	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
   MAGENTO_UPDATE_CATEGORY_PRODUCTS,
   MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS,
+  MAGENTO_GET_FILTERED_PRODUCTS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -28,6 +29,14 @@ export default (state = INITIAL_STATE, action) => {
 				totalCount: action.payload.total_count
       };
 		}
+    case MAGENTO_GET_FILTERED_PRODUCTS: {
+      return {
+        ...state,
+        products: action.payload.items,
+        totalCount: action.payload.total_count
+      };
+    }
+
     case MAGENTO_UPDATE_CATEGORY_PRODUCTS: {
       return {
         ...state,

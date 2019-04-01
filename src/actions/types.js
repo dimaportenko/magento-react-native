@@ -28,6 +28,7 @@ export const MAGENTO_CART_ITEM_PRODUCT = 'magento_cart_item_product';
 export const MAGENTO_PLACE_GUEST_CART_ORDER = 'magento_place_guest_cart_order';
 export const MAGENTO_REMOVE_FROM_CART_LOADING = 'magento_remove_from_cart_loading';
 export const MAGENTO_REMOVE_FROM_CART = 'magento_remove_from_cart';
+export const MAGENTO_GET_FILTERED_PRODUCTS = 'magento_get_filtered_products';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
 

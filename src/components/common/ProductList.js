@@ -63,11 +63,27 @@ class ProductList extends Component {
         onRowPress={this.props.onRowPress}
       />
     );
-  }
+  };
+
+  renderFilter = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity
+          style={styles.iconStyle}
+          onPress={() => this.props.getFilteredProducts({ page: 1, pageSize: 10, filter: 'Men' })}
+        >
+          <View style={styles.iconWrapper}>
+            <Icon name={this.state.defaultButtonView} type="ionicon" />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   renderHeader = () => {
     return (
       <View style={{ alignItems: 'flex-end' }}>
+        {this.renderFilter()}
         <TouchableOpacity
           style={styles.iconStyle}
           onPress={this.changeGridValueFunction}

@@ -173,6 +173,59 @@ class Magento {
     }
     return false;
   }
+
+  makeParams = ({ sort, page, pageSize, filter }) => {
+    let index = 0;
+    let query = '';
+    if (typeof sort !== 'undefined') {
+      query += `searchCriteria[sortOrders][${index}][field]=${sort}&`;
+    }
+
+    if (typeof page !== 'undefined') {
+      query += `searchCriteria[currentPage]=${page}&`;
+    }
+
+    if (typeof pageSize !== 'undefined') {
+      query += `searchCriteria[pageSize]=${pageSize}&`;
+    }
+
+    if (typeof filter !== 'undefined') {
+      Object.keys(filter)
+        .forEach((key) => {
+          let value = filter[key];
+          let condition = null;
+          let subQuery = '';
+          if (typeof value === 'object') {
+            condition = value.condition;
+            value = value.value;
+            if (condition.includes('from')) {
+              const conditions = condition.split(',');
+              const values = value.split(',');
+              index++;
+              subQuery = `searchCriteria[filter_groups][${index}][filters][0][field]=${key}&`;
+              subQuery += `searchCriteria[filter_groups][${index}][filters][0][value]=${values[0]}&`;
+              subQuery += `searchCriteria[filter_groups][${index}][filters][0][condition_type]=${conditions[0]}&`;
+              index++;
+              subQuery += `searchCriteria[filter_groups][${index}][filters][0][field]=${key}&`;
+              subQuery += `searchCriteria[filter_groups][${index}][filters][0][value]=${values[1]}&`;
+              subQuery += `searchCriteria[filter_groups][${index}][filters][0][condition_type]=${conditions[1]}&`;
+            }
+          } else {
+            condition = 'eq';
+          }
+          if (condition.includes('from')) {
+            query += subQuery;
+          } else {
+            index++;
+            query += `searchCriteria[filter_groups][${index}][filters][0][field]=${key}&`;
+            query += `searchCriteria[filter_groups][${index}][filters][0][value]=${value}&`;
+            query += `searchCriteria[filter_groups][${index}][filters][0][condition_type]=${condition}&`;
+          }
+        });
+    }
+
+    return query;
+  }
 }
 
 export const magento = new Magento();

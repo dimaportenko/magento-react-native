@@ -42,6 +42,7 @@ import {
   MAGENTO_UPDATE_REFRESHING_HOME_DATA,
   MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE,
   MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
+  MAGENTO_GET_FILTERED_PRODUCTS,
 } from './types';
 
 export const initMagento = () => {
@@ -522,6 +523,17 @@ export const removeFromCartLoading = isLoading => {
   return {
     type: MAGENTO_REMOVE_FROM_CART_LOADING,
     payload: isLoading,
+  };
+};
+
+export const getFilteredProducts = ({ page, pageSize, filter }) => {
+  return async dispatch => {
+    try {
+      const data = await magento.admin.getFeaturedChildren(page, pageSize, filter);
+      dispatch({ type: MAGENTO_GET_FILTERED_PRODUCTS, payload: data });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 

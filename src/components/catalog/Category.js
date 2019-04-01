@@ -9,6 +9,7 @@ import {
   getProductsForCategoryOrChild,
   setCurrentProduct,
   updateProductsForCategoryOrChild,
+  getFilteredProducts,
 } from '../../actions';
 import { ProductList } from '../common/ProductList';
 import NavigationService from '../../navigation/NavigationService';
@@ -63,6 +64,7 @@ class Category extends Component {
 					onEndReached={this.onEndReached}
 					canLoadMoreContent={this.props.canLoadMoreContent}
 					onRowPress={this.onRowPress}
+          getFilteredProducts={this.props.getFilteredProducts}
 				/>
 			</View>
 		);
@@ -133,4 +135,5 @@ export default connect(mapStateToProps, {
   getProductsForCategoryOrChild,
   updateProductsForCategoryOrChild,
   setCurrentProduct,
+  getFilteredProducts,
 })(Category);
