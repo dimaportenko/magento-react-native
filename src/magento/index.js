@@ -133,6 +133,18 @@ class Magento {
     });
   }
 
+  getErrorMessageForResponce(data) {
+    const params = data.parameters;
+    let message = data.message;
+    if (typeof params !== 'undefined' && params.length > 0) {
+      data.parameters.forEach((item, index) => {
+        message = message.replace(`%${index + 1}`, item);
+      });
+      return message;
+    }
+    return message;
+  }
+
   setStoreConfig(config) {
     this.storeConfig = config;
   }

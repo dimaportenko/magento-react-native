@@ -26,6 +26,7 @@ export const MAGENTO_ADD_SHIPPING_TO_CART = 'magento_add_shipping_to_cart';
 export const MAGENTO_GET_CART_PAYMENT_METHODS = 'magento_get_cart_payment_methods';
 export const MAGENTO_CART_ITEM_PRODUCT = 'magento_cart_item_product';
 export const MAGENTO_PLACE_GUEST_CART_ORDER = 'magento_place_guest_cart_order';
+export const MAGENTO_ERROR_MESSAGE_CART_ORDER = 'magento_error_massage_cart_order';
 export const MAGENTO_REMOVE_FROM_CART_LOADING = 'magento_remove_from_cart_loading';
 export const MAGENTO_REMOVE_FROM_CART = 'magento_remove_from_cart';
 

@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist/es/constants';
 import {
 	MAGENTO_GET_COUNTRIES,
   UI_CHECKOUT_UPDATE,
@@ -8,7 +9,8 @@ import {
 	MAGENTO_GET_CART_SHIPPING_METHODS,
 	MAGENTO_GET_CART_PAYMENT_METHODS,
 	MAGENTO_PLACE_GUEST_CART_ORDER,
-	MAGENTO_ADD_SHIPPING_TO_CART
+	MAGENTO_ADD_SHIPPING_TO_CART,
+  MAGENTO_ERROR_MESSAGE_CART_ORDER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -33,11 +35,14 @@ const INITIAL_STATE = {
 	totals: false,
 	countries: false,
 	orderId: false,
-	activeSection: 1
+	activeSection: 1,
+  errorMessage: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
+    case REHYDRATE:
+      return { ...INITIAL_STATE };
 		case MAGENTO_GET_CART_SHIPPING_METHODS:
 			return { ...state, shipping: action.payload };
 		case MAGENTO_GET_CART_PAYMENT_METHODS:
@@ -68,6 +73,8 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, selectedShipping: action.payload };
 		case UI_CHECKOUT_PAYMENT_SELECTED:
 			return { ...state, selectedPayment: action.payload };
+    case MAGENTO_ERROR_MESSAGE_CART_ORDER:
+      return { ...state, errorMessage: action.payload };
 		default:
 			return state;
 	}
