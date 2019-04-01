@@ -1,3 +1,4 @@
+import { REHYDRATE } from 'redux-persist/es/constants';
 import {
 	MAGENTO_GET_COUNTRIES,
   UI_CHECKOUT_UPDATE,
@@ -40,6 +41,8 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
+    case REHYDRATE:
+      return { ...state, INITIAL_STATE };
 		case MAGENTO_GET_CART_SHIPPING_METHODS:
 			return { ...state, shipping: action.payload };
 		case MAGENTO_GET_CART_PAYMENT_METHODS:
