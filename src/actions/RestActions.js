@@ -529,7 +529,7 @@ export const removeFromCartLoading = isLoading => {
 export const getFilteredProducts = ({ page, pageSize, filter }) => {
   return async dispatch => {
     try {
-      const data = await magento.admin.getFeaturedChildren(page, pageSize, filter);
+      const data = await magento.admin.getFeaturedChildren({ page, pageSize, filter });
       dispatch({ type: MAGENTO_GET_FILTERED_PRODUCTS, payload: data });
     } catch (error) {
       console.log(error);

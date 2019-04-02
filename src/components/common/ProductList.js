@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { ProductListItem, Spinner } from './';
 import Sizes from '../../constants/Sizes';
+import { NAVIGATION_DRAWER_SCREEN } from '../../navigation/routes';
 
 class ProductList extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class ProductList extends Component {
 
     this.state = {
       gridColumnsValue: true,
-      defaultButtonView: 'md-grid'
+      defaultButtonView: 'md-grid',
     };
   }
 
@@ -31,7 +32,7 @@ class ProductList extends Component {
         defaultButtonView: 'md-grid'
       });
     }
-  }
+  };
 
   renderItemRow = (product) => {
     return (
@@ -42,7 +43,7 @@ class ProductList extends Component {
       onRowPress={this.props.onRowPress}
       />
     );
-  }
+  };
 
   renderItemColumn = (product) => {
     const {
@@ -70,10 +71,10 @@ class ProductList extends Component {
       <View style={{ flex: 1 }}>
         <TouchableOpacity
           style={styles.iconStyle}
-          onPress={() => this.props.getFilteredProducts({ page: 1, pageSize: 10, filter: 'Men' })}
+          onPress={() => this.props.navigation.openDrawer(NAVIGATION_DRAWER_SCREEN)}
         >
           <View style={styles.iconWrapper}>
-            <Icon name={this.state.defaultButtonView} type="ionicon" />
+            <Icon name='md-cog' type="ionicon" />
           </View>
         </TouchableOpacity>
       </View>

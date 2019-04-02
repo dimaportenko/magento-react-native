@@ -2,7 +2,8 @@ import React from 'react';
 import {
   createStackNavigator,
   createSwitchNavigator,
-  createBottomTabNavigator
+  createBottomTabNavigator,
+  createDrawerNavigator,
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -20,6 +21,8 @@ import HomeScreen from '../components/home/HomeScreen';
 import SearchScreen from '../components/search/SearchScreen';
 import OrdersScreen from '../components/account/OrdersScreen';
 import OrderScreen from '../components/account/OrderScreen';
+import DrawerScreen from '../components/catalog/DrawerScreen';
+
 
 import CartBadge from '../components/cart/CartBadge';
 
@@ -43,6 +46,8 @@ import {
   NAVIGATION_SEARCH_PRODUCT_PATH,
   NAVIGATION_ORDERS_PATH,
   NAVIGATION_ORDER_PATH,
+  NAVIGATION_DRAWER_SCREEN,
+  BOTTOM_TAB_NAVIGATOR
 } from './routes';
 
 const HomeStack = createStackNavigator(
@@ -96,10 +101,10 @@ const CartStack = createStackNavigator({
   [NAVIGATION_CHECKOUT_PATH]: Checkout,
 });
 
-export const Navigator = createBottomTabNavigator(
+const BottomTabNavigator = createBottomTabNavigator(
   {
     [NAVIGATION_HOME_STACK_PATH]: {
-      screen: HomeStack,
+      screen: DrawerScreen,
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => {
           return <Icon name="md-home" type="ionicon" color={tintColor} />;
@@ -138,3 +143,14 @@ export const Navigator = createBottomTabNavigator(
     }
   }
 );
+
+export const Navigator = createDrawerNavigator({
+  [BOTTOM_TAB_NAVIGATOR]: {
+    screen: BottomTabNavigator
+  },
+  [NAVIGATION_DRAWER_SCREEN]: {
+    screen: DrawerScreen
+  },
+}, {
+  contentComponent: DrawerScreen,
+});
