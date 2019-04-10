@@ -12,7 +12,6 @@
 **React Native Project setup**
 * Go to repository dir
 * Run `npm install`
-* Then `react-native link react-native-vector-icons`
 * copy `src/config/magento-sample.js` to `src/config/magento.js`
 * set Magento base url to url param in `magento.js`
 * set Access Token from Integration you created to `access_token` param in `magento.js`
