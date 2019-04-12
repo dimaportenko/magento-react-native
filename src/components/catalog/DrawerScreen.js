@@ -3,10 +3,11 @@ import { connect } from 'react-redux';
 import {
   View,
   StyleSheet,
+  TextInput,
 } from 'react-native';
-import { Input, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { getFilteredProducts } from '../../actions';
-import Sizes from '../../constants/Sizes';
+import { Button } from '../common';
 
 
 class DrawerScreen extends Component {
@@ -16,27 +17,52 @@ class DrawerScreen extends Component {
   static defaultProps = {};
 
   state = {
-    values: [1, 100],
+    maxValue: '',
+    minValue: '',
   };
 
-  onValuesChange = (values) => {
-    this.setState({ values });
+  onApplyPressed = () => {
+    this.props.getFilteredProducts({
+      page: 1,
+      filter: { category_id: 3, price: this.state.maxValue }
+    });
   };
-// () => this.props.getFilteredProducts({ page: 1, pageSize: 10, filter: { category_id: 3, price: this.state.values[0]
 
-    render() {
+  render() {
+    const {
+      buttonStyle,
+      container,
+      InputContainer,
+      textStyle,
+      minInputStyle,
+      maxInputStyle,
+      dashTextStyle,
+      inputContainerStyle
+    } = styles;
+
     return (
-      <View style={styles.container}>
-        <Text style={styles.textStyle}>Price</Text>
-        <Input
-          style={styles.minInputStyle}
-          placeholder='Min.'
-        />
-        <Text> - </Text>
-        <Input
-          style={styles.minInputStyle}
-          placeholder='Max.'
-        />
+      <View style={container}>
+        <View style={InputContainer}>
+          <Text style={textStyle}>Price:</Text>
+          <View style={inputContainerStyle}>
+            <TextInput
+              style={minInputStyle}
+              placeholder='Min.'
+              onChangeText={(minValue) => this.setState({ minValue })}
+            />
+            <Text style={dashTextStyle}>-</Text>
+            <TextInput
+              style={maxInputStyle}
+              placeholder='Max.'
+              onChangeText={(maxValue) => this.setState({ maxValue })}
+            />
+          </View>
+        </View>
+        <View style={buttonStyle}>
+          <Button onPress={this.onApplyPressed}>
+            Apply
+          </Button>
+        </View>
       </View>
     );
   }
@@ -44,25 +70,43 @@ class DrawerScreen extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  InputContainer: {
     flexDirection: 'row',
-    // justifyContent: 'space-around',
     backgroundColor: '#fff',
   },
   minInputStyle: {
     marginTop: 25,
-    width: 12,
-    flex: 2,
+    width: 50,
   },
   maxInputStyle: {
     marginTop: 25,
-    width: 12,
-    flex: 2,
+    width: 50,
   },
   textStyle: {
     marginTop: 20,
     fontSize: 18,
     lineHeight: 40,
-    paddingLeft: 4,
+    paddingLeft: 50,
+  },
+  dashTextStyle: {
+    marginTop: 20,
+    fontSize: 18,
+    lineHeight: 40,
+    paddingRight: 23,
+  },
+  inputContainerStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonStyle: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    paddingBottom: 10,
   },
 });
 
