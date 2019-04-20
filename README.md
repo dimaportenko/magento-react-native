@@ -37,4 +37,4 @@ troublesohard@gmail.com
 [linkedin](https://www.linkedin.com/in/dmitry-portenko-712ab84a/)
 
 ## License
-[MIT License](LICENSE.md) Copyright (c) 2017-2018 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
+[MIT License](LICENSE.md) Copyright (c) 2017-2019 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
