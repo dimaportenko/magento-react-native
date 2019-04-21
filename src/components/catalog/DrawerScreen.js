@@ -24,8 +24,15 @@ class DrawerScreen extends Component {
   onApplyPressed = () => {
     this.props.getFilteredProducts({
       page: 1,
-      filter: { category_id: 3, price: this.state.maxValue }
+      filter: {
+        category_id: this.props.categoryId,
+        price: {
+          condition: 'from,to',
+          value: `${this.state.minValue},${this.state.maxValue}`,
+        }
+      }
     });
+    this.props.navigation.closeDrawer();
   };
 
   render() {
@@ -110,4 +117,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(null, { getFilteredProducts })(DrawerScreen);
+const mapStateToProps = ({ category }) => ({
+  categoryId: category.current.category.id,
+});
+
+export default connect(mapStateToProps, { getFilteredProducts })(DrawerScreen);

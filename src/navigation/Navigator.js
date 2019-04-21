@@ -104,7 +104,7 @@ const CartStack = createStackNavigator({
 const BottomTabNavigator = createBottomTabNavigator(
   {
     [NAVIGATION_HOME_STACK_PATH]: {
-      screen: DrawerScreen,
+      screen: HomeStack,
       navigationOptions: () => ({
         tabBarIcon: ({ tintColor }) => {
           return <Icon name="md-home" type="ionicon" color={tintColor} />;
@@ -149,7 +149,8 @@ export const Navigator = createDrawerNavigator({
     screen: BottomTabNavigator
   },
   [NAVIGATION_DRAWER_SCREEN]: {
-    screen: DrawerScreen
+    screen: DrawerScreen,
+    navigationOptions: { header: null }
   },
 }, {
   contentComponent: DrawerScreen,
