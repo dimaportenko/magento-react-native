@@ -2,7 +2,8 @@ import React from 'react';
 import {
   createStackNavigator,
   createSwitchNavigator,
-  createBottomTabNavigator
+  createBottomTabNavigator,
+  createDrawerNavigator,
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -48,7 +49,6 @@ import {
 const HomeStack = createStackNavigator(
   {
     [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
-    [NAVIGATION_CATEGORY_TREE_PATH]: CategoryTree,
     [NAVIGATION_CATEGORY_PATH]: Category,
     [NAVIGATION_HOME_PRODUCT_PATH]: Product,
   },
@@ -96,7 +96,7 @@ const CartStack = createStackNavigator({
   [NAVIGATION_CHECKOUT_PATH]: Checkout,
 });
 
-export const Navigator = createBottomTabNavigator(
+const MainAppNavigator = createBottomTabNavigator(
   {
     [NAVIGATION_HOME_STACK_PATH]: {
       screen: HomeStack,
@@ -136,5 +136,14 @@ export const Navigator = createBottomTabNavigator(
     tabBarOptions: {
       showLabel: false
     }
+  }
+);
+
+export const Navigator = createDrawerNavigator(
+  {
+    MainAppNavigator,
+  },
+  {
+    contentComponent: CategoryTree,
   }
 );

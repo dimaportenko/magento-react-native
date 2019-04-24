@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
+import { ScrollView, TouchableWithoutFeedback, StyleSheet, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
+import { MaterialHeaderButtons, Item } from '../common';
 import {
-  NAVIGATION_CATEGORY_TREE_PATH,
   NAVIGATION_HOME_PRODUCT_PATH
 } from '../../navigation/routes';
 import { getHomeData, setCurrentProduct } from '../../actions';
 import HomeSlider from './HomeSlider';
 import FeaturedProducts from './FeaturedProducts';
 import NavigationService from '../../navigation/NavigationService';
-import { Button } from '../common';
 import Sizes from '../../constants/Sizes';
 
 class HomeScreen extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Magento React Native',
     headerBackTitle: ' ',
-  };
+    headerLeft: (
+      <MaterialHeaderButtons>
+        <Item title="menu" iconName="menu" onPress={navigation.getParam('toggleDrawer')} />
+      </MaterialHeaderButtons>
+    ),
+  });
 
   static propTypes = {
     slider: PropTypes.array,
@@ -33,9 +37,16 @@ class HomeScreen extends Component {
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
     if (this.props.slider.length === 0) {
       this.props.getHomeData();
     }
+    navigation.setParams({ toggleDrawer: this.toggleDrawer });
+  }
+
+  toggleDrawer = () => {
+    const { navigation } = this.props;
+    navigation.toggleDrawer();
   }
 
   onProductPress = product => {
@@ -47,10 +58,6 @@ class HomeScreen extends Component {
 
   onRefresh = () => {
     this.props.getHomeData(true);
-  };
-
-  allCategories = () => {
-    this.props.navigation.navigate(NAVIGATION_CATEGORY_TREE_PATH);
   };
 
   renderFeatured() {
@@ -79,11 +86,6 @@ class HomeScreen extends Component {
       >
         <HomeSlider slider={this.props.slider} />
         {this.renderFeatured()}
-        <View style={styles.button}>
-          <Button style={styles.buttonStyle} onPress={this.allCategories}>
-            All Categories
-          </Button>
-        </View>
       </ScrollView>
     );
   }
