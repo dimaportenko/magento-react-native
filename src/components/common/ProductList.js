@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { ProductListItem, Spinner } from './';
 import Sizes from '../../constants/Sizes';
+import { NAVIGATION_DRAWER_SCREEN, NAVIGATION_FILTER_DRAWER_SCREEN } from '../../navigation/routes';
 
 class ProductList extends Component {
   constructor(props) {
@@ -15,7 +16,7 @@ class ProductList extends Component {
 
     this.state = {
       gridColumnsValue: true,
-      defaultButtonView: 'md-grid'
+      defaultButtonView: 'md-grid',
     };
   }
 
@@ -31,7 +32,7 @@ class ProductList extends Component {
         defaultButtonView: 'md-grid'
       });
     }
-  }
+  };
 
   renderItemRow = (product) => {
     return (
@@ -42,7 +43,7 @@ class ProductList extends Component {
       onRowPress={this.props.onRowPress}
       />
     );
-  }
+  };
 
   renderItemColumn = (product) => {
     const {
@@ -63,11 +64,27 @@ class ProductList extends Component {
         onRowPress={this.props.onRowPress}
       />
     );
-  }
+  };
+
+  renderFilter = () => {
+    return (
+      <View style={{ flex: 1 }}>
+        <TouchableOpacity
+          style={styles.iconStyle}
+          onPress={() => this.props.navigation.toggleFilterDrawer()}
+        >
+          <View style={styles.iconWrapper}>
+            <Icon name='md-cog' type="ionicon" />
+          </View>
+        </TouchableOpacity>
+      </View>
+    );
+  };
 
   renderHeader = () => {
     return (
       <View style={{ alignItems: 'flex-end' }}>
+        {this.renderFilter()}
         <TouchableOpacity
           style={styles.iconStyle}
           onPress={this.changeGridValueFunction}

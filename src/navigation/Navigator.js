@@ -4,6 +4,7 @@ import {
   createSwitchNavigator,
   createBottomTabNavigator,
   createDrawerNavigator,
+  DrawerActions,
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -21,6 +22,8 @@ import HomeScreen from '../components/home/HomeScreen';
 import SearchScreen from '../components/search/SearchScreen';
 import OrdersScreen from '../components/account/OrdersScreen';
 import OrderScreen from '../components/account/OrderScreen';
+import DrawerScreen from '../components/catalog/DrawerScreen';
+
 
 import CartBadge from '../components/cart/CartBadge';
 
@@ -44,6 +47,9 @@ import {
   NAVIGATION_SEARCH_PRODUCT_PATH,
   NAVIGATION_ORDERS_PATH,
   NAVIGATION_ORDER_PATH,
+  NAVIGATION_DRAWER_SCREEN,
+  BOTTOM_TAB_NAVIGATOR,
+  NAVIGATION_FILTER_DRAWER_SCREEN
 } from './routes';
 
 const HomeStack = createStackNavigator(
@@ -139,11 +145,28 @@ const MainAppNavigator = createBottomTabNavigator(
   }
 );
 
+const Drawer = createDrawerNavigator({
+  [BOTTOM_TAB_NAVIGATOR]: {
+    screen: MainAppNavigator
+  },
+  [NAVIGATION_DRAWER_SCREEN]: {
+    screen: DrawerScreen,
+    navigationOptions: { header: null }
+  },
+}, {
+  contentComponent: CategoryTree,
+});
+
 export const Navigator = createDrawerNavigator(
   {
-    MainAppNavigator,
+    Drawer,
   },
   {
-    contentComponent: CategoryTree,
+    contentComponent: DrawerScreen,
+    getCustomActionCreators: (route, stateKey) => {
+      return {
+        toggleFilterDrawer: () => DrawerActions.toggleDrawer({ key: stateKey }),
+      };
+    },
   }
 );
