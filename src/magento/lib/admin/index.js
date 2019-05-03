@@ -176,6 +176,23 @@ export default magento => {
       });
     },
 
+    getFeaturedChildren: ({ page, pageSize = 10, filter }) => {
+      return new Promise((resolve, reject) => {
+        let path = '/V1/products?';
+        path += magento.makeParams({ page, pageSize, filter });
+        console.log('PATH:', path);
+        magento
+          .get(path, undefined, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
     getConfigurableChildren: (sku) => {
       return new Promise((resolve, reject) => {
         const path = `/V1/configurable-products/${sku}/children`;
