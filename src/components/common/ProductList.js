@@ -11,29 +11,6 @@ import Sizes from '../../constants/Sizes';
 import { NAVIGATION_DRAWER_SCREEN, NAVIGATION_FILTER_DRAWER_SCREEN } from '../../navigation/routes';
 
 class ProductList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      gridColumnsValue: true,
-      defaultButtonView: 'md-grid',
-    };
-  }
-
-  changeGridValueFunction = () => {
-    if (this.state.gridColumnsValue === true) {
-      this.setState({
-        gridColumnsValue: false,
-        defaultButtonView: 'md-list'
-      });
-    } else {
-      this.setState({
-        gridColumnsValue: true,
-        defaultButtonView: 'md-grid'
-      });
-    }
-  };
-
   renderItemRow = (product) => {
     return (
       <ProductListItem
@@ -85,14 +62,6 @@ class ProductList extends Component {
     return (
       <View style={{ alignItems: 'flex-end' }}>
         {this.renderFilter()}
-        <TouchableOpacity
-          style={styles.iconStyle}
-          onPress={this.changeGridValueFunction}
-        >
-          <View style={styles.iconWrapper}>
-            <Icon name={this.state.defaultButtonView} type="ionicon" />
-          </View>
-        </TouchableOpacity>
       </View>
     );
   }
@@ -106,8 +75,7 @@ class ProductList extends Component {
   }
 
   renderContent = () => {
-    const { products, onEndReached, refreshControl } = this.props;
-    const { gridColumnsValue } = this.state;
+    const { products, onEndReached, refreshControl, gridColumnsValue } = this.props;
 
     if (!this.props.products) {
       return <Spinner />;

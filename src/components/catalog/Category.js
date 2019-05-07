@@ -10,21 +10,31 @@ import {
   setCurrentProduct,
   updateProductsForCategoryOrChild,
 } from '../../actions';
+import HeaderIcon from './CategoryHeaderIcon';
 import { ProductList } from '../common/ProductList';
 import NavigationService from '../../navigation/NavigationService';
 import {
   NAVIGATION_HOME_PRODUCT_PATH
 } from '../../navigation/routes';
 
-
 class Category extends Component {
 	static navigationOptions = ({ navigation }) => ({
 		title: navigation.state.params.title.toUpperCase(),
-		headerBackTitle: ' '
+		headerBackTitle: ' ',
+		headerRight: (<HeaderIcon changeGridValueFunction={navigation.getParam('changeGridValueFunction')} />),
 	});
 
+	constructor(props) {
+		super(props);
+		this.state = {
+			gridColumnsValue: false,
+		};
+	}
+
 	componentDidMount() {
+		const { navigation } = this.props;
 		this.props.getProductsForCategoryOrChild(this.props.category);
+		navigation.setParams({ changeGridValueFunction: this.changeGridValueFunction });
 	}
 
   onRowPress = (product) => {
@@ -51,6 +61,10 @@ class Category extends Component {
 		}
 	};
 
+	changeGridValueFunction = () => {
+		this.setState({ gridColumnsValue: !this.state.gridColumnsValue });
+	};
+
 	render() {
 		return (
 			<View style={styles.containerStyle}>
@@ -65,7 +79,8 @@ class Category extends Component {
 					onEndReached={this.onEndReached}
 					canLoadMoreContent={this.props.canLoadMoreContent}
 					onRowPress={this.onRowPress}
-          navigation={this.props.navigation}
+					navigation={this.props.navigation}
+					gridColumnsValue={this.state.gridColumnsValue}
 				/>
 			</View>
 		);
