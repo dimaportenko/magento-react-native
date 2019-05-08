@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Icon } from 'react-native-elements';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   FlatList,
   Platform,
-  TouchableOpacity, Text
+  TouchableOpacity,
+  Text,
+  StyleSheet,
 } from 'react-native';
 import { ProductListItem, Spinner } from './';
 import Sizes from '../../constants/Sizes';
@@ -43,25 +45,24 @@ class ProductList extends Component {
     );
   };
 
-  renderFilter = () => {
-    return (
-      <View style={{ flex: 1 }}>
-        <TouchableOpacity
-          style={styles.iconStyle}
-          onPress={() => this.props.navigation.toggleFilterDrawer()}
-        >
-          <View style={styles.iconWrapper}>
-            <Icon name='md-cog' type="ionicon" />
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  };
-
   renderHeader = () => {
     return (
-      <View style={{ alignItems: 'flex-end' }}>
-        {this.renderFilter()}
+      <View style={styles.headerContainerStyle}>
+        <TouchableOpacity
+          style={styles.iconWrapper}
+          onPress={() => console.log('Show sort dialog')}
+        >
+          <Icon name='sort' size={24} color="#95989F" />
+          <Text style={styles.headerTextStyle}>Sort</Text>
+        </TouchableOpacity>
+        <View style={styles.separator} />
+        <TouchableOpacity
+          style={styles.iconWrapper}
+          onPress={() => this.props.navigation.toggleFilterDrawer()}
+        >
+          <Icon name='filter'size={24} color="#95989F" />
+          <Text style={styles.headerTextStyle}>Filter</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -115,7 +116,7 @@ class ProductList extends Component {
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   MainContainer: {
     justifyContent: 'center',
     flex: 1,
@@ -155,20 +156,36 @@ const styles = {
   imageStyle: {
     flex: 1
   },
-  iconStyle: {
-    height: 32,
-    width: 40,
-    margin: 5,
-    marginRight: 0
-  },
-  iconWrapper: {
-    marginTop: 5,
-    marginRight: 10
-  },
   columnContainerStyle: {
     flexDirection: 'column',
     borderBottomWidth: 0,
   },
-};
+  headerContainerStyle: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'stretch',
+    borderBottomWidth: 1,
+    borderBottomColor: '#D4D5D7',
+  },
+  iconWrapper: {
+    flex: 1,
+    height: 32,
+    margin: 8,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  headerTextStyle: {
+    color: '#545864',
+    textTransform: 'uppercase',
+    marginLeft: 4,
+  },
+  separator: {
+    width: 1,
+    backgroundColor: '#D4D5D7',
+    marginTop: 8,
+    marginBottom: 8
+  }
+});
 
 export { ProductList };
