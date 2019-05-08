@@ -10,7 +10,27 @@ import {
 } from 'react-native';
 import { ProductListItem, Spinner } from './';
 import Sizes from '../../constants/Sizes';
+import ModalSelector from 'react-native-modal-selector';
 import { NAVIGATION_DRAWER_SCREEN, NAVIGATION_FILTER_DRAWER_SCREEN } from '../../navigation/routes';
+
+const sortData = [
+  {
+    label: 'Name: A to Z',
+    key: 0
+  },
+  {
+    label: 'Name: Z to A',
+    key: 1
+  },
+  {
+    label: 'Price: high to low',
+    key: 2
+  },
+  {
+    label: 'Price: low to high',
+    key: 3
+  },
+];
 
 class ProductList extends Component {
   renderItemRow = (product) => {
@@ -48,13 +68,21 @@ class ProductList extends Component {
   renderHeader = () => {
     return (
       <View style={styles.headerContainerStyle}>
-        <TouchableOpacity
-          style={styles.iconWrapper}
-          onPress={() => console.log('Show sort dialog')}
-        >
-          <Icon name='sort' size={24} color="#95989F" />
-          <Text style={styles.headerTextStyle}>Sort</Text>
-        </TouchableOpacity>
+        <ModalSelector
+        style={styles.iconWrapper}
+          data={sortData}
+          ref={selector => { this.selector = selector; }}
+          customSelector={
+            <TouchableOpacity
+              style={styles.iconWrapper}
+              onPress={() => this.selector.open()}
+            >
+              <Icon name='sort' size={24} color="#95989F" />
+              <Text style={styles.headerTextStyle}>Sort</Text>
+            </TouchableOpacity>
+          }
+          onChange={(option) => console.log(`${option.label} (${option.key})`)}
+        />
         <View style={styles.separator} />
         <TouchableOpacity
           style={styles.iconWrapper}
