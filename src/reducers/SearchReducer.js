@@ -18,6 +18,7 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_RESET_SEARCH_PRODUCTS: 
       return {
         ...state,
+        searchInput: null,
         products: [],
         totalCount: null,
         loadingMore: null,

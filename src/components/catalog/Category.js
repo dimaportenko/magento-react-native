@@ -10,8 +10,7 @@ import {
   setCurrentProduct,
   updateProductsForCategoryOrChild,
 } from '../../actions';
-import HeaderIcon from './CategoryHeaderIcon';
-import { ProductList } from '../common/ProductList';
+import { ProductList, HeaderIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import {
   NAVIGATION_HOME_PRODUCT_PATH

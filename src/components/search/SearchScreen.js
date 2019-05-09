@@ -8,25 +8,33 @@ import {
   getSearchProducts,
   setCurrentProduct
 } from '../../actions';
-import { ProductList } from '../common/ProductList';
+import { ProductList, HeaderIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_SEARCH_PRODUCT_PATH } from '../../navigation/routes';
 
 class SearchScreen extends Component {
-  static navigationOptions = {
+  static navigationOptions = ({ navigation }) => ({
     title: 'Search',
-    headerBackTitle: ' '
-  };
+    headerBackTitle: ' ',
+    headerRight: (<HeaderIcon changeGridValueFunction={navigation.getParam('changeGridValueFunction')} />),
+  });
 
   constructor(props) {
     super(props);
     this.state = {
       input: '',
+      gridColumnsValue: true,
       sortOrder: null,
     };
     this.getSearchProducts = _.debounce(this.props.getSearchProducts, 1000);
   }
-  onRowPress = (productgetSearchProductsgetSearchProducts) => {
+
+  componentDidMount() {
+    const { navigation } = this.props;
+    navigation.setParams({ changeGridValueFunction: this.changeGridValueFunction });
+  }
+
+  onRowPress = (product) => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_SEARCH_PRODUCT_PATH, {
       title: product.name
@@ -56,7 +64,11 @@ class SearchScreen extends Component {
 		this.setState({ sortOrder }, () => {
       this.props.getSearchProducts(this.state.input, null, sortOrder);
     });
-	}
+  }
+
+  changeGridValueFunction = () => {
+		this.setState({ gridColumnsValue: !this.state.gridColumnsValue });
+	};
 
   renderContent = () => {
     return (
@@ -66,6 +78,7 @@ class SearchScreen extends Component {
         canLoadMoreContent={this.props.canLoadMoreContent}
         searchIndicator
         onRowPress={this.onRowPress}
+        gridColumnsValue={this.state.gridColumnsValue}
         performSort={this.performSort}
       />
     );

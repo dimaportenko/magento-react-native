@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { MaterialHeaderButtons, Item } from '../common';
+import { MaterialHeaderButtons, Item } from '.';
 
 const HeaderIcon = ({
 	changeGridValueFunction = () => {},
@@ -25,4 +25,4 @@ HeaderIcon.propTypes = {
     changeGridValueFunction: PropTypes.func,
 };
 
-export default HeaderIcon;
+export { HeaderIcon };
