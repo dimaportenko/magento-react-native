@@ -15,19 +15,19 @@ import { NAVIGATION_DRAWER_SCREEN, NAVIGATION_FILTER_DRAWER_SCREEN } from '../..
 
 const sortData = [
   {
-    label: 'Name: A to Z',
+    label: 'Name: a to z',
     key: 0
   },
   {
-    label: 'Name: Z to A',
+    label: 'Name: z to a',
     key: 1
   },
   {
-    label: 'Price: high to low',
+    label: 'Price: low to high',
     key: 2
   },
   {
-    label: 'Price: low to high',
+    label: 'Price: high to low',
     key: 3
   },
 ];
@@ -81,7 +81,7 @@ class ProductList extends Component {
               <Text style={styles.headerTextStyle}>Sort</Text>
             </TouchableOpacity>
           }
-          onChange={(option) => console.log(`${option.label} (${option.key})`)}
+          onChange={(option) => this.props.performSort(option.key)}
         />
         <View style={styles.separator} />
         <TouchableOpacity

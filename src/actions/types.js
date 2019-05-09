@@ -8,6 +8,7 @@ export const MAGENTO_GET_CATEGORY_PRODUCTS = 'magento_get_category_products';
 export const MAGENTO_GET_SEARCH_PRODUCTS = 'magento_get_search_products';
 export const MAGENTO_GET_FEATURED_PRODUCTS = 'magento_get_featured_products';
 export const MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS = 'magento_load_more_category_products';
+export const MAGENTO_RESET_CATEGORY_PRODUCTS = 'magento_reset_category_reducer';
 
 export const MAGENTO_UPDATE_CONF_PRODUCT = 'magento_update_conf_product';
 export const MAGENTO_UPDATE_FEATURED_CONF_PRODUCT = 'magento_update_featured_conf_product';

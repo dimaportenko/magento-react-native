@@ -28,6 +28,7 @@ class Category extends Component {
 		super(props);
 		this.state = {
 			gridColumnsValue: false,
+			sortOrder: null,
 		};
 	}
 
@@ -53,13 +54,20 @@ class Category extends Component {
 			canLoadMoreContent,
 			loadingMore,
 			products,
-			category
+			category,
+			totalCount
 		} = this.props;
-
+		const { sortOrder } = this.state;
+		console.log(loadingMore, totalCount, canLoadMoreContent);
 		if (!loadingMore && canLoadMoreContent) {
-			this.props.getProductsForCategoryOrChild(category, products.length);
+			this.props.getProductsForCategoryOrChild(category, products.length, sortOrder);
 		}
 	};
+
+	performSort = (sortOrder) => {
+		this.setState({ sortOrder });
+		this.props.getProductsForCategoryOrChild(this.props.category, null, sortOrder);
+	}
 
 	changeGridValueFunction = () => {
 		this.setState({ gridColumnsValue: !this.state.gridColumnsValue });
@@ -81,6 +89,7 @@ class Category extends Component {
 					onRowPress={this.onRowPress}
 					navigation={this.props.navigation}
 					gridColumnsValue={this.state.gridColumnsValue}
+					performSort={this.performSort}
 				/>
 			</View>
 		);
