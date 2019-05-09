@@ -27,7 +27,7 @@ class Category extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			gridColumnsValue: false,
+			gridColumnsValue: true,
 			sortOrder: null,
 		};
 	}
@@ -58,6 +58,7 @@ class Category extends Component {
 			totalCount
 		} = this.props;
 		const { sortOrder } = this.state;
+		console.log('On end reached called!')
 		console.log(loadingMore, totalCount, canLoadMoreContent);
 		if (!loadingMore && canLoadMoreContent) {
 			this.props.getProductsForCategoryOrChild(category, products.length, sortOrder);
@@ -65,8 +66,9 @@ class Category extends Component {
 	};
 
 	performSort = (sortOrder) => {
-		this.setState({ sortOrder });
-		this.props.getProductsForCategoryOrChild(this.props.category, null, sortOrder);
+		this.setState({ sortOrder }, () => {
+			this.props.getProductsForCategoryOrChild(this.props.category, null, sortOrder);
+		});
 	}
 
 	changeGridValueFunction = () => {

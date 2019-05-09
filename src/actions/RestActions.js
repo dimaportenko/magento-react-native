@@ -36,6 +36,7 @@ import {
   MAGENTO_GET_SEARCH_PRODUCTS,
   MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
   MAGENTO_LOAD_MORE_SEARCH_PRODUCTS,
+  MAGENTO_RESET_SEARCH_PRODUCTS,
   MAGENTO_STORE_CONFIG,
   MAGENTO_GET_ORDERS,
   MAGENTO_UPDATE_CATEGORY_PRODUCTS,
@@ -178,14 +179,19 @@ export const updateProductsForCategoryOrChild = (category, refreshing) => {
   };
 };
 
-export const getSearchProducts = (searchInput, offset) => {
+export const getSearchProducts = (searchInput, offset, sortOrder) => {
   return async dispatch => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: true });
     }
+
+    if (!offset && typeof sortOrder === 'number') {
+      dispatch({ type: MAGENTO_RESET_SEARCH_PRODUCTS });
+    }
+
     try {
       const data = await magento.admin
-        .getProductsWithAttribute('name', searchInput, 10, offset);
+        .getProductsWithAttribute('name', searchInput, 10, offset, sortOrder);
       dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload: { searchInput, data } });
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(

@@ -22,10 +22,11 @@ class SearchScreen extends Component {
     super(props);
     this.state = {
       input: '',
+      sortOrder: null,
     };
     this.getSearchProducts = _.debounce(this.props.getSearchProducts, 1000);
   }
-  onRowPress = (product) => {
+  onRowPress = (productgetSearchProductsgetSearchProducts) => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_SEARCH_PRODUCT_PATH, {
       title: product.name
@@ -38,9 +39,10 @@ class SearchScreen extends Component {
       loadingMore,
       products
     } = this.props;
+    const { sortOrder } = this.state;
 
     if (!loadingMore && canLoadMoreContent) {
-      this.props.getSearchProducts(this.state.input, products.length);
+      this.props.getSearchProducts(this.state.input, products.length, sortOrder);
     }
   };
 
@@ -50,6 +52,12 @@ class SearchScreen extends Component {
     });
   };
 
+  performSort = (sortOrder) => {
+		this.setState({ sortOrder }, () => {
+      this.props.getSearchProducts(this.state.input, null, sortOrder);
+    });
+	}
+
   renderContent = () => {
     return (
       <ProductList
@@ -58,6 +66,7 @@ class SearchScreen extends Component {
         canLoadMoreContent={this.props.canLoadMoreContent}
         searchIndicator
         onRowPress={this.onRowPress}
+        performSort={this.performSort}
       />
     );
   };

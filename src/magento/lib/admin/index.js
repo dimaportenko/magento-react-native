@@ -147,10 +147,6 @@ export default magento => {
       getForCategory(category);      
 
       if (typeof sortOrder === 'number') {
-        console.log('*************************')
-        console.log(sortOrder);
-        console.log(getSortFieldName(sortOrder))
-        console.log(getSortDirection(sortOrder))
         result['searchCriteria[sortOrders][0][field]'] = getSortFieldName(sortOrder);
         result['searchCriteria[sortOrders][0][direction]'] = getSortDirection(sortOrder);
       }

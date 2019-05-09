@@ -118,7 +118,7 @@ class ProductList extends Component {
           renderItem={gridColumnsValue ? this.renderItemRow : this.renderItemColumn}
           keyExtractor={(item, index) => index.toString()}
           onEndReached={onEndReached}
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={0.1}
           ListHeaderComponent={this.renderHeader}
           ListFooterComponent={this.renderFooter}
           numColumns={gridColumnsValue ? 1 : 2}

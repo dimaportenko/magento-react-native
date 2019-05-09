@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { MaterialHeaderButtons, Item } from '../common';
 
 const HeaderIcon = ({
-	changeGridValueFunction,
+	changeGridValueFunction = () => {},
 }) => {
     const GRID_LAYOUT_ICON = 'grid-on';
     const LIST_LAYOUT_ICON = 'list';
@@ -22,7 +22,7 @@ const HeaderIcon = ({
 };
 
 HeaderIcon.propTypes = {
-    changeGridValueFunction: PropTypes.func.isRequired,
+    changeGridValueFunction: PropTypes.func,
 };
 
 export default HeaderIcon;
