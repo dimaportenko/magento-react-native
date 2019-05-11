@@ -1,6 +1,7 @@
 import { getPriceFromChildren } from '../helper/product';
 import {
-	MAGENTO_CURRENT_CATEGORY,
+  MAGENTO_CURRENT_CATEGORY,
+  MAGENTO_RESET_CATEGORY_PRODUCTS,
 	MAGENTO_GET_CATEGORY_PRODUCTS,
 	MAGENTO_UPDATE_CONF_PRODUCT,
 	MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
@@ -21,6 +22,8 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case MAGENTO_CURRENT_CATEGORY:
       return { ...INITIAL_STATE, current: action.payload };
+    case MAGENTO_RESET_CATEGORY_PRODUCTS:
+      return { ...state, products: false, loadingMore: false, totalCount: false };
 		case MAGENTO_GET_CATEGORY_PRODUCTS: {
 			const products = state.products ? state.products : [];
       return {

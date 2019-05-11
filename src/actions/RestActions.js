@@ -10,6 +10,7 @@ import {
   MAGENTO_UPDATE_CONF_PRODUCT,
   MAGENTO_GET_CONF_OPTIONS,
   MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
+  MAGENTO_RESET_CATEGORY_PRODUCTS,
   MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
   MAGENTO_CURRENT_PRODUCT,
   MAGENTO_GET_PRODUCT_MEDIA,
@@ -35,6 +36,7 @@ import {
   MAGENTO_GET_SEARCH_PRODUCTS,
   MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
   MAGENTO_LOAD_MORE_SEARCH_PRODUCTS,
+  MAGENTO_RESET_SEARCH_PRODUCTS,
   MAGENTO_STORE_CONFIG,
   MAGENTO_GET_ORDERS,
   MAGENTO_UPDATE_CATEGORY_PRODUCTS,
@@ -137,15 +139,19 @@ export const getProductsForCategory = ({ id, offset }) => {
   };
 };
 
-export const getProductsForCategoryOrChild = (category, offset) => {
+export const getProductsForCategoryOrChild = (category, offset, sortOrder) => {
   return async dispatch => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
     }
 
+    if (!offset && typeof sortOrder === 'number') {
+      dispatch({ type: MAGENTO_RESET_CATEGORY_PRODUCTS });
+    }
+
     try {
       const payload = await magento.admin
-        .getSearchCreteriaForCategoryAndChild(category, 10, offset);
+        .getSearchCreteriaForCategoryAndChild(category, 10, offset, sortOrder);
       dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(payload.items, dispatch);
@@ -173,14 +179,19 @@ export const updateProductsForCategoryOrChild = (category, refreshing) => {
   };
 };
 
-export const getSearchProducts = (searchInput, offset) => {
+export const getSearchProducts = (searchInput, offset, sortOrder) => {
   return async dispatch => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: true });
     }
+
+    if (!offset && typeof sortOrder === 'number') {
+      dispatch({ type: MAGENTO_RESET_SEARCH_PRODUCTS });
+    }
+
     try {
       const data = await magento.admin
-        .getProductsWithAttribute('name', searchInput, 10, offset);
+        .getProductsWithAttribute('name', searchInput, 10, offset, sortOrder);
       dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload: { searchInput, data } });
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(
