@@ -396,6 +396,21 @@ export const getOrdersForCustomer = (customerId, refreshing) => {
 
     try {
       const data = await magento.admin.getOrderList(customerId);
+      const orders = data.items.map(order => {
+        const items = order.items;
+        const simpleItems = items.filter(i => i.product_type === 'simple');
+        const simpleItemsWithPriceAndName = simpleItems.map(simpleItem => {
+          if (simpleItem.parent_item) {
+            simpleItem.price = simpleItem.parent_item.price;
+            simpleItem.row_total = simpleItem.parent_item.row_total;
+            simpleItem.name = simpleItem.parent_item.name || simpleItem.name;
+          }
+          return simpleItem;
+        });
+        order.items = simpleItemsWithPriceAndName;
+        return order;
+      });
+      data.items = orders;
       dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
     } catch (error) {

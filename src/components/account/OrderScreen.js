@@ -30,7 +30,7 @@ class OrderScreen extends Component {
 		if (products[item.sku]) {
 			return getProductThumbnailFromAttribute(products[item.sku]);
 		}
-	}
+	};
 
   renderItem = (item) => {
     const { code, text, row, imageStyle, container } = styles;
@@ -56,25 +56,26 @@ class OrderScreen extends Component {
 
   render() {
     const { navigation } = this.props;
+    const { item } = navigation.state.params;
     const { text, container } = styles;
-    const currency = priceSignByCode(this.props.navigation.state.params.item.order_currency_code);
+    const currency = priceSignByCode(item.order_currency_code);
 
     return (
       <View style={[container, { backgroundColor: '#F5F5F5' }]}>
         <FlatList
-          data={navigation.state.params.item.items}
+          data={[...item.items]}
           renderItem={this.renderItem}
-          keyExtractor={(item, index) => index.toString()}
+          keyExtractor={(_item, index) => index.toString()}
         />
-        <Text style={text}>{`Status: ${this.props.navigation.state.params.item.status}`}</Text>
+        <Text style={text}>{`Status: ${item.status}`}</Text>
         <Text style={text}>
-          {`Subtotal: ${currency} ${this.props.navigation.state.params.item.subtotal}`}
+          {`Subtotal: ${currency} ${item.subtotal}`}
         </Text>
         <Text style={text}>
-          {`Shipping & Handling: ${currency} ${this.props.navigation.state.params.item.shipping_amount}`}
+          {`Shipping & Handling: ${currency} ${item.shipping_amount}`}
         </Text>
         <Text style={[text, { fontWeight: 'bold' }]}>
-          {`Grand Total: ${currency} ${this.props.navigation.state.params.item.total_due}`}
+          {`Grand Total: ${currency} ${item.total_due}`}
         </Text>
       </View>
     );
