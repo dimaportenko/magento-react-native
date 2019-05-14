@@ -39,6 +39,7 @@ import {
   MAGENTO_RESET_SEARCH_PRODUCTS,
   MAGENTO_STORE_CONFIG,
   MAGENTO_GET_ORDERS,
+  MAGENTO_ORDER_PRODUCT_DETAIL,
   MAGENTO_UPDATE_CATEGORY_PRODUCTS,
   MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS,
   MAGENTO_UPDATE_REFRESHING_HOME_DATA,
@@ -397,6 +398,24 @@ export const getOrdersForCustomer = (customerId, refreshing) => {
       const data = await magento.admin.getOrderList(customerId);
       dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+// Fetch product_data for product in OrderScreen
+export const orderProductDetail = (sku) => {
+  return async dispatch => {
+    try {
+      const product = await magento.admin.getProductBySku(sku);
+      dispatch({
+        type: MAGENTO_ORDER_PRODUCT_DETAIL,
+        payload: {
+          sku,
+          product
+        }
+      });
     } catch (error) {
       console.log(error);
     }
