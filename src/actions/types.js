@@ -8,6 +8,7 @@ export const MAGENTO_GET_CATEGORY_PRODUCTS = 'magento_get_category_products';
 export const MAGENTO_GET_SEARCH_PRODUCTS = 'magento_get_search_products';
 export const MAGENTO_GET_FEATURED_PRODUCTS = 'magento_get_featured_products';
 export const MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS = 'magento_load_more_category_products';
+export const MAGENTO_RESET_CATEGORY_PRODUCTS = 'magento_reset_category_reducer';
 
 export const MAGENTO_UPDATE_CONF_PRODUCT = 'magento_update_conf_product';
 export const MAGENTO_UPDATE_FEATURED_CONF_PRODUCT = 'magento_update_featured_conf_product';
@@ -55,12 +56,13 @@ export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';
 export const HOME_SCREEN_DATA = 'home_screen_data';
 export const MAGENTO_UPDATE_SEARCH_CONF_PRODUCT = 'magento_update_search_conf_product';
 export const MAGENTO_LOAD_MORE_SEARCH_PRODUCTS = 'magento_load_more_search_products';
+export const MAGENTO_RESET_SEARCH_PRODUCTS = 'magento_reset_search_products';
 
 export const MAGENTO_GET_ORDERS = 'magento_get_orders';
 export const MAGENTO_UPDATE_REFRESHING_ORDERS_DATA = 'magento_update_refreshing_orders_data';
+export const MAGENTO_ORDER_PRODUCT_DETAIL = 'magento_order_product_detail';
 export const MAGENTO_UPDATE_CATEGORY_PRODUCTS = 'magento_update_category_products';
 export const MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS = 'magento_update_refreshing_category_products';
 export const MAGENTO_UPDATE_REFRESHING_HOME_DATA = 'magento_update_refreshing_home_data';
 export const MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE = 'magento_update_refreshing_category_tree';
 export const MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT = 'magento_update_refreshing_cart_item_product';
-

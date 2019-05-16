@@ -26,6 +26,10 @@
 # Demo
 ![Demo](docs/gifs/demo.gif)
 
+## Alternative projects
+MageCart: Magento 2 React Native project - https://github.com/alexakasanjeev/magento_react_native
+
+
 ## You can contact me
 
 I open to any discussion. I have [Slack](https://join.slack.com/t/magento-react-native/shared_invite/enQtNjE3ODY0MDUxOTQyLWU4MzViODdmMTg0NTQ5MGVjYjM1ODI4ZTgxZDJhYzFlNjMyOTI2MmZiZDIxNDBmZDJjNTQ5MGIyYmY4NzMxMzE) workspace so ping me via email if you want to join. 
