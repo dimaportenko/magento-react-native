@@ -57,6 +57,7 @@ export const MAGENTO_UPDATE_SEARCH_CONF_PRODUCT = 'magento_update_search_conf_pr
 export const MAGENTO_LOAD_MORE_SEARCH_PRODUCTS = 'magento_load_more_search_products';
 
 export const MAGENTO_GET_ORDERS = 'magento_get_orders';
+export const MAGENTO_UPDATE_REFRESHING_ORDERS_DATA = 'magento_update_refreshing_orders_data';
 export const MAGENTO_UPDATE_CATEGORY_PRODUCTS = 'magento_update_category_products';
 export const MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS = 'magento_update_refreshing_category_products';
 export const MAGENTO_UPDATE_REFRESHING_HOME_DATA = 'magento_update_refreshing_home_data';

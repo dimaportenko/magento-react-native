@@ -1,7 +1,7 @@
 import {
   MAGENTO_CURRENT_CUSTOMER,
   MAGENTO_GET_ORDERS,
-  MAGENTO_UPDATE_REFRESHING_HOME_DATA
+  MAGENTO_UPDATE_REFRESHING_ORDERS_DATA
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -18,7 +18,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, customer: action.payload };
     case MAGENTO_GET_ORDERS:
       return { ...state, orderData: action.payload };
-    case MAGENTO_UPDATE_REFRESHING_HOME_DATA:
+    case MAGENTO_UPDATE_REFRESHING_ORDERS_DATA:
       return {
         ...state,
         refreshing: action.payload,
