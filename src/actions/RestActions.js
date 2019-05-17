@@ -47,6 +47,7 @@ import {
   MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
   MAGENTO_ERROR_MESSAGE_CART_ORDER,
   MAGENTO_GET_FILTERED_PRODUCTS,
+  MAGENTO_UPDATE_REFRESHING_ORDERS_DATA
 } from './types';
 
 export const initMagento = () => {
@@ -391,7 +392,7 @@ export const cartItemProduct = (sku) => {
 export const getOrdersForCustomer = (customerId, refreshing) => {
   return async dispatch => {
     if (refreshing) {
-      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: true });
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: true });
     }
 
     try {
@@ -412,7 +413,7 @@ export const getOrdersForCustomer = (customerId, refreshing) => {
       });
       data.items = orders;
       dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
-      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: false });
     } catch (error) {
       console.log(error);
     }
