@@ -17,3 +17,4 @@ export const NAVIGATION_AUTH_LOADING_SWITCH = 'navigation_auth_loading_switch';
 export const NAVIGATION_LOGIN_STACK_PATH = 'Login_Stack';
 export const NAVIGATION_ACCOUNT_STACK_PATH = 'Account_Stack';
 export const NAVIGATION_SEARCH_SCREEN_PATH = 'Search';
+export const NAVIGATION_ADDRESS_SCREEN_PATH = 'Address';

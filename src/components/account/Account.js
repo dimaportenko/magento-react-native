@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Button } from '../common';
 import { logout, currentCustomer } from '../../actions';
-import { NAVIGATION_ORDERS_PATH } from '../../navigation/routes';
+import { NAVIGATION_ORDERS_PATH, NAVIGATION_ADDRESS_SCREEN_PATH } from '../../navigation/routes';
 
 class Account extends Component {
   static navigationOptions = {
@@ -46,6 +46,11 @@ class Account extends Component {
     this.props.navigation.navigate(NAVIGATION_ORDERS_PATH);
   };
 
+  openAddAddress = () => {
+    this.props.navigation.navigate(NAVIGATION_ADDRESS_SCREEN_PATH);
+
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -55,6 +60,9 @@ class Account extends Component {
         </Button>
         <Button onPress={this.openOrders} style={styles.buttonMargin}>
           My Orders
+        </Button>
+        <Button onPress={this.openAddAddress} style={styles.buttonMargin}>
+          Add Address
         </Button>
       </View>
     );
