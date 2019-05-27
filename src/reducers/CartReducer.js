@@ -18,6 +18,7 @@ const INITIAL_STATE = {
 	cart: {},
 	products: {},
   refreshing: false,
+  removingItemId: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -37,7 +38,7 @@ export default (state = INITIAL_STATE, action) => {
 		case MAGENTO_GET_CART:
 			return { ...state, quote: action.payload };
     case MAGENTO_REMOVE_FROM_CART_LOADING:
-      return { ...state, addToCartLoading: action.payload };
+      return { ...state, removingItemId: action.payload };
     case MAGENTO_REMOVE_FROM_CART:
       return { ...state, errorMessage: action.payload.message };
     case MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT:

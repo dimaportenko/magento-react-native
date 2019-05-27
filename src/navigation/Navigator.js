@@ -2,7 +2,9 @@ import React from 'react';
 import {
   createStackNavigator,
   createSwitchNavigator,
-  createBottomTabNavigator
+  createBottomTabNavigator,
+  createDrawerNavigator,
+  DrawerActions,
 } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -21,6 +23,8 @@ import SearchScreen from '../components/search/SearchScreen';
 import OrdersScreen from '../components/account/OrdersScreen';
 import OrderScreen from '../components/account/OrderScreen';
 import AddressScreen from '../components/account/AddressScreen';
+import DrawerScreen from '../components/catalog/DrawerScreen';
+
 
 import CartBadge from '../components/cart/CartBadge';
 
@@ -45,12 +49,14 @@ import {
   NAVIGATION_ORDERS_PATH,
   NAVIGATION_ORDER_PATH,
   NAVIGATION_ADDRESS_SCREEN_PATH,
+  NAVIGATION_DRAWER_SCREEN,
+  BOTTOM_TAB_NAVIGATOR,
+  NAVIGATION_FILTER_DRAWER_SCREEN
 } from './routes';
 
 const HomeStack = createStackNavigator(
   {
     [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
-    [NAVIGATION_CATEGORY_TREE_PATH]: CategoryTree,
     [NAVIGATION_CATEGORY_PATH]: Category,
     [NAVIGATION_HOME_PRODUCT_PATH]: Product,
   },
@@ -99,7 +105,7 @@ const CartStack = createStackNavigator({
   [NAVIGATION_CHECKOUT_PATH]: Checkout,
 });
 
-export const Navigator = createBottomTabNavigator(
+const MainAppNavigator = createBottomTabNavigator(
   {
     [NAVIGATION_HOME_STACK_PATH]: {
       screen: HomeStack,
@@ -139,5 +145,31 @@ export const Navigator = createBottomTabNavigator(
     tabBarOptions: {
       showLabel: false
     }
+  }
+);
+
+const Drawer = createDrawerNavigator({
+  [BOTTOM_TAB_NAVIGATOR]: {
+    screen: MainAppNavigator
+  },
+  [NAVIGATION_DRAWER_SCREEN]: {
+    screen: DrawerScreen,
+    navigationOptions: { header: null }
+  },
+}, {
+  contentComponent: CategoryTree,
+});
+
+export const Navigator = createDrawerNavigator(
+  {
+    Drawer,
+  },
+  {
+    contentComponent: DrawerScreen,
+    getCustomActionCreators: (route, stateKey) => {
+      return {
+        toggleFilterDrawer: () => DrawerActions.toggleDrawer({ key: stateKey }),
+      };
+    },
   }
 );

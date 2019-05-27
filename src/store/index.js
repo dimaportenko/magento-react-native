@@ -37,11 +37,6 @@ const searchSubsetBlacklistFilter = createBlacklistFilter(
   ['loadingMore']
 );
 
-const checkoutSubsetBlacklistFilter = createBlacklistFilter(
-  'checkout',
-  []
-);
-
 const persistConfig = {
   key: 'root',
   transforms: [
@@ -51,7 +46,6 @@ const persistConfig = {
     cartSubsetBlacklistFilter,
     homeSubsetBlacklistFilter,
     searchSubsetBlacklistFilter,
-    checkoutSubsetBlacklistFilter,
   ],
   storage,
 };

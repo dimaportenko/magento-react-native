@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, SafeAreaView } from 'react-native';
 import CategoryTreeListItem from './CategoryTreeListItem';
 
 class CategoryTreeList extends Component {
@@ -9,12 +9,14 @@ class CategoryTreeList extends Component {
 
 	render() {
 		return (
+		  <SafeAreaView style={{ flex: 1 }}>
 				<FlatList
           refreshControl={this.props.refreshControl}
 					data={this.props.categories}
 					renderItem={this.renderItem}
 					keyExtractor={(item, index) => index.toString()}
 				/>
+      </SafeAreaView>
 		);
 	}
 }

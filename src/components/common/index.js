@@ -8,4 +8,5 @@ export * from './Confirm';
 export * from './ExpandButton';
 export * from './ModalSelect';
 export * from './ProductList';
+export * from './ProductListHeaderIcon';
 export * from './ProductListItem';

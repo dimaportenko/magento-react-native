@@ -28,7 +28,7 @@ class CartListItem extends Component {
   };
 
   performRemoveItem() {
-    this.props.removeFromCartLoading(true);
+    this.props.removeFromCartLoading(this.props.item.item_id);
 
     this.props.removeFromCart({
       cart: this.props.cart,
@@ -56,8 +56,10 @@ class CartListItem extends Component {
 						<Text style={textStyle}>Qty: {this.props.item.qty}</Text>
 					</View>
           <View style={styles.removeContainer}>
-            {this.props.cart.addToCartLoading ?
-              <Spinner />
+            {this.props.cart.removingItemId === this.props.item.item_id ?
+              <View style={styles.spinnerWrapper}>
+                <Spinner />
+              </View>
               :
               <TouchableOpacity
                 style={styles.iconStyle}
@@ -108,7 +110,11 @@ const styles = {
 	removeContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
+    minWidth: 50,
 	},
+  spinnerWrapper: {
+	  marginRight: 10,
+  },
 };
 
 const mapStateToProps = ({ cart }) => {

@@ -2,6 +2,7 @@ import {
   MAGENTO_GET_SEARCH_PRODUCTS,
   MAGENTO_LOAD_MORE_SEARCH_PRODUCTS,
   MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
+  MAGENTO_RESET_SEARCH_PRODUCTS
 } from '../actions/types';
 import { getPriceFromChildren } from '../helper/product';
 
@@ -14,6 +15,14 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case MAGENTO_RESET_SEARCH_PRODUCTS: 
+      return {
+        ...state,
+        searchInput: null,
+        products: [],
+        totalCount: null,
+        loadingMore: null,
+      };
     case MAGENTO_GET_SEARCH_PRODUCTS: {
       if (state.searchInput === action.payload.searchInput) {
         return {

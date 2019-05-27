@@ -5354,6 +5354,11 @@ react-native-modal-selector@^1.0.3:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-platform-touchable@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-platform-touchable/-/react-native-platform-touchable-1.1.1.tgz#fde4acc65eea585d28b164d0c3716a42129a68e4"
+  integrity sha1-/eSsxl7qWF0osWTQw3FqQhKaaOQ=
+
 react-native-ratings@^6.3.0:
   version "6.3.1"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-6.3.1.tgz#4e4bd87f376423dc62c933f570fc1932c78adaa4"
@@ -5477,6 +5482,13 @@ react-navigation-drawer@0.4.3:
   resolved "https://registry.yarnpkg.com/react-navigation-drawer/-/react-navigation-drawer-0.4.3.tgz#c04c94e2429b7e724801af05bd0a93a79cb27f71"
   dependencies:
     react-native-drawer-layout-polyfill "^1.3.2"
+
+react-navigation-header-buttons@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-navigation-header-buttons/-/react-navigation-header-buttons-2.2.0.tgz#41e2c94051a33907b3a3c31172c832aa17d21afc"
+  integrity sha512-Dv1GBcs6gxBVm6rVR81EdHlBYCmbmOJKiE5OoRRLLwKzalAMDbv68zQv7+TkgpqBDHXfhUB++KMuM7/8nXfM8w==
+  dependencies:
+    react-native-platform-touchable "^1.1.1"
 
 react-navigation-tabs@0.5.1:
   version "0.5.1"

@@ -5,5 +5,6 @@ const screenHeight = Dimensions.get('window').height;
 
 export default {
   WINDOW_WIDTH: screenWidth,
-  WINDOW_HEIGHT: screenHeight
+  WINDOW_HEIGHT: screenHeight,
+  HEADER_BUTTON_SIZE: 23,
 };

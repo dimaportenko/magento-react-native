@@ -10,6 +10,7 @@ import {
   MAGENTO_UPDATE_CONF_PRODUCT,
   MAGENTO_GET_CONF_OPTIONS,
   MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS,
+  MAGENTO_RESET_CATEGORY_PRODUCTS,
   MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
   MAGENTO_CURRENT_PRODUCT,
   MAGENTO_GET_PRODUCT_MEDIA,
@@ -35,8 +36,10 @@ import {
   MAGENTO_GET_SEARCH_PRODUCTS,
   MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
   MAGENTO_LOAD_MORE_SEARCH_PRODUCTS,
+  MAGENTO_RESET_SEARCH_PRODUCTS,
   MAGENTO_STORE_CONFIG,
   MAGENTO_GET_ORDERS,
+  MAGENTO_ORDER_PRODUCT_DETAIL,
   MAGENTO_UPDATE_CATEGORY_PRODUCTS,
   MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS,
   MAGENTO_UPDATE_REFRESHING_HOME_DATA,
@@ -44,6 +47,9 @@ import {
   MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
   MAGENTO_ADD_ACCOUNT_ADDRESS,
   RESET_ACCOUNT_ADDRESS_UI,
+  MAGENTO_ERROR_MESSAGE_CART_ORDER,
+  MAGENTO_GET_FILTERED_PRODUCTS,
+  MAGENTO_UPDATE_REFRESHING_ORDERS_DATA,
 } from './types';
 
 export const initMagento = () => {
@@ -141,15 +147,19 @@ export const getProductsForCategory = ({ id, offset }) => {
   };
 };
 
-export const getProductsForCategoryOrChild = (category, offset) => {
+export const getProductsForCategoryOrChild = (category, offset, sortOrder) => {
   return async dispatch => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
     }
 
+    if (!offset && typeof sortOrder === 'number') {
+      dispatch({ type: MAGENTO_RESET_CATEGORY_PRODUCTS });
+    }
+
     try {
       const payload = await magento.admin
-        .getSearchCreteriaForCategoryAndChild(category, 10, offset);
+        .getSearchCreteriaForCategoryAndChild(category, 10, offset, sortOrder);
       dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(payload.items, dispatch);
@@ -177,14 +187,19 @@ export const updateProductsForCategoryOrChild = (category, refreshing) => {
   };
 };
 
-export const getSearchProducts = (searchInput, offset) => {
+export const getSearchProducts = (searchInput, offset, sortOrder) => {
   return async dispatch => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: true });
     }
+
+    if (!offset && typeof sortOrder === 'number') {
+      dispatch({ type: MAGENTO_RESET_SEARCH_PRODUCTS });
+    }
+
     try {
       const data = await magento.admin
-        .getProductsWithAttribute('name', searchInput, 10, offset);
+        .getProductsWithAttribute('name', searchInput, 10, offset, sortOrder);
       dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload: { searchInput, data } });
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(
@@ -383,13 +398,46 @@ export const cartItemProduct = (sku) => {
 export const getOrdersForCustomer = (customerId, refreshing) => {
   return async dispatch => {
     if (refreshing) {
-      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: true });
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: true });
     }
 
     try {
       const data = await magento.admin.getOrderList(customerId);
+      const orders = data.items.map(order => {
+        const items = order.items;
+        const simpleItems = items.filter(i => i.product_type === 'simple');
+        const simpleItemsWithPriceAndName = simpleItems.map(simpleItem => {
+          if (simpleItem.parent_item) {
+            simpleItem.price = simpleItem.parent_item.price;
+            simpleItem.row_total = simpleItem.parent_item.row_total;
+            simpleItem.name = simpleItem.parent_item.name || simpleItem.name;
+          }
+          return simpleItem;
+        });
+        order.items = simpleItemsWithPriceAndName;
+        return order;
+      });
+      data.items = orders;
       dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
-      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: false });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
+// Fetch product_data for product in OrderScreen
+export const orderProductDetail = (sku) => {
+  return async dispatch => {
+    try {
+      const product = await magento.admin.getProductBySku(sku);
+      dispatch({
+        type: MAGENTO_ORDER_PRODUCT_DETAIL,
+        payload: {
+          sku,
+          product
+        }
+      });
     } catch (error) {
       console.log(error);
     }
@@ -514,7 +562,12 @@ export const placeGuestCartOrder = (cartId, payment) => {
       } else {
         data = await magento.guest.placeGuestCartOrder(cartId, payment);
       }
-      dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
+      if (!data.message) {
+        dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
+      } else {
+        const message = magento.getErrorMessageForResponce(data);
+        dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: message });
+      }
       dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
     } catch (error) {
       console.log(error);
@@ -539,6 +592,17 @@ export const removeFromCartLoading = isLoading => {
   return {
     type: MAGENTO_REMOVE_FROM_CART_LOADING,
     payload: isLoading,
+  };
+};
+
+export const getFilteredProducts = ({ page, pageSize, filter }) => {
+  return async dispatch => {
+    try {
+      const data = await magento.admin.getFeaturedChildren({ page, pageSize, filter });
+      dispatch({ type: MAGENTO_GET_FILTERED_PRODUCTS, payload: data });
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 

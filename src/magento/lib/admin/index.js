@@ -1,5 +1,32 @@
 import {ADMIN_TYPE, CUSTOMER_TYPE} from '../../types';
 
+
+const getSortFieldName = (sortOrder) => {
+  switch (sortOrder) {
+    case 0:
+    case 1:
+      return 'name';
+    case 2:
+    case 3:
+      return 'price';
+    default:
+      return '';
+  }
+};
+
+const getSortDirection = (sortOrder) => {
+  switch (sortOrder) {
+    case 0:
+    case 2:
+      return 'ASC';
+    case 1:
+    case 3:
+      return 'DESC';
+    default:
+      return '';
+  }
+};
+
 export default magento => {
   return {
     getStoreConfig: () => {
@@ -106,10 +133,17 @@ export default magento => {
       });
     },
 
-    getSearchCreteriaForCategoryAndChild: (category, pageSize = 10, offset = 1) => {
+    /**
+     * SortOrder can be
+     * 0 = Arrange products in ascending order based on their names
+     * 1 = Arrange products in descending order based on their names
+     * 2 = Arrange products in ascending order based on their prices
+     * 3 = Arrange products in descending order based on their prices
+     */
+    getSearchCreteriaForCategoryAndChild: (category, pageSize = 10, offset = 1, sortOrder) => {
       let level = 0;
       const currentPage = parseInt(offset / pageSize, 10) + 1;
-      let result = {
+      const result = {
         'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
         'searchCriteria[filterGroups][1][filters][0][value]': '4',
         'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
@@ -127,27 +161,34 @@ export default magento => {
         });
       };
 
-      getForCategory(category);
+      getForCategory(category);      
+
+      if (typeof sortOrder === 'number') {
+        result['searchCriteria[sortOrders][0][field]'] = getSortFieldName(sortOrder);
+        result['searchCriteria[sortOrders][0][direction]'] = getSortDirection(sortOrder);
+      }
 
       return magento.admin.getProductsWithSearchCritaria(result);
     },
 
-    getProducts: (categoryId, pageSize = 10, offset = 0) => {
+    getProducts: (categoryId, pageSize = 10, offset = 0, sortOrder) => {
       return magento.admin.getProductsWithAttribute(
         'category_id',
         categoryId,
         pageSize,
         offset,
+        sortOrder,
         'eq');
     },
 
-  getProductsWithAttribute: (
-  attributeCode,
-  attributeValue,
-  pageSize = 10,
-  offset = 0,
-  conditionType = 'like'
-  ) => {
+    getProductsWithAttribute: (
+    attributeCode,
+    attributeValue,
+    pageSize = 10,
+    offset = 0,
+    sortOrder,
+    conditionType = 'like'
+    ) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
       const currentAttributeValue = conditionType === 'eq' ? attributeValue : `%${attributeValue}%`;
       const params = {
@@ -160,6 +201,10 @@ export default magento => {
         'searchCriteria[pageSize]': pageSize,
         'searchCriteria[currentPage]': currentPage
       };
+      if (sortOrder) {
+        params['searchCriteria[sortOrders][0][field]'] = getSortFieldName(sortOrder);
+        params['searchCriteria[sortOrders][0][direction]'] = getSortDirection(sortOrder);
+      }
       return magento.admin.getProductsWithSearchCritaria(params);
     },
 
@@ -183,6 +228,23 @@ export default magento => {
         const path = `/V1/products/${sku}`;
 
         magento.get(path, undefined, undefined, ADMIN_TYPE)
+          .then(data => {
+            resolve(data);
+          })
+          .catch(e => {
+            console.log(e);
+            reject(e);
+          });
+      });
+    },
+
+    getFeaturedChildren: ({ page, pageSize = 10, filter }) => {
+      return new Promise((resolve, reject) => {
+        let path = '/V1/products?';
+        path += magento.makeParams({ page, pageSize, filter });
+        console.log('PATH:', path);
+        magento
+          .get(path, undefined, undefined, ADMIN_TYPE)
           .then(data => {
             resolve(data);
           })

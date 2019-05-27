@@ -12,7 +12,6 @@
 **React Native Project setup**
 * Go to repository dir
 * Run `npm install`
-* Then `react-native link react-native-vector-icons`
 * copy `src/config/magento-sample.js` to `src/config/magento.js`
 * set Magento base url to url param in `magento.js`
 * set Access Token from Integration you created to `access_token` param in `magento.js`
@@ -27,9 +26,13 @@
 # Demo
 ![Demo](docs/gifs/demo.gif)
 
+## Alternative projects
+MageCart: Magento 2 React Native project - https://github.com/alexakasanjeev/magento_react_native
+
+
 ## You can contact me
 
-I open to any discussion. I have [Slack](https://magento-react-native.slack.com/) workspace so ping me via email if you want to join. 
+I open to any discussion. I have [Slack](https://join.slack.com/t/magento-react-native/shared_invite/enQtNjE3ODY0MDUxOTQyLWU4MzViODdmMTg0NTQ5MGVjYjM1ODI4ZTgxZDJhYzFlNjMyOTI2MmZiZDIxNDBmZDJjNTQ5MGIyYmY4NzMxMzE) workspace so ping me via email if you want to join. 
 
 troublesohard@gmail.com
 
@@ -38,4 +41,4 @@ troublesohard@gmail.com
 [linkedin](https://www.linkedin.com/in/dmitry-portenko-712ab84a/)
 
 ## License
-[MIT License](LICENSE.md) Copyright (c) 2017-2018 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
+[MIT License](LICENSE.md) Copyright (c) 2017-2019 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).

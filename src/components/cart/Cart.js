@@ -55,13 +55,13 @@ class Cart extends Component {
     this.props.getCart(true);
   };
 
-  getCartItemProduct = (items, refreshing) => {
+  getCartItemProduct = (items) => {
     const { products } = this.props;
 
     items.forEach(item => {
       if (!item.thumbnail) {
         if (!products[item.sku]) {
-          this.props.cartItemProduct(item.sku, refreshing);
+          this.props.cartItemProduct(item.sku);
         }
       }
     });
@@ -135,7 +135,7 @@ class Cart extends Component {
                 onRefresh={this.onRefresh}
               />
             }
-            data={items}
+            data={[...items]}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
           />
@@ -201,7 +201,8 @@ const mapStateToProps = ({ cart }) => {
   return {
     cart: cart.quote,
     refreshing: cart.refreshing,
-    products };
+    products,
+  };
 };
 
 export default connect(mapStateToProps, { cartItemProduct, getCart })(Cart);
