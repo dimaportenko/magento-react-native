@@ -1,4 +1,4 @@
-import { ADMIN_TYPE } from '../../types';
+import {ADMIN_TYPE, CUSTOMER_TYPE} from '../../types';
 
 export default magento => {
   return {
@@ -16,6 +16,23 @@ export default magento => {
             console.log(e);
             reject(e);
           });
+      });
+    },
+
+    addAccountBillingAddress: (id, customer) => {
+      // POST /V1/carts/mine/billing-address
+      return new Promise((resolve, reject) => {
+        const path = `/V1/customers/${id}`;
+
+        magento
+            .put(path, customer, undefined, ADMIN_TYPE)
+            .then(data => {
+              resolve(data);
+            })
+            .catch(e => {
+              console.log(e);
+              reject(e);
+            });
       });
     },
 

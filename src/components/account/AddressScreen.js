@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
 import {
     View,
-    Text,
 } from 'react-native';
-import CheckoutCustomerAccount from "../checkout/CheckoutCustomerAccount";
+import AddAccountAddress from "./AddAccountAddress";
 
 class AddressScreen extends Component {
     static navigationOptions = () => ({
-        title: 'Add Address',
+        title: 'My Address',
         headerBackTitle: ' '
     });
 
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <CheckoutCustomerAccount />
+                <AddAccountAddress />
             </View>
         );
     }

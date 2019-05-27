@@ -62,7 +62,7 @@ class Account extends Component {
           My Orders
         </Button>
         <Button onPress={this.openAddAddress} style={styles.buttonMargin}>
-          Add Address
+          My Address
         </Button>
       </View>
     );
