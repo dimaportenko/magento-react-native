@@ -9,6 +9,7 @@ import {
 	MAGENTO_REMOVE_FROM_CART,
 	MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
 	MAGENTO_LOGOUT,
+	MAGENTO_CURRENT_PRODUCT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -32,6 +33,8 @@ export default (state = INITIAL_STATE, action) => {
 			const products = { ...state.products, [action.payload.sku]: action.payload };
 			return { ...state, products };
 		}
+		case MAGENTO_CURRENT_PRODUCT:
+			return { errorMessage: false };
 		case MAGENTO_LOGOUT:
 			return { ...INITIAL_STATE };
 		case MAGENTO_ADD_TO_CART:
