@@ -3,27 +3,27 @@ import { View, Text, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import {
   getCountries,
-  addGuestCartBillingAddress,
-  createCustomer,
-  updateCheckoutUI,
-  checkoutCustomerNextLoading,
+  addAccountAddress,
+  updateAccountAddressUI,
+  accountAddressNextLoading,
+  resetAccountAddressUI,
 } from '../../actions';
 import { CardSection, Input, Spinner, ModalSelect, Button } from '../common';
 import Sizes from '../../constants/Sizes';
 
 
-class CheckoutCustomerAccount extends Component {
+class AddAccountAddress extends Component {
   componentWillMount() {
     this.props.getCountries();
   }
 
   componentDidMount() {
     // Hardcode US
-    this.props.updateCheckoutUI('countryId', 'US');
+    this.props.updateAccountAddressUI('countryId', 'US');
     // Clear the error
-    this.props.updateCheckoutUI('error', false);
+    this.props.updateAccountAddressUI('error', false);
     // Clear loading
-    this.props.checkoutCustomerNextLoading(false);
+    this.props.accountAddressNextLoading(false);
 
     if (this.props.customer && this.props.customer.addresses && this.props.customer.addresses.length) {
       const address = this.props.customer.addresses[0];
@@ -34,9 +34,6 @@ class CheckoutCustomerAccount extends Component {
         regionId: regionData.region_id,
       };
       this.updateUI('region', region);
-      this.updateUI('firstname', address.firstname);
-      this.updateUI('lastname', address.lastname);
-      this.updateUI('email', this.props.customer.email);
       this.updateUI('street', address.street.length ? address.street[0] : '');
       this.updateUI('city', address.city);
       this.updateUI('postcode', address.postcode);
@@ -46,93 +43,52 @@ class CheckoutCustomerAccount extends Component {
 
   onNextPressed = () => {
     const {
-      email,
-      password,
       postcode,
       countryId,
-      firstname,
-      lastname,
-      telephone,
       city,
       street,
       region,
-      cartId,
+      customer,
+      telephone,
     } = this.props;
 
-    const customer = {
+    const data = {
       customer: {
-        email,
-        firstname,
-        lastname,
+        ...customer,
         addresses: [
           {
-            defaultShipping: true,
-            defaultBilling: true,
-            firstname,
-            lastname,
-            region,
-            postcode,
+            region: {
+              region: region.region,
+              region_id: region.regionId,
+              region_code: region.regionCode,
+            },
+            country_id: countryId,
             street: [street],
+            postcode,
             city,
-            telephone,
-            countryId,
-          },
-        ],
-      },
-      password,
+            // same_as_billing: 1,
+            firstname: customer.firstname,
+            lastname: customer.lastname,
+            telephone: telephone,
+          }
+        ]
+      }
     };
 
-    const address = {
-      address: {
-        // id: 0,
-        region: region.region,
-        region_id: region.regionId,
-        region_code: region.regionCode,
-        country_id: countryId,
-        street: [street],
-        // company: 'test',
-        telephone,
-        // fax: 'test',
-        postcode,
-        city,
-        firstname,
-        lastname,
-        // middlename: 'test',
-        // prefix: 'test',
-        // suffix: 'string',
-        // vat_id: 'string',
-        // customer_id: 0,
-        email,
-        same_as_billing: 1,
-        // customer_address_id: 0,
-        // save_in_address_book: 0,
-        // "extension_attributes": {
-        // 	"gift_registry_id": 0
-        // },
-        // "custom_attributes": [
-        // 	{
-        // 		"attribute_code": "string",
-        // 		"value": "string"
-        // 	}
-        // ]
-      },
-      useForShipping: true,
-    };
-
-    // this.props.createCustomer(customer);
-    this.props.checkoutCustomerNextLoading(true);
-    this.props.addGuestCartBillingAddress(cartId, address);
-  }
-
-  updateUI = (key, value) => {
-    this.props.updateCheckoutUI(key, value);
+    this.props.accountAddressNextLoading(true);
+    this.props.addAccountAddress(customer.id, data);
+    this.props.resetAccountAddressUI();
   };
 
-  countrySelect(attributeId, optionValue) {
-    this.props.updateCheckoutUI('countryId', optionValue);
-  }
+  updateUI = (key, value) => {
+    this.props.updateAccountAddressUI(key, value);
+  };
 
-  regionSelect(attributeId, selectedRegion) {
+  countrySelect = (attributeId, optionValue) => {
+    this.props.updateAccountAddressUI('countryId', optionValue);
+  };
+
+  regionSelect = (attributeId, selectedRegion) => {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
       const country = countries.find(item => {
@@ -148,9 +104,9 @@ class CheckoutCustomerAccount extends Component {
       };
       this.updateUI('region', region);
     }
-  }
+  };
 
-  renderButton() {
+  renderButton = () => {
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
@@ -160,13 +116,13 @@ class CheckoutCustomerAccount extends Component {
           onPress={this.onNextPressed}
           style={styles.buttonStyle}
         >
-          Next
+          Update
         </Button>
       </View>
     );
-  }
+  };
 
-  renderRegions() {
+  renderRegions = () => {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length && countries.length) {
       const country = countries.find(item => {
@@ -188,7 +144,7 @@ class CheckoutCustomerAccount extends Component {
             attribute="Region"
             value="Region"
             data={data}
-            onChange={this.regionSelect.bind(this)}
+            onChange={this.regionSelect}
           />
         );
       }
@@ -202,9 +158,9 @@ class CheckoutCustomerAccount extends Component {
         onChangeText={value => this.updateUI('region', value)}
       />
     );
-  }
+  };
 
-  renderCountries() {
+  renderCountries = () => {
     const { countries, countryId } = this.props;
 
     if (!countries || !countries.length) {
@@ -238,63 +194,14 @@ class CheckoutCustomerAccount extends Component {
         attribute="Country"
         value="Country"
         data={data}
-        onChange={this.countrySelect.bind(this)}
+        onChange={this.countrySelect}
       />
     );
-  }
-
-  renderUser() {
-    if (this.props.customer) {
-      return;
-    }
-
-    return (
-      <View>
-        <CardSection>
-          <Input
-            label="Email"
-            value={this.props.email}
-            placeholder="email@gmail.com"
-            onChangeText={value => this.updateUI('email', value)}
-          />
-        </CardSection>
-
-        <CardSection>
-          <Input
-            secureTextEntry
-            label="Password"
-            value={this.props.password}
-            placeholder="password"
-            onChangeText={value => this.updateUI('password', value)}
-          />
-        </CardSection>
-
-        <CardSection>
-          <Input
-            label="Firstname"
-            value={this.props.firstname}
-            placeholder="firstname"
-            onChangeText={value => this.updateUI('firstname', value)}
-          />
-        </CardSection>
-
-        <CardSection>
-          <Input
-            label="Lastname"
-            value={this.props.lastname}
-            placeholder="lastname"
-            onChangeText={value => this.updateUI('lastname', value)}
-          />
-        </CardSection>
-      </View>
-    );
-  }
+  };
 
   render() {
     return (
-      <View>
-        {this.renderUser()}
-
+      <View style={styles.containerStyle}>
         <CardSection>{this.renderCountries()}</CardSection>
 
         <CardSection>{this.renderRegions()}</CardSection>
@@ -337,13 +244,17 @@ class CheckoutCustomerAccount extends Component {
 
         <Text style={styles.errorTextStyle}>{this.props.error}</Text>
 
-        <CardSection>{this.renderButton()}</CardSection>
+        {this.renderButton()}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  containerStyle: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
   errorTextStyle: {
     color: 'red',
     fontSize: 20,
@@ -361,14 +272,11 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ checkout, cart, account, magento }) => {
-  const { countries } = magento;
-  const { cartId } = cart;
+const mapStateToProps = ({ account, magento }) => {
   const { customer } = account;
-
+  const { countries } = magento;
   return {
-    ...checkout.ui,
-    cartId,
+    ...account.ui,
     countries,
     customer,
   };
@@ -376,8 +284,8 @@ const mapStateToProps = ({ checkout, cart, account, magento }) => {
 
 export default connect(mapStateToProps, {
   getCountries,
-  updateCheckoutUI,
-  addGuestCartBillingAddress,
-  checkoutCreateCustomer: createCustomer,
-  checkoutCustomerNextLoading,
-})(CheckoutCustomerAccount);
+  updateAccountAddressUI,
+  addAccountAddress,
+  accountAddressNextLoading,
+  resetAccountAddressUI,
+})(AddAccountAddress);

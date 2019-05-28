@@ -45,9 +45,11 @@ import {
   MAGENTO_UPDATE_REFRESHING_HOME_DATA,
   MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE,
   MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
+  MAGENTO_ADD_ACCOUNT_ADDRESS,
+  RESET_ACCOUNT_ADDRESS_UI,
   MAGENTO_ERROR_MESSAGE_CART_ORDER,
   MAGENTO_GET_FILTERED_PRODUCTS,
-  MAGENTO_UPDATE_REFRESHING_ORDERS_DATA
+  MAGENTO_UPDATE_REFRESHING_ORDERS_DATA,
 } from './types';
 
 export const initMagento = () => {
@@ -122,6 +124,10 @@ export const getCategoryTree = (refreshing) => {
     }
   };
 };
+
+export const resetAccountAddressUI = () => ({
+  type: RESET_ACCOUNT_ADDRESS_UI,
+});
 
 export const getProductsForCategory = ({ id, offset }) => {
   return dispatch => {
@@ -436,6 +442,17 @@ export const orderProductDetail = (sku) => {
       console.log(error);
     }
   };
+};
+
+export const addAccountAddress = (id, customer) => {
+  return async dispatch => {
+    try {
+      const data = await magento.admin.updateCustomerData(id, customer);
+      dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS, payload: data });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };
 
 export const addGuestCartBillingAddress = (cartId, address) => {
