@@ -5,9 +5,10 @@ import {
 	MAGENTO_ADD_TO_CART_LOADING,
 	MAGENTO_GET_CART,
 	MAGENTO_CART_ITEM_PRODUCT,
-  MAGENTO_REMOVE_FROM_CART_LOADING,
-  MAGENTO_REMOVE_FROM_CART,
-  MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
+	MAGENTO_REMOVE_FROM_CART_LOADING,
+	MAGENTO_REMOVE_FROM_CART,
+	MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
+	MAGENTO_LOGOUT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -31,6 +32,8 @@ export default (state = INITIAL_STATE, action) => {
 			const products = { ...state.products, [action.payload.sku]: action.payload };
 			return { ...state, products };
 		}
+		case MAGENTO_LOGOUT:
+			return { ...INITIAL_STATE };
 		case MAGENTO_ADD_TO_CART:
 			return { ...state, addToCartLoading: false, errorMessage: action.payload.message };
 		case NAVIGATION_GO_TO_SCREEN:
