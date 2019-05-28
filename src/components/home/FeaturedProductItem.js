@@ -19,7 +19,7 @@ const FeaturedProductItem = props => {
           source={{ uri: getProductThumbnailFromAttribute(props) }}
         />
         <View style={styles.infoStyle}>
-          <Text style={styles.textStyle}>{props.name}</Text>
+          <Text style={styles.textStyle} ellipsizeMode="tail" numberOfLines={2}>{props.name}</Text>
           <Text style={styles.priceStyle}>
             {priceSignByCode(
               magento.storeConfig.default_display_currency_code
