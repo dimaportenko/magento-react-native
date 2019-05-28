@@ -1,4 +1,4 @@
-import { ADMIN_TYPE } from '../../types';
+import {ADMIN_TYPE} from '../../types';
 
 
 const getSortFieldName = (sortOrder) => {
@@ -43,6 +43,23 @@ export default magento => {
             console.log(e);
             reject(e);
           });
+      });
+    },
+
+    updateCustomerData: (id, customer) => {
+      // POST /V1/carts/mine/billing-address
+      return new Promise((resolve, reject) => {
+        const path = `/V1/customers/${id}`;
+
+        magento
+            .put(path, customer, undefined, ADMIN_TYPE)
+            .then(data => {
+              resolve(data);
+            })
+            .catch(e => {
+              console.log(e);
+              reject(e);
+            });
       });
     },
 
@@ -144,7 +161,7 @@ export default magento => {
         });
       };
 
-      getForCategory(category);      
+      getForCategory(category);
 
       if (typeof sortOrder === 'number') {
         result['searchCriteria[sortOrders][0][field]'] = getSortFieldName(sortOrder);
