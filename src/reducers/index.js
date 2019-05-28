@@ -9,6 +9,7 @@
  import CartReducer from './CartReducer';
  import HomeReducer from './HomeReducer';
  import SearchReducer from './SearchReducer';
+ import FilterReducer from './FilterReducer'
 
  export default combineReducers({
    categoryTree: CategoryTreeReducer,
@@ -21,4 +22,5 @@
    cart: CartReducer,
    home: HomeReducer,
    search: SearchReducer,
+   filters: FilterReducer,
  });

@@ -50,6 +50,8 @@ import {
   MAGENTO_ERROR_MESSAGE_CART_ORDER,
   MAGENTO_GET_FILTERED_PRODUCTS,
   MAGENTO_UPDATE_REFRESHING_ORDERS_DATA,
+  ADD_FILTER_DATA,
+  RESET_FILTERS_DATA,
 } from './types';
 
 export const initMagento = () => {
@@ -147,19 +149,28 @@ export const getProductsForCategory = ({ id, offset }) => {
   };
 };
 
-export const getProductsForCategoryOrChild = (category, offset, sortOrder) => {
+export const addFilterData = (filter) => ({
+  type: ADD_FILTER_DATA,
+  payload: filter,
+});
+
+export const resetFilters = () => ({
+  type: RESET_FILTERS_DATA,
+});
+
+export const getProductsForCategoryOrChild = (category, offset, sortOrder, filter) => {
   return async dispatch => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
     }
 
-    if (!offset && typeof sortOrder === 'number') {
+    if (!offset && (typeof sortOrder === 'number' || typeof filter !== 'undefined')) {
       dispatch({ type: MAGENTO_RESET_CATEGORY_PRODUCTS });
     }
 
     try {
       const payload = await magento.admin
-        .getSearchCreteriaForCategoryAndChild(category, 10, offset, sortOrder);
+        .getSearchCreteriaForCategoryAndChild(category, 10, offset, sortOrder, filter);
       dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(payload.items, dispatch);

@@ -6,9 +6,10 @@ import {
   RefreshControl,
 } from 'react-native';
 import {
-  getProductsForCategoryOrChild,
-  setCurrentProduct,
-  updateProductsForCategoryOrChild,
+	addFilterData,
+	getProductsForCategoryOrChild,
+	setCurrentProduct,
+	updateProductsForCategoryOrChild,
 } from '../../actions';
 import { ProductList, HeaderIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
@@ -27,7 +28,6 @@ class Category extends Component {
 		super(props);
 		this.state = {
 			gridColumnsValue: true,
-			sortOrder: null,
 		};
 	}
 
@@ -56,19 +56,18 @@ class Category extends Component {
 			category,
 			totalCount
 		} = this.props;
-		const { sortOrder } = this.state;
+		const { sortOrder, priceFilter } = this.props;
 		console.log('On end reached called!')
 		console.log(loadingMore, totalCount, canLoadMoreContent);
 		if (!loadingMore && canLoadMoreContent) {
-			this.props.getProductsForCategoryOrChild(category, products.length, sortOrder);
+			this.props.getProductsForCategoryOrChild(category, products.length, sortOrder, priceFilter);
 		}
 	};
 
-	performSort = (sortOrder) => {
-		this.setState({ sortOrder }, () => {
-			this.props.getProductsForCategoryOrChild(this.props.category, null, sortOrder);
-		});
-	}
+	performSortAndPrice = (sortOrder) => {
+		this.props.addFilterData(sortOrder);
+		this.props.getProductsForCategoryOrChild(this.props.category, null, sortOrder, this.props.priceFilter);
+	};
 
 	changeGridValueFunction = () => {
 		this.setState({ gridColumnsValue: !this.state.gridColumnsValue });
@@ -90,7 +89,8 @@ class Category extends Component {
 					onRowPress={this.onRowPress}
 					navigation={this.props.navigation}
 					gridColumnsValue={this.state.gridColumnsValue}
-					performSort={this.performSort}
+					performSortAndFilter={this.performSortAndFilter}
+					sortOrder={this.state.sortOrder}
 				/>
 			</View>
 		);
@@ -152,13 +152,15 @@ const styles = {
 const mapStateToProps = state => {
 	const { category } = state.category.current;
 	const { products, totalCount, loadingMore, refreshing } = state.category;
+	const { priceFilter, sortOrder } = state.filter;
 	const canLoadMoreContent = products.length < totalCount;
 
-	return { category, products, totalCount, canLoadMoreContent, loadingMore, refreshing };
+	return { category, products, totalCount, canLoadMoreContent, loadingMore, refreshing, priceFilter, sortOrder };
 };
 
 export default connect(mapStateToProps, {
   getProductsForCategoryOrChild,
   updateProductsForCategoryOrChild,
   setCurrentProduct,
+	addFilterData,
 })(Category);
