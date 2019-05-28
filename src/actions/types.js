@@ -51,8 +51,8 @@ export const UI_CHECKOUT_SHIPPING_SELECTED = 'ui_checkout_shipping_selected';
 export const UI_CHECKOUT_PAYMENT_SELECTED = 'ui_checkout_payment_selected';
 export const UI_CHECKOUT_CUSTOMER_NEXT_LOADING = 'ui_checkout_customer_next_loading';
 export const UI_CHECKOUT_UPDATE = 'ui_checkout_update';
-export const UI_ACCOUNT_ADDRESS_UPDATE = 'ui_account_address_update';
-export const UI_ACCOUNT_ADDRESS_NEXT_LOADING = 'ui_account_address_next_loading';
+export const UI_ACCOUNT_CUSTOMER_DATA_UPDATE = 'ui_account_customer_data_update';
+export const UI_ACCOUNT_CUSTOMER_DATA_LOADING = 'ui_account_customer_data_loading';
 export const RESET_ACCOUNT_ADDRESS_UI = 'reset_account_address_ui';
 
 export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';

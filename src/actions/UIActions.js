@@ -7,8 +7,8 @@ import {
 	UI_CHECKOUT_PAYMENT_SELECTED,
 	UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
   UI_CHECKOUT_UPDATE,
-	UI_ACCOUNT_ADDRESS_UPDATE,
-	UI_ACCOUNT_ADDRESS_NEXT_LOADING,
+	UI_ACCOUNT_CUSTOMER_DATA_UPDATE,
+	UI_ACCOUNT_CUSTOMER_DATA_LOADING,
 } from './types';
 
 export const updateProductQtyInput = qty => {
@@ -69,14 +69,14 @@ export const updateCheckoutUI = (key, value) => {
 
 export const updateAccountAddressUI = (key, value) => {
   return {
-    type: UI_ACCOUNT_ADDRESS_UPDATE,
+    type: UI_ACCOUNT_CUSTOMER_DATA_UPDATE,
     payload: { key, value }
   };
 };
 
 export const accountAddressNextLoading = (loading) => {
 	return {
-		type: UI_ACCOUNT_ADDRESS_NEXT_LOADING,
+		type: UI_ACCOUNT_CUSTOMER_DATA_LOADING,
 		payload: loading
 	};
 };

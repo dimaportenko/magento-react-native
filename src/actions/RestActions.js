@@ -447,7 +447,7 @@ export const orderProductDetail = (sku) => {
 export const addAccountAddress = (id, customer) => {
   return async dispatch => {
     try {
-      const data = await magento.admin.addAccountBillingAddress(id, customer);
+      const data = await magento.admin.updateCustomerData(id, customer);
       dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS, payload: data });
     } catch (error) {
       console.log(error);

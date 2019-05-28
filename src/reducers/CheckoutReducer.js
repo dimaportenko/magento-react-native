@@ -1,6 +1,5 @@
 import { REHYDRATE } from 'redux-persist/es/constants';
 import {
-	MAGENTO_GET_COUNTRIES,
   UI_CHECKOUT_UPDATE,
 	UI_CHECKOUT_ACTIVE_SECTION,
 	UI_CHECKOUT_PAYMENT_SELECTED,
@@ -59,9 +58,6 @@ export default (state = INITIAL_STATE, action) => {
 		case UI_CHECKOUT_UPDATE: {
 			const ui = { ...state.ui, [action.payload.key]: action.payload.value };
 			return { ...state, ui };
-		}
-		case MAGENTO_GET_COUNTRIES: {
-			return { ...state, countries: action.payload };
 		}
 		case UI_CHECKOUT_CUSTOMER_NEXT_LOADING: {
 			const ui = { ...state.ui, loading: action.payload };

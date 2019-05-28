@@ -361,8 +361,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const mapStateToProps = ({ checkout, cart, account }) => {
-  const { countries } = checkout;
+const mapStateToProps = ({ checkout, cart, account, magento }) => {
+  const { countries } = magento;
   const { cartId } = cart;
   const { customer } = account;
 

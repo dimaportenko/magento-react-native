@@ -48,7 +48,6 @@ class Account extends Component {
 
   openAddAddress = () => {
     this.props.navigation.navigate(NAVIGATION_ADDRESS_SCREEN_PATH);
-
   };
 
   render() {

@@ -1,4 +1,4 @@
-import {ADMIN_TYPE, CUSTOMER_TYPE} from '../../types';
+import {ADMIN_TYPE} from '../../types';
 
 
 const getSortFieldName = (sortOrder) => {
@@ -46,7 +46,7 @@ export default magento => {
       });
     },
 
-    addAccountBillingAddress: (id, customer) => {
+    updateCustomerData: (id, customer) => {
       // POST /V1/carts/mine/billing-address
       return new Promise((resolve, reject) => {
         const path = `/V1/customers/${id}`;
@@ -161,7 +161,7 @@ export default magento => {
         });
       };
 
-      getForCategory(category);      
+      getForCategory(category);
 
       if (typeof sortOrder === 'number') {
         result['searchCriteria[sortOrders][0][field]'] = getSortFieldName(sortOrder);

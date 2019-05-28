@@ -1,10 +1,13 @@
 import { REHYDRATE } from 'redux-persist/es/constants';
-import { MAGENTO_INIT, MAGENTO_STORE_CONFIG } from '../actions/types';
+import {
+  MAGENTO_GET_COUNTRIES, MAGENTO_INIT, MAGENTO_STORE_CONFIG,
+} from '../actions/types';
 import { magento } from '../magento';
 
 const INITIAL_STATE = {
   magento: null,
   storeConfig: null,
+  countries: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -24,8 +27,11 @@ export default (state = INITIAL_STATE, action) => {
       }
       return state;
     }
+    case MAGENTO_GET_COUNTRIES: {
+      return { ...state, countries: action.payload };
+    }
     case MAGENTO_INIT:
-      return { ...state, ...action.payload };
+      return { ...state, magento: action.payload };
     default:
       return state;
   }
