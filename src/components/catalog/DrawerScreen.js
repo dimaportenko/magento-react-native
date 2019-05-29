@@ -6,7 +6,9 @@ import {
   TextInput,
 } from 'react-native';
 import { Text } from 'react-native-elements';
-import { getFilteredProducts } from '../../actions';
+import {
+  getProductsForCategoryOrChild, addFilterData, getSearchProducts,
+} from '../../actions';
 import { Button } from '../common';
 
 
@@ -22,16 +24,19 @@ class DrawerScreen extends Component {
   };
 
   onApplyPressed = () => {
-    this.props.getFilteredProducts({
-      page: 1,
-      filter: {
-        category_id: this.props.categoryId,
-        price: {
-          condition: 'from,to',
-          value: `${this.state.minValue},${this.state.maxValue}`,
+    const priceFilter = {
+      price: {
+      condition: 'from,to',
+      value: `${this.state.minValue},${this.state.maxValue}`,
         }
-      }
-    });
+      };
+    this.props.addFilterData(priceFilter);
+    if (this.props.filters.categoryScreen) {
+      this.props.getProductsForCategoryOrChild(this.props.category, null, this.props.filters.sortOrder, priceFilter);
+      this.props.addFilterData({ categoryScreen: false });
+    } else {
+      this.props.getSearchProducts(this.props.searchInput, null, this.props.filters.sortOrder, priceFilter);
+    }
     this.props.navigation.closeDrawer();
   };
 
@@ -117,9 +122,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ category }) => {
-  const categoryId = category.current && category.current.category ? category.current.category.id : null;
-  return { categoryId };
+const mapStateToProps = ({ category, filters, search }) => {
+  const currentCategory  = category.current.category;
+  const { searchInput } = search;
+  return { category: currentCategory, filters, searchInput };
 };
 
-export default connect(mapStateToProps, { getFilteredProducts })(DrawerScreen);
+export default connect(mapStateToProps, {
+  getProductsForCategoryOrChild, addFilterData, getSearchProducts,
+})(DrawerScreen);

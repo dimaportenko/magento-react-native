@@ -70,3 +70,6 @@ export const MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS = 'magento_update_refre
 export const MAGENTO_UPDATE_REFRESHING_HOME_DATA = 'magento_update_refreshing_home_data';
 export const MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE = 'magento_update_refreshing_category_tree';
 export const MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT = 'magento_update_refreshing_cart_item_product';
+
+export const ADD_FILTER_DATA = 'add_filter_data';
+export const RESET_FILTERS_DATA = 'reset_filters_data';

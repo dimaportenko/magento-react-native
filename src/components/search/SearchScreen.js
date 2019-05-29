@@ -6,6 +6,8 @@ import _ from 'lodash';
 import Sizes from '../../constants/Sizes';
 import {
   getSearchProducts,
+  addFilterData,
+  resetFilters,
   setCurrentProduct
 } from '../../actions';
 import { ProductList, HeaderIcon } from '../common';
@@ -24,7 +26,6 @@ class SearchScreen extends Component {
     this.state = {
       input: '',
       gridColumnsValue: true,
-      sortOrder: null,
     };
     this.getSearchProducts = _.debounce(this.props.getSearchProducts, 1000);
   }
@@ -47,24 +48,24 @@ class SearchScreen extends Component {
       loadingMore,
       products
     } = this.props;
-    const { sortOrder } = this.state;
+    const { sortOrder, priceFilter } = this.props;
 
     if (!loadingMore && canLoadMoreContent) {
-      this.props.getSearchProducts(this.state.input, products.length, sortOrder);
+      this.props.getSearchProducts(this.state.input, products.length, sortOrder, priceFilter);
     }
   };
 
   updateSearch = input => {
     this.setState({ input }, () => {
-      this.getSearchProducts(input);
+      this.props.resetFilters();
+      this.getSearchProducts(input, null, this.props.sortOrder, this.props.priceFilter);
     });
   };
 
   performSort = (sortOrder) => {
-		this.setState({ sortOrder }, () => {
-      this.props.getSearchProducts(this.state.input, null, sortOrder);
-    });
-  }
+    this.props.addFilterData(sortOrder);
+    this.props.getSearchProducts(this.state.input, null, sortOrder, this.props.priceFilter);
+  };
 
   changeGridValueFunction = () => {
 		this.setState({ gridColumnsValue: !this.state.gridColumnsValue });
@@ -74,6 +75,7 @@ class SearchScreen extends Component {
     return (
       <ProductList
         products={this.props.products}
+        navigation={this.props.navigation}
         onEndReached={this.onEndReached}
         canLoadMoreContent={this.props.canLoadMoreContent}
         searchIndicator
@@ -138,15 +140,18 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ search }) => {
+const mapStateToProps = ({ search, filters }) => {
+  const { sortOrder, priceFilter } = filters;
   const { products, totalCount, loadingMore } = search;
   const canLoadMoreContent = products.length < totalCount;
 
-  return { products, totalCount, canLoadMoreContent, loadingMore };
+  return { products, totalCount, canLoadMoreContent, loadingMore, sortOrder, priceFilter };
 };
 
 
 export default connect(mapStateToProps, {
   getSearchProducts,
-  setCurrentProduct
+  setCurrentProduct,
+  resetFilters,
+  addFilterData,
 })(SearchScreen);

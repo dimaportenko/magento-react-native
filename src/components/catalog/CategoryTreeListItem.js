@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Text, View, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
 import CategoryTreeList from './CategoryTreeList';
-import { setCurrentCategory } from '../../actions/index';
+import { setCurrentCategory, resetFilters } from '../../actions/index';
 import { NAVIGATION_CATEGORY_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 
@@ -27,6 +27,7 @@ class CategoryTreeListItem extends Component {
 
   onRowPress() {
     const { category } = this.props;
+    this.props.resetFilters();
     this.props.setCurrentCategory({ category });
     NavigationService.navigate(NAVIGATION_CATEGORY_PATH, {
       title: category.name
@@ -112,4 +113,4 @@ const styles = {
   }
 };
 
-export default connect(null, { setCurrentCategory })(CategoryTreeListItem);
+export default connect(null, { setCurrentCategory, resetFilters })(CategoryTreeListItem);
