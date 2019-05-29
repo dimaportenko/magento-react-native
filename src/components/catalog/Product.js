@@ -259,7 +259,6 @@ class Product extends Component {
 						{priceSignByCode(magento.storeConfig.default_display_currency_code)}
 						{this.renderPrice()}
 					</Text>
-					{this.renderDescription()}
 					<Text style={styles.textStyle}>Qty</Text>
 					<TextInput
 							autoCorrect={false}
@@ -271,6 +270,7 @@ class Product extends Component {
 					{this.renderOptions()}
 					{this.renderAddToCartButton()}
 					<Text style={styles.errorStyle}>{this.props.cart.errorMessage}</Text>
+					{this.renderDescription()}
 				</ScrollView>
 		);
 	}
