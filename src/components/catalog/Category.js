@@ -32,6 +32,7 @@ class Category extends Component {
 	}
 
 	componentDidMount() {
+		this.props.addFilterData({ categoryScreen: true });
 		const { navigation } = this.props;
 		this.props.getProductsForCategoryOrChild(this.props.category);
 		navigation.setParams({ changeGridValueFunction: this.changeGridValueFunction });
@@ -64,7 +65,7 @@ class Category extends Component {
 		}
 	};
 
-	performSortAndPrice = (sortOrder) => {
+	performSort = (sortOrder) => {
 		this.props.addFilterData(sortOrder);
 		this.props.getProductsForCategoryOrChild(this.props.category, null, sortOrder, this.props.priceFilter);
 	};
@@ -89,7 +90,7 @@ class Category extends Component {
 					onRowPress={this.onRowPress}
 					navigation={this.props.navigation}
 					gridColumnsValue={this.state.gridColumnsValue}
-					performSortAndFilter={this.performSortAndFilter}
+					performSort={this.performSort}
 					sortOrder={this.state.sortOrder}
 				/>
 			</View>
@@ -152,7 +153,7 @@ const styles = {
 const mapStateToProps = state => {
 	const { category } = state.category.current;
 	const { products, totalCount, loadingMore, refreshing } = state.category;
-	const { priceFilter, sortOrder } = state.filter;
+	const { priceFilter, sortOrder } = state.filters;
 	const canLoadMoreContent = products.length < totalCount;
 
 	return { category, products, totalCount, canLoadMoreContent, loadingMore, refreshing, priceFilter, sortOrder };

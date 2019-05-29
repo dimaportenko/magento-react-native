@@ -6,7 +6,9 @@ import {
   TextInput,
 } from 'react-native';
 import { Text } from 'react-native-elements';
-import { getProductsForCategoryOrChild, addFilterData } from '../../actions';
+import {
+  getProductsForCategoryOrChild, addFilterData, getSearchProducts,
+} from '../../actions';
 import { Button } from '../common';
 
 
@@ -29,7 +31,12 @@ class DrawerScreen extends Component {
         }
       };
     this.props.addFilterData(priceFilter);
-    this.props.getProductsForCategoryOrChild(this.props.category, null, this.props.filter.sortOrder, priceFilter);
+    if (this.props.filters.categoryScreen) {
+      this.props.getProductsForCategoryOrChild(this.props.category, null, this.props.filters.sortOrder, priceFilter);
+      this.props.addFilterData({ categoryScreen: false });
+    } else {
+      this.props.getSearchProducts(this.props.searchInput, null, this.props.filters.sortOrder, priceFilter);
+    }
     this.props.navigation.closeDrawer();
   };
 
@@ -115,9 +122,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ category, filter }) => {
+const mapStateToProps = ({ category, filters, search }) => {
   const currentCategory  = category.current.category;
-  return { category: currentCategory, filter };
+  const { searchInput } = search;
+  return { category: currentCategory, filters, searchInput };
 };
 
-export default connect(mapStateToProps, { getProductsForCategoryOrChild, addFilterData })(DrawerScreen);
+export default connect(mapStateToProps, {
+  getProductsForCategoryOrChild, addFilterData, getSearchProducts,
+})(DrawerScreen);

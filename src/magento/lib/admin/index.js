@@ -196,13 +196,14 @@ export default magento => {
       return magento.admin.getProductsWithSearchCritaria(result);
     },
 
-    getProducts: (categoryId, pageSize = 10, offset = 0, sortOrder) => {
+    getProducts: (categoryId, pageSize = 10, offset = 0, sortOrder, filter) => {
       return magento.admin.getProductsWithAttribute(
         'category_id',
         categoryId,
         pageSize,
         offset,
         sortOrder,
+        filter,
         'eq');
     },
 
@@ -212,6 +213,7 @@ export default magento => {
     pageSize = 10,
     offset = 0,
     sortOrder,
+    filter,
     conditionType = 'like'
     ) => {
       const currentPage = parseInt(offset / pageSize, 10) + 1;
@@ -226,10 +228,33 @@ export default magento => {
         'searchCriteria[pageSize]': pageSize,
         'searchCriteria[currentPage]': currentPage
       };
-      if (sortOrder) {
+      if (typeof sortOrder === 'number') {
         params['searchCriteria[sortOrders][0][field]'] = getSortFieldName(sortOrder);
         params['searchCriteria[sortOrders][0][direction]'] = getSortDirection(sortOrder);
       }
+      if (typeof filter !== 'undefined') {
+        Object.keys(filter)
+          .forEach((key) => {
+            let value = filter[key];
+            let condition = null;
+            // let subQuery = '';
+            if (typeof value === 'object') {
+              condition = value.condition;
+              value = value.value;
+              if (condition.includes('from')) {
+                const conditions = condition.split(',');
+                const values = value.split(',');
+                params[`searchCriteria[filterGroups][2][filters][0][field]`]= key;
+                params[`searchCriteria[filterGroups][2][filters][0][value]`] = values[0];
+                params[`searchCriteria[filterGroups][2][filters][0][condition_type]`] = conditions[0];
+                params[`searchCriteria[filterGroups][3][filters][0][field]`] = key;
+                params[`searchCriteria[filterGroups][3][filters][0][value]`] = values[1];
+                params[`searchCriteria[filterGroups][3][filters][0][condition_type]`] = conditions[1];
+              }
+            }
+          });
+      }
+
       return magento.admin.getProductsWithSearchCritaria(params);
     },
 

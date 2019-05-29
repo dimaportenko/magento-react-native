@@ -81,7 +81,7 @@ class ProductList extends Component {
               <Text style={styles.headerTextStyle}>Sort</Text>
             </TouchableOpacity>
           }
-          onChange={(option) => this.props.performSortAndPrice(option.key)}
+          onChange={(option) => this.props.performSort(option.key)}
         />
         <View style={styles.separator} />
         <TouchableOpacity

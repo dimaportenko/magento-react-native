@@ -149,9 +149,9 @@ export const getProductsForCategory = ({ id, offset }) => {
   };
 };
 
-export const addFilterData = (filter) => ({
+export const addFilterData = (data) => ({
   type: ADD_FILTER_DATA,
-  payload: filter,
+  payload: data,
 });
 
 export const resetFilters = () => ({
@@ -198,19 +198,19 @@ export const updateProductsForCategoryOrChild = (category, refreshing) => {
   };
 };
 
-export const getSearchProducts = (searchInput, offset, sortOrder) => {
+export const getSearchProducts = (searchInput, offset, sortOrder, filter) => {
   return async dispatch => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: true });
     }
 
-    if (!offset && typeof sortOrder === 'number') {
+    if (!offset && (typeof sortOrder === 'number' || typeof filter !== 'undefined')) {
       dispatch({ type: MAGENTO_RESET_SEARCH_PRODUCTS });
     }
 
     try {
       const data = await magento.admin
-        .getProductsWithAttribute('name', searchInput, 10, offset, sortOrder);
+        .getProductsWithAttribute('name', searchInput, 10, offset, sortOrder, filter);
       dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload: { searchInput, data } });
       dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: false });
       updateConfigurableProductsPrices(
