@@ -7,7 +7,8 @@
 * Fill Name filed and password
 * API > Resource Access select all (in production you can select only resources you really need)
 * Save
-* Acitvate your Integration
+* Acitvate your Integration  
+More details in docs https://devdocs.magento.com/guides/v2.3/get-started/authentication/gs-authentication-token.html
 
 **React Native Project setup**
 * Go to repository dir
