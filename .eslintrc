@@ -6,6 +6,8 @@
   ],
   "rules": {
     "react/require-extension": 0,
+    "react/sort-comp": 0,
+    "eslint-disable-next-line": 0,
     "arrow-body-style": 0
   },
   "globals": {

@@ -10,7 +10,7 @@ import { removeFromCartLoading, removeFromCart } from '../../actions';
 class CartListItem extends Component {
 	image() {
 		const { products, item } = this.props;
-		if (products[item.sku]) {
+		if (products && products[item.sku]) {
 			return getProductThumbnailFromAttribute(products[item.sku]);
 		}
 	}

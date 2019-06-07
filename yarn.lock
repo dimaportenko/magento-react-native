@@ -5388,9 +5388,9 @@ react-native-status-bar-height@^2.2.0:
   resolved "https://registry.yarnpkg.com/react-native-status-bar-height/-/react-native-status-bar-height-2.2.0.tgz#3bd51de134660efc5f5ad136ca573c7d5790f7ed"
   integrity sha512-4WJpyZirzeMHyZiyNEy4LnSPOtuLRVy3+28Rhz7ffrjCVcc5RFcC0HVjFnkwfuhcTyXIDtzPG6canJkXzbTtBA==
 
-react-native-swiper@^1.5.12:
+"react-native-swiper@github:troublediehard/react-native-swiper":
   version "1.5.13"
-  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.5.13.tgz#fa695cd4ab77b9a9df2d2bfee38ea7274dd07a2e"
+  resolved "https://codeload.github.com/troublediehard/react-native-swiper/tar.gz/ff0e11d878afc5f25192d4fd8f2774e553ff0ce3"
   dependencies:
     prop-types "^15.5.10"
 

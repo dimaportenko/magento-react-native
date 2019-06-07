@@ -25,7 +25,7 @@ class Product extends Component {
 
 	state = {
 		selectedProduct: null
-	}
+	};
 
 	componentDidMount() {
 		const { product, medias } = this.props;
@@ -245,7 +245,6 @@ class Product extends Component {
 		}
 		return (
 			<ProductMedia media={medias[product.sku]} />
-
 		);
 	}
 
@@ -306,7 +305,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
   buttonStyle: {
-	  marginTop: 10,
+		marginTop: 10,
     width: Sizes.WINDOW_WIDTH * 0.9
   }
 });

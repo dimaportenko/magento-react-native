@@ -168,7 +168,7 @@ class CheckoutCustomerAccount extends Component {
 
   renderRegions() {
     const { countryId, countries } = this.props;
-    if (countryId && countryId.length && countries.length) {
+    if (countryId && countryId.length && countries && countries.length) {
       const country = countries.find(item => {
         return item.id === countryId;
       });

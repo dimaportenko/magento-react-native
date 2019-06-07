@@ -20,6 +20,9 @@ export default (state = INITIAL_STATE, action) => {
 		case MAGENTO_CURRENT_PRODUCT:
 			return { ...state, selectedOptions: {}, current: action.payload };
 		case MAGENTO_GET_PRODUCT_MEDIA: {
+			if (!action.payload.media || !action.payload.media.length) {
+				return state;
+			}
 			const medias = state.current && state.current.medias ? state.current.media : {};
 			const current = {
 				...state.current,
