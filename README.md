@@ -1,11 +1,6 @@
 # Open source React Native mobile app for Magento 2
 <img src="https://github.com/troublediehard/magento-react-native/blob/master/android/app/src/main/ic_launcher-web.png" alt="Logo" width="250px"/>
 
-```diff
-+ If you are Magento store owner and you want free mobile app for it. 
-+ Drop me a line I have a proposition for you. You can find my contacts below.
-```
-
 # Setup
 Follow detailed [setup guide](https://github.com/troublediehard/magento-react-native/wiki/Setup)
 
