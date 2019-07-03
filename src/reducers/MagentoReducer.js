@@ -1,6 +1,6 @@
 import { REHYDRATE } from 'redux-persist/es/constants';
 import {
-  MAGENTO_GET_COUNTRIES, MAGENTO_INIT, MAGENTO_STORE_CONFIG,
+  MAGENTO_GET_COUNTRIES, MAGENTO_INIT, MAGENTO_INIT_ERROR, MAGENTO_STORE_CONFIG,
 } from '../actions/types';
 import { magento } from '../magento';
 
@@ -32,6 +32,8 @@ export default (state = INITIAL_STATE, action) => {
     }
     case MAGENTO_INIT:
       return { ...state, magento: action.payload };
+    case MAGENTO_INIT_ERROR:
+      return { ...state, errorMessage: action.payload.errorMessage };
     default:
       return state;
   }
