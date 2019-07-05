@@ -1,0 +1,23 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "troublediehard",
+      "name": "Dmytro Portenko",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6594232?v=4",
+      "profile": "https://github.com/troublediehard",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "magento-react-native",
+  "projectOwner": "troublediehard",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
