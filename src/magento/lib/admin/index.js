@@ -29,108 +29,28 @@ const getSortDirection = (sortOrder) => {
 
 export default magento => {
   return {
-    getStoreConfig: () => {
-      return new Promise((resolve, reject) => {
-        const path = '/V1/store/storeConfigs';
+    getStoreConfig: () => magento.get('/V1/store/storeConfigs', undefined, undefined, ADMIN_TYPE),
 
-        magento
-          .get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-            magento.setStoreConfig(data[0]);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    updateCustomerData: (id, customer) => magento.put(`/V1/customers/${id}`, customer, undefined, ADMIN_TYPE),
 
-    updateCustomerData: (id, customer) => {
-      // POST /V1/carts/mine/billing-address
-      return new Promise((resolve, reject) => {
-        const path = `/V1/customers/${id}`;
+    getCategoriesTree: () => magento.get('/V1/categories', undefined, undefined, ADMIN_TYPE),
 
-        magento
-            .put(path, customer, undefined, ADMIN_TYPE)
-            .then(data => {
-              resolve(data);
-            })
-            .catch(e => {
-              console.log(e);
-              reject(e);
-            });
-      });
-    },
+    getCategory: id => magento.get(`/V1/categories/${id}`, undefined, undefined, ADMIN_TYPE),
 
-    getCategoriesTree: () => {
-      return new Promise((resolve, reject) => {
-        const path = '/V1/categories';
-        magento
-          .get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getCategory: id => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/categories/${id}`;
-        magento
-          .get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getCategoryAttributes: attributeCode => {
-      // GET /V1/categories/attributes/:attributeCode
-      return new Promise((resolve, reject) => {
-        const path = `/V1/categories/attributes/${attributeCode}`;
-        magento
-          .get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getCategoryAttributes: attributeCode => magento.get(`/V1/categories/attributes/${attributeCode}`, undefined, undefined, ADMIN_TYPE),
 
     getCategoriesList: () => {
       // GET /V1/categories/list
-      return new Promise((resolve, reject) => {
-        const path = '/V1/categories/list';
-        const params = {
-          'searchCriteria[filterGroups][0][filters][0][field]': 'name',
-          'searchCriteria[filterGroups][0][filters][0][value]': 'Woman',
-          'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
-          'searchCriteria[pageSize]': 20,
-          'searchCriteria[currentPage]': 1
-        };
+      const path = '/V1/categories/list';
+      const params = {
+        'searchCriteria[filterGroups][0][filters][0][field]': 'name',
+        'searchCriteria[filterGroups][0][filters][0][value]': 'Woman',
+        'searchCriteria[filterGroups][0][filters][0][conditionType]': 'eq',
+        'searchCriteria[pageSize]': 20,
+        'searchCriteria[currentPage]': 1
+      };
 
-        magento
-          .get(path, params, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
+      return magento.get(path, params, undefined, ADMIN_TYPE);
     },
 
     /**
@@ -258,214 +178,44 @@ export default magento => {
       return magento.admin.getProductsWithSearchCritaria(params);
     },
 
-    getProductsWithSearchCritaria: (searchCriteria) => {
-      return new Promise((resolve, reject) => {
-        const path = '/V1/products';
+    getProductsWithSearchCritaria: (searchCriteria) => magento.get('/V1/products', searchCriteria, undefined, ADMIN_TYPE),
 
-        magento.get(path, searchCriteria, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getProductBySku: (sku) => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/products/${sku}`;
-
-        magento.get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getProductBySku: (sku) => magento.get(`/V1/products/${sku}`, undefined, undefined, ADMIN_TYPE),
 
     getFeaturedChildren: ({ page, pageSize = 10, filter }) => {
-      return new Promise((resolve, reject) => {
-        let path = '/V1/products?';
-        path += magento.makeParams({ page, pageSize, filter });
-        console.log('PATH:', path);
-        magento
-          .get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
+      let path = '/V1/products?';
+      path += magento.makeParams({ page, pageSize, filter });
+      console.log('PATH:', path);
+      return magento.get(path, undefined, undefined, ADMIN_TYPE);
     },
 
-    getConfigurableChildren: (sku) => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/configurable-products/${sku}/children`;
+    getConfigurableChildren: (sku) => magento.get(`/V1/configurable-products/${sku}/children`, undefined, undefined, ADMIN_TYPE),
 
-        magento.get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getConfigurableProductOptions: (sku) => magento.get(`/V1/configurable-products/${sku}/options/all`, undefined, undefined, ADMIN_TYPE),
 
-    getConfigurableProductOptions: (sku) => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/configurable-products/${sku}/options/all`;
+    getConfigurableProductOptionById: (sku, id) => magento.get(`/V1/configurable-products/${sku}/options/${id}`, undefined, undefined, ADMIN_TYPE),
 
-        magento.get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getProductAttributesOptions: (attributeId) => magento.get(`/V1/products/attributes/${attributeId}/options`, undefined, undefined, ADMIN_TYPE),
 
-    getConfigurableProductOptionById: (sku, id) => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/configurable-products/${sku}/options/${id}`;
+    getAttributeByCode: (attributeCode) => magento.get(`/V1/products/attributes/${attributeCode}`, undefined, undefined, ADMIN_TYPE),
 
-        magento.get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getProductMedia: (sku) => magento.get(`/V1/products/${sku}/media`, undefined, undefined, ADMIN_TYPE),
 
-    getProductAttributesOptions: (attributeId) => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/products/attributes/${attributeId}/options`;
+    getCart: customerId => magento.post(`/V1/customers/${customerId}/carts`, undefined, ADMIN_TYPE),
 
-        magento.get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getCmsBlock: id => magento.get(`/V1/cmsBlock/${id}`, undefined, undefined, ADMIN_TYPE),
 
-    getAttributeByCode: (attributeCode) => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/products/attributes/${attributeCode}`;
-
-        magento.get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getProductMedia: (sku) => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/products/${sku}/media`;
-
-        magento.get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getCart: customerId => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/customers/${customerId}/carts`;
-
-        magento
-          .post(path, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getCmsBlock: id => {
-      return new Promise((resolve, reject) => {
-        // GET /V1/cmsBlock/:blockId
-        const path = `/V1/cmsBlock/${id}`;
-
-        magento
-          .get(path, undefined, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    removeItemFromCart: (cartId, itemId) => {
-      // DELETE /V1/carts/mine/items
-      return new Promise((resolve, reject) => {
-        const path = `/V1/carts/${cartId}/items/${itemId}`;
-
-        magento
-          .delete(path, undefined, ADMIN_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    removeItemFromCart: (cartId, itemId) => magento.delete(`/V1/carts/${cartId}/items/${itemId}`, undefined, ADMIN_TYPE),
 
     getOrderList: (customerId) => {
       console.log('getting orders for: ', customerId);
-      return new Promise((resolve, reject) => {
-        const path = '/V1/orders';
-        const params = {
-          'searchCriteria[filterGroups][0][filters][0][field]': 'customer_id',
-          'searchCriteria[filterGroups][0][filters][0][value]': customerId
-        };
 
-        magento
-          .get(path, params, undefined, ADMIN_TYPE)
-          .then(data => {
-            console.log('getOrderList response:', data);
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
+      const path = '/V1/orders';
+      const params = {
+        'searchCriteria[filterGroups][0][filters][0][field]': 'customer_id',
+        'searchCriteria[filterGroups][0][filters][0][value]': customerId
+      };
+      return magento.get(path, params, undefined, ADMIN_TYPE);
     },
-
   };
 };

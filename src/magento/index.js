@@ -34,38 +34,11 @@ class Magento {
   }
 
   init() {
-    return new Promise((resolve, reject) => {
-      if (this.configuration.authentication.integration.access_token) {
-        this.access_token = this.configuration.authentication.integration.access_token;
-        resolve(this);
-      } else if (this.configuration.authentication.login) {
-        const {
-          username,
-          password,
-          type
-        } = this.configuration.authentication.login;
-        if (username) {
-          let path;
-          if (type === 'admin') {
-            path = '/V1/integration/admin/token';
-          } else {
-            path = '/V1/integration/customer/token';
-          }
-
-          this.post(path, { username, password })
-            .then(token => {
-              // debugger;
-              console.log('token');
-              this.access_token = token;
-              resolve(this);
-            })
-            .catch(e => {
-              console.log(e);
-              reject(e);
-            });
-        }
-      }
-    });
+    if (this.configuration.authentication.integration.access_token) {
+      this.access_token = this.configuration.authentication.integration.access_token;
+      return;
+    } 
+    throw new Error('Need Integration Token!');
   }
 
   post(path, params, type = ADMIN_TYPE) {
