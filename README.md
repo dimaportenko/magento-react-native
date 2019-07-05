@@ -1,4 +1,5 @@
 # Open source React Native mobile app for Magento 2
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 <img src="https://github.com/troublediehard/magento-react-native/blob/master/android/app/src/main/ic_launcher-web.png" alt="Logo" width="250px"/>
 
 # Setup
@@ -23,3 +24,15 @@ troublesohard@gmail.com
 
 ## License
 [MIT License](LICENSE.md) Copyright (c) 2017-2019 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://github.com/troublediehard"><img src="https://avatars2.githubusercontent.com/u/6594232?v=4" width="100px;" alt="Dmytro Portenko"/><br /><sub><b>Dmytro Portenko</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=troublediehard" title="Code">💻</a></td></tr></table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
