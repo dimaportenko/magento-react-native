@@ -1,5 +1,5 @@
 # Open source React Native mobile app for Magento 2
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
 <img src="https://github.com/troublediehard/magento-react-native/blob/master/android/app/src/main/ic_launcher-web.png" alt="Logo" width="250px"/>
 
 # Setup
@@ -31,7 +31,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/troublediehard"><img src="https://avatars2.githubusercontent.com/u/6594232?v=4" width="100px;" alt="Dmytro Portenko"/><br /><sub><b>Dmytro Portenko</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=troublediehard" title="Code">💻</a></td><td align="center"><a href="http://twitter.com/alexakasanjeev"><img src="https://avatars0.githubusercontent.com/u/13250741?v=4" width="100px;" alt="Sanjeev yadav"/><br /><sub><b>Sanjeev yadav</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=alexakasanjeev" title="Code">💻</a></td></tr></table>
+<table><tr><td align="center"><a href="https://github.com/troublediehard"><img src="https://avatars2.githubusercontent.com/u/6594232?v=4" width="100px;" alt="Dmytro Portenko"/><br /><sub><b>Dmytro Portenko</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=troublediehard" title="Code">💻</a></td><td align="center"><a href="http://twitter.com/alexakasanjeev"><img src="https://avatars0.githubusercontent.com/u/13250741?v=4" width="100px;" alt="Sanjeev yadav"/><br /><sub><b>Sanjeev yadav</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=alexakasanjeev" title="Code">💻</a></td><td align="center"><a href="https://github.com/Dtema1996"><img src="https://avatars3.githubusercontent.com/u/17969457?v=4" width="100px;" alt="Artem"/><br /><sub><b>Artem</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=Dtema1996" title="Code">💻</a></td></tr></table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
