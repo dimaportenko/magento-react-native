@@ -4,6 +4,7 @@ import { magento } from '../magento';
 import { magentoOptions } from '../config/magento';
 import {
   MAGENTO_INIT,
+  MAGENTO_INIT_ERROR,
   MAGENTO_GET_CATEGORY_TREE,
   MAGENTO_CURRENT_CATEGORY,
   MAGENTO_GET_CATEGORY_PRODUCTS,
@@ -67,6 +68,7 @@ export const initMagento = () => {
       magento.setCustomerToken(customerToken);
     } catch (error) {
       console.log(error);
+      dispatch({ type: MAGENTO_INIT_ERROR, payload: { errorMessage: error } });
     }
   };
 };
@@ -575,15 +577,11 @@ export const placeGuestCartOrder = (cartId, payment) => {
       } else {
         data = await magento.guest.placeGuestCartOrder(cartId, payment);
       }
-      if (!data.message) {
-        dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
-      } else {
-        const message = magento.getErrorMessageForResponce(data);
-        dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: message });
-      }
+      dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
       dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
     } catch (error) {
       console.log(error);
+      dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: error });
     }
   };
 };

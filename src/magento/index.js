@@ -9,16 +9,8 @@ const defaultOptions = {
   userAgent: 'Dmytro Portenko Magento Library',
   home_cms_block_id: '',
   authentication: {
-    login: {
-      type: 'admin',
-      username: undefined,
-      password: undefined
-    },
     integration: {
-      consumer_key: undefined,
-      consumer_secret: undefined,
       access_token: undefined,
-      access_token_secret: undefined
     }
   }
 };
@@ -91,17 +83,21 @@ class Magento {
       fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => {
           console.log(response);
-          return response.json();
+          if (response.ok) {
+            return response.json();
+          }
+          // Possible 401 or other network error
+          return response.json().then(errorResponse => Promise.reject(errorResponse));
         })
         .then(responseData => {
-          // TODO: check response code
           // debugger;
           console.log(responseData);
           resolve(responseData);
         })
         .catch(error => {
           console.log(error);
-          reject(error);
+          const customError = this.getErrorMessageForResponce(error);
+          reject(customError);
         });
     });
   }
@@ -109,12 +105,16 @@ class Magento {
   getErrorMessageForResponce(data) {
     const params = data.parameters;
     let message = data.message;
-    if (typeof params !== 'undefined' && params.length > 0) {
-      data.parameters.forEach((item, index) => {
-        message = message.replace(`%${index + 1}`, item);
-      });
-      return message;
-    }
+    if (typeof params !== 'undefined') {
+      if (Array.isArray(params) && params.length > 0) {
+        data.parameters.forEach((item, index) => {
+          message = message.replace(`%${index + 1}`, item);
+        });
+        return message;
+      } else if (params.resources !== undefined) {
+        return message.replace('%resources', params.resources);
+      }
+  }
     return message;
   }
 

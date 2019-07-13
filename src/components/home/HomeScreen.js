@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, TouchableWithoutFeedback, StyleSheet, RefreshControl } from 'react-native';
+import { ScrollView, View, TouchableWithoutFeedback, Text, StyleSheet, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { MaterialHeaderButtons, Item } from '../common';
@@ -74,6 +74,14 @@ class HomeScreen extends Component {
   }
 
   render() {
+    if (this.props.errorMessage) {
+      return (
+        <View style={styles.errorContainer}>
+          <Text>{this.props.errorMessage}</Text>
+        </View>
+      );
+    }
+
     return (
       <ScrollView
         style={styles.container}
@@ -104,12 +112,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: Sizes.WINDOW_WIDTH * 0.9,
     marginBottom: 3,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   }
 });
 
 const mapStateToProps = state => {
   const { refreshing } = state.home;
-  return { ...state.home, refreshing };
+  const { errorMessage } = state.magento;
+  return { ...state.home, refreshing, errorMessage };
 };
 
 export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(HomeScreen);
