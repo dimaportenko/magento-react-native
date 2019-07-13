@@ -1,174 +1,25 @@
-import {CUSTOMER_TYPE} from '../../types';
+import { CUSTOMER_TYPE } from '../../types';
 
 export default magento => {
   return {
-    getCurrentCustomer: () => {
-      // GET /rest/V1/customers/me
-      return new Promise((resolve, reject) => {
-        const path = '/V1/customers/me';
+    getCurrentCustomer: () => magento.get('/V1/customers/me', undefined, undefined, CUSTOMER_TYPE),
 
-        magento
-          .get(path, undefined, undefined, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getCustomerCart: () => magento.get('/V1/carts/mine', undefined, undefined, CUSTOMER_TYPE),
 
-    getCustomerCart: () => {
-      // GET /V1/carts/mine
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine';
+    createCart: customerId => magento.post(`/V1/customers/${customerId}/carts`, undefined, CUSTOMER_TYPE),
 
-        magento
-          .get(path, undefined, undefined, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    addItemToCart: item => magento.post('/V1/carts/mine/items', item, CUSTOMER_TYPE),
 
-    createCart: customerId => {
-      return new Promise((resolve, reject) => {
-        const path = `/V1/customers/${customerId}/carts`;
+    addCartBillingAddress: (address) => magento.post('/V1/carts/mine/billing-address', address, CUSTOMER_TYPE),
 
-        magento
-          .post(path, undefined, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    cartEstimateShippingMethods: (address) => magento.post('/V1/carts/mine/estimate-shipping-methods', address, CUSTOMER_TYPE),
 
-    addItemToCart: item => {
-      // POST /V1/carts/mine/items
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine/items';
+    addCartShippingInfo: (address) => magento.post('/V1/carts/mine/shipping-information', address, CUSTOMER_TYPE),
 
-        magento
-          .post(path, item, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    getCartShippingMethods: () => magento.get('/V1/carts/mine/estimate-shipping-methods', undefined, undefined, CUSTOMER_TYPE),
 
-    addCartBillingAddress: (address) => {
-      // POST /V1/carts/mine/billing-address
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine/billing-address';
+    getCartPaymentMethods: () => magento.get('/V1/carts/mine/payment-methods', undefined, undefined, CUSTOMER_TYPE),
 
-        magento
-          .post(path, address, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    cartEstimateShippingMethods: (address) => {
-      // POST /V1/carts/mine/estimate-shipping-methods"
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine/estimate-shipping-methods';
-
-        magento
-          .post(path, address, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    addCartShippingInfo: (address) => {
-      // POST /V1/carts/mine/shipping-information
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine/shipping-information';
-
-        magento
-          .post(path, address, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getCartShippingMethods: () => {
-      // GET /V1/carts/mine/estimate-shipping-methods
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine/estimate-shipping-methods';
-
-        magento
-          .get(path, undefined, undefined, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    getCartPaymentMethods: () => {
-      // GET /V1/carts/mine/payment-methods
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine/payment-methods';
-
-        magento
-          .get(path, undefined, undefined, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
-
-    placeCartOrder: (payment) => {
-      // PUT /V1/carts/mine/order
-      return new Promise((resolve, reject) => {
-        const path = '/V1/carts/mine/order';
-
-        magento
-          .put(path, payment, CUSTOMER_TYPE)
-          .then(data => {
-            resolve(data);
-          })
-          .catch(e => {
-            console.log(e);
-            reject(e);
-          });
-      });
-    },
+    placeCartOrder: (payment) => magento.put('/V1/carts/mine/order', payment, CUSTOMER_TYPE),
   };
 };

@@ -59,7 +59,7 @@ export const initMagento = () => {
 
   return async dispatch => {
     try {
-      await magento.init();
+      magento.init();
       dispatch({ type: MAGENTO_INIT, payload: magento });
       const storeConfig = await magento.admin.getStoreConfig();
       dispatch({ type: MAGENTO_STORE_CONFIG, payload: storeConfig });
@@ -78,7 +78,8 @@ export const getHomeData = (refreshing) => {
     }
 
     try {
-      await magento.admin.getStoreConfig();
+      const storeConfig = await magento.admin.getStoreConfig();
+      magento.setStoreConfig(storeConfig[0]);
       const value = await magento.getHomeData();
       console.log('home', value);
       const payload = JSON.parse(value.content.replace(/<\/?[^>]+(>|$)/g, ''));
@@ -414,6 +415,7 @@ export const getOrdersForCustomer = (customerId, refreshing) => {
 
     try {
       const data = await magento.admin.getOrderList(customerId);
+      console.log('getOrderList response:', data);
       const orders = data.items.map(order => {
         const items = order.items;
         const simpleItems = items.filter(i => i.product_type === 'simple');
