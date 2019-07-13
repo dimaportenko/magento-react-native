@@ -381,6 +381,7 @@ const dispatchAddToCart = async (dispatch, cartId, item) => {
     dispatchGetGuestCart(dispatch, cartId);
   } catch (e) {
     console.log(e);
+    dispatch({ type: MAGENTO_ADD_TO_CART, payload: e });
   }
 };
 

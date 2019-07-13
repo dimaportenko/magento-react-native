@@ -29,7 +29,7 @@ class Magento {
     if (this.configuration.authentication.integration.access_token) {
       this.access_token = this.configuration.authentication.integration.access_token;
       return;
-    } 
+    }
     throw new Error('Need Integration Token!');
   }
 
@@ -97,7 +97,7 @@ class Magento {
         .catch(error => {
           console.log(error);
           const customError = this.getErrorMessageForResponce(error);
-          reject(customError);
+          reject(new Error(customError));
         });
     });
   }
