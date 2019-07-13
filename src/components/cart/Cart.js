@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   FlatList,
-  RefreshControl
+  RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { cartItemProduct, getCart } from '../../actions';
@@ -14,7 +14,7 @@ import CartListItem from './CartListItem';
 import NavigationService from '../../navigation/NavigationService';
 import {
   NAVIGATION_CHECKOUT_PATH,
-  NAVIGATION_HOME_SCREEN_PATH
+  NAVIGATION_HOME_SCREEN_PATH,
 } from '../../navigation/routes';
 import { Button } from '../common';
 import Sizes from '../../constants/Sizes';
@@ -22,18 +22,21 @@ import Sizes from '../../constants/Sizes';
 class Cart extends Component {
   static navigationOptions = {
     title: 'Cart',
-    headerBackTitle: ' '
+    headerBackTitle: ' ',
   };
 
   static propTypes = {
     cart: PropTypes.object,
     products: PropTypes.object,
     cartItemProduct: PropTypes.func,
+    getCart: PropTypes.func,
+    refreshing: PropTypes.bool,
   };
 
   static defaultProps = {
     cart: {},
     products: {},
+    refreshing: false,
   };
 
   componentDidMount() {
@@ -47,7 +50,7 @@ class Cart extends Component {
 
   onPressAddToCheckout = () => {
     NavigationService.navigate(NAVIGATION_CHECKOUT_PATH, {
-      title: 'Cart'
+      title: 'Cart',
     });
   };
 
@@ -58,7 +61,7 @@ class Cart extends Component {
   getCartItemProduct = (items) => {
     const { products } = this.props;
 
-    items.forEach(item => {
+    items.forEach((item) => {
       if (!item.thumbnail) {
         if (!products[item.sku]) {
           this.props.cartItemProduct(item.sku);
@@ -73,7 +76,7 @@ class Cart extends Component {
 
     let sum = 0;
     if (items) {
-      items.forEach(item => {
+      items.forEach((item) => {
         sum += item.price * item.qty;
       });
     }
@@ -81,7 +84,9 @@ class Cart extends Component {
     if (sum > 0) {
       return (
         <Text style={totals}>
-          Totals {sum.toFixed(2)}
+          Totals
+          {' '}
+          {sum.toFixed(2)}
         </Text>
       );
     }
@@ -92,7 +97,7 @@ class Cart extends Component {
     const {
       containerStyle,
       totals,
-      buttonTextStyle
+      buttonTextStyle,
     } = styles;
 
 
@@ -112,9 +117,7 @@ class Cart extends Component {
     );
   };
 
-  renderItem(items) {
-    return <CartListItem item={items.item} expanded={false} />;
-  }
+  renderItem = items => <CartListItem item={items.item} expanded={false} />
 
   renderCart = () => {
     const { items } = this.props.cart;
@@ -122,19 +125,19 @@ class Cart extends Component {
       container,
       content,
       footer,
-      buttonStyle
+      buttonStyle,
     } = styles;
 
     return (
       <View style={container}>
         <View style={content}>
           <FlatList
-            refreshControl={
+            refreshControl={(
               <RefreshControl
                 refreshing={this.props.refreshing}
                 onRefresh={this.onRefresh}
               />
-            }
+            )}
             data={[...items]}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
@@ -166,15 +169,15 @@ class Cart extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   containerStyle: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   content: {
-    flex: 1
+    flex: 1,
   },
   totals: {
     fontSize: 20,

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
+import {
+  View, Text, Image, TouchableOpacity, Alert,
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { magento } from '../../magento';
@@ -8,12 +10,12 @@ import { Spinner } from '../common';
 import { removeFromCartLoading, removeFromCart } from '../../actions';
 
 class CartListItem extends Component {
-	image() {
-		const { products, item } = this.props;
-		if (products && products[item.sku]) {
-			return getProductThumbnailFromAttribute(products[item.sku]);
-		}
-	}
+  image() {
+    const { products, item } = this.props;
+    if (products && products[item.sku]) {
+      return getProductThumbnailFromAttribute(products[item.sku]);
+    }
+  }
 
   onPressRemoveItem = () => {
     Alert.alert(
@@ -23,7 +25,7 @@ class CartListItem extends Component {
         { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
         { text: 'Remove it', onPress: () => this.performRemoveItem() },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -32,35 +34,38 @@ class CartListItem extends Component {
 
     this.props.removeFromCart({
       cart: this.props.cart,
-      item: this.props.item
+      item: this.props.item,
     });
   }
 
-	render() {
-		const {
-			imageStyle,
-			containerStyle,
-			textStyle,
-			infoStyle
-		} = styles;
-		return (
-				<View style={containerStyle}>
-					<Image style={imageStyle} resizeMode="contain" source={{ uri: this.image() }} />
-					<View style={infoStyle}>
-						<Text style={textStyle}>{this.props.item.name}</Text>
-						<Text style={textStyle}>
-							{magento.storeConfig.default_display_currency_code}
-							{' '}
-							{this.props.item.price}
-						</Text>
-						<Text style={textStyle}>Qty: {this.props.item.qty}</Text>
-					</View>
-          <View style={styles.removeContainer}>
-            {this.props.cart.removingItemId === this.props.item.item_id ?
+  render() {
+    const {
+      imageStyle,
+      containerStyle,
+      textStyle,
+      infoStyle,
+    } = styles;
+    const imageUri = this.image();
+    return (
+      <View style={containerStyle}>
+        <Image style={imageStyle} resizeMode="contain" source={{ uri: imageUri }} />
+        <View style={infoStyle}>
+          <Text style={textStyle}>{this.props.item.name}</Text>
+          <Text style={textStyle}>
+            {magento.storeConfig.default_display_currency_code}
+            {' '}
+            {this.props.item.price}
+          </Text>
+          <Text style={textStyle}>Qty: {this.props.item.qty}</Text>
+        </View>
+        <View style={styles.removeContainer}>
+          {this.props.cart.removingItemId === this.props.item.item_id
+            ? (
               <View style={styles.spinnerWrapper}>
                 <Spinner />
               </View>
-              :
+            )
+            : (
               <TouchableOpacity
                 style={styles.iconStyle}
                 onPress={this.onPressRemoveItem}
@@ -73,53 +78,54 @@ class CartListItem extends Component {
                 </View>
 
               </TouchableOpacity>
+            )
             }
-          </View>
-				</View>
-		);
-	}
+        </View>
+      </View>
+    );
+  }
 }
 
 const styles = {
-	containerStyle: {
-		flexDirection: 'row',
-		flex: 1,
-		borderColor: '#ddd',
-		borderBottomWidth: 1,
-		backgroundColor: '#fff',
-	},
-	infoStyle: {
-		flexDirection: 'column',
-		justifyContent: 'center',
-		flex: 2
-	},
-	textStyle: {
-		flex: 1,
-		padding: 10
-	},
-	imageStyle: {
-		height: 100,
-		flex: 1,
-		margin: 10,
-		width: null
-	},
+  containerStyle: {
+    flexDirection: 'row',
+    flex: 1,
+    borderColor: '#ddd',
+    borderBottomWidth: 1,
+    backgroundColor: '#fff',
+  },
+  infoStyle: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flex: 2,
+  },
+  textStyle: {
+    flex: 1,
+    padding: 10,
+  },
+  imageStyle: {
+    height: 100,
+    flex: 1,
+    margin: 10,
+    width: null,
+  },
   iconWrapper: {
     alignSelf: 'flex-end',
-    marginRight: 20
+    marginRight: 20,
   },
-	removeContainer: {
+  removeContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     minWidth: 50,
-	},
+  },
   spinnerWrapper: {
-	  marginRight: 10,
+    marginRight: 10,
   },
 };
 
 const mapStateToProps = ({ cart }) => {
-	const { products } = cart;
-	return { products, cart };
+  const { products } = cart;
+  return { products, cart };
 };
 
 export default connect(mapStateToProps, { removeFromCartLoading, removeFromCart })(CartListItem);
