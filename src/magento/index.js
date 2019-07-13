@@ -26,13 +26,11 @@ class Magento {
   }
 
   init() {
-    return new Promise((resolve, reject) => {
-      if (this.configuration.authentication.integration.access_token) {
-        this.access_token = this.configuration.authentication.integration.access_token;
-        resolve(this);
-      }
-      reject(new Error('Integration token required!'));
-    });
+    if (this.configuration.authentication.integration.access_token) {
+      this.access_token = this.configuration.authentication.integration.access_token;
+      return;
+    } 
+    throw new Error('Need Integration Token!');
   }
 
   post(path, params, type = ADMIN_TYPE) {

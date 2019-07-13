@@ -1,0 +1,41 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "troublediehard",
+      "name": "Dmytro Portenko",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6594232?v=4",
+      "profile": "https://github.com/troublediehard",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "alexakasanjeev",
+      "name": "Sanjeev yadav",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/13250741?v=4",
+      "profile": "http://twitter.com/alexakasanjeev",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "Dtema1996",
+      "name": "Artem",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/17969457?v=4",
+      "profile": "https://github.com/Dtema1996",
+      "contributions": [
+        "code"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "magento-react-native",
+  "projectOwner": "troublediehard",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
