@@ -5,7 +5,6 @@ import {
   StyleSheet,
   TouchableOpacity
 } from 'react-native';
-import { priceSignByCode } from '../../helper/price';
 import { NAVIGATION_ORDER_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 
@@ -18,7 +17,7 @@ class OrderListItem extends Component {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, currencySymbol } = this.props;
     const { code, text, container } = styles;
 
     return (
@@ -30,7 +29,7 @@ class OrderListItem extends Component {
             {`Ship to ${item.customer_firstname} ${item.customer_lastname}`}
           </Text>
           <Text style={text} >
-            {`Order Total: ${priceSignByCode(item.order_currency_code)} ${item.grand_total}`}
+            {`Order Total: ${currencySymbol} ${item.grand_total}`}
           </Text>
           <Text style={text} >{`Status: ${item.status}`}</Text>
         </View>

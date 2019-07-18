@@ -33,7 +33,7 @@ class OrdersScreen extends Component {
 
   renderItem = (orderItem) => {
     return (
-      <OrderListItem item={orderItem.item} />
+      <OrderListItem item={orderItem.item} currencySymbol={this.props.currencySymbol}/>
     );
   };
 
@@ -117,13 +117,15 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ account }) => {
+const mapStateToProps = ({ account, magento }) => {
   const customerId = account.customer ? account.customer.id : null;
+  const { default_display_currency_symbol: currencySymbol } = magento.currency;
   const orders = account.orderData ? account.orderData.items : [];
   return {
     customerId,
     orders,
     refreshing: account.refreshing,
+    currencySymbol,
   };
 };
 

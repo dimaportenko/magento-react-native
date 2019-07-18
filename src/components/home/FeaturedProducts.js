@@ -16,7 +16,7 @@ const FeaturedProducts = props => {
         data={props.products.items}
         keyExtractor={keyExtractor}
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <FeaturedProductItem {...item} onPress={props.onPress} />}
+        renderItem={({ item }) => <FeaturedProductItem {...item} currencySymbol={props.currencySymbol} onPress={props.onPress} />}
       />
     </View>
   );
@@ -27,6 +27,7 @@ FeaturedProducts.propTypes = {
   onPress: PropTypes.func,
   title: PropTypes.string,
   style: PropTypes.object,
+  currencySymbol: PropTypes.string.isRequired,
 };
 
 FeaturedProducts.defaultProps = {

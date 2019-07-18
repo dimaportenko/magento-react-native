@@ -8,7 +8,6 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import { orderProductDetail } from '../../actions';
-import { priceSignByCode } from '../../helper/price';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 
 class OrderScreen extends Component {
@@ -34,7 +33,7 @@ class OrderScreen extends Component {
 
   renderItem = (item) => {
     const { code, text, row, imageStyle, container } = styles;
-    const currency = priceSignByCode(this.props.navigation.state.params.item.order_currency_code);
+    const { currencySymbol } = this.props;
 
     return (
       <View style={container}>
@@ -44,10 +43,10 @@ class OrderScreen extends Component {
             <Text style={code} >{item.item.name}</Text>
             <Text style={text} >{`SKU: ${item.item.sku}`}</Text>
             <Text style={text} >
-              {`Price: ${currency} ${item.item.price}`}
+              {`Price: ${currencySymbol} ${item.item.price}`}
             </Text>
             <Text style={text} >{`Qty: ${item.item.qty_ordered}`}</Text>
-            <Text style={text} >{`Subtotal: ${currency} ${item.item.row_total}`}</Text>
+            <Text style={text} >{`Subtotal: ${currencySymbol} ${item.item.row_total}`}</Text>
           </View>
         </View>
       </View>
@@ -55,10 +54,9 @@ class OrderScreen extends Component {
   };
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, currencySymbol } = this.props;
     const { item } = navigation.state.params;
     const { text, container } = styles;
-    const currency = priceSignByCode(item.order_currency_code);
 
     return (
       <View style={[container, { backgroundColor: '#F5F5F5' }]}>
@@ -69,13 +67,13 @@ class OrderScreen extends Component {
         />
         <Text style={text}>{`Status: ${item.status}`}</Text>
         <Text style={text}>
-          {`Subtotal: ${currency} ${item.subtotal}`}
+          {`Subtotal: ${currencySymbol} ${item.subtotal}`}
         </Text>
         <Text style={text}>
-          {`Shipping & Handling: ${currency} ${item.shipping_amount}`}
+          {`Shipping & Handling: ${currencySymbol} ${item.shipping_amount}`}
         </Text>
         <Text style={[text, { fontWeight: 'bold' }]}>
-          {`Grand Total: ${currency} ${item.total_due}`}
+          {`Grand Total: ${currencySymbol} ${item.total_due}`}
         </Text>
       </View>
     );
@@ -109,10 +107,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ account }) => {
+const mapStateToProps = ({ account, magento }) => {
   const { products } = account;
+  const { default_display_currency_symbol: currencySymbol } = magento.currency;
   return {
-    products
+    products,
+    currencySymbol,
   };
 };
 

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Text, View, Image, TouchableOpacity } from 'react-native';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
-import { magento } from '../../magento';
-import { priceSignByCode } from '../../helper/price';
 
 class ProductListItem extends Component {
 
@@ -35,16 +34,17 @@ class ProductListItem extends Component {
           <View style={[infoStyle, this.props.infoStyle]}>
             <Text style={[textStyle, this.props.textStyle]}>{this.props.product.name}</Text>
             <Text style={[priceStyle, this.props.priceStyle]}>
-              {priceSignByCode(
-                magento.storeConfig.default_display_currency_code
-              )}
-              {this.props.product.price}
+              {`${this.props.currencySymbol} ${this.props.product.price}`}
             </Text>
           </View>
         </TouchableOpacity>
       </View>
     );
   }
+}
+
+ProductListItem.propTypes = {
+  currencySymbol: PropTypes.string.isRequired,
 }
 
 const styles = {

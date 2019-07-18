@@ -2,16 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
 import Sizes from '../../constants/Sizes';
-import { priceSignByCode } from '../../helper/price';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
-import { magento } from '../../magento';
 
-const FeaturedProductItem = props => {
+const FeaturedProductItem = ({
+  onPress,
+  currencySymbol,
+  ...props
+}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity
         style={styles.containerStyle}
-        onPress={() => { props.onPress(props); }}
+        onPress={() => { onPress(props); }}
       >
         <Image
           style={styles.imageStyle}
@@ -21,10 +23,7 @@ const FeaturedProductItem = props => {
         <View style={styles.infoStyle}>
           <Text style={styles.textStyle} ellipsizeMode="tail" numberOfLines={2}>{props.name}</Text>
           <Text style={styles.priceStyle}>
-            {priceSignByCode(
-              magento.storeConfig.default_display_currency_code
-            )}{' '}
-            {props.price}
+          {`${currencySymbol} ${props.price}`}
           </Text>
         </View>
       </TouchableOpacity>
@@ -34,6 +33,7 @@ const FeaturedProductItem = props => {
 
 FeaturedProductItem.propTypes = {
   name: PropTypes.string,
+  currencySymbol: PropTypes.string.isRequired,
   price: PropTypes.number,
   onPress: PropTypes.func,
 };
