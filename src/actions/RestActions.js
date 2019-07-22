@@ -26,6 +26,7 @@ import {
   MAGENTO_GET_CART,
   MAGENTO_CART_ITEM_PRODUCT,
   MAGENTO_GET_COUNTRIES,
+  MAGENTO_GET_CURRENCY,
   MAGENTO_CREATE_CUSTOMER,
   UI_CHECKOUT_ACTIVE_SECTION,
   UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
@@ -66,11 +67,21 @@ export const initMagento = () => {
       dispatch({ type: MAGENTO_STORE_CONFIG, payload: storeConfig });
       const customerToken = await AsyncStorage.getItem('customerToken');
       magento.setCustomerToken(customerToken);
+      getCurrency(dispatch);
     } catch (error) {
       console.log(error);
       dispatch({ type: MAGENTO_INIT_ERROR, payload: { errorMessage: error } });
     }
   };
+};
+
+const getCurrency = async dispatch => {
+  try {
+    let data = await magento.guest.getCurrency();
+    dispatch({ type: MAGENTO_GET_CURRENCY, payload: data });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getHomeData = (refreshing) => {

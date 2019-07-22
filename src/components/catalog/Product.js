@@ -12,10 +12,8 @@ import {
   updateProductQtyInput,
   uiProductUpdate,
 } from '../../actions';
-import { magento } from '../../magento';
 import { Spinner, ModalSelect, Button } from '../common';
 import { getProductCustomAttribute } from '../../helper/product';
-import { priceSignByCode } from '../../helper/price';
 import ProductMedia from './ProductMedia';
 import Sizes from '../../constants/Sizes';
 
@@ -259,8 +257,7 @@ class Product extends Component {
         {this.renderProductMedia()}
         <Text style={styles.textStyle}>{this.props.product.name}</Text>
         <Text style={styles.textStyle}>
-          {priceSignByCode(magento.storeConfig.default_display_currency_code)}
-          {this.renderPrice()}
+          {`${this.props.currencySymbol}${this.renderPrice()}`}
         </Text>
         <Text style={styles.textStyle}>Qty</Text>
         <TextInput
@@ -317,6 +314,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   const { product, options, medias } = state.product.current;
   const { attributes, selectedOptions } = state.product;
+  const { default_display_currency_symbol: currencySymbol } = state.magento.currency;
   const { cart, account } = state;
   console.log('Product Component');
   console.log(state.product);
@@ -330,6 +328,7 @@ const mapStateToProps = (state) => {
     selectedOptions,
     customer: account.customer,
     qty: state.product.qtyInput,
+    currencySymbol,
   };
 };
 

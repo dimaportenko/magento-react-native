@@ -68,6 +68,7 @@ class HomeScreen extends Component {
           products={value}
           title={this.props.featuredCategories[key].title}
           onPress={this.onProductPress}
+          currencySymbol={this.props.currencySymbol}
         />
       );
     });
@@ -122,8 +123,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
   const { refreshing } = state.home;
-  const { errorMessage } = state.magento;
-  return { ...state.home, refreshing, errorMessage };
+  const { errorMessage, currency } = state.magento;
+  const { default_display_currency_symbol: currencySymbol } = currency;
+  return { ...state.home, refreshing, errorMessage, currencySymbol };
 };
 
 export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(HomeScreen);

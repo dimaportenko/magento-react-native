@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
@@ -40,6 +41,7 @@ class ProductList extends Component {
       viewContainerStyle={{ flex: 1 }}
       product={product.item}
       onRowPress={this.props.onRowPress}
+      currencySymbol={this.props.currencySymbol}
       />
     );
   };
@@ -61,6 +63,7 @@ class ProductList extends Component {
         priceStyle={priceStyle}
         product={product.item}
         onRowPress={this.props.onRowPress}
+        currencySymbol={this.props.currencySymbol}
       />
     );
   };
@@ -142,6 +145,10 @@ class ProductList extends Component {
       </View>
     );
   }
+}
+
+ProductList.propTypes = {
+  currencySymbol: PropTypes.string.isRequired,
 }
 
 const styles = StyleSheet.create({

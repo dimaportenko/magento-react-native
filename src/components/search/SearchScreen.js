@@ -82,6 +82,7 @@ class SearchScreen extends Component {
         onRowPress={this.onRowPress}
         gridColumnsValue={this.state.gridColumnsValue}
         performSort={this.performSort}
+        currencySymbol={this.props.currencySymbol}
       />
     );
   };
@@ -140,12 +141,13 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ search, filters }) => {
+const mapStateToProps = ({ search, filters, magento }) => {
   const { sortOrder, priceFilter } = filters;
   const { products, totalCount, loadingMore } = search;
+  const { default_display_currency_symbol: currencySymbol } = magento.currency;
   const canLoadMoreContent = products.length < totalCount;
 
-  return { products, totalCount, canLoadMoreContent, loadingMore, sortOrder, priceFilter };
+  return { products, totalCount, canLoadMoreContent, loadingMore, sortOrder, priceFilter, currencySymbol };
 };
 
 

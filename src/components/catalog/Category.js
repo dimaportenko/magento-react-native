@@ -78,12 +78,12 @@ class Category extends Component {
 		return (
 			<View style={styles.containerStyle}>
 				<ProductList
-          refreshControl={
-            <RefreshControl
-              refreshing={this.props.refreshing}
-              onRefresh={this.onRefresh}
-            />
-          }
+          			refreshControl={
+            			<RefreshControl
+              				refreshing={this.props.refreshing}
+              				onRefresh={this.onRefresh}
+            			/>
+          			}
 					products={this.props.products}
 					onEndReached={this.onEndReached}
 					canLoadMoreContent={this.props.canLoadMoreContent}
@@ -92,6 +92,7 @@ class Category extends Component {
 					gridColumnsValue={this.state.gridColumnsValue}
 					performSort={this.performSort}
 					sortOrder={this.state.sortOrder}
+					currencySymbol={this.props.currencySymbol}
 				/>
 			</View>
 		);
@@ -153,10 +154,11 @@ const styles = {
 const mapStateToProps = state => {
 	const { category } = state.category.current;
 	const { products, totalCount, loadingMore, refreshing } = state.category;
+	const { default_display_currency_symbol: currencySymbol } = state.magento.currency;
 	const { priceFilter, sortOrder } = state.filters;
 	const canLoadMoreContent = products.length < totalCount;
 
-	return { category, products, totalCount, canLoadMoreContent, loadingMore, refreshing, priceFilter, sortOrder };
+	return { category, products, totalCount, canLoadMoreContent, loadingMore, refreshing, priceFilter, sortOrder, currencySymbol };
 };
 
 export default connect(mapStateToProps, {

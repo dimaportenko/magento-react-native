@@ -47,5 +47,7 @@ export default magento => {
       const path = '/V1/customers/password';
       return magento.put(path, data, GUEST_TYPE);
     },
+
+    getCurrency: () => magento.get('/V1/directory/currency', undefined, undefined, GUEST_TYPE),
   };
 };

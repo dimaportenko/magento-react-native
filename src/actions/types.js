@@ -2,6 +2,7 @@ export const MAGENTO_INIT = 'magento_init';
 export const MAGENTO_INIT_ERROR = 'magento_init_error';
 export const MAGENTO_STORE_CONFIG = 'magento_store_config';
 export const MAGENTO_GET_COUNTRIES = 'magento_get_countries';
+export const MAGENTO_GET_CURRENCY = 'magento_get_currency';
 
 export const MAGENTO_GET_CATEGORY_TREE = 'magento_get_category_tree';
 export const MAGENTO_CURRENT_CATEGORY = 'magento_current_category';
