@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import admin from './lib/admin';
 import guest from './lib/guest';
 import customer from './lib/customer';
@@ -111,8 +112,10 @@ class Magento {
           message = message.replace(`%${index + 1}`, item);
         });
         return message;
-      } else if (params.resources !== undefined) {
-        return message.replace('%resources', params.resources);
+      } else {
+        _.forEach(params, (value, name) => {
+          message = message.replace(`%${name}`, value);
+        });
       }
   }
     return message;

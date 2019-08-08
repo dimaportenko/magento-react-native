@@ -317,17 +317,20 @@ export const setCurrentProduct = product => {
   };
 };
 
-export const createCustomerCart = customerId => {
-  return async dispatch => {
-    if (customerId) {
+export const createCustomerCart = (customerId) => async dispatch => {
+  if (customerId) {
+    try {
       const cartId = await magento.admin.getCart(customerId);
-      dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
+      // dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
+      dispatch(getCart());
+    } catch (error) {
+      console.log(error);
     }
-  };
+  }
 };
 
-export const getCart = (refreshing) => {
-  return async dispatch => {
+export const getCart = (refreshing = false) => {
+  return async (dispatch, getState) => {
     if (refreshing) {
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT, payload: true });
     }
@@ -344,6 +347,12 @@ export const getCart = (refreshing) => {
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT, payload: false });
     } catch (error) {
       console.log(error);
+      if (error.message && error.message.includes('No such entity with customerId')) {
+        const { customer } = getState().account;
+        if (customer && customer.id) {
+          dispatch(createCustomerCart(customer.id));
+        }
+      }
     }
   };
 };

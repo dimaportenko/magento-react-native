@@ -40,8 +40,12 @@ class CheckoutCustomerAccount extends Component {
         regionId: regionData.region_id,
       };
       this.updateUI('region', region);
-      this.updateUI('firstname', address.firstname);
-      this.updateUI('lastname', address.lastname);
+      if (address.firstname && address.firstname.length) {
+        this.updateUI('firstname', address.firstname);
+      }
+      if (address.lastname && address.lastname.length) {
+        this.updateUI('lastname', address.lastname);
+      }
       this.updateUI('email', customer.email);
       this.updateUI('street', address.street.length ? address.street[0] : '');
       this.updateUI('city', address.city);

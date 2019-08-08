@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { Alert, View, Text, StyleSheet } from 'react-native';
+import {
+  Alert, View, Text, StyleSheet,
+} from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import {
@@ -10,7 +12,7 @@ import {
   getCart,
 } from '../../actions';
 import { NAVIGATION_HOME_STACK_PATH } from '../../navigation/routes';
-import { Button } from '../common';
+import { Button, Spinner } from '../common';
 import Sizes from '../../constants/Sizes';
 
 class CheckoutTotals extends Component {
@@ -19,7 +21,7 @@ class CheckoutTotals extends Component {
     const payment = {
       paymentMethod: {
         // po_number: selectedPayment.code,
-        method: selectedPayment.code
+        method: selectedPayment.code,
         // additional_data: [
         // 	"string"
         // ],
@@ -28,7 +30,7 @@ class CheckoutTotals extends Component {
         // 		"string"
         // 	]
         // }
-      }
+      },
     };
     this.props.checkoutCustomerNextLoading(true);
     this.props.placeGuestCartOrder(cartId, payment);
@@ -37,7 +39,7 @@ class CheckoutTotals extends Component {
   goHome = () => {
     const resetAction = StackActions.reset({
       index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Cart' })]
+      actions: [NavigationActions.navigate({ routeName: 'Cart' })],
     });
 
     this.props.navigation.dispatch(resetAction);
@@ -50,13 +52,25 @@ class CheckoutTotals extends Component {
     return (
       <View style={styles.totalsStyle}>
         <Text>
-          Subtotals - {totals.subtotal_incl_tax} {totals.quote_currency_code}
+          Subtotals -
+          {' '}
+          {totals.subtotal_incl_tax}
+          {' '}
+          {totals.quote_currency_code}
         </Text>
         <Text>
-          Shipping - {totals.shipping_incl_tax} {totals.quote_currency_code}
+          Shipping -
+          {' '}
+          {totals.shipping_incl_tax}
+          {' '}
+          {totals.quote_currency_code}
         </Text>
         <Text>
-          Totals - {totals.grand_total} {totals.quote_currency_code}
+          Totals -
+          {' '}
+          {totals.grand_total}
+          {' '}
+          {totals.quote_currency_code}
         </Text>
       </View>
     );
@@ -68,13 +82,13 @@ class CheckoutTotals extends Component {
       return <View />;
     }
 
-    // if (this.props.loading) {
-    //   return (
-    //     <View style={styles.nextButtonStyle}>
-    //       <Spinner size="large" />
-    //     </View>
-    //   );
-    // }
+    if (this.props.loading) {
+      return (
+        <View style={styles.nextButtonStyle}>
+          <Spinner size="large" />
+        </View>
+      );
+    }
     return (
       <View style={styles.nextButtonStyle}>
         <Button
@@ -104,8 +118,8 @@ class CheckoutTotals extends Component {
       title,
       message,
       [{ text: 'OK', onPress: () => this.goHome() }],
-      { cancelable: false }
-      );
+      { cancelable: false },
+    );
   }
 
   render() {
@@ -113,7 +127,6 @@ class CheckoutTotals extends Component {
       <View style={styles.container}>
         {this.renderTotals()}
         {this.renderButton()}
-        {/*{this.renderPopup()}*/}
       </View>
     );
   }
@@ -122,33 +135,37 @@ class CheckoutTotals extends Component {
 const styles = StyleSheet.create({
   container: {
     margin: 15,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   radioWrap: {
     alignItems: 'flex-start',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   nextButtonStyle: {
     flex: 1,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   totalsStyle: {
     alignItems: 'flex-end',
-    alignSelf: 'flex-end'
+    alignSelf: 'flex-end',
   },
   buttonStyle: {
     marginTop: 10,
     alignSelf: 'center',
     width: Sizes.WINDOW_WIDTH * 0.9,
     marginBottom: 10,
-  }
+  },
 });
 
 const mapStateToProps = ({ cart, checkout }) => {
   const { cartId } = cart;
   const { loading } = checkout.ui;
-  const { payments, selectedPayment, totals, orderId, errorMessage } = checkout;
-  return { cartId, payments, selectedPayment, totals, loading, orderId, errorMessage };
+  const {
+    payments, selectedPayment, totals, orderId, errorMessage,
+  } = checkout;
+  return {
+    cartId, payments, selectedPayment, totals, loading, orderId, errorMessage,
+  };
 };
 
 export default connect(mapStateToProps, {
