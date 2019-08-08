@@ -593,7 +593,8 @@ export const placeGuestCartOrder = (cartId, payment) => {
       dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
     } catch (error) {
       console.log(error);
-      dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: error });
+      const message = error.message ? error.message : 'Place order error';
+      dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: message });
     }
   };
 };

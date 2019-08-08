@@ -25,8 +25,14 @@ class CheckoutCustomerAccount extends Component {
     // Clear loading
     this.props.checkoutCustomerNextLoading(false);
 
-    if (this.props.customer && this.props.customer.addresses && this.props.customer.addresses.length) {
-      const address = this.props.customer.addresses[0];
+    const { customer } = this.props;
+    if (customer) {
+      this.updateUI('firstname', customer.firstname);
+      this.updateUI('lastname', customer.lastname);
+      this.updateUI('email', customer.email);
+    }
+    if (customer && customer.addresses && customer.addresses.length) {
+      const address = customer.addresses[0];
       const regionData = address.region;
       const region = {
         regionCode: regionData.region_code,
@@ -36,7 +42,7 @@ class CheckoutCustomerAccount extends Component {
       this.updateUI('region', region);
       this.updateUI('firstname', address.firstname);
       this.updateUI('lastname', address.lastname);
-      this.updateUI('email', this.props.customer.email);
+      this.updateUI('email', customer.email);
       this.updateUI('street', address.street.length ? address.street[0] : '');
       this.updateUI('city', address.city);
       this.updateUI('postcode', address.postcode);
