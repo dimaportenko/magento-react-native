@@ -40,12 +40,13 @@ class Cart extends Component {
   };
 
   componentDidMount() {
-    const { items } = this.props.cart;
+    this.updateCartItemsProducts();
+  }
 
-    if (!items) {
-      return;
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.cart.items.length !== this.props.cart.items.length) {
+      this.updateCartItemsProducts();
     }
-    this.getCartItemProduct(items);
   }
 
   onPressAddToCheckout = () => {
@@ -58,7 +59,13 @@ class Cart extends Component {
     this.props.getCart(true);
   };
 
-  getCartItemProduct = (items) => {
+  updateCartItemsProducts = () => {
+    const { items } = this.props.cart;
+
+    if (!items) {
+      return;
+    }
+
     const { products } = this.props;
 
     items.forEach((item) => {

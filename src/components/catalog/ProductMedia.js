@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Swiper from 'react-native-swiper';
 import { View, Image } from 'react-native';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
 
 
-class ProductMedia extends Component {
+class ProductMedia extends PureComponent {
 
   renderMedia() {
     const { media } = this.props;

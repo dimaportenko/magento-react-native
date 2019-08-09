@@ -34,7 +34,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, products };
     }
     case MAGENTO_CURRENT_PRODUCT:
-      return { errorMessage: false };
+      return { ...state, errorMessage: false };
     case MAGENTO_LOGOUT:
       return { ...INITIAL_STATE };
     case MAGENTO_ADD_TO_CART:
