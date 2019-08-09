@@ -8,7 +8,9 @@ import {
   accountAddressNextLoading,
   resetAccountAddressUI,
 } from '../../actions';
-import { CardSection, Input, Spinner, ModalSelect, Button } from '../common';
+import {
+  CardSection, Input, Spinner, ModalSelect, Button,
+} from '../common';
 import Sizes from '../../constants/Sizes';
 
 
@@ -17,13 +19,12 @@ class AddAccountAddress extends Component {
     this.props.getCountries();
   }
 
-  componentDidMount() {
-    // Hardcode US
-    this.props.updateAccountAddressUI('countryId', 'US');
-    // Clear the error
+  componentWillUnmount() {
     this.props.updateAccountAddressUI('error', false);
-    // Clear loading
-    this.props.accountAddressNextLoading(false);
+  }
+
+  componentDidMount() {
+    this.props.resetAccountAddressUI();
 
     if (this.props.customer && this.props.customer.addresses && this.props.customer.addresses.length) {
       const address = this.props.customer.addresses[0];
@@ -34,6 +35,7 @@ class AddAccountAddress extends Component {
         regionId: regionData.region_id,
       };
       this.updateUI('region', region);
+      this.updateUI('countryId', address.country_id);
       this.updateUI('street', address.street.length ? address.street[0] : '');
       this.updateUI('city', address.city);
       this.updateUI('postcode', address.postcode);
@@ -52,16 +54,20 @@ class AddAccountAddress extends Component {
       telephone,
     } = this.props;
 
+    const regionValue = (typeof region === 'object') ? {
+      region: region.region,
+      region_id: region.regionId,
+      region_code: region.regionCode,
+    } : {
+      region,
+    };
+
     const data = {
       customer: {
         ...customer,
         addresses: [
           {
-            region: {
-              region: region.region,
-              region_id: region.regionId,
-              region_code: region.regionCode,
-            },
+            region: regionValue,
             country_id: countryId,
             street: [street],
             postcode,
@@ -69,15 +75,16 @@ class AddAccountAddress extends Component {
             // same_as_billing: 1,
             firstname: customer.firstname,
             lastname: customer.lastname,
-            telephone: telephone,
-          }
-        ]
-      }
+            telephone,
+          },
+        ],
+      },
     };
 
+    this.props.updateAccountAddressUI('error', false);
     this.props.accountAddressNextLoading(true);
     this.props.addAccountAddress(customer.id, data);
-    this.props.resetAccountAddressUI();
+    // this.props.resetAccountAddressUI();
   };
 
   updateUI = (key, value) => {
@@ -91,12 +98,8 @@ class AddAccountAddress extends Component {
   regionSelect = (attributeId, selectedRegion) => {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
-      const country = countries.find(item => {
-        return item.id === countryId;
-      });
-      const regionData = country.available_regions.find(item => {
-        return item.id === selectedRegion;
-      });
+      const country = countries.find(item => item.id === countryId);
+      const regionData = country.available_regions.find(item => item.id === selectedRegion);
       const region = {
         regionCode: regionData.code,
         region: regionData.name,
@@ -125,16 +128,12 @@ class AddAccountAddress extends Component {
   renderRegions = () => {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length && countries.length) {
-      const country = countries.find(item => {
-        return item.id === countryId;
-      });
+      const country = countries.find(item => item.id === countryId);
       if (country && country.available_regions) {
-        const data = country.available_regions.map(value => {
-          return {
-            label: value.name,
-            key: value.id,
-          };
-        });
+        const data = country.available_regions.map(value => ({
+          label: value.name,
+          key: value.id,
+        }));
 
         return (
           <ModalSelect
@@ -150,10 +149,11 @@ class AddAccountAddress extends Component {
       }
     }
 
+    const regionValue = typeof (this.props.region) === 'string' ? this.props.region : this.props.region.region;
     return (
       <Input
         label="Region"
-        value={this.props.region}
+        value={regionValue}
         placeholder="region"
         onChangeText={value => this.updateUI('region', value)}
       />
@@ -174,16 +174,12 @@ class AddAccountAddress extends Component {
       );
     }
 
-    const data = countries.map(value => {
-      return {
-        label: value.full_name_locale,
-        key: value.id,
-      };
-    });
+    const data = countries.map(value => ({
+      label: value.full_name_locale,
+      key: value.id,
+    }));
 
-    const country = countries.find(item => {
-      return item.id === countryId;
-    });
+    const country = countries.find(item => item.id === countryId);
     const label = country ? country.full_name_locale : 'Country';
 
     return (
@@ -269,7 +265,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: Sizes.WINDOW_WIDTH * 0.9,
     marginBottom: 10,
-  }
+  },
 });
 
 const mapStateToProps = ({ account, magento }) => {

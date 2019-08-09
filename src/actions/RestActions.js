@@ -54,6 +54,7 @@ import {
   MAGENTO_UPDATE_REFRESHING_ORDERS_DATA,
   ADD_FILTER_DATA,
   RESET_FILTERS_DATA,
+  MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR,
 } from './types';
 
 export const initMagento = () => {
@@ -481,14 +482,16 @@ export const orderProductDetail = (sku) => {
 };
 
 export const addAccountAddress = (id, customer) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       const data = await magento.admin.updateCustomerData(id, customer);
       dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS, payload: data });
     } catch (error) {
       console.log(error);
+      const message = error.message ? error.message : 'Sorry, something went wrong. Please check your internet connection and try again';
+      dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR, payload: message });
     }
-  }
+  };
 };
 
 export const addGuestCartBillingAddress = (cartId, address) => {

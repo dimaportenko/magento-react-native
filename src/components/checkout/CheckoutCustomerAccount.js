@@ -19,7 +19,7 @@ class CheckoutCustomerAccount extends Component {
 
   componentDidMount() {
     // Hardcode US
-    this.props.updateCheckoutUI('countryId', 'US');
+    // this.props.updateCheckoutUI('countryId', 'US');
     // Clear the error
     this.props.updateCheckoutUI('error', false);
     // Clear loading
@@ -39,6 +39,7 @@ class CheckoutCustomerAccount extends Component {
         region: regionData.region,
         regionId: regionData.region_id,
       };
+      this.updateUI('countryId', address.country_id);
       this.updateUI('region', region);
       if (address.firstname && address.firstname.length) {
         this.updateUI('firstname', address.firstname);
@@ -92,12 +93,20 @@ class CheckoutCustomerAccount extends Component {
       password,
     };
 
+    const regionValue = (typeof region === 'object') ? {
+      region: region.region,
+      region_id: region.regionId,
+      region_code: region.regionCode,
+    } : {
+      region,
+    };
+
     const address = {
       address: {
         // id: 0,
-        region: region.region,
-        region_id: region.regionId,
-        region_code: region.regionCode,
+        region: regionValue.region,
+        region_id: regionValue.regionId,
+        region_code: regionValue.regionCode,
         country_id: countryId,
         street: [street],
         // company: 'test',
@@ -204,10 +213,11 @@ class CheckoutCustomerAccount extends Component {
       }
     }
 
+    const regionValue = typeof (this.props.region) === 'string' ? this.props.region : this.props.region.region;
     return (
       <Input
         label="Region"
-        value={this.props.region}
+        value={regionValue}
         placeholder="region"
         onChangeText={value => this.updateUI('region', value)}
       />
