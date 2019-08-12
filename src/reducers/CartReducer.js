@@ -42,7 +42,7 @@ export default (state = INITIAL_STATE, action) => {
     case NAVIGATION_GO_TO_SCREEN:
       return { ...state, errorMessage: false };
     case MAGENTO_GET_CART:
-      return { ...state, quote: action.payload };
+      return { ...state, quote: action.payload, cartId: action.payload.id };
     case MAGENTO_REMOVE_FROM_CART_LOADING:
       return { ...state, removingItemId: action.payload };
     case MAGENTO_REMOVE_FROM_CART:
