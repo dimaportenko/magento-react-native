@@ -8,13 +8,14 @@ import {
   MAGENTO_AUTH_LOADING,
   MAGENTO_AUTH,
   MAGENTO_LOGOUT,
-  MAGENTO_AUTH_ERROR
+  MAGENTO_AUTH_ERROR,
+  MAGENTO_LOGIN_SUCCESS,
 } from './types';
 import NavigationService from '../navigation/NavigationService';
 import {
   NAVIGATION_ACCOUNT_STACK_PATH,
   NAVIGATION_LOGIN_STACK_PATH,
-  NAVIGATION_LOGIN_PATH
+  NAVIGATION_LOGIN_PATH,
 } from '../navigation/routes';
 
 export const signIn = customer => {
@@ -54,6 +55,7 @@ export const auth = (username, password) => {
         authFail(dispatch, response.message);
       } else {
         authSuccess(dispatch, response);
+        dispatch({ type: MAGENTO_LOGIN_SUCCESS });
       }
     } catch (e) {
       authFail(dispatch, e.message);

@@ -10,6 +10,7 @@ import {
   MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
   MAGENTO_LOGOUT,
   MAGENTO_CURRENT_PRODUCT,
+  MAGENTO_LOGIN_SUCCESS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -42,7 +43,7 @@ export default (state = INITIAL_STATE, action) => {
     case NAVIGATION_GO_TO_SCREEN:
       return { ...state, errorMessage: false };
     case MAGENTO_GET_CART:
-      return { ...state, quote: action.payload, cartId: action.payload.id };
+      return { ...state, quote: action.payload };
     case MAGENTO_REMOVE_FROM_CART_LOADING:
       return { ...state, removingItemId: action.payload };
     case MAGENTO_REMOVE_FROM_CART:
@@ -52,6 +53,9 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         refreshing: action.payload,
       };
+    case MAGENTO_LOGIN_SUCCESS: {
+      return { ...state, cartId: false, quote: { items: [] } };
+    }
     default:
       return state;
   }

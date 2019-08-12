@@ -322,7 +322,7 @@ export const createCustomerCart = (customerId) => async dispatch => {
   if (customerId) {
     try {
       const cartId = await magento.admin.getCart(customerId);
-      // dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
+      dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
       dispatch(getCart());
     } catch (error) {
       console.log(error);
@@ -341,7 +341,8 @@ export const getCart = (refreshing = false) => {
       if (magento.isCustomerLogin()) {
         cart = await magento.customer.getCustomerCart();
       } else {
-        const cartId = await magento.getCart();
+        const cartId = await magento.guest.createGuestCart();
+        dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
         cart = await magento.guest.getGuestCart(cartId);
       }
       dispatch({ type: MAGENTO_GET_CART, payload: cart });

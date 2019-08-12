@@ -10,6 +10,7 @@ import {
   checkoutOrderPopupShown,
   placeGuestCartOrder,
   getCart,
+  checkoutSetActiveSection,
 } from '../../actions';
 import { NAVIGATION_HOME_STACK_PATH } from '../../navigation/routes';
 import { Button, Spinner } from '../common';
@@ -112,6 +113,7 @@ class CheckoutTotals extends Component {
   }
 
   showPopup(title, message) {
+    this.props.checkoutSetActiveSection(1);
     this.props.getCart();
     // this.props.checkoutOrderPopupShown();
     Alert.alert(
@@ -171,6 +173,7 @@ const mapStateToProps = ({ cart, checkout }) => {
 export default connect(mapStateToProps, {
   checkoutSelectedPaymentChanged,
   checkoutCustomerNextLoading,
+  checkoutSetActiveSection,
   checkoutOrderPopupShown,
   placeGuestCartOrder,
   getCart,

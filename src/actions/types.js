@@ -42,6 +42,7 @@ export const MAGENTO_CURRENT_CUSTOMER = 'magento_current_customer';
 
 export const MAGENTO_AUTH = 'magento_auth';
 export const MAGENTO_LOGOUT = 'magento_logout';
+export const MAGENTO_LOGIN_SUCCESS = 'magento_login_success';
 export const MAGENTO_AUTH_ERROR = 'magento_auth_error';
 export const MAGENTO_AUTH_LOADING = 'magento_auth_loading';
 export const MAGENTO_PASSWORD_RESET_LOADING = 'magento_password_reset_loading';
