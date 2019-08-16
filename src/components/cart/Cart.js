@@ -44,7 +44,11 @@ class Cart extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.cart.items.length !== this.props.cart.items.length) {
+    if (
+      prevProps.cart.items
+      && this.props.cart.items
+      && prevProps.cart.items.length !== this.props.cart.items.length
+    ) {
       this.updateCartItemsProducts();
     }
   }
