@@ -272,6 +272,7 @@ class CheckoutCustomerAccount extends Component {
       <View>
         <CardSection>
           <Input
+            autoCapitalize="none"
             label="Email"
             value={this.props.email}
             placeholder="email@gmail.com"
