@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { ScrollView, View, TouchableWithoutFeedback, Text, StyleSheet, RefreshControl } from 'react-native';
+import {
+  ScrollView, View, TouchableWithoutFeedback, Text, StyleSheet, RefreshControl,
+} from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { MaterialHeaderButtons, Item } from '../common';
 import {
-  NAVIGATION_HOME_PRODUCT_PATH
+  NAVIGATION_HOME_PRODUCT_PATH,
 } from '../../navigation/routes';
 import { getHomeData, setCurrentProduct } from '../../actions';
 import HomeSlider from './HomeSlider';
@@ -49,10 +51,10 @@ class HomeScreen extends Component {
     navigation.toggleDrawer();
   }
 
-  onProductPress = product => {
+  onProductPress = (product) => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
-      title: product.name
+      title: product.name,
     });
   };
 
@@ -61,17 +63,15 @@ class HomeScreen extends Component {
   };
 
   renderFeatured() {
-    return _.map(this.props.featuredProducts, (value, key) => {
-      return (
-        <FeaturedProducts
-          key={`featured${key}`}
-          products={value}
-          title={this.props.featuredCategories[key].title}
-          onPress={this.onProductPress}
-          currencySymbol={this.props.currencySymbol}
-        />
-      );
-    });
+    return _.map(this.props.featuredProducts, (value, key) => (
+      <FeaturedProducts
+        key={`featured${key}`}
+        products={value}
+        title={this.props.featuredCategories[key].title}
+        onPress={this.onProductPress}
+        currencySymbol={this.props.currencySymbol}
+      />
+    ));
   }
 
   render() {
@@ -86,12 +86,12 @@ class HomeScreen extends Component {
     return (
       <ScrollView
         style={styles.container}
-        refreshControl={
+        refreshControl={(
           <RefreshControl
             refreshing={this.props.refreshing}
             onRefresh={this.onRefresh}
           />
-        }
+)}
       >
         <HomeSlider slider={this.props.slider} />
         {this.renderFeatured()}
@@ -118,14 +118,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  }
+  },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const { refreshing } = state.home;
   const { errorMessage, currency } = state.magento;
   const { default_display_currency_symbol: currencySymbol } = currency;
-  return { ...state.home, refreshing, errorMessage, currencySymbol };
+  return {
+    ...state.home, refreshing, errorMessage, currencySymbol,
+  };
 };
 
 export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(HomeScreen);

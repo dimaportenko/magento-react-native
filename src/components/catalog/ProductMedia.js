@@ -6,7 +6,6 @@ import { Spinner } from '../common';
 
 
 class ProductMedia extends PureComponent {
-
   renderMedia() {
     const { media } = this.props;
 
@@ -27,7 +26,7 @@ class ProductMedia extends PureComponent {
   renderMediaItems() {
     const { media } = this.props;
 
-    return media.map(item => {
+    return media.map((item) => {
       console.log('media item');
       console.log(magento.getProductMediaUrl() + item.file);
       return (
@@ -56,7 +55,7 @@ const styles = {
   },
   imageStyle: {
     height: 290,
-    top: 0
+    top: 0,
   },
 };
 

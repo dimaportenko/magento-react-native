@@ -9,18 +9,18 @@ import { NAVIGATION_CART_PATH } from '../../navigation/routes';
 class CartBadge extends Component {
   onPress() {
     NavigationService.navigate(NAVIGATION_CART_PATH, {
-      title: 'Cart'
+      title: 'Cart',
     });
   }
 
   render() {
     return (
       <IconBadge
-        MainElement={
+        MainElement={(
           <View style={styles.iconWrapper}>
             <Icon name="md-cart" type="ionicon" color={this.props.color} />
           </View>
-        }
+        )}
         BadgeElement={
           <Text style={styles.textStyle}>{this.props.itemsCount}</Text>
         }
@@ -37,23 +37,23 @@ const styles = {
     height: 15,
     width: 15,
     borderRadius: 15,
-    marginLeft: 23
+    marginLeft: 23,
   },
   textStyle: {
     color: '#fff',
     fontSize: 12,
     textAlign: 'center',
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
   iconWrapper: {
     marginTop: 5,
-    marginRight: 10
+    marginRight: 10,
   },
   iconBadgeStyle: {
     minWidth: 15,
     height: 15,
-    backgroundColor: 'red'
-  }
+    backgroundColor: 'red',
+  },
 };
 
 const mapStateToProps = ({ cart }) => {

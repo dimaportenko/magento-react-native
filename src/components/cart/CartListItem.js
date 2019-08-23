@@ -56,7 +56,10 @@ class CartListItem extends Component {
             {' '}
             {this.props.item.price}
           </Text>
-          <Text style={textStyle}>Qty: {this.props.item.qty}</Text>
+          <Text style={textStyle}>
+            Qty:
+            {this.props.item.qty}
+          </Text>
         </View>
         <View style={styles.removeContainer}>
           {this.props.cart.removingItemId === this.props.item.item_id

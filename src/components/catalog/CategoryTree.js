@@ -6,10 +6,10 @@ import { initMagento, getCategoryTree } from '../../actions/index';
 import CategoryTreeList from './CategoryTreeList';
 
 class CategoryTree extends Component {
-	static navigationOptions = {
-		title: 'Categories'.toUpperCase(),
-		headerBackTitle: ' '
-	};
+  static navigationOptions = {
+    title: 'Categories'.toUpperCase(),
+    headerBackTitle: ' ',
+  };
 
   componentDidMount() {
     this.props.getCategoryTree();
@@ -23,16 +23,16 @@ class CategoryTree extends Component {
     const { categoryTree } = this.props;
     if (this.props.categoryTree) {
       return (
-      <CategoryTreeList
-        categories={categoryTree.children_data}
-        refreshControl={
-          <RefreshControl
-            refreshing={this.props.refreshing}
-            onRefresh={this.onRefresh}
-          />
-        }
-      />
-    );
+        <CategoryTreeList
+          categories={categoryTree.children_data}
+          refreshControl={(
+            <RefreshControl
+              refreshing={this.props.refreshing}
+              onRefresh={this.onRefresh}
+            />
+)}
+        />
+      );
     }
 
     return <Spinner />;
@@ -50,12 +50,10 @@ class CategoryTree extends Component {
 const styles = {
   containerStyle: {
     flex: 1,
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 };
 
-const mapStateToProps = ({ magento, categoryTree }) => {
-  return { magento, categoryTree, refreshing: categoryTree.refreshing };
-};
+const mapStateToProps = ({ magento, categoryTree }) => ({ magento, categoryTree, refreshing: categoryTree.refreshing });
 
 export default connect(mapStateToProps, { initMagento, getCategoryTree })(CategoryTree);

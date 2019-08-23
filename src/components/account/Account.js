@@ -4,7 +4,7 @@ import {
   View,
   Text,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import { Button } from '../common';
 import { logout, currentCustomer } from '../../actions';
@@ -12,7 +12,7 @@ import { NAVIGATION_ORDERS_PATH, NAVIGATION_ADDRESS_SCREEN_PATH } from '../../na
 
 class Account extends Component {
   static navigationOptions = {
-    title: 'Account'
+    title: 'Account',
   };
 
   componentDidMount() {
@@ -35,7 +35,9 @@ class Account extends Component {
       <View style={styles.textContainer}>
         <Text style={styles.title}>Contact Information</Text>
         <Text style={styles.text}>
-          {firstname} {lastname}
+          {firstname}
+          {' '}
+          {lastname}
         </Text>
         <Text style={styles.text}>{email}</Text>
       </View>
@@ -73,25 +75,25 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     alignItems: 'center',
-    paddingTop: 20
+    paddingTop: 20,
   },
   activity: {
-    padding: 10
+    padding: 10,
   },
   title: {
     fontWeight: '700',
     textAlign: 'center',
-    fontSize: 16
+    fontSize: 16,
   },
   text: {
     fontSize: 16,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   textContainer: {
-    marginBottom: 15
+    marginBottom: 15,
   },
   buttonMargin: {
-    marginTop: 20
+    marginTop: 20,
   },
 });
 

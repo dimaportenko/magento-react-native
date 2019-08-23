@@ -3,13 +3,12 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import { NAVIGATION_ORDER_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 
 class OrderListItem extends Component {
-
   openOrdersScreen = (item) => {
     NavigationService.navigate(NAVIGATION_ORDER_PATH, {
       item,
@@ -23,15 +22,15 @@ class OrderListItem extends Component {
     return (
       <TouchableOpacity onPress={() => this.openOrdersScreen(item)}>
         <View style={container}>
-          <Text style={code} >{`Order # ${item.increment_id}`}</Text>
-          <Text style={text} >{`Created: ${item.created_at}`}</Text>
-          <Text style={text} >
+          <Text style={code}>{`Order # ${item.increment_id}`}</Text>
+          <Text style={text}>{`Created: ${item.created_at}`}</Text>
+          <Text style={text}>
             {`Ship to ${item.customer_firstname} ${item.customer_lastname}`}
           </Text>
-          <Text style={text} >
+          <Text style={text}>
             {`Order Total: ${currencySymbol} ${item.grand_total}`}
           </Text>
-          <Text style={text} >{`Status: ${item.status}`}</Text>
+          <Text style={text}>{`Status: ${item.status}`}</Text>
         </View>
       </TouchableOpacity>
     );

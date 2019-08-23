@@ -8,7 +8,9 @@ import {
   updateCheckoutUI,
   checkoutCustomerNextLoading,
 } from '../../actions';
-import { CardSection, Input, Spinner, ModalSelect, Button } from '../common';
+import {
+  CardSection, Input, Spinner, ModalSelect, Button,
+} from '../common';
 import Sizes from '../../constants/Sizes';
 
 
@@ -154,12 +156,8 @@ class CheckoutCustomerAccount extends Component {
   regionSelect(attributeId, selectedRegion) {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
-      const country = countries.find(item => {
-        return item.id === countryId;
-      });
-      const regionData = country.available_regions.find(item => {
-        return item.id === selectedRegion;
-      });
+      const country = countries.find(item => item.id === countryId);
+      const regionData = country.available_regions.find(item => item.id === selectedRegion);
       const region = {
         regionCode: regionData.code,
         region: regionData.name,
@@ -188,16 +186,12 @@ class CheckoutCustomerAccount extends Component {
   renderRegions() {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length && countries && countries.length) {
-      const country = countries.find(item => {
-        return item.id === countryId;
-      });
+      const country = countries.find(item => item.id === countryId);
       if (country && country.available_regions) {
-        const data = country.available_regions.map(value => {
-          return {
-            label: value.name,
-            key: value.id,
-          };
-        });
+        const data = country.available_regions.map(value => ({
+          label: value.name,
+          key: value.id,
+        }));
 
         return (
           <ModalSelect
@@ -238,16 +232,12 @@ class CheckoutCustomerAccount extends Component {
       );
     }
 
-    const data = countries.map(value => {
-      return {
-        label: value.full_name_locale,
-        key: value.id,
-      };
-    });
+    const data = countries.map(value => ({
+      label: value.full_name_locale,
+      key: value.id,
+    }));
 
-    const country = countries.find(item => {
-      return item.id === countryId;
-    });
+    const country = countries.find(item => item.id === countryId);
     const label = country ? country.full_name_locale : 'Country';
 
     return (
@@ -379,10 +369,12 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: Sizes.WINDOW_WIDTH * 0.9,
     marginBottom: 10,
-  }
+  },
 });
 
-const mapStateToProps = ({ checkout, cart, account, magento }) => {
+const mapStateToProps = ({
+  checkout, cart, account, magento,
+}) => {
   const { countries } = magento;
   const { cartId } = cart;
   const { customer } = account;

@@ -9,49 +9,47 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import { ProductListItem, Spinner } from './';
-import Sizes from '../../constants/Sizes';
 import ModalSelector from 'react-native-modal-selector';
+import { ProductListItem, Spinner } from '.';
+import Sizes from '../../constants/Sizes';
 import { NAVIGATION_DRAWER_SCREEN, NAVIGATION_FILTER_DRAWER_SCREEN } from '../../navigation/routes';
 
 const sortData = [
   {
     label: 'Name: a to z',
-    key: 0
+    key: 0,
   },
   {
     label: 'Name: z to a',
-    key: 1
+    key: 1,
   },
   {
     label: 'Price: low to high',
-    key: 2
+    key: 2,
   },
   {
     label: 'Price: high to low',
-    key: 3
+    key: 3,
   },
 ];
 
 class ProductList extends Component {
-  renderItemRow = (product) => {
-    return (
-      <ProductListItem
+  renderItemRow = product => (
+    <ProductListItem
       imageStyle={styles.imageStyle}
       viewContainerStyle={{ flex: 1 }}
       product={product.item}
       onRowPress={this.props.onRowPress}
       currencySymbol={this.props.currencySymbol}
-      />
-    );
-  };
+    />
+  );
 
   renderItemColumn = (product) => {
     const {
       textStyle,
       infoStyle,
       priceStyle,
-      columnContainerStyle
+      columnContainerStyle,
     } = styles;
 
     return (
@@ -68,35 +66,33 @@ class ProductList extends Component {
     );
   };
 
-  renderHeader = () => {
-    return (
-      <View style={styles.headerContainerStyle}>
-        <ModalSelector
+  renderHeader = () => (
+    <View style={styles.headerContainerStyle}>
+      <ModalSelector
         style={styles.iconWrapper}
-          data={sortData}
-          ref={selector => { this.selector = selector; }}
-          customSelector={
-            <TouchableOpacity
-              style={styles.iconWrapper}
-              onPress={() => this.selector.open()}
-            >
-              <Icon name='sort' size={24} color="#95989F" />
-              <Text style={styles.headerTextStyle}>Sort</Text>
-            </TouchableOpacity>
-          }
-          onChange={(option) => this.props.performSort(option.key)}
-        />
-        <View style={styles.separator} />
-        <TouchableOpacity
-          style={styles.iconWrapper}
-          onPress={() => this.props.navigation.toggleFilterDrawer()}
-        >
-          <Icon name='filter'size={24} color="#95989F" />
-          <Text style={styles.headerTextStyle}>Filter</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+        data={sortData}
+        ref={(selector) => { this.selector = selector; }}
+        customSelector={(
+          <TouchableOpacity
+            style={styles.iconWrapper}
+            onPress={() => this.selector.open()}
+          >
+            <Icon name="sort" size={24} color="#95989F" />
+            <Text style={styles.headerTextStyle}>Sort</Text>
+          </TouchableOpacity>
+)}
+        onChange={option => this.props.performSort(option.key)}
+      />
+      <View style={styles.separator} />
+      <TouchableOpacity
+        style={styles.iconWrapper}
+        onPress={() => this.props.navigation.toggleFilterDrawer()}
+      >
+        <Icon name="filter" size={24} color="#95989F" />
+        <Text style={styles.headerTextStyle}>Filter</Text>
+      </TouchableOpacity>
+    </View>
+  )
 
   renderFooter = () => {
     if (this.props.canLoadMoreContent) {
@@ -107,7 +103,9 @@ class ProductList extends Component {
   }
 
   renderContent = () => {
-    const { products, onEndReached, refreshControl, gridColumnsValue } = this.props;
+    const {
+      products, onEndReached, refreshControl, gridColumnsValue,
+    } = this.props;
 
     if (!this.props.products) {
       return <Spinner />;
@@ -149,14 +147,14 @@ class ProductList extends Component {
 
 ProductList.propTypes = {
   currencySymbol: PropTypes.string.isRequired,
-}
+};
 
 const styles = StyleSheet.create({
   MainContainer: {
     justifyContent: 'center',
     flex: 1,
     margin: 5,
-    paddingTop: (Platform.OS) === 'ios' ? 20 : 0
+    paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
   },
   containerStyle: {
     flex: 1,
@@ -167,7 +165,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   notFoundText: {
-    textAlign: 'center'
+    textAlign: 'center',
   },
   infoStyle: {
     flexDirection: 'column',
@@ -189,7 +187,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   imageStyle: {
-    flex: 1
+    flex: 1,
   },
   columnContainerStyle: {
     flexDirection: 'column',
@@ -208,7 +206,7 @@ const styles = StyleSheet.create({
     margin: 8,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   headerTextStyle: {
     color: '#545864',
@@ -219,8 +217,8 @@ const styles = StyleSheet.create({
     width: 1,
     backgroundColor: '#D4D5D7',
     marginTop: 8,
-    marginBottom: 8
-  }
+    marginBottom: 8,
+  },
 });
 
 export { ProductList };

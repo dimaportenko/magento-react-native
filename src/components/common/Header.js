@@ -11,8 +11,8 @@ const Header = (props) => {
   const { textStyles, viewStyles } = styles;
 
   return (
-    <View style={viewStyles} >
-      <Text style={textStyles} >{props.text}</Text>
+    <View style={viewStyles}>
+      <Text style={textStyles}>{props.text}</Text>
     </View>
   );
 };
@@ -37,11 +37,11 @@ const styles = {
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     elevation: 2,
-    position: 'relative'
+    position: 'relative',
   },
   textStyles: {
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 };
 
 export const MaterialHeaderButtons = props => (

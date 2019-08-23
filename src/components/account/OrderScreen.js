@@ -4,7 +4,7 @@ import {
   Text,
   Image,
   StyleSheet,
-  FlatList
+  FlatList,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { orderProductDetail } from '../../actions';
@@ -12,12 +12,12 @@ import { getProductThumbnailFromAttribute } from '../../helper/product';
 
 class OrderScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
-    title: `Order # ${navigation.state.params.item.increment_id}`
+    title: `Order # ${navigation.state.params.item.increment_id}`,
   });
 
   componentDidMount() {
     const { navigation } = this.props;
-    navigation.state.params.item.items.forEach(item => {
+    navigation.state.params.item.items.forEach((item) => {
       if (!(item.sku in this.props.products)) {
         this.props.orderProductDetail(item.sku);
       }
@@ -26,13 +26,15 @@ class OrderScreen extends Component {
 
   image = (item) => {
     const { products } = this.props;
-		if (products[item.sku]) {
-			return getProductThumbnailFromAttribute(products[item.sku]);
-		}
-	};
+    if (products[item.sku]) {
+      return getProductThumbnailFromAttribute(products[item.sku]);
+    }
+  };
 
   renderItem = (item) => {
-    const { code, text, row, imageStyle, container } = styles;
+    const {
+      code, text, row, imageStyle, container,
+    } = styles;
     const { currencySymbol } = this.props;
 
     return (
@@ -40,13 +42,13 @@ class OrderScreen extends Component {
         <View style={row}>
           <Image style={imageStyle} resizeMode="contain" source={{ uri: this.image(item.item) }} />
           <View>
-            <Text style={code} >{item.item.name}</Text>
-            <Text style={text} >{`SKU: ${item.item.sku}`}</Text>
-            <Text style={text} >
+            <Text style={code}>{item.item.name}</Text>
+            <Text style={text}>{`SKU: ${item.item.sku}`}</Text>
+            <Text style={text}>
               {`Price: ${currencySymbol} ${item.item.price}`}
             </Text>
-            <Text style={text} >{`Qty: ${item.item.qty_ordered}`}</Text>
-            <Text style={text} >{`Subtotal: ${currencySymbol} ${item.item.row_total}`}</Text>
+            <Text style={text}>{`Qty: ${item.item.qty_ordered}`}</Text>
+            <Text style={text}>{`Subtotal: ${currencySymbol} ${item.item.row_total}`}</Text>
           </View>
         </View>
       </View>

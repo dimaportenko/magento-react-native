@@ -20,7 +20,7 @@ import { NAVIGATION_HOME_SCREEN_PATH } from '../../navigation/routes';
 class OrdersScreen extends Component {
   static navigationOptions = () => ({
     title: 'Orders',
-    headerBackTitle: ' '
+    headerBackTitle: ' ',
   });
 
   componentDidMount() {
@@ -31,24 +31,21 @@ class OrdersScreen extends Component {
     this.props.getOrdersForCustomer(this.props.customerId, true);
   };
 
-  renderItem = (orderItem) => {
-    return (
-      <OrderListItem item={orderItem.item} currencySymbol={this.props.currencySymbol}/>
-    );
-  };
+  renderItem = orderItem => (
+    <OrderListItem item={orderItem.item} currencySymbol={this.props.currencySymbol} />
+  );
 
   renderOrderList = () => {
-    const data = this.props.orders.sort((b, a) =>
-      moment(a.created_at).diff(b.created_at));
+    const data = this.props.orders.sort((b, a) => moment(a.created_at).diff(b.created_at));
 
     return (
       <FlatList
-        refreshControl={
+        refreshControl={(
           <RefreshControl
             refreshing={this.props.refreshing}
             onRefresh={this.onRefresh}
           />
-        }
+)}
         data={data}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
@@ -61,7 +58,7 @@ class OrdersScreen extends Component {
     const {
       emptyListContainerStyle,
       textStyle,
-      buttonTextStyle
+      buttonTextStyle,
     } = styles;
 
 
@@ -103,7 +100,7 @@ const styles = {
   emptyListContainerStyle: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textStyle: {
     fontSize: 20,
@@ -131,5 +128,5 @@ const mapStateToProps = ({ account, magento }) => {
 
 export default connect(mapStateToProps, {
   getOrdersForCustomer,
-  setCurrentProduct
+  setCurrentProduct,
 })(OrdersScreen);

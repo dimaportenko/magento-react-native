@@ -13,7 +13,6 @@ import { Button } from '../common';
 
 
 class DrawerScreen extends Component {
-
   static propTypes = {};
 
   static defaultProps = {};
@@ -26,10 +25,10 @@ class DrawerScreen extends Component {
   onApplyPressed = () => {
     const priceFilter = {
       price: {
-      condition: 'from,to',
-      value: `${this.state.minValue},${this.state.maxValue}`,
-        }
-      };
+        condition: 'from,to',
+        value: `${this.state.minValue},${this.state.maxValue}`,
+      },
+    };
     this.props.addFilterData(priceFilter);
     if (this.props.filters.categoryScreen) {
       this.props.getProductsForCategoryOrChild(this.props.category, null, this.props.filters.sortOrder, priceFilter);
@@ -49,7 +48,7 @@ class DrawerScreen extends Component {
       minInputStyle,
       maxInputStyle,
       dashTextStyle,
-      inputContainerStyle
+      inputContainerStyle,
     } = styles;
 
     return (
@@ -59,14 +58,14 @@ class DrawerScreen extends Component {
           <View style={inputContainerStyle}>
             <TextInput
               style={minInputStyle}
-              placeholder='Min.'
-              onChangeText={(minValue) => this.setState({ minValue })}
+              placeholder="Min."
+              onChangeText={minValue => this.setState({ minValue })}
             />
             <Text style={dashTextStyle}>-</Text>
             <TextInput
               style={maxInputStyle}
-              placeholder='Max.'
-              onChangeText={(maxValue) => this.setState({ maxValue })}
+              placeholder="Max."
+              onChangeText={maxValue => this.setState({ maxValue })}
             />
           </View>
         </View>
@@ -123,7 +122,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = ({ category, filters, search }) => {
-  const currentCategory  = category.current.category;
+  const currentCategory = category.current.category;
   const { searchInput } = search;
   return { category: currentCategory, filters, searchInput };
 };

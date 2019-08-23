@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { Spinner } from '../common';
@@ -13,12 +13,12 @@ import { initiatePasswordReset } from '../../actions';
 
 class PasswordReset extends Component {
   static navigationOptions = {
-    title: 'Reset Password'
+    title: 'Reset Password',
   };
 
   componentWillMount() {
     this.setState({
-      email: ''
+      email: '',
     });
   }
 
@@ -71,26 +71,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   content: {
     width: 230,
     marginTop: 55,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   contentTitle1: {
     fontSize: 12,
     fontWeight: '700',
-    marginBottom: 13
+    marginBottom: 13,
   },
   contentTitle2: {
     fontSize: 12,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   emailOffset: {
     marginTop: 18,
-    marginBottom: 15
-  }
+    marginBottom: 15,
+  },
 });
 
 const mapStateToProps = ({ customerAuth }) => {
@@ -100,5 +100,5 @@ const mapStateToProps = ({ customerAuth }) => {
 };
 
 export default connect(mapStateToProps, {
-  initiatePasswordReset
+  initiatePasswordReset,
 })(PasswordReset);

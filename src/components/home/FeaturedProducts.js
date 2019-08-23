@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, FlatList, Text } from 'react-native';
+import {
+  View, StyleSheet, FlatList, Text,
+} from 'react-native';
 import Sizes from '../../constants/Sizes';
 import FeaturedProductItem from './FeaturedProductItem';
 
 
-const FeaturedProducts = props => {
+const FeaturedProducts = (props) => {
   const keyExtractor = item => item.id.toString();
 
   return (

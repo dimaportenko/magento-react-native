@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, StatusBar, StyleSheet, AsyncStorage } from 'react-native';
-import { Spinner } from './../common';
+import {
+  View, StatusBar, StyleSheet, AsyncStorage,
+} from 'react-native';
+import { Spinner } from '../common';
 import {
   NAVIGATION_ACCOUNT_STACK_PATH,
-  NAVIGATION_LOGIN_STACK_PATH
+  NAVIGATION_LOGIN_STACK_PATH,
 } from '../../navigation/routes';
 import { magento } from '../../magento';
 
@@ -23,7 +25,7 @@ class AuthLoading extends Component {
       this.props.navigation.navigate(
         customerToken
           ? NAVIGATION_ACCOUNT_STACK_PATH
-          : NAVIGATION_LOGIN_STACK_PATH
+          : NAVIGATION_LOGIN_STACK_PATH,
       );
     } catch (e) {
       // TODO: add error screen via switch navigation
@@ -45,8 +47,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignContent: 'center',
-    flexDirection: 'column'
-  }
+    flexDirection: 'column',
+  },
 });
 
 export default connect()(AuthLoading);

@@ -4,7 +4,7 @@ import {
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Text
+  Text,
 } from 'react-native';
 import { connect } from 'react-redux';
 import Colors from '../../constants/Colors';
@@ -14,7 +14,7 @@ import { signIn } from '../../actions';
 
 class Signin extends Component {
   static navigationOptions = {
-    title: 'Sign In'
+    title: 'Sign In',
   };
 
   componentWillMount() {
@@ -23,12 +23,14 @@ class Signin extends Component {
       lastname: '',
       email: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
     });
   }
 
   onCreateAccountPress = () => {
-    const { email, password, firstname, lastname, confirmPassword } = this.state;
+    const {
+      email, password, firstname, lastname, confirmPassword,
+    } = this.state;
     // TODO: add password check
 
     const customer = {
@@ -37,7 +39,7 @@ class Signin extends Component {
         firstname,
         lastname,
       },
-      password
+      password,
     };
 
     this.props.signIn(customer);
@@ -94,7 +96,7 @@ class Signin extends Component {
             style={styles.input}
             value={this.state.lastname}
             onChangeText={value => this.setState({ lastname: value })}
-            ref={input => { this.lastnameInput = input; }}
+            ref={(input) => { this.lastnameInput = input; }}
             onSubmitEditing={() => { this.emailInput.focus(); }}
           />
         </View>
@@ -109,7 +111,7 @@ class Signin extends Component {
             style={styles.input}
             value={this.state.email}
             onChangeText={value => this.setState({ email: value })}
-            ref={input => { this.emailInput = input; }}
+            ref={(input) => { this.emailInput = input; }}
             onSubmitEditing={() => { this.passwordInput.focus(); }}
           />
         </View>
@@ -123,7 +125,7 @@ class Signin extends Component {
             style={styles.input}
             value={this.state.password}
             onChangeText={value => this.setState({ password: value })}
-            ref={input => { this.passwordInput = input; }}
+            ref={(input) => { this.passwordInput = input; }}
             onSubmitEditing={this.onCreateAccountPress}
           />
         </View>
@@ -139,12 +141,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   input: {
     color: '#000',
     paddingRight: 5,
-    paddingLeft: 5
+    paddingLeft: 5,
   },
   inputContainer: {
     borderWidth: 1,
@@ -152,10 +154,10 @@ const styles = StyleSheet.create({
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
     justifyContent: 'center',
-    marginBottom: 20
+    marginBottom: 20,
   },
   offsetTop: {
-    marginTop: Sizes.WINDOW_HEIGHT * 0.1
+    marginTop: Sizes.WINDOW_HEIGHT * 0.1,
   },
   button: {
     borderWidth: 1,
@@ -163,18 +165,18 @@ const styles = StyleSheet.create({
     borderColor: Colors.GRAY,
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   buttonTitle: {
     color: 'white',
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
   error: {
     color: 'red',
     width: Sizes.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
     fontSize: 14,
-    marginTop: 20
+    marginTop: 20,
   },
   success: {
     width: Sizes.WINDOW_WIDTH * 0.85,
@@ -183,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     backgroundColor: '#E5EFE5',
     padding: 5,
-    marginTop: 20
+    marginTop: 20,
   },
 });
 

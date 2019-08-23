@@ -134,7 +134,9 @@ const mapStateToProps = ({ cart, checkout }) => {
   const { cartId } = cart;
   const { payments, selectedPayment } = checkout;
   const { loading } = checkout.ui;
-  return { cartId, payments, selectedPayment, loading };
+  return {
+    cartId, payments, selectedPayment, loading,
+  };
 };
 
 export default connect(mapStateToProps, {

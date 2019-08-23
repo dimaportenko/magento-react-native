@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native';
+import {
+  StyleSheet, Text, TouchableOpacity, View, Image,
+} from 'react-native';
 import Sizes from '../../constants/Sizes';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 
@@ -8,28 +10,26 @@ const FeaturedProductItem = ({
   onPress,
   currencySymbol,
   ...props
-}) => {
-  return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.containerStyle}
-        onPress={() => { onPress(props); }}
-      >
-        <Image
-          style={styles.imageStyle}
-          resizeMode="contain"
-          source={{ uri: getProductThumbnailFromAttribute(props) }}
-        />
-        <View style={styles.infoStyle}>
-          <Text style={styles.textStyle} ellipsizeMode="tail" numberOfLines={2}>{props.name}</Text>
-          <Text style={styles.priceStyle}>
+}) => (
+  <View style={styles.container}>
+    <TouchableOpacity
+      style={styles.containerStyle}
+      onPress={() => { onPress(props); }}
+    >
+      <Image
+        style={styles.imageStyle}
+        resizeMode="contain"
+        source={{ uri: getProductThumbnailFromAttribute(props) }}
+      />
+      <View style={styles.infoStyle}>
+        <Text style={styles.textStyle} ellipsizeMode="tail" numberOfLines={2}>{props.name}</Text>
+        <Text style={styles.priceStyle}>
           {`${currencySymbol} ${props.price}`}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </View>
-  );
-};
+        </Text>
+      </View>
+    </TouchableOpacity>
+  </View>
+);
 
 FeaturedProductItem.propTypes = {
   name: PropTypes.string,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
   imageStyle: {
     height: 80,
     width: 80,
-  }
+  },
 });
 
 export default FeaturedProductItem;

@@ -18,14 +18,14 @@ const styles = {
     color: '#007aff',
     fontSize: 18,
     fontWeight: '600',
-		paddingRight: 15,
-    paddingLeft: 15
+    paddingRight: 15,
+    paddingLeft: 15,
   },
   buttonStyle: {
-		alignSelf: 'flex-end',
+    alignSelf: 'flex-end',
     marginLeft: 5,
-    marginRight: 5
-  }
+    marginRight: 5,
+  },
 };
 
 export { ExpandButton };

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {
   View,
 } from 'react-native';
-import AddAccountAddress from "./AddAccountAddress";
+import AddAccountAddress from './AddAccountAddress';
 
 class AddressScreen extends Component {
   static navigationOptions = () => ({
     title: 'My Address',
-    headerBackTitle: ' '
+    headerBackTitle: ' ',
   });
 
   render() {

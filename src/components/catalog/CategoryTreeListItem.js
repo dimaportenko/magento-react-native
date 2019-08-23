@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Text, View, TouchableOpacity, LayoutAnimation } from 'react-native';
+import {
+  Text, View, TouchableOpacity, LayoutAnimation,
+} from 'react-native';
 import { Icon } from 'react-native-elements';
 import CategoryTreeList from './CategoryTreeList';
 import { setCurrentCategory, resetFilters } from '../../actions/index';
@@ -15,8 +17,8 @@ class CategoryTreeListItem extends Component {
       duration: 150,
       update: {
         type: LayoutAnimation.Types.linear,
-        property: LayoutAnimation.Properties.opacity
-      }
+        property: LayoutAnimation.Properties.opacity,
+      },
     };
     LayoutAnimation.configureNext(switchAnimation);
   }
@@ -30,7 +32,7 @@ class CategoryTreeListItem extends Component {
     this.props.resetFilters();
     this.props.setCurrentCategory({ category });
     NavigationService.navigate(NAVIGATION_CATEGORY_PATH, {
-      title: category.name
+      title: category.name,
     });
   }
 
@@ -60,7 +62,7 @@ class CategoryTreeListItem extends Component {
       fontSize: 18,
       alignSelf: 'flex-start',
       fontWeight: '300',
-      paddingLeft: 10 * category.level
+      paddingLeft: 10 * category.level,
     };
 
     return (
@@ -104,13 +106,13 @@ const styles = {
     borderBottomWidth: 1,
     borderColor: '#ddd',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   dropIcon: {
     height: 24,
     padding: 2,
-    paddingRight: 15
-  }
+    paddingRight: 15,
+  },
 };
 
 export default connect(null, { setCurrentCategory, resetFilters })(CategoryTreeListItem);
