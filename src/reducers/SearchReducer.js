@@ -2,7 +2,7 @@ import {
   MAGENTO_GET_SEARCH_PRODUCTS,
   MAGENTO_LOAD_MORE_SEARCH_PRODUCTS,
   MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
-  MAGENTO_RESET_SEARCH_PRODUCTS
+  MAGENTO_RESET_SEARCH_PRODUCTS,
 } from '../actions/types';
 import { getPriceFromChildren } from '../helper/product';
 
@@ -15,7 +15,7 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case MAGENTO_RESET_SEARCH_PRODUCTS: 
+    case MAGENTO_RESET_SEARCH_PRODUCTS:
       return {
         ...state,
         searchInput: null,
@@ -28,36 +28,36 @@ export default (state = INITIAL_STATE, action) => {
         return {
           searchInput: action.payload.searchInput,
           products: [...state.products, ...action.payload.data.items],
-          totalCount: action.payload.data.total_count
+          totalCount: action.payload.data.total_count,
         };
       }
       return {
         searchInput: action.payload.searchInput,
         products: [...action.payload.data.items],
-        totalCount: action.payload.data.total_count
+        totalCount: action.payload.data.total_count,
       };
     }
     case MAGENTO_UPDATE_SEARCH_CONF_PRODUCT: {
       const { sku, children } = action.payload;
-      const products = state.products.map(product => {
+      const products = state.products.map((product) => {
         if (product.sku === sku) {
           return {
             ...product,
             children,
-            price: getPriceFromChildren(children)
+            price: getPriceFromChildren(children),
           };
         }
         return product;
       });
       return {
         ...state,
-        products
+        products,
       };
     }
     case MAGENTO_LOAD_MORE_SEARCH_PRODUCTS: {
       return {
         ...state,
-        loadingMore: action.payload
+        loadingMore: action.payload,
       };
     }
     default:

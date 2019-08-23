@@ -20,12 +20,12 @@ export default (state = INITIAL_STATE, action) => {
 
       let featuredProducts = {};
       _.forEach(state.featuredProducts, (products, categoryId) => {
-        const items = products.items.map(product => {
+        const items = products.items.map((product) => {
           if (product.sku === sku) {
             return {
               ...product,
               children,
-              price: getPriceFromChildren(children)
+              price: getPriceFromChildren(children),
             };
           }
           return product;

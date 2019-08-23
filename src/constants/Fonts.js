@@ -1,3 +1,3 @@
 export default {
-  TREBUCHET_MS: { fontFamily: 'Trebuchet MS' }
+  TREBUCHET_MS: { fontFamily: 'Trebuchet MS' },
 };

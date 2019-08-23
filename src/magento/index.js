@@ -12,8 +12,8 @@ const defaultOptions = {
   authentication: {
     integration: {
       access_token: undefined,
-    }
-  }
+    },
+  },
 };
 
 class Magento {
@@ -55,23 +55,23 @@ class Magento {
 
     if (params) {
       let separator = '?';
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         uri += `${separator}${key}=${params[key]}`;
         separator = '&';
       });
     }
 
-    //check if there's any missing parameters
+    // check if there's any missing parameters
     const missingFields = uri.match(/(\{[a-zA-Z0-9_]+\})/g);
     if (missingFields && missingFields.length > 0) {
       return Promise.reject(
-        `URL missing parameters: ${missingFields.join(', ')}`
+        `URL missing parameters: ${missingFields.join(', ')}`,
       );
     }
 
     const headers = {
       'User-Agent': this.configuration.userAgent,
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     };
     if (this.access_token && type === ADMIN_TYPE) {
       headers.Authorization = `Bearer ${this.access_token}`;
@@ -80,9 +80,11 @@ class Magento {
     }
 
     return new Promise((resolve, reject) => {
-      console.log({ uri, method, headers, data, ...params });
+      console.log({
+        uri, method, headers, data, ...params,
+      });
       fetch(uri, { method, headers, body: JSON.stringify(data) })
-        .then(response => {
+        .then((response) => {
           console.log(response);
           if (response.ok) {
             return response.json();
@@ -90,12 +92,12 @@ class Magento {
           // Possible 401 or other network error
           return response.json().then(errorResponse => Promise.reject(errorResponse));
         })
-        .then(responseData => {
+        .then((responseData) => {
           // debugger;
           console.log(responseData);
           resolve(responseData);
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
           const customError = this.getErrorMessageForResponce(error);
           reject(new Error(customError));
@@ -105,19 +107,18 @@ class Magento {
 
   getErrorMessageForResponce(data) {
     const params = data.parameters;
-    let message = data.message;
+    let { message } = data;
     if (typeof params !== 'undefined') {
       if (Array.isArray(params) && params.length > 0) {
         data.parameters.forEach((item, index) => {
           message = message.replace(`%${index + 1}`, item);
         });
         return message;
-      } else {
-        _.forEach(params, (value, name) => {
-          message = message.replace(`%${name}`, value);
-        });
       }
-  }
+      _.forEach(params, (value, name) => {
+        message = message.replace(`%${name}`, value);
+      });
+    }
     return message;
   }
 
@@ -162,7 +163,9 @@ class Magento {
     return false;
   }
 
-  makeParams = ({ sort, page, pageSize, filter }) => {
+  makeParams = ({
+    sort, page, pageSize, filter,
+  }) => {
     let index = 0;
     let query = '';
     if (typeof sort !== 'undefined') {

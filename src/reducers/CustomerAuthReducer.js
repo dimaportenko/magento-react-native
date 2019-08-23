@@ -3,7 +3,7 @@ import {
   MAGENTO_CREATE_CUSTOMER,
   MAGENTO_AUTH_LOADING,
   MAGENTO_AUTH,
-  MAGENTO_AUTH_ERROR
+  MAGENTO_AUTH_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -12,7 +12,7 @@ const INITIAL_STATE = {
   error: null,
   success: null,
   loading: false,
-  reset_loading: false
+  reset_loading: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -31,7 +31,7 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           loading: action.payload,
           error: null,
-          success: null
+          success: null,
         };
       }
       return { ...state, loading: action.payload };

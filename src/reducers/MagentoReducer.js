@@ -1,6 +1,6 @@
 import { REHYDRATE } from 'redux-persist/es/constants';
 import {
-  MAGENTO_GET_COUNTRIES, MAGENTO_INIT, MAGENTO_INIT_ERROR, MAGENTO_STORE_CONFIG, MAGENTO_GET_CURRENCY
+  MAGENTO_GET_COUNTRIES, MAGENTO_INIT, MAGENTO_INIT_ERROR, MAGENTO_STORE_CONFIG, MAGENTO_GET_CURRENCY,
 } from '../actions/types';
 import { magento } from '../magento';
 
@@ -14,9 +14,9 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case REHYDRATE: {
-      if (action.payload &&
-        action.payload.magento &&
-        action.payload.magento.storeConfig
+      if (action.payload
+        && action.payload.magento
+        && action.payload.magento.storeConfig
       ) {
         magento.setStoreConfig(action.payload.magento.storeConfig);
       }

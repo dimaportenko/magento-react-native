@@ -9,32 +9,32 @@ import reducers from '../reducers';
 
 const categoryTreeSubsetBlacklistFilter = createBlacklistFilter(
   'categoryTree',
-  ['refreshing']
+  ['refreshing'],
 );
 
 const customerAuthSubsetBlacklistFilter = createBlacklistFilter(
   'customerAuth',
-  ['loading', 'reset_loading']
+  ['loading', 'reset_loading'],
 );
 
 const accountSubsetBlacklistFilter = createBlacklistFilter(
   'account',
-  ['refreshing']
+  ['refreshing'],
 );
 
 const cartSubsetBlacklistFilter = createBlacklistFilter(
   'cart',
-  ['addToCartLoading', 'errorMessage', 'refreshing']
+  ['addToCartLoading', 'errorMessage', 'refreshing'],
 );
 
 const homeSubsetBlacklistFilter = createBlacklistFilter(
   'home',
-  ['refreshing']
+  ['refreshing'],
 );
 
 const searchSubsetBlacklistFilter = createBlacklistFilter(
   'search',
-  ['loadingMore']
+  ['loadingMore'],
 );
 
 const persistConfig = {
@@ -55,10 +55,9 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 export const store = createStore(
   persistedReducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), // TODO: remove for production
-  applyMiddleware(thunk)
+  applyMiddleware(thunk),
 );
 
 export const persistor = persistStore(store);
 
 // persistor.purge();
-

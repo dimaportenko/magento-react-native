@@ -14,10 +14,10 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_FILTER_DATA: {
       if (typeof action.payload === 'number') {
         return { ...state, sortOrder: action.payload };
-      } else if (action.payload.price) {
+      } if (action.payload.price) {
         return { ...state, priceFilter: action.payload };
       }
-        return { ...state, categoryScreen: true };
+      return { ...state, categoryScreen: true };
     }
     case RESET_FILTERS_DATA:
       return { ...INITIAL_STATE };

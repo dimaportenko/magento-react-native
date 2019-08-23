@@ -51,7 +51,7 @@ import {
   NAVIGATION_ADDRESS_SCREEN_PATH,
   NAVIGATION_DRAWER_SCREEN,
   BOTTOM_TAB_NAVIGATOR,
-  NAVIGATION_FILTER_DRAWER_SCREEN
+  NAVIGATION_FILTER_DRAWER_SCREEN,
 } from './routes';
 
 const HomeStack = createStackNavigator(
@@ -70,10 +70,10 @@ const HomeStack = createStackNavigator(
       headerTitleStyle: {
         fontWeight: '500',
         fontSize: 18,
-        alignSelf: 'center'
-      }
-    }
-  }
+        alignSelf: 'center',
+      },
+    },
+  },
 );
 
 const AuthStack = createStackNavigator({
@@ -92,7 +92,7 @@ const AccountStack = createStackNavigator({
 const AccountSwitch = createSwitchNavigator({
   [NAVIGATION_AUTH_LOADING_SWITCH]: AuthLoading,
   [NAVIGATION_LOGIN_STACK_PATH]: AuthStack,
-  [NAVIGATION_ACCOUNT_STACK_PATH]: AccountStack
+  [NAVIGATION_ACCOUNT_STACK_PATH]: AccountStack,
 });
 
 const SearchStack = createStackNavigator({
@@ -110,51 +110,43 @@ const MainAppNavigator = createBottomTabNavigator(
     [NAVIGATION_HOME_STACK_PATH]: {
       screen: HomeStack,
       navigationOptions: () => ({
-        tabBarIcon: ({ tintColor }) => {
-          return <Icon name="md-home" type="ionicon" color={tintColor} />;
-        }
-      })
+        tabBarIcon: ({ tintColor }) => <Icon name="md-home" type="ionicon" color={tintColor} />,
+      }),
     },
     [NAVIGATION_SEARCH_SCREEN_PATH]: {
       screen: SearchStack,
       navigationOptions: () => ({
-        tabBarIcon: ({ tintColor }) => {
-          return <Icon name="md-search" type="ionicon" color={tintColor} />;
-        }
-      })
+        tabBarIcon: ({ tintColor }) => <Icon name="md-search" type="ionicon" color={tintColor} />,
+      }),
     },
     [NAVIGATION_AUTH_STACK_PATH]: {
       screen: AccountSwitch,
       navigationOptions: () => ({
-        tabBarIcon: ({ tintColor }) => {
-          return <Icon name="md-person" type="ionicon" color={tintColor} />;
-        }
-      })
+        tabBarIcon: ({ tintColor }) => <Icon name="md-person" type="ionicon" color={tintColor} />,
+      }),
     },
     [NAVIGATION_CART_PATH]: {
       screen: CartStack,
       navigationOptions: () => ({
-        tabBarIcon: ({ tintColor }) => {
-          return <CartBadge color={tintColor} />;
-        }
-      })
+        tabBarIcon: ({ tintColor }) => <CartBadge color={tintColor} />,
+      }),
     },
   },
   {
     // initialRouteName: NAVIGATION_AUTH_STACK_PATH,
     tabBarOptions: {
-      showLabel: false
-    }
-  }
+      showLabel: false,
+    },
+  },
 );
 
 const Drawer = createDrawerNavigator({
   [BOTTOM_TAB_NAVIGATOR]: {
-    screen: MainAppNavigator
+    screen: MainAppNavigator,
   },
   [NAVIGATION_DRAWER_SCREEN]: {
     screen: DrawerScreen,
-    navigationOptions: { header: null }
+    navigationOptions: { header: null },
   },
 }, {
   contentComponent: CategoryTree,
@@ -166,10 +158,8 @@ export const Navigator = createDrawerNavigator(
   },
   {
     contentComponent: DrawerScreen,
-    getCustomActionCreators: (route, stateKey) => {
-      return {
-        toggleFilterDrawer: () => DrawerActions.toggleDrawer({ key: stateKey }),
-      };
-    },
-  }
+    getCustomActionCreators: (route, stateKey) => ({
+      toggleFilterDrawer: () => DrawerActions.toggleDrawer({ key: stateKey }),
+    }),
+  },
 );

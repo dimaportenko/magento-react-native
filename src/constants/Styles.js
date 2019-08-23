@@ -10,19 +10,19 @@ export const buttonStyles = StyleSheet.create({
     borderColor: Colors.GRAY,
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   title: {
     color: 'white',
-    alignSelf: 'center'
-  }
+    alignSelf: 'center',
+  },
 });
 
 export const inputStyles = StyleSheet.create({
   input: {
     color: '#000',
     paddingRight: 5,
-    paddingLeft: 5
+    paddingLeft: 5,
   },
   container: {
     borderWidth: 1,
@@ -30,6 +30,6 @@ export const inputStyles = StyleSheet.create({
     width: Sizes.WINDOW_WIDTH * 0.7,
     height: 40,
     justifyContent: 'center',
-    marginBottom: 20
+    marginBottom: 20,
   },
 });
