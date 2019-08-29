@@ -42,4 +42,4 @@ troublesohard@gmail.com
 They are offering an open-source plan for this project.
 
 ## License
-[MIT License](LICENSE.md) Copyright (c) 2017-2019 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
+[MIT License](LICENSE) Copyright (c) 2017-2019 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
