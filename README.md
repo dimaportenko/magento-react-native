@@ -35,5 +35,11 @@ troublesohard@gmail.com
 
 [linkedin](https://www.linkedin.com/in/dmitry-portenko-712ab84a/)
 
+## Thanks to
+
+[<img src="https://global-uploads.webflow.com/5c741219fd0819540590e785/5c741219fd0819856890e790_asset%2039.svg" width="200px">](https://www.bugsnag.com/)
+
+They are offering an open-source plan for this project.
+
 ## License
 [MIT License](LICENSE.md) Copyright (c) 2017-2019 [Dmytro Portenko](https://www.linkedin.com/in/dmitry-portenko-712ab84a/).
