@@ -56,6 +56,7 @@ import {
   RESET_FILTERS_DATA,
   MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR,
 } from './types';
+import { logError } from '../helper/logger';
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
@@ -70,7 +71,7 @@ export const initMagento = () => {
       magento.setCustomerToken(customerToken);
       getCurrency(dispatch);
     } catch (error) {
-      console.log(error);
+      logError(error);
       dispatch({ type: MAGENTO_INIT_ERROR, payload: { errorMessage: error } });
     }
   };
@@ -81,7 +82,7 @@ const getCurrency = async (dispatch) => {
     const data = await magento.guest.getCurrency();
     dispatch({ type: MAGENTO_GET_CURRENCY, payload: data });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -101,7 +102,7 @@ export const getHomeData = refreshing => async (dispatch) => {
 
     _.forEach(payload.featuredCategories, (details, categoryId) => getFeaturedCategoryProducts(categoryId, dispatch));
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -118,7 +119,7 @@ const getFeaturedCategoryProducts = async (categoryId, dispatch) => {
       MAGENTO_UPDATE_FEATURED_CONF_PRODUCT,
     );
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -132,7 +133,7 @@ export const getCategoryTree = refreshing => async (dispatch) => {
     dispatch({ type: MAGENTO_GET_CATEGORY_TREE, payload: data });
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE, payload: false });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -152,7 +153,7 @@ export const getProductsForCategory = ({ id, offset }) => (dispatch) => {
       updateConfigurableProductsPrices(payload.items, dispatch);
     })
     .catch((error) => {
-      console.log(error);
+      logError(error);
     });
 };
 
@@ -181,7 +182,7 @@ export const getProductsForCategoryOrChild = (category, offset, sortOrder, filte
     dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
     updateConfigurableProductsPrices(payload.items, dispatch);
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -197,7 +198,7 @@ export const updateProductsForCategoryOrChild = (category, refreshing) => async 
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS, payload: false });
     updateConfigurableProductsPrices(payload.items, dispatch);
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -221,7 +222,7 @@ export const getSearchProducts = (searchInput, offset, sortOrder, filter) => asy
       MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
     );
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -244,12 +245,12 @@ export const getConfigurableProductOptions = sku => (dispatch) => {
             });
           })
           .catch((error) => {
-            console.log(error);
+            logError(error);
           });
       });
     })
     .catch((error) => {
-      console.log(error);
+      logError(error);
     });
 };
 
@@ -271,7 +272,7 @@ const updateConfigurableProductPrice = async (
     const data = await magento.admin.getConfigurableChildren(sku);
     dispatch({ type, payload: { sku, children: data } });
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -282,7 +283,7 @@ export const getProductMedia = ({ sku }) => (dispatch) => {
       dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: { sku, media } });
     })
     .catch((error) => {
-      console.log(error);
+      logError(error);
     });
 };
 
@@ -303,7 +304,7 @@ export const createCustomerCart = customerId => async (dispatch) => {
       dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
       dispatch(getCart());
     } catch (error) {
-      console.log(error);
+      logError(error);
     }
   }
 };
@@ -325,7 +326,7 @@ export const getCart = (refreshing = false) => async (dispatch, getState) => {
     dispatch({ type: MAGENTO_GET_CART, payload: cart });
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT, payload: false });
   } catch (error) {
-    console.log(error);
+    logError(error);
     if (error.message && error.message.includes('No such entity with customerId')) {
       const { customer } = getState().account;
       if (customer && customer.id) {
@@ -359,7 +360,7 @@ export const addToCart = ({ cartId, item, customer }) => async (dispatch) => {
     updatedItem.cartItem.quoteId = guestCartId;
     return dispatchAddToCart(dispatch, guestCartId, updatedItem);
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -374,7 +375,7 @@ const dispatchAddToCart = async (dispatch, cartId, item) => {
     dispatch({ type: MAGENTO_ADD_TO_CART, payload: result });
     dispatchGetGuestCart(dispatch, cartId);
   } catch (e) {
-    console.log(e);
+    logError(e);
     dispatch({ type: MAGENTO_ADD_TO_CART, payload: e });
   }
 };
@@ -389,7 +390,7 @@ const dispatchGetGuestCart = async (dispatch, cartId) => {
     }
     dispatch({ type: MAGENTO_GET_CART, payload: data });
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -398,7 +399,7 @@ export const cartItemProduct = sku => async (dispatch) => {
     const data = await magento.admin.getProductBySku(sku);
     dispatch({ type: MAGENTO_CART_ITEM_PRODUCT, payload: data });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -428,7 +429,7 @@ export const getOrdersForCustomer = (customerId, refreshing) => async (dispatch)
     dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: false });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -444,7 +445,7 @@ export const orderProductDetail = sku => async (dispatch) => {
       },
     });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -453,7 +454,7 @@ export const addAccountAddress = (id, customer) => async (dispatch) => {
     const data = await magento.admin.updateCustomerData(id, customer);
     dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS, payload: data });
   } catch (error) {
-    console.log(error);
+    logError(error);
     const message = error.message ? error.message : 'Sorry, something went wrong. Please check your internet connection and try again';
     dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR, payload: message });
   }
@@ -469,7 +470,7 @@ export const addGuestCartBillingAddress = (cartId, address) => async (dispatch) 
     }
     dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 
   try {
@@ -486,7 +487,7 @@ export const addGuestCartBillingAddress = (cartId, address) => async (dispatch) 
     dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
     dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -500,7 +501,7 @@ export const getGuestCartShippingMethods = cartId => async (dispatch) => {
     }
     dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -516,7 +517,7 @@ export const addGuestCartShippingInfo = (cartId, address) => async (dispatch) =>
     dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
     dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 3 });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -532,7 +533,7 @@ export const getGuestCartPaymentMethods = cartId => async (dispatch) => {
     dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
     dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 4 });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -543,7 +544,7 @@ export const getCountries = () => (dispatch) => {
       dispatch({ type: MAGENTO_GET_COUNTRIES, payload: data });
     })
     .catch((error) => {
-      console.log(error);
+      logError(error);
     });
 };
 
@@ -558,7 +559,7 @@ export const placeGuestCartOrder = (cartId, payment) => async (dispatch) => {
     dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
     dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
   } catch (error) {
-    console.log(error);
+    logError(error);
     const message = error.message ? error.message : 'Place order error';
     dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: message });
   }
@@ -571,7 +572,7 @@ export const createCustomer = customer => (dispatch) => {
       dispatch({ type: MAGENTO_CREATE_CUSTOMER, payload: data });
     })
     .catch((error) => {
-      console.log(error);
+      logError(error);
     });
 };
 
@@ -585,7 +586,7 @@ export const getFilteredProducts = ({ page, pageSize, filter }) => async (dispat
     const data = await magento.admin.getFeaturedChildren({ page, pageSize, filter });
     dispatch({ type: MAGENTO_GET_FILTERED_PRODUCTS, payload: data });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 
@@ -596,7 +597,7 @@ export const removeFromCart = ({ cart, item }) => async (dispatch) => {
       dispatchRemoveFromCart(dispatch, cart, item);
     }
   } catch (error) {
-    console.log(error);
+    logError(error);
     dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: error.message });
   }
 };
@@ -611,7 +612,7 @@ const dispatchRemoveFromCart = async (dispatch, cart, item) => {
     // TODO: handle error
     dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: e.message });
     dispatch({ type: MAGENTO_REMOVE_FROM_CART_LOADING, payload: false });
-    console.log(e);
+    logError(e);
   }
 };
 
@@ -625,6 +626,6 @@ const dispatchGetCart = async (dispatch, cartId) => {
     }
     dispatch({ type: MAGENTO_GET_CART, payload: data });
   } catch (e) {
-    console.log(e);
+    logError(e);
   }
 };

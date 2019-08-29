@@ -16,6 +16,7 @@ import { Spinner, ModalSelect, Button } from '../common';
 import { getProductCustomAttribute } from '../../helper/product';
 import ProductMedia from './ProductMedia';
 import Sizes from '../../constants/Sizes';
+import { logError } from '../../helper/logger';
 
 class Product extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -97,7 +98,7 @@ class Product extends Component {
       try {
         description = decodeURI(description);
       } catch (e) {
-        // console.log(e);
+        logError(e);
       }
 
       return <Text style={styles.descriptionStyle}>{description}</Text>;

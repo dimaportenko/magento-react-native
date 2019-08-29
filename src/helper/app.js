@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native';
 import { magento } from '../magento';
 import { initMagento, getCart, setCurrentCustomer } from '../actions';
+import { logError } from './logger';
 
 
 export const onAppStart = async (store) => {
@@ -15,6 +16,7 @@ export const onAppStart = async (store) => {
       store.dispatch(setCurrentCustomer(customer));
     } catch (error) {
       console.log('onAppStart -> unable to retrieve current customer', error);
+      logError(error);
     }
   }
   store.dispatch(getCart());

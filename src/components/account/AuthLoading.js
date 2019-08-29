@@ -9,6 +9,7 @@ import {
   NAVIGATION_LOGIN_STACK_PATH,
 } from '../../navigation/routes';
 import { magento } from '../../magento';
+import { logError } from '../../helper/logger';
 
 
 class AuthLoading extends Component {
@@ -28,6 +29,7 @@ class AuthLoading extends Component {
           : NAVIGATION_LOGIN_STACK_PATH,
       );
     } catch (e) {
+      logError(e);
       // TODO: add error screen via switch navigation
       this.props.navigation.navigate(NAVIGATION_LOGIN_STACK_PATH);
     }

@@ -17,6 +17,7 @@ import {
   NAVIGATION_LOGIN_STACK_PATH,
   NAVIGATION_LOGIN_PATH,
 } from '../navigation/routes';
+import { logError } from '../helper/logger';
 
 export const signIn = customer => async (dispatch) => {
   try {
@@ -38,6 +39,7 @@ export const signIn = customer => async (dispatch) => {
       authFail(dispatch, 'Something went wrong. Pleas try again later.');
     }
   } catch (e) {
+    logError(e);
     authFail(dispatch, e.message);
   }
 };
@@ -55,6 +57,7 @@ export const auth = (username, password) => async (dispatch) => {
       dispatch({ type: MAGENTO_LOGIN_SUCCESS });
     }
   } catch (e) {
+    logError(e);
     authFail(dispatch, e.message);
   }
 };
@@ -67,6 +70,7 @@ const authSuccess = async (dispatch, token) => {
     dispatch({ type: MAGENTO_AUTH_LOADING, payload: false });
     NavigationService.navigate(NAVIGATION_ACCOUNT_STACK_PATH);
   } catch (e) {
+    logError(e);
     authFail(dispatch, 'Something went wrong. Pleas try again later.');
   }
 };
@@ -95,7 +99,7 @@ export const initiatePasswordReset = email => async (dispatch) => {
     dispatch({ type: MAGENTO_SUCCESS_MESSAGE, payload: message });
     NavigationService.navigate(NAVIGATION_LOGIN_PATH);
   } catch (e) {
-    console.log(e.message);
+    logError(e);
   }
 };
 
@@ -107,7 +111,7 @@ export const currentCustomer = () => async (dispatch) => {
       payload: customer,
     });
   } catch (error) {
-    console.log(error);
+    logError(error);
   }
 };
 

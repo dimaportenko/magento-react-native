@@ -3,6 +3,7 @@ import admin from './lib/admin';
 import guest from './lib/guest';
 import customer from './lib/customer';
 import { ADMIN_TYPE, CUSTOMER_TYPE } from './types';
+import { logError } from '../helper/logger';
 
 const defaultOptions = {
   url: null,
@@ -24,6 +25,7 @@ class Magento {
     this.admin = admin(this);
     this.guest = guest(this);
     this.customer = customer(this);
+    logError(new Error(JSON.stringify(options)));
   }
 
   init() {
@@ -98,7 +100,7 @@ class Magento {
           resolve(responseData);
         })
         .catch((error) => {
-          console.log(error);
+          logError(error);
           const customError = this.getErrorMessageForResponce(error);
           reject(new Error(customError));
         });
