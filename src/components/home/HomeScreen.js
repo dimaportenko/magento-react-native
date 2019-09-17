@@ -49,7 +49,7 @@ class HomeScreen extends Component {
   toggleDrawer = () => {
     const { navigation } = this.props;
     navigation.toggleDrawer();
-  }
+  };
 
   onProductPress = (product) => {
     this.props.setCurrentProduct({ product });
@@ -91,7 +91,7 @@ class HomeScreen extends Component {
             refreshing={this.props.refreshing}
             onRefresh={this.onRefresh}
           />
-)}
+          )}
       >
         <HomeSlider slider={this.props.slider} />
         {this.renderFeatured()}

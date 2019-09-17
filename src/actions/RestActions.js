@@ -72,7 +72,7 @@ export const initMagento = () => {
       getCurrency(dispatch);
     } catch (error) {
       logError(error);
-      dispatch({ type: MAGENTO_INIT_ERROR, payload: { errorMessage: error } });
+      dispatch({ type: MAGENTO_INIT_ERROR, payload: { errorMessage: error.message } });
     }
   };
 };
@@ -95,6 +95,10 @@ export const getHomeData = refreshing => async (dispatch) => {
     const storeConfig = await magento.admin.getStoreConfig();
     magento.setStoreConfig(storeConfig[0]);
     const value = await magento.getHomeData();
+    if (!value) {
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
+      return;
+    }
     console.log('home', value);
     const payload = JSON.parse(value.content.replace(/<\/?[^>]+(>|$)/g, ''));
     dispatch({ type: HOME_SCREEN_DATA, payload });
