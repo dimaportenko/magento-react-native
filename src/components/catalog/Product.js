@@ -11,6 +11,7 @@ import {
   getConfigurableProductOptions,
   updateProductQtyInput,
   uiProductUpdate,
+  getCustomOptions,
 } from '../../actions';
 import { Spinner, ModalSelect, Button } from '../common';
 import { getProductCustomAttribute } from '../../helper/product';
@@ -33,6 +34,7 @@ class Product extends Component {
 
     if (product.type_id === 'configurable') {
       this.props.getConfigurableProductOptions(product.sku);
+      this.props.getCustomOptions(product.sku);
     }
 
     if (!medias || !medias[product.sku]) {
@@ -339,5 +341,6 @@ export default connect(mapStateToProps, {
   addToCart,
   getConfigurableProductOptions,
   updateProductQtyInput,
+  getCustomOptions,
   uiProductUpdateOptions: uiProductUpdate,
 })(Product);

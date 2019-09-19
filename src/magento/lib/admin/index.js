@@ -180,6 +180,8 @@ export default magento => ({
 
   getProductBySku: sku => magento.get(`/V1/products/${sku}`, undefined, undefined, ADMIN_TYPE),
 
+  getProductOptions: sku => magento.get(`/V1/products/${sku}/options`, undefined, undefined, ADMIN_TYPE),
+
   getFeaturedChildren: ({ page, pageSize = 10, filter }) => {
     let path = '/V1/products?';
     path += magento.makeParams({ page, pageSize, filter });

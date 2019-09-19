@@ -55,6 +55,7 @@ import {
   ADD_FILTER_DATA,
   RESET_FILTERS_DATA,
   MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR,
+  MAGENTO_GET_CUSTOM_OPTIONS,
 } from './types';
 import { logError } from '../helper/logger';
 
@@ -225,6 +226,15 @@ export const getSearchProducts = (searchInput, offset, sortOrder, filter) => asy
       dispatch,
       MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
     );
+  } catch (e) {
+    logError(e);
+  }
+};
+
+export const getCustomOptions = sku => async (dispatch) => {
+  try {
+    const data = await magento.admin.getProductOptions(sku);
+    dispatch({ type: MAGENTO_GET_CUSTOM_OPTIONS, payload: data });
   } catch (e) {
     logError(e);
   }
