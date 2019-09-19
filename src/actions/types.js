@@ -51,6 +51,7 @@ export const MAGENTO_SUCCESS_MESSAGE = 'magento_success_message';
 
 export const UI_PRODUCT_QTY_INPUT = 'ui_product_qty_input';
 export const UI_PRODUCT_UPDATE_OPTIONS = 'ui_product_update';
+export const UI_PRODUCT_UPDATE_CUSTOM_OPTIONS = 'ui_product_update_custom_options';
 export const UI_CHECKOUT_SHIPPING_SELECTED = 'ui_checkout_shipping_selected';
 export const UI_CHECKOUT_PAYMENT_SELECTED = 'ui_checkout_payment_selected';
 export const UI_CHECKOUT_CUSTOMER_NEXT_LOADING = 'ui_checkout_customer_next_loading';

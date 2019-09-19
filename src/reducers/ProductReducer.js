@@ -7,6 +7,7 @@ import {
   UI_PRODUCT_QTY_INPUT,
   NAVIGATION_GO_TO_SCREEN,
   MAGENTO_GET_CUSTOM_OPTIONS,
+  UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -14,6 +15,7 @@ const INITIAL_STATE = {
   attributes: {},
   qtyInput: 1,
   selectedOptions: {},
+  selectedCustomOptions: {},
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -58,6 +60,9 @@ export default (state = INITIAL_STATE, action) => {
     }
     case UI_PRODUCT_UPDATE_OPTIONS: {
       return { ...state, selectedOptions: action.payload };
+    }
+    case UI_PRODUCT_UPDATE_CUSTOM_OPTIONS: {
+      return { ...state, selectedCustomOptions: action.payload };
     }
     case UI_PRODUCT_QTY_INPUT:
       return { ...state, qtyInput: action.payload };

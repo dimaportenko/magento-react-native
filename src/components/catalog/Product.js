@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   View, Text, ScrollView, TextInput, StyleSheet,
 } from 'react-native';
@@ -11,6 +12,7 @@ import {
   getConfigurableProductOptions,
   updateProductQtyInput,
   uiProductUpdate,
+  uiProductCustomOptionUpdate,
   getCustomOptions,
 } from '../../actions';
 import { Spinner, ModalSelect, Button } from '../common';
@@ -20,6 +22,15 @@ import Sizes from '../../constants/Sizes';
 import { logError } from '../../helper/logger';
 
 class Product extends Component {
+  static propTypes = {
+    currencySymbol: PropTypes.string,
+    uiProductCustomOptionUpdate: PropTypes.string,
+  };
+
+  static defaultProps = {
+    currencySymbol: '',
+  };
+
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.title.toUpperCase(),
     headerBackTitle: ' ',
@@ -45,7 +56,7 @@ class Product extends Component {
   onPressAddToCart = () => {
     console.log('onPressAddToCart');
     const {
-      cart, product, qty, selectedOptions, customer,
+      cart, product, qty, selectedOptions, customer, selectedCustomOptions,
     } = this.props;
     const options = [];
     Object.keys(selectedOptions).forEach((key) => {
@@ -57,12 +68,34 @@ class Product extends Component {
       });
     });
 
+    const customOptions = [];
+    Object.keys(selectedCustomOptions).forEach((key) => {
+      console.log(selectedCustomOptions[key]);
+      customOptions.push({
+        optionId: key,
+        optionValue: selectedCustomOptions[key],
+        extensionAttributes: {},
+      });
+    });
+
     let productOptions = {};
     if (options.length) {
       productOptions = {
         productOption: {
           extensionAttributes: {
             configurableItemOptions: options,
+          },
+        },
+      };
+    }
+
+    if (productOptions.productOption && productOptions.productOption.extensionAttributes) {
+      productOptions.productOption.extensionAttributes.customOptions = customOptions;
+    } else {
+      productOptions = {
+        productOption: {
+          extensionAttributes: {
+            customOptions,
           },
         },
       };
@@ -92,6 +125,12 @@ class Product extends Component {
     this.updateSelectedProduct(updatedOptions);
   }
 
+  customOptionSelect = (optionId, optionValue) => {
+    const { selectedCustomOptions } = this.props;
+    const updatedCustomOptions = { ...selectedCustomOptions, [optionId]: optionValue };
+    this.props.uiProductCustomOptionUpdate(updatedCustomOptions);
+  };
+
   renderDescription() {
     const { product } = this.props;
     const attribute = getProductCustomAttribute(product, 'description');
@@ -107,7 +146,31 @@ class Product extends Component {
     }
   }
 
-  renderOptions() {
+  renderCustomOptions = () => {
+    const { customOptions } = this.props;
+    if (customOptions) {
+      return customOptions.map(option => {
+        const data = option.values.map(value => ({
+          label: value.title,
+          key: value.option_type_id,
+        }));
+
+        return (
+          <ModalSelect
+            disabled={data.length === 0}
+            key={option.option_id}
+            label={option.title}
+            attribute={option.option_id}
+            value={option.option_id}
+            data={data}
+            onChange={this.customOptionSelect}
+          />
+        );
+      });
+    }
+  };
+
+  renderOptions = () => {
     const {
       options, attributes, product, selectedOptions,
     } = this.props;
@@ -271,6 +334,7 @@ class Product extends Component {
           onChangeText={qty => this.props.updateProductQtyInput(qty)}
         />
         {this.renderOptions()}
+        {this.renderCustomOptions()}
         {this.renderAddToCartButton()}
         <Text style={styles.errorStyle}>{this.props.cart.errorMessage}</Text>
         {this.renderDescription()}
@@ -315,23 +379,25 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const { product, options, medias } = state.product.current;
-  const { attributes, selectedOptions } = state.product;
+  const { product, options, medias, customOptions } = state.product.current;
+  const { attributes, selectedOptions, selectedCustomOptions } = state.product;
   const { default_display_currency_symbol: currencySymbol } = state.magento.currency;
   const { cart, account } = state;
   console.log('Product Component');
   console.log(state.product);
   console.log(cart);
   return {
-    product,
-    medias,
     cart,
+    medias,
+    product,
     options,
     attributes,
+    customOptions,
+    currencySymbol,
     selectedOptions,
+    selectedCustomOptions,
     customer: account.customer,
     qty: state.product.qtyInput,
-    currencySymbol,
   };
 };
 
@@ -342,5 +408,6 @@ export default connect(mapStateToProps, {
   getConfigurableProductOptions,
   updateProductQtyInput,
   getCustomOptions,
+  uiProductCustomOptionUpdate,
   uiProductUpdateOptions: uiProductUpdate,
 })(Product);

@@ -9,6 +9,7 @@ import {
   UI_CHECKOUT_UPDATE,
   UI_ACCOUNT_CUSTOMER_DATA_UPDATE,
   UI_ACCOUNT_CUSTOMER_DATA_LOADING,
+  UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
 } from './types';
 
 export const updateProductQtyInput = qty => ({
@@ -18,6 +19,11 @@ export const updateProductQtyInput = qty => ({
 
 export const uiProductUpdate = selectedOptions => ({
   type: UI_PRODUCT_UPDATE_OPTIONS,
+  payload: selectedOptions,
+});
+
+export const uiProductCustomOptionUpdate = selectedOptions => ({
+  type: UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
   payload: selectedOptions,
 });
 
