@@ -97,8 +97,8 @@ class SearchScreen extends Component {
             onChangeText={this.updateSearch}
             value={input}
             containerStyle={searchStyle}
-            inputStyle={{ backgroundColor: '#DAE2EA' }}
-            inputContainerStyle={{ backgroundColor: '#DAE2EA' }}
+            inputStyle={{ backgroundColor: '#DAE2EA', }}
+            inputContainerStyle={{ backgroundColor: '#DAE2EA', borderRadius: 25 }}
             showLoading={this.props.loadingMore}
           />
         </View>
@@ -122,13 +122,13 @@ const styles = {
   },
   searchStyle: {
     marginTop: 5,
-    backgroundColor: '#DAE2EA',
+    backgroundColor: 'white',
     borderRadius: 25,
     alignSelf: 'center',
     borderBottomWidth: 0,
     borderTopWidth: 0,
     height: 55,
-    width: Sizes.WINDOW_WIDTH * 0.9,
+    width: Sizes.WINDOW_WIDTH * 0.95,
   },
   notFoundTextWrap: {
     flex: 1,
