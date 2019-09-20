@@ -4,6 +4,7 @@ import guest from './lib/guest';
 import customer from './lib/customer';
 import { ADMIN_TYPE, CUSTOMER_TYPE } from './types';
 import { logError } from '../helper/logger';
+import { parseNumber } from './utils/parser';
 
 const defaultOptions = {
   url: null,
@@ -25,6 +26,7 @@ class Magento {
     this.admin = admin(this);
     this.guest = guest(this);
     this.customer = customer(this);
+    this.getMagentoVersion();
     logError(new Error(JSON.stringify(options)));
   }
 
@@ -164,6 +166,20 @@ class Magento {
     }
     return false;
   }
+
+  getMagentoVersion = async () => {
+    try {
+      const response = await fetch(`${this.base_url}magento_version`);
+      const text = await response.text();
+      const number = parseNumber(text);
+      this.version = `${number}`;
+
+      return number;
+    } catch (error) {
+      logError(error);
+      return false;
+    }
+  };
 
   makeParams = ({
     sort, page, pageSize, filter,
