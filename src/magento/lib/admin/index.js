@@ -217,4 +217,7 @@ export default magento => ({
     };
     return magento.get(path, params, undefined, ADMIN_TYPE);
   },
+
+  getBraintreeToken: () => magento.get('/V1/mma/braintree/token', undefined, undefined, ADMIN_TYPE),
+
 });

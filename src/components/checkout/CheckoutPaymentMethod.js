@@ -1,17 +1,37 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
+import BTClient from 'react-native-braintree-xplat';
+import { magento } from '../../magento';
 import { Spinner, Button } from '../common';
 import {
   checkoutSelectedPaymentChanged,
   checkoutSetActiveSection,
   getGuestCartPaymentMethods,
   checkoutCustomerNextLoading,
+  updateCheckoutUI,
 } from '../../actions';
 import Sizes from '../../constants/Sizes';
 
 class CheckoutPaymentMethod extends Component {
+  static propTypes = {
+    checkoutCustomerNextLoading: PropTypes.func,
+    checkoutSelectedPaymentChanged: PropTypes.func,
+    getGuestCartPaymentMethods: PropTypes.func,
+    selectedPayment: PropTypes.shape({
+      code: PropTypes.string,
+    }),
+    cartId: PropTypes.string || PropTypes.number,
+    payments: PropTypes.array,
+    loading: PropTypes.bool,
+    updateCheckoutUI: PropTypes.func,
+  };
+
+  static defaultProps = {
+  };
+
   componentWillMount() {
     const { payments, selectedPayment } = this.props;
     if (!selectedPayment && payments.length) {
@@ -25,31 +45,61 @@ class CheckoutPaymentMethod extends Component {
 
   onNextPressed = () => {
     const { cartId, selectedPayment } = this.props;
-    // const payment = {
-    // 	paymentMethod: {
-    // 		// po_number: selectedPayment.code,
-    // 		method: selectedPayment.code
-    // 		// additional_data: [
-    // 		// 	"string"
-    // 		// ],
-    // 		// extension_attributes: {
-    // 		// 	agreement_ids: [
-    // 		// 		"string"
-    // 		// 	]
-    // 		// }
-    // 	}
-    // };
-    // this.props.placeGuestCartOrder(cartId, payment);
+
+    // console.warn(selectedPayment.code)
     this.props.checkoutCustomerNextLoading(true);
-    // setTimeout(
-    // 	() => {
-    // this.props.checkoutCustomerNextLoading(false);
-    this.props.getGuestCartPaymentMethods(cartId);
-    // 	},
-    // 	1000
-    // );
-    // this.props.checkoutSetActiveSection(4);
+    if (selectedPayment && selectedPayment.code === 'braintree') {
+      this.processBraintree();
+    } else if (selectedPayment && selectedPayment.code === 'braintree_cc_vault') {
+      // this.processBraintreeVault();
+    } else {
+      this.props.getGuestCartPaymentMethods(cartId);
+    }
+  };
+
+  processBraintree() {
+    // try {
+    //   this.processBillingAddress();
+    // } catch (e) {
+    //   this.props.updateCheckoutUI('error', 'There was a problem with your billing address. Please make sure it is correct.');
+    //   this.props.checkoutCustomerNextLoading(false);
+    //   return;
+    // }
+
+    const { card } = this.state;
+    if (!card || !card.valid) {
+      this.props.updateCheckoutUI('error', 'Invalid credit card data. Please review.');
+      this.props.checkoutCustomerNextLoading(false);
+    } else {
+      this.getBraintreeCCNonce();
+    }
   }
+
+  getBraintreeCCNonce = async () => {
+    try {
+      const self = this;
+      const { card } = this.state;
+      const token = await magento.admin.getBraintreeToken();
+      await BTClient.setup(token);
+
+      const braintreeCC = {
+        number: card.values.number,
+        expirationDate: card.values.expiry, // or "10/2020" or any valid date
+        cvv: card.values.cvc,
+      };
+
+      BTClient.getCardNonce(braintreeCC)
+        .then((payment_method_nonce) => {
+          self.props.paymentMethodNonce(payment_method_nonce);
+          self.props.checkoutCustomerNextLoading(false);
+          self.props.checkoutActivateSection(5);
+        });
+    } catch (e) {
+      console.log(e);
+      this.props.updateCheckoutUI('error', 'Credit Card data is invalid');
+      this.props.checkoutCustomerNextLoading(false);
+    }
+  };
 
   renderPaymentMethods() {
     const { payments } = this.props;
@@ -144,4 +194,5 @@ export default connect(mapStateToProps, {
   checkoutSetActiveSection,
   getGuestCartPaymentMethods,
   checkoutCustomerNextLoading,
+  updateCheckoutUI,
 })(CheckoutPaymentMethod);
