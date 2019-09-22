@@ -56,6 +56,7 @@
 		BF9ECC6DBB794CFD8ACC3E5C /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1A59B7C9213E4AA7999D670A /* Octicons.ttf */; };
 		C765C6CF4E9544AEA0A34026 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1966DB184435422A85ED0EE6 /* FontAwesome5_Brands.ttf */; };
 		F2333C7DAC33409DBAE41333 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 38F16D36D5EB48D6BDDD04C0 /* FontAwesome5_Solid.ttf */; };
+		F821DE5888334F5089DBB013 /* libRCTBraintree.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FE9AAD77532A4440BDAFEF5B /* libRCTBraintree.a */; };
 		FBEB9835C39E46B7AD53CD5A /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9CEDE55076A34BE49E8C7B7C /* Feather.ttf */; };
 /* End PBXBuildFile section */
 
@@ -291,6 +292,13 @@
 			remoteGlobalIDString = 8AD256131D6DE5F600C7D842;
 			remoteInfo = BugsnagReactNative;
 		};
+		6608DBBB2337FF8D00C92541 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 764AB3327B274BCC98196DFF /* RCTBraintree.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = DE4F06CC1D156AA8005F99CD;
+			remoteInfo = RCTBraintree;
+		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -405,6 +413,7 @@
 		60222B53EEDA4A57BDDA32D1 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		6CF15E666EB64A06A292E251 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		73414258F5054A5AB7EDFFAF /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		764AB3327B274BCC98196DFF /* RCTBraintree.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTBraintree.xcodeproj; path = "../node_modules/react-native-braintree-xplat/ios/RCTBraintree.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		7CB82F87B29D47F6BEA1D719 /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
@@ -418,6 +427,7 @@
 		C9039B711EFB43F594B7986F /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		E4BCEEEDAFDF413382A7C461 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		E6D53455B98F44E4A575D2CE /* libBugsnagReactNative.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libBugsnagReactNative.a; sourceTree = "<group>"; };
+		FE9AAD77532A4440BDAFEF5B /* libRCTBraintree.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTBraintree.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -450,6 +460,7 @@
 				45FD02EE3B2D46A88B6C5203 /* libRNVectorIcons.a in Frameworks */,
 				4778AEF6F01C4B14A717839E /* libBugsnagReactNative.a in Frameworks */,
 				8ADF2700E14A43C0BAC1E5FE /* libz.tbd in Frameworks */,
+				F821DE5888334F5089DBB013 /* libRCTBraintree.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -622,6 +633,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		6608DBA52337FF8D00C92541 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6608DBBC2337FF8D00C92541 /* libRCTBraintree.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -648,6 +667,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				2DB07994BA7142BDB1C2C0DF /* RNVectorIcons.xcodeproj */,
 				13375B6BFF064774B8FDA552 /* BugsnagReactNative.xcodeproj */,
+				764AB3327B274BCC98196DFF /* RCTBraintree.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -726,6 +746,7 @@
 			children = (
 				42E3230E1F7548CE83D32852 /* libRNVectorIcons.a */,
 				E6D53455B98F44E4A575D2CE /* libBugsnagReactNative.a */,
+				FE9AAD77532A4440BDAFEF5B /* libRCTBraintree.a */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -866,6 +887,10 @@
 				{
 					ProductGroup = C2F540A320FBF17D0093495D /* Products */;
 					ProjectRef = ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */;
+				},
+				{
+					ProductGroup = 6608DBA52337FF8D00C92541 /* Products */;
+					ProjectRef = 764AB3327B274BCC98196DFF /* RCTBraintree.xcodeproj */;
 				},
 				{
 					ProductGroup = 00C302B61ABCB90400DB3ED1 /* Products */;
@@ -1136,6 +1161,13 @@
 			remoteRef = 6606ABA523184FC40014FB73 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		6608DBBC2337FF8D00C92541 /* libRCTBraintree.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRCTBraintree.a;
+			remoteRef = 6608DBBB2337FF8D00C92541 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -1370,12 +1402,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = magento_mobile_appTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1397,12 +1431,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = magento_mobile_appTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1425,6 +1461,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = magento_mobile_app/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1447,6 +1484,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = magento_mobile_app/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1476,11 +1514,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = "magento_mobile_app-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1512,11 +1552,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-vector-icons/RNVectorIconsManager",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = "magento_mobile_app-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1546,11 +1588,13 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = "magento_mobile_app-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1580,11 +1624,13 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/bugsnag-react-native/cocoa/**",
+					"$(SRCROOT)/../node_modules/react-native-braintree-xplat/ios/RCTBraintree/**",
 				);
 				INFOPLIST_FILE = "magento_mobile_app-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);

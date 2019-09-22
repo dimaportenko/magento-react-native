@@ -14,6 +14,7 @@
 		"prop-types": "^15.5.10",
 		"react": "16.8.3",
 		"react-native": "^0.59.2",
+		"react-native-braintree-xplat": "git+https://github.com/troublediehard/react-native-braintree-xplat",
 		"react-native-elements": "^1.1.0",
 		"react-native-icon-badge": "^1.1.3",
 		"react-native-modal-selector": "^1.0.3",
