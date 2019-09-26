@@ -70,17 +70,19 @@ export default magento => ({
       'searchCriteria[currentPage]': currentPage,
     };
 
+    let categoryIds = '';
     const getForCategory = (cat) => {
-      result[`searchCriteria[filterGroups][0][filters][${level}][field]`] = 'category_id';
-      result[`searchCriteria[filterGroups][0][filters][${level}][value]`] = cat.id;
-      result[`searchCriteria[filterGroups][0][filters][${level}][conditionType]`] = 'eq';
-      level++;
+      categoryIds = `${categoryIds},${cat.id}`;
       cat.children_data.forEach((childCategory) => {
         getForCategory(childCategory);
       });
     };
-
     getForCategory(category);
+    categoryIds = categoryIds.substr(1);
+
+    result[`searchCriteria[filterGroups][0][filters][${level}][field]`] = 'category_id';
+    result[`searchCriteria[filterGroups][0][filters][${level}][value]`] = categoryIds;
+    result[`searchCriteria[filterGroups][0][filters][${level}][conditionType]`] = 'in';
 
     if (typeof sortOrder === 'number') {
       result['searchCriteria[sortOrders][0][field]'] = getSortFieldName(sortOrder);
