@@ -27,7 +27,7 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 
 ## You can contact me
 
-I open to any discussion. I have [Slack](https://join.slack.com/t/magento-react-native/shared_invite/enQtNjE3ODY0MDUxOTQyLWU4MzViODdmMTg0NTQ5MGVjYjM1ODI4ZTgxZDJhYzFlNjMyOTI2MmZiZDIxNDBmZDJjNTQ5MGIyYmY4NzMxMzE) workspace so ping me via email if you want to join. 
+I open to any discussion. I have [Slack](https://join.slack.com/t/magento-react-native/shared_invite/enQtNjE3ODY0MDUxOTQyLTgwNDY2YzczNTEyNjQyY2QzMmY5ZDY4MmZlYjMyYmRiYzgzZjBiMDhmOTYxMDZkZjAwODkwZGI2MjAxY2FkNTE) workspace so ping me via email if you want to join. 
 
 troublesohard@gmail.com
 
