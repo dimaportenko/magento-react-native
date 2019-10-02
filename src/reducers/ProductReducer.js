@@ -8,6 +8,7 @@ import {
   NAVIGATION_GO_TO_SCREEN,
   MAGENTO_GET_CUSTOM_OPTIONS,
   UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
+  MAGENTO_UPDATE_CONF_PRODUCT,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -68,6 +69,15 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, qtyInput: action.payload };
     case NAVIGATION_GO_TO_SCREEN:
       return { ...state, qtyInput: INITIAL_STATE.qtyInput };
+    case MAGENTO_UPDATE_CONF_PRODUCT: {
+      const { sku, children } = action.payload;
+      let { current } = state;
+      if (current && current.product && current.product.sku === sku) {
+        current = { ...current, product: { ...current.product, children } };
+      }
+
+      return { ...state, current };
+    }
     default:
       return state;
   }

@@ -175,7 +175,7 @@ class Product extends Component {
       options, attributes, product, selectedOptions,
     } = this.props;
 
-    if (Array.isArray(options)) {
+    if (Array.isArray(options) && product.children) {
       const prevOptions = [];
       let first = true;
       return options.map((option) => {
