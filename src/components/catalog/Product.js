@@ -69,7 +69,7 @@ class Product extends Component {
     });
 
     const customOptions = [];
-    Object.keys(selectedCustomOptions).forEach((key) => {
+    selectedCustomOptions && Object.keys(selectedCustomOptions).forEach((key) => {
       console.log(selectedCustomOptions[key]);
       customOptions.push({
         optionId: key,
