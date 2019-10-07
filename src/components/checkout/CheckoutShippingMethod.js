@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
-import { Spinner, Button } from '../common';
+import { Spinner, Text, Button } from '../common';
 import {
   getGuestCartShippingMethods,
   checkoutSelectedShippingChanged,
   addGuestCartShippingInfo,
   checkoutCustomerNextLoading,
 } from '../../actions';
-import Sizes from '../../constants/Sizes';
+import { ThemeContext } from '../../theme';
 
 class CheckoutShippingMethod extends Component {
+  static contextType = ThemeContext;
+
   componentWillMount() {
     const { shipping, selectedShipping } = this.props;
     if (!selectedShipping && shipping.length) {
@@ -79,6 +81,7 @@ class CheckoutShippingMethod extends Component {
   }
 
   renderShippingMethods() {
+    const theme = this.context;
     const { shipping } = this.props;
 
     if (!shipping || !shipping.length) {
@@ -95,6 +98,9 @@ class CheckoutShippingMethod extends Component {
 
     return (
       <RadioForm
+        buttonColor={theme.colors.secondary}
+        labelColor={theme.colors.bodyText}
+        selectedLabelColor={theme.colors.titleText}
         style={styles.radioWrap}
         radio_props={radioProps}
         initial={0}
@@ -105,6 +111,7 @@ class CheckoutShippingMethod extends Component {
   }
 
   renderButton() {
+    const theme = this.context;
     const { shipping } = this.props;
     if (!shipping.length) {
       return <View />;
@@ -121,7 +128,7 @@ class CheckoutShippingMethod extends Component {
       <View style={styles.nextButtonStyle}>
         <Button
           onPress={this.onNextPressed}
-          style={styles.buttonStyle}
+          style={styles.buttonStyle(theme)}
         >
           Next
         </Button>
@@ -130,8 +137,9 @@ class CheckoutShippingMethod extends Component {
   }
 
   render() {
+    const theme = this.context;
     return (
-      <View style={styles.container}>
+      <View style={styles.container(theme)}>
         {this.renderShippingMethods()}
         {this.renderButton()}
       </View>
@@ -140,10 +148,10 @@ class CheckoutShippingMethod extends Component {
 }
 
 const styles = {
-  container: {
-    margin: 15,
+  container: theme => ({
+    margin: theme.spacing.large,
     alignItems: 'flex-start',
-  },
+  }),
   radioWrap: {
     alignItems: 'flex-start',
     alignSelf: 'flex-start',
@@ -152,12 +160,11 @@ const styles = {
     flex: 1,
     alignSelf: 'center',
   },
-  buttonStyle: {
-    marginTop: 10,
+  buttonStyle: theme => ({
+    marginVertical: theme.spacing.large,
     alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 10,
-  },
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+  }),
 };
 
 const mapStateToProps = ({ cart, checkout }) => {

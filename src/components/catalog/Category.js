@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import {
   View,
-  Platform,
   RefreshControl,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import {
   addFilterData,
   getProductsForCategoryOrChild,
@@ -16,140 +16,111 @@ import NavigationService from '../../navigation/NavigationService';
 import {
   NAVIGATION_HOME_PRODUCT_PATH,
 } from '../../navigation/routes';
+import { ThemeContext } from '../../theme';
 
-class Category extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.title.toUpperCase(),
-    headerBackTitle: ' ',
-    headerRight: (<HeaderIcon changeGridValueFunction={navigation.getParam('changeGridValueFunction')} />),
-  });
+const Category = ({
+  canLoadMoreContent,
+  loadingMore,
+  products,
+  totalCount,
+  sortOrder, // Add its validation in prop-types
+  priceFilter, // Add its validation in prop-types
+  category,
+  refreshing,
+  navigation,
+  currencySymbol,
+  addFilterData: _addFilterData,
+  getProductsForCategoryOrChild: _getProductsForCategoryOrChild,
+  setCurrentProduct: _setCurrentProduct,
+  updateProductsForCategoryOrChild: _updateProductsForCategoryOrChild,
+}) => {
+  const theme = useContext(ThemeContext);
+  const [gridColumnsValue, setGridColumnsValue] = useState(true);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      gridColumnsValue: true,
-    };
-  }
+  useEffect(() => {
+    _addFilterData({ categoryScreen: true });
+    _getProductsForCategoryOrChild(category);
+    navigation.setParams({ changeGridValueFunction });
+  }, []);
 
-  componentDidMount() {
-    this.props.addFilterData({ categoryScreen: true });
-    const { navigation } = this.props;
-    this.props.getProductsForCategoryOrChild(this.props.category);
-    navigation.setParams({ changeGridValueFunction: this.changeGridValueFunction });
-  }
-
-  onRowPress = (product) => {
-    this.props.setCurrentProduct({ product });
+  const onRowPress = (product) => {
+    _setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name,
     });
   };
 
-  onRefresh = () => {
-    this.props.updateProductsForCategoryOrChild(this.props.category, true);
+  const onRefresh = () => {
+    _updateProductsForCategoryOrChild(category, true);
   };
 
-  onEndReached = () => {
-    const {
-      canLoadMoreContent,
-      loadingMore,
-      products,
-      category,
-      totalCount,
-    } = this.props;
-    const { sortOrder, priceFilter } = this.props;
+  const onEndReached = () => {
     console.log('On end reached called!');
     console.log(loadingMore, totalCount, canLoadMoreContent);
     if (!loadingMore && canLoadMoreContent) {
-      this.props.getProductsForCategoryOrChild(category, products.length, sortOrder, priceFilter);
+      _getProductsForCategoryOrChild(category, products.length, sortOrder, priceFilter);
     }
   };
 
-  performSort = (sortOrder) => {
-    this.props.addFilterData(sortOrder);
-    this.props.getProductsForCategoryOrChild(this.props.category, null, sortOrder, this.props.priceFilter);
+  const performSort = (_sortOrder) => {
+    _addFilterData(_sortOrder);
+    _getProductsForCategoryOrChild(category, null, _sortOrder, priceFilter);
   };
 
-  changeGridValueFunction = () => {
-    this.setState({ gridColumnsValue: !this.state.gridColumnsValue });
-  };
+  const changeGridValueFunction = () => setGridColumnsValue(!gridColumnsValue);
 
-  render() {
-    return (
-      <View style={styles.containerStyle}>
-        <ProductList
-          refreshControl={(
-            <RefreshControl
-              refreshing={this.props.refreshing}
-              onRefresh={this.onRefresh}
-            />
-          )}
-          products={this.props.products}
-          onEndReached={this.onEndReached}
-          canLoadMoreContent={this.props.canLoadMoreContent}
-          onRowPress={this.onRowPress}
-          navigation={this.props.navigation}
-          gridColumnsValue={this.state.gridColumnsValue}
-          performSort={this.performSort}
-          sortOrder={this.state.sortOrder}
-          currencySymbol={this.props.currencySymbol}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.containerStyle(theme)}>
+      <ProductList
+        refreshControl={(
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        )}
+        products={products}
+        onEndReached={onEndReached}
+        canLoadMoreContent={canLoadMoreContent}
+        onRowPress={onRowPress}
+        navigation={navigation}
+        gridColumnsValue={gridColumnsValue}
+        performSort={performSort}
+        sortOrder={sortOrder}
+        currencySymbol={currencySymbol}
+      />
+    </View>
+  );
+};
+
+Category.navigationOptions = ({ navigation }) => ({
+  title: navigation.state.params.title.toUpperCase(),
+  headerBackTitle: ' ',
+  headerRight: (<HeaderIcon changeGridValueFunction={navigation.getParam('changeGridValueFunction')} />),
+});
 
 const styles = {
-  MainContainer: {
-    justifyContent: 'center',
+  containerStyle: theme => ({
     flex: 1,
-    margin: 5,
-    paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-  },
-  containerStyle: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  notFoundTextWrap: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  notFoundText: {
-    textAlign: 'center',
-  },
-  infoStyle: {
-    flexDirection: 'column',
-    justifyContent: 'center',
-  },
-  textStyle: {
-    justifyContent: 'center',
-    textAlign: 'center',
-    flexDirection: 'column',
-    marginTop: 0,
-    fontSize: 16,
-    padding: 0,
-    fontWeight: '200',
-    color: '#555',
-  },
-  priceStyle: {
-    fontSize: 14,
-    fontWeight: '200',
-    textAlign: 'center',
-  },
-  imageStyle: {
-    flex: 1,
-  },
-  iconStyle: {
-    height: 32,
-    width: 40,
-    margin: 5,
-    marginRight: 0,
-  },
-  iconWrapper: {
-    marginTop: 5,
-    marginRight: 10,
-  },
+    backgroundColor: theme.colors.background,
+  }),
 };
+
+Category.propTypes = {
+  canLoadMoreContent: PropTypes.bool.isRequired,
+  loadingMore: PropTypes.bool.isRequired,
+  products: PropTypes.arrayOf(PropTypes.object),
+  totalCount: PropTypes.number.isRequired,
+  category: PropTypes.object,
+  refreshing: PropTypes.bool.isRequired,
+  navigation: PropTypes.object.isRequired,
+  currencySymbol: PropTypes.string.isRequired,
+  addFilterData: PropTypes.func.isRequired,
+  getProductsForCategoryOrChild: PropTypes.func.isRequired,
+  setCurrentProduct: PropTypes.func.isRequired,
+  updateProductsForCategoryOrChild: PropTypes.func.isRequired,
+};
+
+Category.defaultProps = {};
 
 const mapStateToProps = (state) => {
   const { category } = state.category.current;
@@ -161,7 +132,15 @@ const mapStateToProps = (state) => {
   const canLoadMoreContent = products.length < totalCount;
 
   return {
-    category, products, totalCount, canLoadMoreContent, loadingMore, refreshing, priceFilter, sortOrder, currencySymbol,
+    category,
+    products,
+    totalCount,
+    canLoadMoreContent,
+    loadingMore,
+    refreshing,
+    priceFilter,
+    sortOrder,
+    currencySymbol,
   };
 };
 

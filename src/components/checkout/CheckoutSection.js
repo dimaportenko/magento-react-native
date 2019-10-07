@@ -1,17 +1,26 @@
-import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
+import { View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { Text } from '../common';
 import { checkoutSetActiveSection } from '../../actions';
+import { ThemeContext } from '../../theme';
 
-class CheckoutSection extends Component {
-  onPress() {
+const CheckoutSection = ({
+  number,
+  expanded,
+  children,
+  title,
+  checkoutSetActiveSection: _checkoutSetActiveSection
+}) => {
+  const theme = useContext(ThemeContext);
+
+  const onPress = () => {
     console.log('Checkout section press');
-    console.log(this.props.number);
-    this.props.checkoutSetActiveSection(this.props.number);
-  }
+    console.log(number);
+    _checkoutSetActiveSection(number);
+  };
 
-  renderExpanded() {
-    const { expanded, children } = this.props;
+  const renderExpanded = () => {
     if (expanded) {
       return (
         <View style={styles.expandedStyle}>
@@ -19,48 +28,44 @@ class CheckoutSection extends Component {
         </View>
       );
     }
+    return <></>;
+  };
 
-    return <View />;
-  }
-
-  render() {
-    const { expanded } = this.props;
-    const container = expanded ? styles.containerStyles : {};
-    return (
-      <View style={container}>
-        <TouchableOpacity style={styles.headerStyles} onPress={this.onPress.bind(this)}>
-          <Text style={styles.leftText}>{this.props.title}</Text>
-          <View style={styles.textBackground}>
-            <Text style={styles.textStyle}>{this.props.number}</Text>
-          </View>
-        </TouchableOpacity>
-        {this.renderExpanded()}
-      </View>
-    );
-  }
-}
+  const container = expanded ? styles.containerStyles : {};
+  return (
+    <View style={container}>
+      <TouchableOpacity style={styles.headerStyles(theme)} onPress={onPress}>
+        <Text style={styles.leftText}>{title}</Text>
+        <View style={styles.textBackground}>
+          <Text style={styles.textStyle}>{number}</Text>
+        </View>
+      </TouchableOpacity>
+      {renderExpanded()}
+    </View>
+  );
+};
 
 const styles = {
   containerStyles: {
     flex: 1,
   },
-  headerStyles: {
+  headerStyles: theme => ({
     opacity: 1,
     borderBottomWidth: 1,
-    height: 50,
-    borderColor: '#ddd',
+    height: theme.dimens.checkouSectionHeaderHeight,
+    borderColor: theme.colors.border,
     position: 'relative',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingLeft: 10,
-    shadowColor: '#000',
+    paddingLeft: theme.spacing.small,
+    shadowColor: theme.colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 2,
     shadowRadius: 2,
     elevation: 1,
-    marginBottom: 4,
-  },
+    marginBottom: theme.spacing.tiny,
+  }),
   textBackground: {
     backgroundColor: '#999',
     height: 40,

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import {
-  View, StatusBar, StyleSheet, AsyncStorage,
+  View,
+  StatusBar,
+  StyleSheet,
+  AsyncStorage,
 } from 'react-native';
 import { Spinner } from '../common';
 import {
@@ -10,9 +12,12 @@ import {
 } from '../../navigation/routes';
 import { magento } from '../../magento';
 import { logError } from '../../helper/logger';
+import { ThemeContext } from '../../theme';
 
 
 class AuthLoading extends Component {
+  static contextType = ThemeContext;
+
   constructor() {
     super();
     this.bootstrapAsync();
@@ -36,8 +41,9 @@ class AuthLoading extends Component {
   };
 
   render() {
+    const theme = this.context;
     return (
-      <View style={styles.container}>
+      <View style={styles.container(theme)}>
         <Spinner />
         <StatusBar barStyle="default" />
       </View>
@@ -46,11 +52,12 @@ class AuthLoading extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
     alignContent: 'center',
     flexDirection: 'column',
-  },
+    backgroundColor: theme.colors.background,
+  }),
 });
 
-export default connect()(AuthLoading);
+export default AuthLoading;

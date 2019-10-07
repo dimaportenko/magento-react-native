@@ -1,85 +1,93 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
-  StyleSheet, Text, TouchableOpacity, View, Image,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
 } from 'react-native';
-import Sizes from '../../constants/Sizes';
+import { Text } from '../common';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
+import { ThemeContext } from '../../theme';
 
 const FeaturedProductItem = ({
   onPress,
   currencySymbol,
-  ...props
-}) => (
-  <View style={styles.container}>
-    <TouchableOpacity
-      style={styles.containerStyle}
-      onPress={() => { onPress(props); }}
-    >
-      <Image
-        style={styles.imageStyle}
-        resizeMode="contain"
-        source={{ uri: getProductThumbnailFromAttribute(props) }}
-      />
-      <View style={styles.infoStyle}>
-        <Text style={styles.textStyle} ellipsizeMode="tail" numberOfLines={2}>{props.name}</Text>
-        <Text style={styles.priceStyle}>
-          {`${currencySymbol} ${props.price}`}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  </View>
-);
-
-FeaturedProductItem.propTypes = {
-  name: PropTypes.string,
-  currencySymbol: PropTypes.string.isRequired,
-  price: PropTypes.number,
-  onPress: PropTypes.func,
-};
-
-FeaturedProductItem.defaultProps = {
-  products: {},
-  style: {},
+  product,
+}) => {
+  const theme = useContext(ThemeContext);
+  return (
+    <View style={styles.container(theme)}>
+      <TouchableOpacity
+        style={styles.containerStyle(theme)}
+        onPress={() => { onPress(product); }}
+      >
+        <Image
+          style={styles.imageStyle(theme)}
+          resizeMode="contain"
+          source={{ uri: getProductThumbnailFromAttribute(product) }}
+        />
+        <View style={styles.infoStyle}>
+          <Text
+            type="subheading"
+            style={styles.textStyle(theme)}
+            ellipsizeMode="tail"
+            numberOfLines={2}
+          >
+            {product.name}
+          </Text>
+          <Text
+            type="caption"
+            style={styles.priceStyle}
+          >
+            {`${currencySymbol} ${product.price}`}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 5,
-    width: Sizes.WINDOW_WIDTH * 0.32,
-  },
-  containerStyle: {
+  container: theme => ({
+    padding: theme.spacing.tiny,
+    width: theme.dimens.WINDOW_WIDTH * 0.32,
+  }),
+  containerStyle: theme => ({
     flexDirection: 'column',
     flex: 1,
     borderWidth: 1,
-    borderColor: '#ddd',
-    backgroundColor: '#fff',
-    borderRadius: 4,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.dimens.borderRadius,
     alignItems: 'center',
     justifyContent: 'center',
-  },
+  }),
   infoStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
   },
-  textStyle: {
+  textStyle: theme => ({
     justifyContent: 'center',
     textAlign: 'center',
     flexDirection: 'column',
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: '200',
-    color: '#555',
-  },
+    marginTop: theme.spacing.small,
+  }),
   priceStyle: {
-    fontSize: 14,
-    fontWeight: '200',
     textAlign: 'center',
   },
-  imageStyle: {
-    height: 80,
-    width: 80,
-  },
+  imageStyle: theme => ({
+    height: theme.dimens.homeProductImageHeight,
+    width: theme.dimens.homeProductImageWidth,
+  }),
 });
+
+FeaturedProductItem.propTypes = {
+  currencySymbol: PropTypes.string.isRequired,
+  onPress: PropTypes.func,
+  product: PropTypes.object,
+};
+
+FeaturedProductItem.defaultProps = {};
 
 export default FeaturedProductItem;

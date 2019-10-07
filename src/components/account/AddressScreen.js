@@ -1,22 +1,16 @@
-import React, { Component } from 'react';
-import {
-  View,
-} from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
 import AddAccountAddress from './AddAccountAddress';
 
-class AddressScreen extends Component {
-  static navigationOptions = () => ({
-    title: 'My Address',
-    headerBackTitle: ' ',
-  });
+const AddressScreen = () => (
+  <View style={{ flex: 1 }}>
+    <AddAccountAddress />
+  </View>
+);
 
-  render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <AddAccountAddress />
-      </View>
-    );
-  }
-}
+AddressScreen.navigationOptions = () => ({
+  title: 'My Address',
+  headerBackTitle: ' ',
+});
 
 export default AddressScreen;

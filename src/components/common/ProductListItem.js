@@ -1,89 +1,110 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Text, View, Image, TouchableOpacity,
+  View,
+  Image,
+  TouchableOpacity,
 } from 'react-native';
+import { Text } from './Text';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
+import { ThemeContext } from '../../theme';
 
-class ProductListItem extends Component {
-  image() {
-    return getProductThumbnailFromAttribute(this.props.product);
-  }
+const ProductListItem = ({
+  product,
+  onRowPress,
+  currencySymbol,
+  imageStyle,
+  infoStyle,
+  textStyle,
+  priceStyle,
+  viewContainerStyle,
+  columnContainerStyle,
+}) => {
+  const theme = useContext(ThemeContext);
+  const image = () => getProductThumbnailFromAttribute(product);
 
-  render() {
-    const {
-      imageStyle,
-      containerStyle,
-      textStyle,
-      infoStyle,
-      priceStyle,
-    } = styles;
+  return (
+    <View style={viewContainerStyle}>
+      <TouchableOpacity
+        style={[styles.containerStyle(theme), columnContainerStyle]}
+        onPress={() => { onRowPress(product); }}
+      >
 
-
-    return (
-      <View style={this.props.viewContainerStyle}>
-        <TouchableOpacity
-          style={[containerStyle, this.props.columnContainerStyle]}
-          onPress={() => { this.props.onRowPress(this.props.product); }}
-        >
-
-          <Image
-            style={[imageStyle, this.props.imageStyle]}
-            resizeMode="contain"
-            source={{ uri: this.image() }}
-          />
-          <View style={[infoStyle, this.props.infoStyle]}>
-            <Text style={[textStyle, this.props.textStyle]}>{this.props.product.name}</Text>
-            <Text style={[priceStyle, this.props.priceStyle]}>
-              {`${this.props.currencySymbol} ${this.props.product.price}`}
-            </Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-}
+        <Image
+          style={[styles.imageStyle(theme), imageStyle]}
+          resizeMode="contain"
+          source={{ uri: image() }}
+        />
+        <View style={[styles.infoStyle, infoStyle]}>
+          <Text type="subheading" style={[styles.textStyle(theme), textStyle]}>{product.name}</Text>
+          <Text type="heading" style={[styles.priceStyle(theme), priceStyle]}>
+            {`${currencySymbol} ${product.price}`}
+          </Text>
+        </View>
+      </TouchableOpacity>
+    </View>
+  );
+};
 
 ProductListItem.propTypes = {
+  product: PropTypes.shape({
+    name: PropTypes.string,
+    sku: PropTypes.string.isRequired,
+    type_id: PropTypes.string,
+    price: PropTypes.number,
+    custom_attributes: PropTypes.arrayOf(PropTypes.shape({
+      attribute_code: PropTypes.string,
+      value: PropTypes.string,
+    })),
+  }).isRequired,
+  onRowPress: PropTypes.func,
+  imageStyle: PropTypes.object,
+  infoStyle: PropTypes.object,
+  textStyle: PropTypes.object,
+  priceStyle: PropTypes.object,
+  viewContainerStyle: PropTypes.object,
+  columnContainerStyle: PropTypes.object,
   currencySymbol: PropTypes.string.isRequired,
 };
 
+ProductListItem.defaultProps = {
+  onRowPress: () => {},
+  imageStyle: {},
+  infoStyle: {},
+  textStyle: {},
+  priceStyle: {},
+  viewContainerStyle: {},
+  columnContainerStyle: {},
+};
+
 const styles = {
-  containerStyle: {
+  containerStyle: theme => ({
     flexDirection: 'row',
     flex: 1,
-    borderColor: '#ddd',
-    borderBottomWidth: 1,
-    backgroundColor: '#fff',
-    margin: 1,
-  },
+    backgroundColor: theme.colors.surface,
+  }),
   infoStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
     flex: 2,
   },
-  textStyle: {
+  textStyle: theme => ({
     flex: 1,
-    padding: 10,
-    marginTop: 20,
-    fontSize: 16,
-    fontWeight: '200',
-  },
-  priceStyle: {
+    padding: theme.spacing.small,
+    marginTop: theme.spacing.large,
+  }),
+  priceStyle: theme => ({
     flex: 1,
-    padding: 10,
+    padding: theme.spacing.small,
     paddingTop: 0,
-    fontSize: 20,
-    fontWeight: '300',
-    color: '#555',
-  },
-  imageStyle: {
-    height: 100,
-    margin: 10,
+  }),
+  imageStyle: theme => ({
+    height: theme.dimens.productListItemImageHeight,
+    margin: theme.spacing.small,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: theme.colors.border,
     width: null,
-  },
+  }),
 };
 
 export { ProductListItem };

@@ -1,59 +1,62 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Spinner } from '../common/index';
 import { initMagento, getCategoryTree } from '../../actions/index';
 import CategoryTreeList from './CategoryTreeList';
+import { ThemeContext } from '../../theme';
 
-class CategoryTree extends Component {
-  static navigationOptions = {
-    title: 'Categories'.toUpperCase(),
-    headerBackTitle: ' ',
+const CategoryTree = ({
+  categoryTree,
+  refreshing,
+  getCategoryTree: _getCategoryTree,
+}) => {
+  const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    _getCategoryTree();
+  }, []);
+
+  const onRefresh = () => {
+    _getCategoryTree(true);
   };
 
-  componentDidMount() {
-    this.props.getCategoryTree();
-  }
-
-  onRefresh = () => {
-    this.props.getCategoryTree(true);
-  };
-
-  renderContent() {
-    const { categoryTree } = this.props;
-    if (this.props.categoryTree) {
+  const renderContent = () => {
+    if (categoryTree) {
       return (
         <CategoryTreeList
           categories={categoryTree.children_data}
           refreshControl={(
             <RefreshControl
-              refreshing={this.props.refreshing}
-              onRefresh={this.onRefresh}
+              refreshing={refreshing}
+              onRefresh={onRefresh}
             />
-)}
+          )}
         />
       );
     }
-
     return <Spinner />;
-  }
+  };
 
-  render() {
-    return (
-      <View style={styles.containerStyle}>
-        {this.renderContent()}
-      </View>
-    );
-  }
-}
-
-const styles = {
-  containerStyle: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
+  return (
+    <View style={styles.container(theme)}>
+      {renderContent()}
+    </View>
+  );
 };
 
-const mapStateToProps = ({ magento, categoryTree }) => ({ magento, categoryTree, refreshing: categoryTree.refreshing });
+CategoryTree.navigationOptions = {
+  title: 'Categories'.toUpperCase(),
+  headerBackTitle: ' ',
+};
+
+const styles = {
+  container: theme => ({
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  }),
+};
+
+const mapStateToProps = ({ categoryTree }) => ({ categoryTree, refreshing: categoryTree.refreshing });
 
 export default connect(mapStateToProps, { initMagento, getCategoryTree })(CategoryTree);

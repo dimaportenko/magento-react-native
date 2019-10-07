@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import {
   getCountries,
@@ -9,12 +9,14 @@ import {
   resetAccountAddressUI,
 } from '../../actions';
 import {
-  CardSection, Input, Spinner, ModalSelect, Button,
+  Input, Spinner, ModalSelect, Button, Text,
 } from '../common';
-import Sizes from '../../constants/Sizes';
+import { ThemeContext } from '../../theme';
 
 
 class AddAccountAddress extends Component {
+  static contextType = ThemeContext;
+
   componentWillMount() {
     this.props.getCountries();
   }
@@ -110,22 +112,22 @@ class AddAccountAddress extends Component {
   };
 
   renderButton = () => {
+    const theme = this.context;
     if (this.props.loading) {
-      return <Spinner size="large" />;
+      return <Spinner />;
     }
     return (
-      <View style={styles.nextButtonStyle}>
-        <Button
-          onPress={this.onNextPressed}
-          style={styles.buttonStyle}
-        >
-          Update
-        </Button>
-      </View>
+      <Button
+        onPress={this.onNextPressed}
+        style={styles.buttonStyle(theme)}
+      >
+        Update
+      </Button>
     );
   };
 
   renderRegions = () => {
+    const theme = this.context;
     const { countryId, countries } = this.props;
     if (countryId && countryId.length && countries.length) {
       const country = countries.find(item => item.id === countryId);
@@ -144,6 +146,7 @@ class AddAccountAddress extends Component {
             value="Region"
             data={data}
             onChange={this.regionSelect}
+            style={styles.inputContainer(theme)}
           />
         );
       }
@@ -152,24 +155,25 @@ class AddAccountAddress extends Component {
     const regionValue = typeof (this.props.region) === 'string' ? this.props.region : this.props.region.region;
     return (
       <Input
-        label="Region"
         value={regionValue}
-        placeholder="region"
+        placeholder="Region"
         onChangeText={value => this.updateUI('region', value)}
+        containerStyle={styles.inputContainer(theme)}
       />
     );
   };
 
   renderCountries = () => {
+    const theme = this.context;
     const { countries, countryId } = this.props;
 
     if (!countries || !countries.length) {
       return (
         <Input
-          label="Country"
           value={this.props.country}
-          placeholder="country"
+          placeholder="Country"
           onChangeText={value => this.updateUI('country', value)}
+          containerStyle={styles.inputContainer(theme)}
         />
       );
     }
@@ -191,81 +195,71 @@ class AddAccountAddress extends Component {
         value="Country"
         data={data}
         onChange={this.countrySelect}
+        style={styles.inputContainer(theme)}
       />
     );
   };
 
   render() {
+    const theme = this.context;
     return (
-      <View style={styles.containerStyle}>
-        <CardSection>{this.renderCountries()}</CardSection>
+      <View style={styles.container(theme)}>
+        {this.renderCountries()}
 
-        <CardSection>{this.renderRegions()}</CardSection>
+        {this.renderRegions()}
 
-        <CardSection>
-          <Input
-            label="Postcode"
-            value={this.props.postcode}
-            placeholder="postcode"
-            onChangeText={value => this.updateUI('postcode', value)}
-          />
-        </CardSection>
+        <Input
+          value={this.props.postcode}
+          placeholder="Postcode"
+          onChangeText={value => this.updateUI('postcode', value)}
+          containerStyle={styles.inputContainer(theme)}
+        />
 
-        <CardSection>
-          <Input
-            label="Street"
-            value={this.props.street}
-            placeholder="street"
-            onChangeText={value => this.updateUI('street', value)}
-          />
-        </CardSection>
+        <Input
+          value={this.props.street}
+          placeholder="Street"
+          onChangeText={value => this.updateUI('street', value)}
+          containerStyle={styles.inputContainer(theme)}
+        />
 
-        <CardSection>
-          <Input
-            label="City"
-            value={this.props.city}
-            placeholder="city"
-            onChangeText={value => this.updateUI('city', value)}
-          />
-        </CardSection>
+        <Input
+          value={this.props.city}
+          placeholder="City"
+          onChangeText={value => this.updateUI('city', value)}
+          containerStyle={styles.inputContainer(theme)}
+        />
 
-        <CardSection>
-          <Input
-            label="Telephone"
-            value={this.props.telephone}
-            placeholder="telephone"
-            onChangeText={value => this.updateUI('telephone', value)}
-          />
-        </CardSection>
-
-        <Text style={styles.errorTextStyle}>{this.props.error}</Text>
-
+        <Input
+          value={this.props.telephone}
+          placeholder="Telephone"
+          onChangeText={value => this.updateUI('telephone', value)}
+          containerStyle={styles.inputContainer(theme)}
+        />
         {this.renderButton()}
+        <Text type="heading" style={styles.errorTextStyle(theme)}>{this.props.error}</Text>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  containerStyle: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  errorTextStyle: {
-    color: 'red',
-    fontSize: 20,
+    backgroundColor: theme.colors.background,
+    padding: theme.spacing.large,
+  }),
+  inputContainer: theme => ({
+    marginBottom: theme.spacing.large,
+  }),
+  errorTextStyle: theme => ({
+    color: theme.colors.error,
     alignSelf: 'center',
-  },
-  nextButtonStyle: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  buttonStyle: {
-    marginTop: 10,
+  }),
+  buttonStyle: theme => ({
+    marginVertical: theme.spacing.large,
     alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 10,
-  },
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+  }),
 });
 
 const mapStateToProps = ({ account, magento }) => {

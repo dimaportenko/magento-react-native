@@ -1,173 +1,160 @@
-import React, { Component } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import {
   View,
-  TextInput,
   StyleSheet,
   TouchableOpacity,
-  Text,
   KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
-import Colors from '../../constants/Colors';
-import Sizes from '../../constants/Sizes';
-import { Spinner, Button } from '../common';
+import PropTypes from 'prop-types';
+import {
+  Spinner,
+  Button,
+  Input,
+  Text,
+} from '../common';
 import { auth } from '../../actions/CustomerAuthActions';
 import {
   NAVIGATION_SIGNIN_PATH,
   NAVIGATION_RESET_PASSWORD_PATH,
 } from '../../navigation/routes';
+import { ThemeContext } from '../../theme';
 
-class Login extends Component {
-  static navigationOptions = {
-    title: 'Login',
+const Login = ({
+  loading,
+  error,
+  success,
+  navigation,
+  auth: _auth,
+}) => {
+  const theme = useContext(ThemeContext);
+  // Internal State
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // Reference
+  const passwordInput = useRef();
+
+  const onLoginPress = () => {
+    _auth(email, password);
   };
 
-  componentWillMount() {
-    this.setState({
-      email: '',
-      password: '',
-      number: '',
-    });
-  }
-
-  onLoginPress = () => {
-    const { email, password } = this.state;
-    this.props.auth(email, password);
+  const onSigninPress = () => {
+    navigation.navigate(NAVIGATION_SIGNIN_PATH);
   };
 
-  onSigninPress = () => {
-    this.props.navigation.navigate(NAVIGATION_SIGNIN_PATH);
+  const passwordForget = () => {
+    navigation.navigate(NAVIGATION_RESET_PASSWORD_PATH);
   };
 
-  passwordForget = () => {
-    this.props.navigation.navigate(NAVIGATION_RESET_PASSWORD_PATH);
-  };
-
-  passwordInputFocus = () => {
-    this.passwordInput.focus();
-  };
-
-  renderButtons() {
-    if (this.props.loading) {
+  const renderButtons = () => {
+    if (loading) {
       return <Spinner style={{ marginTop: 30 }} />;
     }
 
     return (
       <View>
-        <Button onPress={this.onLoginPress}>
+        <Button
+          disabled={email === '' || password === ''}
+          onPress={onLoginPress}
+        >
           LOG IN
         </Button>
         <Button
-          onPress={this.onSigninPress}
-          style={styles.buttonMargin}
+          onPress={onSigninPress}
+          style={styles.buttonMargin(theme)}
         >
-          SIGN IN
+          SIGN UP
         </Button>
-        <TouchableOpacity onPress={this.passwordForget} style={styles.link}>
+        <TouchableOpacity onPress={passwordForget} style={styles.link(theme)}>
           <Text style={styles.linkTitle}>Forget password?</Text>
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  renderMessages() {
-    const { error, success } = this.props;
+  const renderMessages = () => {
     if (error) {
-      return <Text style={styles.error}>{error}</Text>;
+      return <Text style={styles.error(theme)}>{error}</Text>;
     }
 
     if (success) {
-      return <Text style={styles.success}>{success}</Text>;
+      return <Text style={styles.success(theme)}>{success}</Text>;
     }
-  }
+  };
 
-  render() {
-    return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <View style={[styles.inputContainer, styles.offsetTop]}>
-          <TextInput
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            placeholder="Email"
-            keyboardType="email-address"
-            returnKeyType="next"
-            autoCorrect={false}
-            style={styles.input}
-            value={this.state.email}
-            onChangeText={value => this.setState({ email: value })}
-            onSubmitEditing={this.passwordInputFocus}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            secureTextEntry
-            placeholder="Password"
-            autoCorrect={false}
-            style={styles.input}
-            value={this.state.password}
-            onChangeText={value => this.setState({ password: value })}
-            onSubmitEditing={this.onLoginPress}
-            ref={(input) => { this.passwordInput = input; }}
-          />
-        </View>
-        {this.renderButtons()}
-        {this.renderMessages()}
-        <View />
-      </KeyboardAvoidingView>
-    );
-  }
-}
+  return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      style={styles.container(theme)}
+    >
+      <Input
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        placeholder="Email"
+        keyboardType="email-address"
+        returnKeyType="next"
+        autoCorrect={false}
+        value={email}
+        editable={!loading}
+        onChangeText={setEmail}
+        onSubmitEditing={() => passwordInput.current.focus()}
+        containerStyle={styles.inputContainer(theme)}
+      />
+      <Input
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        secureTextEntry
+        placeholder="Password"
+        autoCorrect={false}
+        value={password}
+        editable={!loading}
+        onChangeText={setPassword}
+        onSubmitEditing={onLoginPress}
+        assignRef={(input) => { passwordInput.current = input; }}
+        containerStyle={styles.inputContainer(theme)}
+      />
+      {renderButtons()}
+      {renderMessages()}
+    </KeyboardAvoidingView>
+  );
+};
+
+Login.navigationOptions = {
+  title: 'Login',
+};
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
     alignItems: 'center',
-  },
-  input: {
-    color: '#000',
-    paddingRight: 5,
-    paddingLeft: 5,
-  },
-  inputContainer: {
-    borderWidth: 1,
-    borderColor: Colors.GRAY,
-    width: Sizes.WINDOW_WIDTH * 0.7,
-    height: 40,
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  offsetTop: {
-    marginTop: Sizes.WINDOW_HEIGHT * 0.2,
-  },
-  buttonMargin: {
-    marginTop: 20,
-  },
-  error: {
-    color: 'red',
-    width: Sizes.WINDOW_WIDTH * 0.85,
+    paddingTop: theme.dimens.WINDOW_HEIGHT * 0.1,
+  }),
+  inputContainer: theme => ({
+    width: theme.dimens.WINDOW_WIDTH * 0.7,
+    marginBottom: theme.spacing.large,
+  }),
+  buttonMargin: theme => ({
+    marginTop: theme.spacing.large,
+  }),
+  error: theme => ({
+    color: theme.colors.error,
+    width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
-    fontSize: 14,
-    marginTop: 20,
-  },
-  success: {
-    width: Sizes.WINDOW_WIDTH * 0.85,
-    color: '#01640B',
+    marginTop: theme.spacing.large,
+  }),
+  success: theme => ({
+    width: theme.dimens.WINDOW_WIDTH * 0.85,
+    color: theme.colors.success,
     textAlign: 'center',
-    fontSize: 14,
-    backgroundColor: '#E5EFE5',
-    padding: 5,
-    marginTop: 20,
-  },
-  link: {
-    marginTop: 20,
-  },
+    marginTop: theme.spacing.extraLarge,
+  }),
+  link: theme => ({
+    marginTop: theme.spacing.extraLarge,
+  }),
   linkTitle: {
-    color: '#797979',
     textAlign: 'center',
-    fontSize: 14,
   },
 });
 
@@ -175,6 +162,18 @@ const mapStateToProps = ({ customerAuth }) => {
   const { error, success, loading } = customerAuth;
 
   return { error, success, loading };
+};
+
+Login.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType(PropTypes.string, null),
+  success: PropTypes.oneOfType(PropTypes.string, null),
+  auth: PropTypes.func.isRequired,
+};
+
+Login.defaultProps = {
+  error: null,
+  success: null,
 };
 
 export default connect(mapStateToProps, { auth })(Login);

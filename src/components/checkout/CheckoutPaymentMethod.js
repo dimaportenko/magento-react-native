@@ -9,9 +9,11 @@ import {
   getGuestCartPaymentMethods,
   checkoutCustomerNextLoading,
 } from '../../actions';
-import Sizes from '../../constants/Sizes';
+import { ThemeContext } from '../../theme';
 
 class CheckoutPaymentMethod extends Component {
+  static contextType = ThemeContext;
+
   componentWillMount() {
     const { payments, selectedPayment } = this.props;
     if (!selectedPayment && payments.length) {
@@ -52,6 +54,7 @@ class CheckoutPaymentMethod extends Component {
   }
 
   renderPaymentMethods() {
+    const theme = this.context;
     const { payments } = this.props;
 
     if (!payments || !payments.length) {
@@ -65,6 +68,9 @@ class CheckoutPaymentMethod extends Component {
 
     return (
       <RadioForm
+        buttonColor={theme.colors.secondary}
+        labelColor={theme.colors.bodyText}
+        selectedLabelColor={theme.colors.titleText}
         style={styles.radioWrap}
         radio_props={radioProps}
         initial={0}
@@ -75,6 +81,7 @@ class CheckoutPaymentMethod extends Component {
   }
 
   renderButton() {
+    const theme = this.context;
     const { payments, checkout } = this.props;
     if (!payments.length) {
       return <View />;
@@ -91,7 +98,7 @@ class CheckoutPaymentMethod extends Component {
       <View style={styles.nextButtonStyle}>
         <Button
           onPress={this.onNextPressed}
-          style={styles.buttonStyle}
+          style={styles.buttonStyle(theme)}
         >
               Next
         </Button>
@@ -100,8 +107,9 @@ class CheckoutPaymentMethod extends Component {
   }
 
   render() {
+    const theme = this.context;
     return (
-      <View style={styles.container}>
+      <View style={styles.container(theme)}>
         {this.renderPaymentMethods()}
         {this.renderButton()}
       </View>
@@ -110,10 +118,10 @@ class CheckoutPaymentMethod extends Component {
 }
 
 const styles = {
-  container: {
-    margin: 15,
+  container: theme => ({
+    margin: theme.spacing.large,
     alignItems: 'flex-start',
-  },
+  }),
   radioWrap: {
     alignItems: 'flex-start',
     alignSelf: 'flex-start',
@@ -122,12 +130,11 @@ const styles = {
     flex: 1,
     alignSelf: 'center',
   },
-  buttonStyle: {
-    marginTop: 10,
+  buttonStyle: theme => ({
+    marginVertical: theme.spacing.large,
     alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 20,
-  },
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+  }),
 };
 
 const mapStateToProps = ({ cart, checkout }) => {

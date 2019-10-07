@@ -1,101 +1,119 @@
-import React, { Component } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { connect } from 'react-redux';
 import {
   View,
-  Text,
   StyleSheet,
   ActivityIndicator,
 } from 'react-native';
-import { Button } from '../common';
+import PropTypes from 'prop-types';
+import { Button, Text } from '../common';
 import { logout, currentCustomer } from '../../actions';
 import { NAVIGATION_ORDERS_PATH, NAVIGATION_ADDRESS_SCREEN_PATH } from '../../navigation/routes';
+import { ThemeContext } from '../../theme';
 
-class Account extends Component {
-  static navigationOptions = {
-    title: 'Account',
+const Account = ({
+  customer,
+  navigation,
+  currentCustomer: _currentCustomer,
+  logout: _logout,
+}) => {
+  const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    // ComponentDidMount
+    if (!customer) {
+      _currentCustomer();
+    }
+  }, []);
+
+  const onLogoutPress = () => {
+    _logout();
   };
 
-  componentDidMount() {
-    if (!this.props.customer) {
-      this.props.currentCustomer();
-    }
-  }
-
-  onLogoutPress = () => {
-    this.props.logout();
-  };
-
-  renderCustomerData() {
-    if (!this.props.customer) {
-      return <ActivityIndicator size="large" style={styles.activity} />;
+  const renderCustomerData = () => {
+    if (!customer) {
+      return (
+        <ActivityIndicator
+          size="large"
+          color={theme.colors.secondary}
+          style={styles.activity(theme)}
+        />
+      );
     }
 
-    const { email, firstname, lastname } = this.props.customer;
+    const { email, firstname, lastname } = customer;
     return (
-      <View style={styles.textContainer}>
-        <Text style={styles.title}>Contact Information</Text>
-        <Text style={styles.text}>
+      <View style={styles.textContainer(theme)}>
+        <Text type="subheading" bold style={styles.center}>Contact Information</Text>
+        <Text style={styles.center}>
           {firstname}
           {' '}
           {lastname}
         </Text>
-        <Text style={styles.text}>{email}</Text>
+        <Text style={styles.center}>{email}</Text>
       </View>
     );
-  }
-
-  openOrders = () => {
-    this.props.navigation.navigate(NAVIGATION_ORDERS_PATH);
   };
 
-  openAddAddress = () => {
-    this.props.navigation.navigate(NAVIGATION_ADDRESS_SCREEN_PATH);
+  const openOrders = () => {
+    navigation.navigate(NAVIGATION_ORDERS_PATH);
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        {this.renderCustomerData()}
-        <Button onPress={this.onLogoutPress}>
-          LOG OUT
-        </Button>
-        <Button onPress={this.openOrders} style={styles.buttonMargin}>
-          My Orders
-        </Button>
-        <Button onPress={this.openAddAddress} style={styles.buttonMargin}>
-          My Address
-        </Button>
-      </View>
-    );
-  }
-}
+  const openAddAddress = () => {
+    navigation.navigate(NAVIGATION_ADDRESS_SCREEN_PATH);
+  };
+
+  return (
+    <View style={styles.container(theme)}>
+      {renderCustomerData()}
+      <Button onPress={onLogoutPress}>
+        LOG OUT
+      </Button>
+      <Button onPress={openOrders} style={styles.buttonMargin(theme)}>
+        My Orders
+      </Button>
+      <Button onPress={openAddAddress} style={styles.buttonMargin(theme)}>
+        My Address
+      </Button>
+    </View>
+  );
+};
+
+Account.navigationOptions = {
+  title: 'Account',
+};
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
     alignItems: 'center',
-    paddingTop: 20,
-  },
-  activity: {
-    padding: 10,
-  },
-  title: {
-    fontWeight: '700',
-    textAlign: 'center',
-    fontSize: 16,
-  },
-  text: {
-    fontSize: 16,
+    paddingTop: theme.spacing.large,
+  }),
+  activity: theme => ({
+    padding: theme.spacing.large,
+  }),
+  center: {
     textAlign: 'center',
   },
-  textContainer: {
-    marginBottom: 15,
-  },
-  buttonMargin: {
-    marginTop: 20,
-  },
+  textContainer: theme => ({
+    marginBottom: theme.spacing.large,
+  }),
+  buttonMargin: theme => ({
+    marginTop: theme.spacing.large,
+  }),
 });
+
+Account.propTypes = {
+  customer: PropTypes.object,
+  navigation: PropTypes.object.isRequired,
+  currentCustomer: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
+};
+
+Account.defaultProps = {
+  customer: null,
+};
 
 const mapStateToProps = ({ account }) => {
   const { customer } = account;

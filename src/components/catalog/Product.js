@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, Text, ScrollView, TextInput, StyleSheet,
+  View, ScrollView, TextInput, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -15,13 +15,15 @@ import {
   uiProductCustomOptionUpdate,
   getCustomOptions,
 } from '../../actions';
-import { Spinner, ModalSelect, Button } from '../common';
+import { Spinner, ModalSelect, Button, Text, Input } from '../common';
 import { getProductCustomAttribute } from '../../helper/product';
 import ProductMedia from './ProductMedia';
-import Sizes from '../../constants/Sizes';
 import { logError } from '../../helper/logger';
+import { ThemeContext } from '../../theme';
 
 class Product extends Component {
+  static contextType = ThemeContext;
+
   static propTypes = {
     currencySymbol: PropTypes.string,
     uiProductCustomOptionUpdate: PropTypes.string,
@@ -132,6 +134,7 @@ class Product extends Component {
   };
 
   renderDescription() {
+    const theme = this.context;
     const { product } = this.props;
     const attribute = getProductCustomAttribute(product, 'description');
     if (attribute) {
@@ -142,14 +145,14 @@ class Product extends Component {
         logError(e);
       }
 
-      return <Text style={styles.descriptionStyle}>{description}</Text>;
+      return <Text style={styles.descriptionStyle(theme)}>{description}</Text>;
     }
   }
 
   renderCustomOptions = () => {
     const { customOptions } = this.props;
     if (customOptions) {
-      return customOptions.map(option => {
+      return customOptions.map((option) => {
         const data = option.values.map(value => ({
           label: value.title,
           key: value.option_type_id,
@@ -171,6 +174,7 @@ class Product extends Component {
   };
 
   renderOptions = () => {
+    const theme = this.context;
     const {
       options, attributes, product, selectedOptions,
     } = this.props;
@@ -232,6 +236,7 @@ class Product extends Component {
 
         return (
           <ModalSelect
+            style={styles.modalStyle(theme)}
             disabled={data.length === 0}
             key={option.id}
             label={option.label}
@@ -246,16 +251,15 @@ class Product extends Component {
   }
 
   renderAddToCartButton() {
+    const theme = this.context;
     const { cart } = this.props;
     if (cart.addToCartLoading) {
       return <Spinner />;
     }
     return (
-      <View style={styles.buttonWrap}>
-        <Button style={styles.buttonStyle} onPress={this.onPressAddToCart}>
-          Add to Cart
-        </Button>
-      </View>
+      <Button style={styles.buttonStyle(theme)} onPress={this.onPressAddToCart}>
+        Add to Cart
+      </Button>
     );
   }
 
@@ -317,18 +321,22 @@ class Product extends Component {
   }
 
   render() {
+    const theme = this.context;
     console.log('Product screen render');
     return (
-      <ScrollView style={styles.container}>
+      <ScrollView
+        style={styles.container(theme)}
+      >
         {this.renderProductMedia()}
-        <Text style={styles.textStyle}>{this.props.product.name}</Text>
-        <Text style={styles.textStyle}>
+        <Text type="heading" bold style={styles.textStyle(theme)}>{this.props.product.name}</Text>
+        <Text type="subheading" bold style={styles.textStyle(theme)}>
           {`${this.props.currencySymbol}${this.renderPrice()}`}
         </Text>
-        <Text style={styles.textStyle}>Qty</Text>
-        <TextInput
+        <Text bold style={styles.textStyle(theme)}>Qty</Text>
+        <Input
+          containerStyle={styles.inputContainer(theme)}
+          inputStyle={{ textAlign: 'center' }}
           autoCorrect={false}
-          style={styles.textStyle}
           keyboardType="numeric"
           value={`${this.props.qty}`}
           onChangeText={qty => this.props.updateProductQtyInput(qty)}
@@ -336,7 +344,7 @@ class Product extends Component {
         {this.renderOptions()}
         {this.renderCustomOptions()}
         {this.renderAddToCartButton()}
-        <Text style={styles.errorStyle}>{this.props.cart.errorMessage}</Text>
+        <Text style={styles.errorStyle(theme)}>{this.props.cart.errorMessage}</Text>
         {this.renderDescription()}
       </ScrollView>
     );
@@ -344,38 +352,38 @@ class Product extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  textStyle: {
-    padding: 10,
+    backgroundColor: theme.colors.background,
+  }),
+  textStyle: theme => ({
+    padding: theme.spacing.small,
     textAlign: 'center',
-    fontWeight: 'bold',
-  },
-  descriptionStyle: {
-    padding: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
-    fontWeight: '300',
-    lineHeight: 25,
-  },
-  errorStyle: {
-    textAlign: 'center',
-    padding: 10,
-    color: 'red',
-  },
-  dropDownContainer: {
-    flex: 1,
-    backgroundColor: '#333',
-  },
-  buttonWrap: {
-    alignItems: 'center',
-  },
-  buttonStyle: {
+  }),
+  inputContainer: theme => ({
+    width: 40,
+    alignSelf: 'center',
+    marginBottom: theme.spacing.extraLarge,
+  }),
+  modalStyle: theme => ({
+    alignSelf: 'center',
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+    marginBottom: theme.spacing.large,
+  }),
+  buttonStyle: theme => ({
+    alignSelf: 'center',
     marginTop: 10,
-    width: Sizes.WINDOW_WIDTH * 0.9,
-  },
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+  }),
+  descriptionStyle: theme => ({
+    padding: theme.spacing.large,
+    lineHeight: 25,
+  }),
+  errorStyle: theme => ({
+    textAlign: 'center',
+    padding: theme.spacing.small,
+    color: theme.colors.error,
+  }),
 });
 
 const mapStateToProps = (state) => {

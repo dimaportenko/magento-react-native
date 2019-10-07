@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  Text,
   View,
   StyleSheet,
   TouchableOpacity,
@@ -16,10 +15,12 @@ import {
   NAVIGATION_CHECKOUT_PATH,
   NAVIGATION_HOME_SCREEN_PATH,
 } from '../../navigation/routes';
-import { Button } from '../common';
-import Sizes from '../../constants/Sizes';
+import { Button, Text } from '../common';
+import { ThemeContext } from '../../theme';
 
 class Cart extends Component {
+  static contextType = ThemeContext;
+
   static navigationOptions = {
     title: 'Cart',
     headerBackTitle: ' ',
@@ -82,6 +83,7 @@ class Cart extends Component {
   };
 
   renderTotals() {
+    const theme = this.context;
     const { items } = this.props.cart;
     const { totals } = styles;
 
@@ -94,7 +96,7 @@ class Cart extends Component {
 
     if (sum > 0) {
       return (
-        <Text style={totals}>
+        <Text type="heading" style={totals(theme)}>
           Totals
           {' '}
           {sum.toFixed(2)}
@@ -104,6 +106,7 @@ class Cart extends Component {
   }
 
   renderEmptyCart = () => {
+    const theme = this.context;
     const { navigate } = this.props.navigation;
     const {
       containerStyle,
@@ -113,14 +116,14 @@ class Cart extends Component {
 
 
     return (
-      <View style={containerStyle}>
-        <Text style={totals}>
+      <View style={containerStyle(theme)}>
+        <Text type="heading" style={totals}>
           Your cart is empty
         </Text>
         <TouchableOpacity
           onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
         >
-          <Text style={buttonTextStyle}>
+          <Text type="heading" bold style={buttonTextStyle(theme)}>
             Continue Shopping
           </Text>
         </TouchableOpacity>
@@ -131,6 +134,7 @@ class Cart extends Component {
   renderItem = items => <CartListItem item={items.item} expanded={false} />
 
   renderCart = () => {
+    const theme = this.context;
     const { items } = this.props.cart;
     const {
       container,
@@ -140,7 +144,7 @@ class Cart extends Component {
     } = styles;
 
     return (
-      <View style={container}>
+      <View style={container(theme)}>
         <View style={content}>
           <FlatList
             refreshControl={(
@@ -154,11 +158,11 @@ class Cart extends Component {
             keyExtractor={(item, index) => index.toString()}
           />
         </View>
-        <View style={footer}>
+        <View style={footer(theme)}>
           {this.renderTotals()}
           <Button
             onPress={this.onPressAddToCheckout}
-            style={buttonStyle}
+            style={buttonStyle(theme)}
           >
             Go to Checkout
           </Button>
@@ -178,36 +182,35 @@ class Cart extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  containerStyle: {
+    backgroundColor: theme.colors.background,
+  }),
+  containerStyle: theme => ({
+    backgroundColor: theme.colors.background,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
+  }),
   content: {
     flex: 1,
   },
-  totals: {
-    fontSize: 20,
-    paddingTop: 7,
-  },
-  buttonTextStyle: {
-    padding: 14,
-    fontSize: 20,
+  totals: theme => ({
+    paddingTop: theme.spacing.small,
+  }),
+  buttonTextStyle: theme => ({
+    padding: theme.spacing.large,
     top: 0,
-    color: '#3478f6',
-  },
-  footer: {
-    padding: 14,
+    color: theme.colors.secondary,
+  }),
+  footer: theme => ({
+    padding: theme.spacing.large,
     flexDirection: 'row',
     justifyContent: 'space-around',
-  },
-  buttonStyle: {
-    width: Sizes.WINDOW_WIDTH * 0.5,
-  },
+  }),
+  buttonStyle: theme => ({
+    width: theme.dimens.WINDOW_WIDTH * 0.5,
+  }),
 });
 
 const mapStateToProps = ({ cart }) => {

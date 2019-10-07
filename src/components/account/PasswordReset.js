@@ -1,104 +1,152 @@
-import React, { Component } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
-  TextInput,
-  TouchableOpacity,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { Spinner } from '../common';
-import { buttonStyles, inputStyles } from '../../constants/Styles';
-import { initiatePasswordReset } from '../../actions';
+import PropTypes from 'prop-types';
+import {
+  Spinner,
+  Button,
+  Text,
+  Input,
+} from '../common';
+import { initiatePasswordReset, updatePasswordResetUI } from '../../actions';
+import { ThemeContext } from '../../theme';
 
-class PasswordReset extends Component {
-  static navigationOptions = {
-    title: 'Reset Password',
+const PasswordReset = ({
+  loading,
+  error,
+  success,
+  initiatePasswordReset: _initiatePasswordReset,
+  updatePasswordResetUI: _updatePasswordResetUI,
+}) => {
+  const theme = useContext(ThemeContext);
+  const [email, setEmail] = useState('');
+
+  useEffect(() => (() => {
+    // componentWillUnmount
+    _updatePasswordResetUI();
+  }), []);
+
+  const onResetPress = () => {
+    _initiatePasswordReset(email);
   };
 
-  componentWillMount() {
-    this.setState({
-      email: '',
-    });
-  }
+  const renderMessages = () => {
+    if (error) {
+      return <Text style={styles.error(theme)}>{error}</Text>;
+    }
 
-  onResetPress = () => {
-    this.props.initiatePasswordReset(this.state.email);
+    if (success) {
+      return <Text style={styles.success(theme)}>{success}</Text>;
+    }
   };
 
-  renderButtons() {
-    if (this.props.loading) {
-      return <Spinner style={{ marginTop: 30 }} />;
+  const renderButtons = () => {
+    if (loading) {
+      return <Spinner style={{ marginTop: theme.spacing.extraLarge }} />;
     }
 
     return (
-      <TouchableOpacity onPress={this.onResetPress} style={buttonStyles.button}>
-        <Text style={buttonStyles.title}>RESET MY PASSWORD</Text>
-      </TouchableOpacity>
+      <Button
+        disabled={email === ''}
+        onPress={onResetPress}
+      >
+        RESET MY PASSWORD
+      </Button>
     );
-  }
+  };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.content}>
-          <Text style={styles.contentTitle1}>PASSWORD RECOVERY</Text>
-          <Text style={styles.contentTitle2}>
-            Please enter your email address below to receive a password reset
-            link
-          </Text>
-          <View style={[inputStyles.container, styles.emailOffset]}>
-            <TextInput
-              autoCapitalize="none"
-              underlineColorAndroid="transparent"
-              keyboardType="email-address"
-              placeholder="Email"
-              autoCorrect={false}
-              style={inputStyles.input}
-              value={this.state.email}
-              onSubmitEditing={this.onResetPress}
-              onChangeText={email => this.setState({ email })}
-            />
-          </View>
-          {this.renderButtons()}
-        </View>
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container(theme)}>
+      <Text type="subheading" bold style={styles.title(theme)}>PASSWORD RECOVERY</Text>
+      <Text style={styles.description}>
+        Please enter your email address below to receive a password reset
+        link
+      </Text>
+      <Input
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        keyboardType="email-address"
+        placeholder="Email"
+        autoCorrect={false}
+        containerStyle={styles.emailOffset(theme)}
+        value={email}
+        editable={!loading}
+        onSubmitEditing={onResetPress}
+        onChangeText={setEmail}
+      />
+      {renderButtons()}
+      {renderMessages()}
+    </View>
+  );
+};
+
+PasswordReset.navigationOptions = {
+  title: 'Reset Password',
+};
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
     alignItems: 'center',
-  },
-  content: {
-    width: 230,
-    marginTop: 55,
-    alignItems: 'center',
-  },
-  contentTitle1: {
-    fontSize: 12,
-    fontWeight: '700',
-    marginBottom: 13,
-  },
-  contentTitle2: {
-    fontSize: 12,
+    paddingTop: theme.dimens.WINDOW_HEIGHT * 0.1,
+  }),
+  title: theme => ({
+    marginBottom: theme.spacing.medium,
+  }),
+  description: {
     textAlign: 'center',
   },
-  emailOffset: {
-    marginTop: 18,
-    marginBottom: 15,
-  },
+  emailOffset: theme => ({
+    width: theme.dimens.WINDOW_WIDTH * 0.7,
+    marginVertical: theme.spacing.large,
+  }),
+  error: theme => ({
+    color: theme.colors.error,
+    width: theme.dimens.WINDOW_WIDTH * 0.85,
+    textAlign: 'center',
+    marginTop: theme.spacing.extraLarge,
+  }),
+  success: theme => ({
+    color: theme.colors.success,
+    width: theme.dimens.WINDOW_WIDTH * 0.85,
+    textAlign: 'center',
+    marginTop: theme.spacing.extraLarge,
+  }),
 });
 
-const mapStateToProps = ({ customerAuth }) => {
-  const { reset_email, reset_loading } = customerAuth;
+PasswordReset.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  success: PropTypes.oneOfType([PropTypes.string, null]),
+  error: PropTypes.oneOfType([PropTypes.string, null]),
+  initiatePasswordReset: PropTypes.func.isRequired,
+  updatePasswordResetUI: PropTypes.func.isRequired,
 
-  return { email: reset_email, loading: reset_loading };
+};
+
+PasswordReset.defaultProps = {
+  success: null,
+  error: null,
+};
+
+const mapStateToProps = ({ customerAuth }) => {
+  const {
+    resetLoading: loading,
+    resetPasswordErrorMessage: error,
+    resetPasswordSuccessMessage: success,
+  } = customerAuth;
+
+  return {
+    loading,
+    success,
+    error,
+  };
 };
 
 export default connect(mapStateToProps, {
   initiatePasswordReset,
+  updatePasswordResetUI,
 })(PasswordReset);

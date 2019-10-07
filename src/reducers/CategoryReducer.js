@@ -13,7 +13,7 @@ import {
 const INITIAL_STATE = {
   current: false,
   products: false,
-  totalCount: false,
+  totalCount: 0,
   loadingMore: false,
   refreshing: false,
 };
