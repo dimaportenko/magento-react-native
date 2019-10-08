@@ -3,7 +3,10 @@
 <img src="https://github.com/troublediehard/magento-react-native/blob/master/android/app/src/main/ic_launcher-web.png" alt="Logo" width="250px"/>
 
 # Setup
-Follow detailed [setup guide](https://github.com/troublediehard/magento-react-native/wiki/Setup)
+Follow detailed [setup guide](https://github.com/troublediehard/magento-react-native/wiki/Setup) 
+
+# Theme editing
+Here [instructions](https://github.com/troublediehard/magento-react-native/wiki/Theme-usage)
 
 # Demo
 ![Demo](docs/gifs/demo.gif)
