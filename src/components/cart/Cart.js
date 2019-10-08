@@ -117,7 +117,7 @@ class Cart extends Component {
 
     return (
       <View style={containerStyle(theme)}>
-        <Text type="heading" style={totals}>
+        <Text type="heading" style={totals(theme)}>
           Your cart is empty
         </Text>
         <TouchableOpacity

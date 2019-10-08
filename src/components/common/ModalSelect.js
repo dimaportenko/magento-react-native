@@ -54,7 +54,7 @@ ModalSelect.propTypes = {
       PropTypes.string,
       PropTypes.number,
     ]).isRequired,
-    label: PropTypes.string.isRequired,
+    label: PropTypes.string,
   })).isRequired,
   label: PropTypes.string.isRequired,
   attribute: PropTypes.string,

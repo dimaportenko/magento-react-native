@@ -115,7 +115,7 @@ OrdersScreen.propTypes = {
   orders: PropTypes.arrayOf(PropTypes.object),
   customerId: PropTypes.number,
   currencySymbol: PropTypes.string.isRequired,
-  refreshing: PropTypes.bool.isRequired,
+  refreshing: PropTypes.bool,
   getOrdersForCustomer: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
 };

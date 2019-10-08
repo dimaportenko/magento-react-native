@@ -72,8 +72,8 @@ class DrawerScreen extends Component {
             onChangeText={maxValue => this.setState({ maxValue })}
           />
         </View>
-        <View style={buttonStyle}>
-          <Button onPress={this.onApplyPressed}>
+        <View style={styles.buttonStyleWrap}>
+          <Button onPress={this.onApplyPressed} style={styles.buttonStyle}>
             Apply
           </Button>
         </View>
@@ -109,6 +109,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.large,
   }),
   buttonStyle: {
+    width: '100%',
+  },
+  buttonStyleWrap: {
     flex: 1,
     justifyContent: 'flex-end',
   },

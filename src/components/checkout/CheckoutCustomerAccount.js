@@ -261,7 +261,7 @@ class CheckoutCustomerAccount extends Component {
     return (
       <View>
         <Input
-          autoCapitalize
+          autoCapitalize="none"
           label="Email"
           value={this.props.email}
           placeholder="email@gmail.com"

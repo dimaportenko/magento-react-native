@@ -54,7 +54,7 @@ ProductListItem.propTypes = {
     price: PropTypes.number,
     custom_attributes: PropTypes.arrayOf(PropTypes.shape({
       attribute_code: PropTypes.string,
-      value: PropTypes.string,
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
     })),
   }).isRequired,
   onRowPress: PropTypes.func,

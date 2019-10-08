@@ -165,7 +165,7 @@ const mapStateToProps = ({ customerAuth }) => {
 };
 
 Login.propTypes = {
-  loading: PropTypes.bool.isRequired,
+  loading: PropTypes.bool,
   error: PropTypes.oneOfType(PropTypes.string, null),
   success: PropTypes.oneOfType(PropTypes.string, null),
   auth: PropTypes.func.isRequired,
@@ -174,6 +174,7 @@ Login.propTypes = {
 Login.defaultProps = {
   error: null,
   success: null,
+  loading: false,
 };
 
 export default connect(mapStateToProps, { auth })(Login);

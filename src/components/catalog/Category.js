@@ -108,7 +108,7 @@ const styles = {
 Category.propTypes = {
   canLoadMoreContent: PropTypes.bool.isRequired,
   loadingMore: PropTypes.bool.isRequired,
-  products: PropTypes.arrayOf(PropTypes.object),
+  products: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.bool]),
   totalCount: PropTypes.number.isRequired,
   category: PropTypes.object,
   refreshing: PropTypes.bool.isRequired,

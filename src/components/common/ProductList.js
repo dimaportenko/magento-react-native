@@ -150,10 +150,6 @@ const ProductList = ({
   );
 };
 
-ProductList.propTypes = {
-  currencySymbol: PropTypes.string.isRequired,
-};
-
 const styles = StyleSheet.create({
   itemSeparator: theme => ({
     height: theme.dimens.productListItemInBetweenSpace,
@@ -222,7 +218,7 @@ ProductList.propTypes = {
   performSort: PropTypes.func,
   navigation: PropTypes.object.isRequired,
   canLoadMoreContent: PropTypes.bool.isRequired,
-  products: PropTypes.arrayOf(PropTypes.object),
+  products: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.bool]),
   onEndReached: PropTypes.func,
   refreshControl: PropTypes.element,
   gridColumnsValue: PropTypes.bool.isRequired,

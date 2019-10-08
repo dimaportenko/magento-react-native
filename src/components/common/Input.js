@@ -60,8 +60,8 @@ const styles = {
 
 Input.propTypes = {
   label: PropTypes.string,
-  value: PropTypes.string.isRequired,
-  onChangeText: PropTypes.func.isRequired,
+  value: PropTypes.string,
+  onChangeText: PropTypes.func,
   placeholder: PropTypes.string,
   secureTextEntry: PropTypes.bool,
   containerStyle: ViewPropTypes.style,
@@ -70,9 +70,11 @@ Input.propTypes = {
 
 Input.defaultProps = {
   label: null,
+  value: '',
   placeholder: '',
   secureTextEntry: false,
   assignRef: () => {},
+  onChangeText: () => {},
 };
 
 export { Input };
