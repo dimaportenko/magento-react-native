@@ -7,11 +7,11 @@ export default {
    *
    * Example: If primary color is dark, make appbarTintColor light
    */
-  primaryDark: '#000', // some shade of white or white
-  primary: '#1f1f1f', // #fff
-  tabBarBackground: '#212121', // #fff
+  primaryDark: '#000',
+  primary: '#fff',
+  tabBarBackground: '#fff',
   tabBarIconInactive: '#8c8c8c',
-  appbarTint: '#fff', // #000
+  appbarTint: '#000',
   /**
    * ========================= Secondary color =========================
    * secondaryLight: to be used for hover state
@@ -36,15 +36,15 @@ export default {
   /**
    * The screen background.
    */
-  background: '#121212', // #fff
+  background: '#F7F6F4',
   /**
    * To be used as a default background for all components, like Card, CardSection, List etc
    */
-  surface: '#313131', //'#1d1d1d', // #fff
+  surface: '#fff',
   /**
    * Use it for card border
    */
-  border: '#ccc', // #d9d9d9
+  border: '#d9d9d9',
   /**
    * Success messages and icons.
    */
@@ -57,11 +57,11 @@ export default {
    * The default color of text in many components.
    * To be used for heading, subheading, label text
    */
-  titleText: '#fff', // #595959
+  titleText: '#595959',
   /**
    * To be used for normal text like paragraph
    */
-  bodyText: '#e4e6e8', // #737373
+  bodyText: '#737373',
   /**
    * To be used for hint text component
    */
