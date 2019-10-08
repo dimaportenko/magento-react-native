@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  View, ScrollView, TextInput, StyleSheet,
+  View, ScrollView, StyleSheet,
 } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
@@ -26,7 +26,7 @@ class Product extends Component {
 
   static propTypes = {
     currencySymbol: PropTypes.string,
-    uiProductCustomOptionUpdate: PropTypes.string,
+    uiProductCustomOptionUpdate: PropTypes.func,
   };
 
   static defaultProps = {

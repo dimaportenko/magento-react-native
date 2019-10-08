@@ -240,14 +240,11 @@ class CheckoutCustomerAccount extends Component {
       key: value.id,
     }));
 
-    const country = countries.find(item => item.id === countryId);
-    const label = country ? country.full_name_locale : 'Country';
-
     return (
       <ModalSelect
         disabled={data.length === 0}
         key="countries"
-        label={label}
+        label="Country"
         attribute="Country"
         value="Country"
         data={data}
