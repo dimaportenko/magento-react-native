@@ -3,9 +3,11 @@ import Swiper from 'react-native-swiper';
 import { View, Image } from 'react-native';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
-
+import { ThemeContext } from '../../theme';
 
 class ProductMedia extends PureComponent {
+  static contextType = ThemeContext;
+
   renderMedia() {
     const { media } = this.props;
 
@@ -24,6 +26,7 @@ class ProductMedia extends PureComponent {
   }
 
   renderMediaItems() {
+    const theme = this.context;
     const { media } = this.props;
 
     return media.map((item) => {
@@ -32,7 +35,7 @@ class ProductMedia extends PureComponent {
       return (
         <Image
           key={item.id}
-          style={styles.imageStyle}
+          style={styles.imageStyle(theme)}
           resizeMode="contain"
           source={{ uri: magento.getProductMediaUrl() + item.file }}
         />
@@ -41,8 +44,9 @@ class ProductMedia extends PureComponent {
   }
 
   render() {
+    const theme = this.context;
     return (
-      <View style={styles.imageContainer}>
+      <View style={styles.imageContainer(theme)}>
         {this.renderMedia()}
       </View>
     );
@@ -50,13 +54,13 @@ class ProductMedia extends PureComponent {
 }
 
 const styles = {
-  imageContainer: {
-    height: 300,
-  },
-  imageStyle: {
-    height: 290,
+  imageContainer: theme => ({
+    height: theme.dimens.productDetailImageHeight,
+  }),
+  imageStyle: theme => ({
+    height: (theme.dimens.productDetailImageHeight - 10),
     top: 0,
-  },
+  }),
 };
 
 export default ProductMedia;

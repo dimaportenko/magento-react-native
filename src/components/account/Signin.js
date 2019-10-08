@@ -1,38 +1,35 @@
-import React, { Component } from 'react';
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from 'react-native';
+import React, { useRef, useState, useContext } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import Colors from '../../constants/Colors';
-import Sizes from '../../constants/Sizes';
-import { Spinner } from '../common/Spinner';
+import PropTypes from 'prop-types';
+import {
+  Spinner,
+  Button,
+  Text,
+  Input,
+} from '../common';
 import { signIn } from '../../actions';
+import { ThemeContext } from '../../theme';
 
-class Signin extends Component {
-  static navigationOptions = {
-    title: 'Sign In',
-  };
+const Signin = ({
+  loading,
+  error,
+  success,
+  signIn: _signIn,
+}) => {
+  const theme = useContext(ThemeContext);
+  // Internal State
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // Reference
+  const lastnameInput = useRef(null);
+  const emailInput = useRef(null);
+  const passwordInput = useRef(null);
 
-  componentWillMount() {
-    this.setState({
-      firstname: '',
-      lastname: '',
-      email: '',
-      password: '',
-      confirmPassword: '',
-    });
-  }
-
-  onCreateAccountPress = () => {
-    const {
-      email, password, firstname, lastname, confirmPassword,
-    } = this.state;
-    // TODO: add password check
-
+  const onCreateAccountPress = () => {
+    // TODO: add password validation check
     const customer = {
       customer: {
         email,
@@ -41,153 +38,140 @@ class Signin extends Component {
       },
       password,
     };
-
-    this.props.signIn(customer);
+    _signIn(customer);
   };
 
-  renderButtons() {
-    if (this.props.loading) {
-      return <Spinner style={{ marginTop: 30 }} />;
+  const renderButtons = () => {
+    if (loading) {
+      return <Spinner />;
     }
 
     return (
-      <View>
-        <TouchableOpacity onPress={this.onCreateAccountPress} style={styles.button}>
-          <Text style={styles.buttonTitle}>CREATE ACCOUNT</Text>
-        </TouchableOpacity>
-      </View>
+      <Button
+        disabled={
+          firstname === ''
+          || lastname === ''
+          || email === ''
+          || password === ''
+        }
+        onPress={onCreateAccountPress}
+      >
+        CREATE ACCOUNT
+      </Button>
     );
-  }
+  };
 
-  renderMessages() {
-    const { error, success } = this.props;
+  const renderMessages = () => {
     if (error) {
-      return <Text style={styles.error}>{error}</Text>;
+      return <Text style={styles.error(theme)}>{error}</Text>;
     }
 
     if (success) {
-      return <Text style={styles.success}>{success}</Text>;
+      return <Text style={styles.success(theme)}>{success}</Text>;
     }
-  }
+  };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={[styles.inputContainer, styles.offsetTop]}>
-          <TextInput
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            placeholder="Firstname"
-            autoCorrect={false}
-            returnKeyType="next"
-            style={styles.input}
-            value={this.state.firstname}
-            onChangeText={value => this.setState({ firstname: value })}
-            onSubmitEditing={() => { this.lastnameInput.focus(); }}
-          />
-        </View>
-        <View style={[styles.inputContainer]}>
-          <TextInput
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            placeholder="Lastname"
-            autoCorrect={false}
-            returnKeyType="next"
-            style={styles.input}
-            value={this.state.lastname}
-            onChangeText={value => this.setState({ lastname: value })}
-            ref={(input) => { this.lastnameInput = input; }}
-            onSubmitEditing={() => { this.emailInput.focus(); }}
-          />
-        </View>
-        <View style={[styles.inputContainer]}>
-          <TextInput
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            placeholder="Email"
-            keyboardType="email-address"
-            returnKeyType="next"
-            autoCorrect={false}
-            style={styles.input}
-            value={this.state.email}
-            onChangeText={value => this.setState({ email: value })}
-            ref={(input) => { this.emailInput = input; }}
-            onSubmitEditing={() => { this.passwordInput.focus(); }}
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <TextInput
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            secureTextEntry
-            placeholder="Password"
-            autoCorrect={false}
-            style={styles.input}
-            value={this.state.password}
-            onChangeText={value => this.setState({ password: value })}
-            ref={(input) => { this.passwordInput = input; }}
-            onSubmitEditing={this.onCreateAccountPress}
-          />
-        </View>
-        {this.renderButtons()}
-        {this.renderMessages()}
-        <View />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container(theme)}>
+      <Input
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        placeholder="Firstname"
+        returnKeyType="next"
+        autoCorrect={false}
+        value={firstname}
+        editable={!loading}
+        onChangeText={setFirstname}
+        onSubmitEditing={() => { lastnameInput.current.focus(); }}
+        containerStyle={styles.inputContainer(theme)}
+      />
+      <Input
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        placeholder="Lastname"
+        autoCorrect={false}
+        returnKeyType="next"
+        value={lastname}
+        editable={!loading}
+        onChangeText={setLastname}
+        assignRef={(input) => { lastnameInput.current = input; }}
+        onSubmitEditing={() => { emailInput.current.focus(); }}
+        containerStyle={styles.inputContainer(theme)}
+      />
+      <Input
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        placeholder="Email"
+        keyboardType="email-address"
+        returnKeyType="next"
+        autoCorrect={false}
+        value={email}
+        editable={!loading}
+        onChangeText={setEmail}
+        assignRef={(input) => { emailInput.current = input; }}
+        onSubmitEditing={() => { passwordInput.current.focus(); }}
+        containerStyle={styles.inputContainer(theme)}
+      />
+      <Input
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        secureTextEntry
+        placeholder="Password"
+        autoCorrect={false}
+        value={password}
+        editable={!loading}
+        onChangeText={setPassword}
+        assignRef={(input) => { passwordInput.current = input; }}
+        onSubmitEditing={onCreateAccountPress}
+        containerStyle={styles.inputContainer(theme)}
+      />
+      {renderButtons()}
+      {renderMessages()}
+      <View />
+    </View>
+  );
+};
+
+Signin.navigationOptions = {
+  title: 'Sign Up',
+};
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: theme.colors.background,
     alignItems: 'center',
-  },
-  input: {
-    color: '#000',
-    paddingRight: 5,
-    paddingLeft: 5,
-  },
-  inputContainer: {
-    borderWidth: 1,
-    borderColor: Colors.GRAY,
-    width: Sizes.WINDOW_WIDTH * 0.7,
-    height: 40,
-    justifyContent: 'center',
-    marginBottom: 20,
-  },
-  offsetTop: {
-    marginTop: Sizes.WINDOW_HEIGHT * 0.1,
-  },
-  button: {
-    borderWidth: 1,
-    backgroundColor: Colors.GRAY,
-    borderColor: Colors.GRAY,
-    width: Sizes.WINDOW_WIDTH * 0.7,
-    height: 40,
-    justifyContent: 'center',
-  },
-  buttonTitle: {
-    color: 'white',
-    alignSelf: 'center',
-  },
-  error: {
-    color: 'red',
-    width: Sizes.WINDOW_WIDTH * 0.85,
+    paddingTop: theme.dimens.WINDOW_HEIGHT * 0.1,
+  }),
+  inputContainer: theme => ({
+    width: theme.dimens.WINDOW_WIDTH * 0.7,
+    marginBottom: theme.spacing.large,
+  }),
+  error: theme => ({
+    color: theme.colors.error,
+    width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
-    fontSize: 14,
-    marginTop: 20,
-  },
-  success: {
-    width: Sizes.WINDOW_WIDTH * 0.85,
-    color: '#01640B',
+    marginTop: theme.spacing.extraLarge,
+  }),
+  success: theme => ({
+    color: theme.colors.success,
+    width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
-    fontSize: 14,
-    backgroundColor: '#E5EFE5',
-    padding: 5,
-    marginTop: 20,
-  },
+    marginTop: theme.soacing.extraLarge,
+  }),
 });
+
+Signin.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType(PropTypes.string, null),
+  success: PropTypes.oneOfType(PropTypes.string, null),
+  signIn: PropTypes.func.isRequired,
+};
+
+Signin.defaultProps = {
+  error: null,
+  success: null,
+};
 
 const mapStateToProps = ({ customerAuth }) => {
   const { error, success, loading } = customerAuth;

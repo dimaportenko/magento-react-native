@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import {
   getCountries,
@@ -9,12 +9,14 @@ import {
   checkoutCustomerNextLoading,
 } from '../../actions';
 import {
-  CardSection, Input, Spinner, ModalSelect, Button,
+  Input, Spinner, ModalSelect, Button, Text,
 } from '../common';
-import Sizes from '../../constants/Sizes';
+import { ThemeContext } from '../../theme';
 
 
 class CheckoutCustomerAccount extends Component {
+  static contextType = ThemeContext;
+
   componentWillMount() {
     this.props.getCountries();
   }
@@ -168,6 +170,7 @@ class CheckoutCustomerAccount extends Component {
   }
 
   renderButton() {
+    const theme = this.context;
     if (this.props.loading) {
       return <Spinner size="large" />;
     }
@@ -175,7 +178,7 @@ class CheckoutCustomerAccount extends Component {
       <View style={styles.nextButtonStyle}>
         <Button
           onPress={this.onNextPressed}
-          style={styles.buttonStyle}
+          style={styles.buttonStyle(theme)}
         >
           Next
         </Button>
@@ -237,14 +240,11 @@ class CheckoutCustomerAccount extends Component {
       key: value.id,
     }));
 
-    const country = countries.find(item => item.id === countryId);
-    const label = country ? country.full_name_locale : 'Country';
-
     return (
       <ModalSelect
         disabled={data.length === 0}
         key="countries"
-        label={label}
+        label="Country"
         attribute="Country"
         value="Country"
         data={data}
@@ -260,116 +260,102 @@ class CheckoutCustomerAccount extends Component {
 
     return (
       <View>
-        <CardSection>
-          <Input
-            autoCapitalize="none"
-            label="Email"
-            value={this.props.email}
-            placeholder="email@gmail.com"
-            onChangeText={value => this.updateUI('email', value)}
-          />
-        </CardSection>
+        <Input
+          autoCapitalize="none"
+          label="Email"
+          value={this.props.email}
+          placeholder="email@gmail.com"
+          onChangeText={value => this.updateUI('email', value)}
+        />
 
-        <CardSection>
-          <Input
-            secureTextEntry
-            label="Password"
-            value={this.props.password}
-            placeholder="password"
-            onChangeText={value => this.updateUI('password', value)}
-          />
-        </CardSection>
+        <Input
+          secureTextEntry
+          label="Password"
+          value={this.props.password}
+          placeholder="password"
+          onChangeText={value => this.updateUI('password', value)}
+        />
 
-        <CardSection>
-          <Input
-            label="Firstname"
-            value={this.props.firstname}
-            placeholder="firstname"
-            onChangeText={value => this.updateUI('firstname', value)}
-          />
-        </CardSection>
+        <Input
+          label="Firstname"
+          value={this.props.firstname}
+          placeholder="firstname"
+          onChangeText={value => this.updateUI('firstname', value)}
+        />
 
-        <CardSection>
-          <Input
-            label="Lastname"
-            value={this.props.lastname}
-            placeholder="lastname"
-            onChangeText={value => this.updateUI('lastname', value)}
-          />
-        </CardSection>
+        <Input
+          label="Lastname"
+          value={this.props.lastname}
+          placeholder="lastname"
+          onChangeText={value => this.updateUI('lastname', value)}
+        />
       </View>
     );
   }
 
   render() {
+    const theme = this.context;
     return (
-      <View>
+      <View style={styles.container(theme)}>
         {this.renderUser()}
 
-        <CardSection>{this.renderCountries()}</CardSection>
+        {this.renderCountries()}
 
-        <CardSection>{this.renderRegions()}</CardSection>
+        {this.renderRegions()}
 
-        <CardSection>
-          <Input
-            label="Postcode"
-            value={this.props.postcode}
-            placeholder="postcode"
-            onChangeText={value => this.updateUI('postcode', value)}
-          />
-        </CardSection>
+        <Input
+          label="Postcode"
+          value={this.props.postcode}
+          placeholder="postcode"
+          onChangeText={value => this.updateUI('postcode', value)}
+        />
 
-        <CardSection>
-          <Input
-            label="Street"
-            value={this.props.street}
-            placeholder="street"
-            onChangeText={value => this.updateUI('street', value)}
-          />
-        </CardSection>
+        <Input
+          label="Street"
+          value={this.props.street}
+          placeholder="street"
+          onChangeText={value => this.updateUI('street', value)}
+        />
 
-        <CardSection>
-          <Input
-            label="City"
-            value={this.props.city}
-            placeholder="city"
-            onChangeText={value => this.updateUI('city', value)}
-          />
-        </CardSection>
+        <Input
+          label="City"
+          value={this.props.city}
+          placeholder="city"
+          onChangeText={value => this.updateUI('city', value)}
+        />
 
-        <CardSection>
-          <Input
-            label="Telephone"
-            value={this.props.telephone}
-            placeholder="telephone"
-            onChangeText={value => this.updateUI('telephone', value)}
-          />
-        </CardSection>
+        <Input
+          label="Telephone"
+          value={this.props.telephone}
+          placeholder="telephone"
+          onChangeText={value => this.updateUI('telephone', value)}
+        />
 
-        <Text style={styles.errorTextStyle}>{this.props.error}</Text>
+        <Text type="heading" style={styles.errorTextStyle(theme)}>{this.props.error}</Text>
 
-        <CardSection>{this.renderButton()}</CardSection>
+        {this.renderButton()}
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  errorTextStyle: {
-    color: 'red',
-    fontSize: 20,
+  container: theme => ({
+    padding: theme.spacing.large,
+  }),
+  errorTextStyle: theme => ({
+    color: theme.colors.error,
     alignSelf: 'center',
-  },
+  }),
   nextButtonStyle: {
     flex: 1,
     alignItems: 'center',
   },
-  buttonStyle: {
-    marginTop: 10,
+  buttonStyle: theme => ({
+    marginVertical: theme.spacing.large,
     alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 10,
-  },
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+  }),
 });
 
 const mapStateToProps = ({

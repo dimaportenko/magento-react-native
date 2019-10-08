@@ -1,47 +1,80 @@
-import React from 'react';
-import { TextInput, View, Text } from 'react-native';
+import React, { useContext } from 'react';
+import { TextInput, View, ViewPropTypes } from 'react-native';
+import PropTypes from 'prop-types';
+import { Text } from './Text';
+import { ThemeContext } from '../../theme';
 
 const Input = ({
-  label, value, onChangeText, placeholder, secureTextEntry, ...props
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  secureTextEntry,
+  assignRef,
+  containerStyle,
+  labelStyle,
+  inputStyle,
+  ...props
 }) => {
-  const { inputStyle, labelStyle, containerStyle } = styles;
+  const theme = useContext(ThemeContext);
 
   return (
-    <View style={containerStyle}>
-      <Text style={labelStyle}>{label}</Text>
+    <View style={[styles.containerStyle(theme), containerStyle]}>
+      {
+        label && <Text type="heading" style={[styles.labelStyle(theme), labelStyle]}>{label}</Text>
+      }
       <TextInput
         {...props}
         secureTextEntry={secureTextEntry}
         placeholder={placeholder}
+        placeholderTextColor={theme.colors.bodyText}
         autoCorrect={false}
-        style={inputStyle}
+        style={[styles.inputStyle(theme), inputStyle]}
         value={value}
         onChangeText={onChangeText}
+        ref={(component) => { assignRef && assignRef(component); }}
       />
     </View>
   );
 };
 
 const styles = {
-  inputStyle: {
-    color: '#000',
-    paddingRight: 5,
-    paddingLeft: 5,
-    fontSize: 18,
-    lineHeight: 23,
-    flex: 2,
-  },
-  labelStyle: {
-    fontSize: 18,
-    paddingLeft: 20,
-    flex: 1,
-  },
-  containerStyle: {
-    height: 40,
-    flex: 1,
+  containerStyle: theme => ({
+    height: theme.dimens.defaultInputBoxHeight,
+    backgroundColor: theme.colors.surface,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
     flexDirection: 'row',
     alignItems: 'center',
-  },
+  }),
+  inputStyle: theme => ({
+    color: theme.colors.titleText,
+    padding: theme.spacing.small,
+    flex: 2,
+  }),
+  labelStyle: theme => ({
+    paddingLeft: theme.spacing.large,
+    flex: 1,
+  }),
+};
+
+Input.propTypes = {
+  label: PropTypes.string,
+  value: PropTypes.string,
+  onChangeText: PropTypes.func,
+  placeholder: PropTypes.string,
+  secureTextEntry: PropTypes.bool,
+  containerStyle: ViewPropTypes.style,
+  assignRef: PropTypes.func,
+};
+
+Input.defaultProps = {
+  label: null,
+  value: '',
+  placeholder: '',
+  secureTextEntry: false,
+  assignRef: () => {},
+  onChangeText: () => {},
 };
 
 export { Input };

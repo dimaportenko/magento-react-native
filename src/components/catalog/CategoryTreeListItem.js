@@ -1,15 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
-  Text, View, TouchableOpacity, LayoutAnimation,
+  View, TouchableOpacity, LayoutAnimation,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
 import CategoryTreeList from './CategoryTreeList';
+import { Text } from '../common';
 import { setCurrentCategory, resetFilters } from '../../actions/index';
 import { NAVIGATION_CATEGORY_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
+import { ThemeContext } from '../../theme';
 
 class CategoryTreeListItem extends Component {
+  static contextType = ThemeContext;
+
   state = { expanded: false };
 
   componentWillUpdate() {
@@ -37,6 +41,7 @@ class CategoryTreeListItem extends Component {
   }
 
   renderExpandButton() {
+    const theme = this.context;
     const { category } = this.props;
     const { expanded } = this.state;
     if (category.children_data.length) {
@@ -44,24 +49,24 @@ class CategoryTreeListItem extends Component {
         ? 'ios-arrow-dropdown'
         : 'ios-arrow-dropright';
       return (
-        <Icon
-          iconStyle={styles.dropIcon}
-          size={20}
-          name={icon}
-          type="ionicon"
-          color="#999"
-          onPress={this.onExpandPress.bind(this)}
-        />
+        <TouchableOpacity onPress={this.onExpandPress.bind(this)}>
+          <Icon
+            iconStyle={styles.dropIcon(theme)}
+            size={20}
+            name={icon}
+            type="ionicon"
+            color="#999"
+          />
+        </TouchableOpacity>
       );
     }
   }
 
   renderItem() {
+    const theme = this.context;
     const { category } = this.props;
     const titleStyle = {
-      fontSize: 18,
       alignSelf: 'flex-start',
-      fontWeight: '300',
       paddingLeft: 10 * category.level,
     };
 
@@ -69,9 +74,9 @@ class CategoryTreeListItem extends Component {
       <View>
         <TouchableOpacity
           onPress={this.onRowPress.bind(this)}
-          style={styles.rowStyles}
+          style={styles.rowStyles(theme)}
         >
-          <Text style={titleStyle}>{category.name}</Text>
+          <Text type="heading" style={titleStyle}>{category.name}</Text>
           {this.renderExpandButton()}
         </TouchableOpacity>
       </View>
@@ -99,20 +104,20 @@ class CategoryTreeListItem extends Component {
 }
 
 const styles = {
-  rowStyles: {
+  rowStyles: theme => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     borderBottomWidth: 1,
-    borderColor: '#ddd',
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-  dropIcon: {
+    borderColor: theme.colors.border,
+    paddingVertical: theme.spacing.small,
+    backgroundColor: theme.colors.surface,
+  }),
+  dropIcon: theme => ({
     height: 24,
     padding: 2,
-    paddingRight: 15,
-  },
+    paddingRight: theme.spacing.large,
+  }),
 };
 
 export default connect(null, { setCurrentCategory, resetFilters })(CategoryTreeListItem);

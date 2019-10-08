@@ -54,6 +54,20 @@ import {
   NAVIGATION_FILTER_DRAWER_SCREEN,
 } from './routes';
 
+import { theme } from '../theme';
+
+const defaultHeader = {
+  headerStyle: {
+    backgroundColor: theme.colors.primary,
+  },
+  headerTitleStyle: {
+    ...theme.typography.titleTextSemiBold,
+    alignSelf: 'center',
+  },
+  headerBackTitle: null,
+  headerTintColor: theme.colors.appbarTint,
+};
+
 const HomeStack = createStackNavigator(
   {
     [NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
@@ -62,17 +76,7 @@ const HomeStack = createStackNavigator(
   },
   {
     initialRouteName: NAVIGATION_HOME_SCREEN_PATH,
-    navigationOptions: {
-      headerStyle: {
-        // backgroundColor: '#f4511e',
-      },
-      // headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontWeight: '500',
-        fontSize: 18,
-        alignSelf: 'center',
-      },
-    },
+    navigationOptions: defaultHeader,
   },
 );
 
@@ -80,6 +84,8 @@ const AuthStack = createStackNavigator({
   [NAVIGATION_LOGIN_PATH]: Login,
   [NAVIGATION_SIGNIN_PATH]: Signin,
   [NAVIGATION_RESET_PASSWORD_PATH]: PasswordReset,
+}, {
+  navigationOptions: defaultHeader,
 });
 
 const AccountStack = createStackNavigator({
@@ -87,6 +93,8 @@ const AccountStack = createStackNavigator({
   [NAVIGATION_ORDERS_PATH]: OrdersScreen,
   [NAVIGATION_ORDER_PATH]: OrderScreen,
   [NAVIGATION_ADDRESS_SCREEN_PATH]: AddressScreen,
+}, {
+  navigationOptions: defaultHeader,
 });
 
 const AccountSwitch = createSwitchNavigator({
@@ -98,11 +106,15 @@ const AccountSwitch = createSwitchNavigator({
 const SearchStack = createStackNavigator({
   [NAVIGATION_SEARCH_SCREEN_PATH]: SearchScreen,
   [NAVIGATION_SEARCH_PRODUCT_PATH]: Product,
+}, {
+  navigationOptions: defaultHeader,
 });
 
 const CartStack = createStackNavigator({
   [NAVIGATION_CART_PATH]: Cart,
   [NAVIGATION_CHECKOUT_PATH]: Checkout,
+}, {
+  navigationOptions: defaultHeader,
 });
 
 const MainAppNavigator = createBottomTabNavigator(
@@ -136,6 +148,10 @@ const MainAppNavigator = createBottomTabNavigator(
     // initialRouteName: NAVIGATION_AUTH_STACK_PATH,
     tabBarOptions: {
       showLabel: false,
+      activeTintColor: theme.colors.secondary,
+      inactiveTintColor: theme.colors.tabBarIconInactive,
+      activeBackgroundColor: theme.colors.tabBarBackground,
+      inactiveBackgroundColor: theme.colors.tabBarBackground,
     },
   },
 );

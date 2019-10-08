@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Alert, View, Text, StyleSheet,
+  Alert, View, StyleSheet,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -13,10 +13,12 @@ import {
   checkoutSetActiveSection,
 } from '../../actions';
 import { NAVIGATION_HOME_STACK_PATH } from '../../navigation/routes';
-import { Button, Spinner } from '../common';
-import Sizes from '../../constants/Sizes';
+import { Button, Spinner, Text } from '../common';
+import { ThemeContext } from '../../theme';
 
 class CheckoutTotals extends Component {
+  static contextType = ThemeContext;
+
   onPlacePressed = () => {
     const { cartId, selectedPayment } = this.props;
     const payment = {
@@ -78,6 +80,7 @@ class CheckoutTotals extends Component {
   }
 
   renderButton() {
+    const theme = this.context;
     const { payments } = this.props;
     if (!payments.length) {
       return <View />;
@@ -95,7 +98,7 @@ class CheckoutTotals extends Component {
         <Button
           onPress={this.onPlacePressed}
           disable={this.props.loading}
-          style={styles.buttonStyle}
+          style={styles.buttonStyle(theme)}
         >
           Place Order
         </Button>
@@ -125,8 +128,9 @@ class CheckoutTotals extends Component {
   }
 
   render() {
+    const theme = this.context;
     return (
-      <View style={styles.container}>
+      <View style={styles.container(theme)}>
         {this.renderTotals()}
         {this.renderButton()}
       </View>
@@ -135,10 +139,10 @@ class CheckoutTotals extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    margin: 15,
+  container: theme => ({
+    margin: theme.spacing.large,
     alignItems: 'flex-start',
-  },
+  }),
   radioWrap: {
     alignItems: 'flex-start',
     alignSelf: 'flex-start',
@@ -151,12 +155,11 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     alignSelf: 'flex-end',
   },
-  buttonStyle: {
-    marginTop: 10,
+  buttonStyle: theme => ({
+    marginVertical: theme.spacing.large,
     alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 10,
-  },
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+  }),
 });
 
 const mapStateToProps = ({ cart, checkout }) => {

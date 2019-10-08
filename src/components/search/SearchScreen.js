@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import { SearchBar } from 'react-native-elements';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import Sizes from '../../constants/Sizes';
 import {
   getSearchProducts,
   addFilterData,
@@ -13,8 +12,11 @@ import {
 import { ProductList, HeaderIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_SEARCH_PRODUCT_PATH } from '../../navigation/routes';
+import { ThemeContext } from '../../theme';
 
 class SearchScreen extends Component {
+  static contextType = ThemeContext;
+
   static navigationOptions = ({ navigation }) => ({
     title: 'Search',
     headerBackTitle: ' ',
@@ -86,22 +88,20 @@ class SearchScreen extends Component {
   );
 
   render() {
-    const { searchInputStyle, containerStyle, searchStyle } = styles;
+    const theme = this.context;
     const { input } = this.state;
 
     return (
-      <View style={containerStyle}>
-        <View style={searchInputStyle}>
-          <SearchBar
-            placeholder="Type here..."
-            onChangeText={this.updateSearch}
-            value={input}
-            containerStyle={searchStyle}
-            inputStyle={{ backgroundColor: '#DAE2EA', }}
-            inputContainerStyle={{ backgroundColor: '#DAE2EA', borderRadius: 25 }}
-            showLoading={this.props.loadingMore}
-          />
-        </View>
+      <View style={styles.containerStyle(theme)}>
+        <SearchBar
+          placeholder="Type here..."
+          onChangeText={this.updateSearch}
+          value={input}
+          containerStyle={styles.searchStyle(theme)}
+          inputStyle={styles.inputStyle(theme)}
+          inputContainerStyle={styles.inputContainerStyle(theme)}
+          showLoading={this.props.loadingMore}
+        />
         <View style={{ flex: 1 }}>
           {this.renderContent()}
         </View>
@@ -111,25 +111,26 @@ class SearchScreen extends Component {
 }
 
 const styles = {
-  searchInputStyle: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#aaa',
-    paddingBottom: 5,
-  },
-  containerStyle: {
+  containerStyle: theme => ({
     flex: 1,
-    backgroundColor: 'white',
-  },
-  searchStyle: {
-    marginTop: 5,
-    backgroundColor: 'white',
-    borderRadius: 25,
+    backgroundColor: theme.colors.background,
+  }),
+  searchStyle: theme => ({
+    backgroundColor: theme.colors.background,
     alignSelf: 'center',
     borderBottomWidth: 0,
     borderTopWidth: 0,
-    height: 55,
-    width: Sizes.WINDOW_WIDTH * 0.95,
-  },
+    height: theme.dimens.searchBarHeight,
+    width: theme.dimens.WINDOW_WIDTH,
+  }),
+  inputContainerStyle: theme => ({
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.dimens.searchBarBorderRadius,
+  }),
+  inputStyle: theme => ({
+    backgroundColor: theme.colors.surface,
+    color: theme.colors.titleText,
+  }),
   notFoundTextWrap: {
     flex: 1,
     justifyContent: 'center',
@@ -149,7 +150,6 @@ const mapStateToProps = ({ search, filters, magento }) => {
     products, totalCount, canLoadMoreContent, loadingMore, sortOrder, priceFilter, currencySymbol,
   };
 };
-
 
 export default connect(mapStateToProps, {
   getSearchProducts,

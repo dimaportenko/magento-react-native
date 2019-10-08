@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-  ScrollView, View, TouchableWithoutFeedback, Text, StyleSheet, RefreshControl,
+  ScrollView, View, StyleSheet, RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import { MaterialHeaderButtons, Item } from '../common';
+import { MaterialHeaderButtons, Text, Item } from '../common';
 import {
   NAVIGATION_HOME_PRODUCT_PATH,
 } from '../../navigation/routes';
@@ -13,9 +13,11 @@ import { getHomeData, setCurrentProduct } from '../../actions';
 import HomeSlider from './HomeSlider';
 import FeaturedProducts from './FeaturedProducts';
 import NavigationService from '../../navigation/NavigationService';
-import Sizes from '../../constants/Sizes';
+import { ThemeContext } from '../../theme';
 
 class HomeScreen extends Component {
+  static contextType = ThemeContext;
+
   static navigationOptions = ({ navigation }) => ({
     title: 'Magento React Native',
     headerBackTitle: ' ',
@@ -25,18 +27,6 @@ class HomeScreen extends Component {
       </MaterialHeaderButtons>
     ),
   });
-
-  static propTypes = {
-    slider: PropTypes.array,
-    getHomeData: PropTypes.func,
-    navigation: PropTypes.object,
-    featuredProducts: PropTypes.object,
-    featuredCategories: PropTypes.object,
-  };
-
-  static defaultProps = {
-    slider: [],
-  };
 
   componentDidMount() {
     const { navigation } = this.props;
@@ -75,6 +65,8 @@ class HomeScreen extends Component {
   }
 
   render() {
+    const theme = this.context;
+
     if (this.props.errorMessage) {
       return (
         <View style={styles.errorContainer}>
@@ -85,7 +77,7 @@ class HomeScreen extends Component {
 
     return (
       <ScrollView
-        style={styles.container}
+        style={styles.container(theme)}
         refreshControl={(
           <RefreshControl
             refreshing={this.props.refreshing}
@@ -101,25 +93,32 @@ class HomeScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: 'white',
-  },
-  button: {
-    padding: 10,
-  },
-  buttonStyle: {
-    marginTop: 10,
-    alignSelf: 'center',
-    width: Sizes.WINDOW_WIDTH * 0.9,
-    marginBottom: 3,
-  },
+    backgroundColor: theme.colors.background,
+  }),
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
 });
+
+HomeScreen.propTypes = {
+  slider: PropTypes.array,
+  getHomeData: PropTypes.func,
+  navigation: PropTypes.object,
+  featuredProducts: PropTypes.object,
+  featuredCategories: PropTypes.object,
+  setCurrentProduct: PropTypes.func,
+  currencySymbol: PropTypes.string.isRequired,
+  refreshing: PropTypes.bool,
+};
+
+HomeScreen.defaultProps = {
+  slider: [],
+};
+
 
 const mapStateToProps = (state) => {
   const { refreshing } = state.home;

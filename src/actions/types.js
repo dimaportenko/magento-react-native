@@ -38,7 +38,9 @@ export const MAGENTO_GET_FILTERED_PRODUCTS = 'magento_get_filtered_products';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
 
-export const MAGENTO_CREATE_CUSTOMER = 'magento_checkout_create_customer';
+export const MAGENTO_CREATE_CUSTOMER_LOADING = 'magento_checkout_create_customer_loading';
+export const MAGENTO_CREATE_CUSTOMER_SUCCESS = 'magento_checkout_create_customer_success';
+export const MAGENTO_CREATE_CUSTOMER_ERROR = 'magento_checkout_create_customer_error';
 export const MAGENTO_CURRENT_CUSTOMER = 'magento_current_customer';
 
 export const MAGENTO_AUTH = 'magento_auth';
@@ -47,7 +49,8 @@ export const MAGENTO_LOGIN_SUCCESS = 'magento_login_success';
 export const MAGENTO_AUTH_ERROR = 'magento_auth_error';
 export const MAGENTO_AUTH_LOADING = 'magento_auth_loading';
 export const MAGENTO_PASSWORD_RESET_LOADING = 'magento_password_reset_loading';
-export const MAGENTO_SUCCESS_MESSAGE = 'magento_success_message';
+export const MAGENTO_PASSWORD_RESET_SUCCESS = 'magento_password_reset_success';
+export const MAGENTO_PASSWORD_RESET_ERROR = 'magento_password_reset_error';
 
 export const UI_PRODUCT_QTY_INPUT = 'ui_product_qty_input';
 export const UI_PRODUCT_UPDATE_OPTIONS = 'ui_product_update';

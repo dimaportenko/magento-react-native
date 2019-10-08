@@ -1,71 +1,73 @@
-import React, { Component } from 'react';
-import { View, TextInput } from 'react-native';
+import React, { useState } from 'react';
+import { View, ViewPropTypes } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
+import PropTypes from 'prop-types';
+import { Input } from './Input';
 
-class ModalSelect extends Component {
-  constructor(props) {
-    super(props);
+const ModalSelect = ({
+  data,
+  disabled,
+  label,
+  onChange,
+  attribute,
+  style,
+}) => {
+  const [value, setValue] = useState('');
 
-    this.state = {
-      textInputValue: '',
-    };
-  }
-
-  onChange(option) {
-    const { label, onChange, attribute } = this.props;
-
-    this.setState({
-      ...this.state,
-      textInputValue: `${label} : ${option.label}`,
-    });
+  const _onChange = (option) => {
+    setValue(`${label} : ${option.label}`);
 
     if (onChange) {
       onChange(attribute, option.key);
     }
-  }
+  };
 
-  render() {
-    const { data, label, disabled } = this.props;
-
-    return (
-      <View style={styles.containerStyle}>
-        <ModalSelector
-          disabled={disabled}
-          data={data}
-          initValue={label}
-          onChange={option => this.onChange(option)}
-        >
-          <TextInput
-            style={styles.inputStyle}
-            editable={false}
-            placeholder={this.props.label}
-            value={this.state.textInputValue}
-          />
-        </ModalSelector>
-      </View>
-    );
-  }
-}
+  return (
+    <View style={style}>
+      <ModalSelector
+        disabled={disabled}
+        data={data}
+        initValue={label}
+        onChange={_onChange}
+      >
+        <Input
+          inputStyle={styles.inputStyle}
+          editable={false}
+          placeholder={label}
+          value={value}
+        />
+      </ModalSelector>
+    </View>
+  );
+};
 
 // TODO: add style for disabled element
 const styles = {
-  containerStyle: {
-    flex: 1,
-    justifyContent: 'space-around',
-    padding: 20,
-    paddingBottom: 5,
-    paddingTop: 0,
-  },
-  selectorStyle: {
-
-  },
   inputStyle: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    height: 40,
     textAlign: 'center',
   },
+};
+
+ModalSelect.propTypes = {
+  data: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]).isRequired,
+    label: PropTypes.string,
+  })).isRequired,
+  label: PropTypes.string.isRequired,
+  attribute: PropTypes.string,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool,
+  style: ViewPropTypes.style,
+};
+
+ModalSelect.defaultProps = {
+  disabled: false,
+  onChange: null,
+  attribute: '',
+  style: {},
 };
 
 export { ModalSelect };

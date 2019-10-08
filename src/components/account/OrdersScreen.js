@@ -1,76 +1,73 @@
-import React, { Component } from 'react';
+import React, { useEffect, useContext } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import {
-  Text,
   TouchableOpacity,
   View,
   FlatList,
   RefreshControl,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import {
   getOrdersForCustomer,
-  setCurrentProduct,
 } from '../../actions';
+import { Text } from '../common';
 import OrderListItem from './OrderListItem';
+import { ThemeContext } from '../../theme';
 
 import { NAVIGATION_HOME_SCREEN_PATH } from '../../navigation/routes';
 
+const OrdersScreen = ({
+  orders,
+  customerId,
+  currencySymbol,
+  refreshing,
+  getOrdersForCustomer: _getOrdersForCustomer,
+  navigation,
+}) => {
+  const theme = useContext(ThemeContext);
 
-class OrdersScreen extends Component {
-  static navigationOptions = () => ({
-    title: 'Orders',
-    headerBackTitle: ' ',
-  });
+  useEffect(() => {
+    _getOrdersForCustomer(customerId);
+  }, []);
 
-  componentDidMount() {
-    this.props.getOrdersForCustomer(this.props.customerId);
-  }
-
-  onRefresh = () => {
-    this.props.getOrdersForCustomer(this.props.customerId, true);
+  const onRefresh = () => {
+    _getOrdersForCustomer(customerId, true);
   };
 
-  renderItem = orderItem => (
-    <OrderListItem item={orderItem.item} currencySymbol={this.props.currencySymbol} />
+  const renderItem = orderItem => (
+    <OrderListItem item={orderItem.item} currencySymbol={currencySymbol} />
   );
 
-  renderOrderList = () => {
-    const data = this.props.orders.sort((b, a) => moment(a.created_at).diff(b.created_at));
+  const renderOrderList = () => {
+    const data = orders.sort((b, a) => moment(a.created_at).diff(b.created_at));
 
     return (
       <FlatList
         refreshControl={(
           <RefreshControl
-            refreshing={this.props.refreshing}
-            onRefresh={this.onRefresh}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
           />
 )}
         data={data}
-        renderItem={this.renderItem}
+        renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
       />
     );
   };
 
-  renderEmptyOrderList = () => {
-    const { navigate } = this.props.navigation;
-    const {
-      emptyListContainerStyle,
-      textStyle,
-      buttonTextStyle,
-    } = styles;
-
-
+  const renderEmptyOrderList = () => {
+    const { navigate } = navigation;
     return (
-      <View style={emptyListContainerStyle}>
-        <Text style={textStyle}>
+      <View style={styles.emptyListContainerStyle(theme)}>
+        <Text type="heading" style={styles.textStyle(theme)}>
           Oops, there is no orders yet
         </Text>
         <TouchableOpacity
           onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
         >
-          <Text style={buttonTextStyle}>
+          <Text type="heading" bold style={styles.buttonTextStyle(theme)}>
             Continue Shopping
           </Text>
         </TouchableOpacity>
@@ -78,40 +75,54 @@ class OrdersScreen extends Component {
     );
   };
 
-  render() {
-    const { orders } = this.props;
-
-    if (orders && orders.length) {
-      return (
-        <View style={styles.containerStyle}>
-          {this.renderOrderList()}
-        </View>
-      );
-    }
-    return this.renderEmptyOrderList();
+  if (orders && orders.length) {
+    return (
+      <View style={styles.container(theme)}>
+        {renderOrderList()}
+      </View>
+    );
   }
-}
+  return renderEmptyOrderList();
+};
+
+OrdersScreen.navigationOptions = () => ({
+  title: 'Orders',
+  headerBackTitle: ' ',
+});
 
 const styles = {
-  containerStyle: {
+  container: theme => ({
     flex: 1,
-    backgroundColor: '#fff',
-  },
-  emptyListContainerStyle: {
+    backgroundColor: theme.colors.background,
+  }),
+  emptyListContainerStyle: theme => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  textStyle: {
-    fontSize: 20,
-    paddingTop: 7,
-  },
-  buttonTextStyle: {
-    padding: 14,
-    fontSize: 20,
+    backgroundColor: theme.colors.background,
+  }),
+  textStyle: theme => ({
+    paddingTop: theme.spacing.small,
+  }),
+  buttonTextStyle: theme => ({
+    padding: theme.spacing.large,
     top: 0,
-    color: '#3478f6',
-  },
+    color: theme.colors.secondary,
+  }),
+};
+
+OrdersScreen.propTypes = {
+  orders: PropTypes.arrayOf(PropTypes.object),
+  customerId: PropTypes.number,
+  currencySymbol: PropTypes.string.isRequired,
+  refreshing: PropTypes.bool,
+  getOrdersForCustomer: PropTypes.func.isRequired,
+  navigation: PropTypes.object.isRequired,
+};
+
+OrdersScreen.defaultProps = {
+  orders: null,
+  customerId: null,
 };
 
 const mapStateToProps = ({ account, magento }) => {
@@ -128,5 +139,4 @@ const mapStateToProps = ({ account, magento }) => {
 
 export default connect(mapStateToProps, {
   getOrdersForCustomer,
-  setCurrentProduct,
 })(OrdersScreen);

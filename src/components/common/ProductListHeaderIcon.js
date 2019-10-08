@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { MaterialHeaderButtons, Item } from '.';
+import { MaterialHeaderButtons, Item } from './Header';
 
 const HeaderIcon = ({
   changeGridValueFunction = () => {},

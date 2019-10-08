@@ -1,50 +1,41 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import React, { useContext } from 'react';
+import { View } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import IconBadge from 'react-native-icon-badge';
-import NavigationService from '../../navigation/NavigationService';
-import { NAVIGATION_CART_PATH } from '../../navigation/routes';
+import { Text } from '../common';
+import { ThemeContext } from '../../theme';
 
-class CartBadge extends Component {
-  onPress() {
-    NavigationService.navigate(NAVIGATION_CART_PATH, {
-      title: 'Cart',
-    });
-  }
+const CartBadge = ({
+  color,
+  itemsCount,
+}) => {
+  const theme = useContext(ThemeContext);
 
-  render() {
-    return (
-      <IconBadge
-        MainElement={(
-          <View style={styles.iconWrapper}>
-            <Icon name="md-cart" type="ionicon" color={this.props.color} />
-          </View>
-        )}
-        BadgeElement={
-          <Text style={styles.textStyle}>{this.props.itemsCount}</Text>
-        }
-        IconBadgeStyle={styles.iconBadgeStyle}
-        Hidden={this.props.itemsCount === 0}
-      />
-    );
-  }
-}
+  return (
+    <IconBadge
+      MainElement={(
+        <View style={styles.iconWrapper}>
+          <Icon name="md-cart" type="ionicon" color={color} />
+        </View>
+      )}
+      BadgeElement={
+        <Text style={styles.textStyle(theme)}>{itemsCount}</Text>
+      }
+      IconBadgeStyle={styles.iconBadgeStyle}
+      Hidden={itemsCount === 0}
+    />
+  );
+};
 
 const styles = {
-  textBackground: {
-    backgroundColor: '#999',
-    height: 15,
-    width: 15,
-    borderRadius: 15,
-    marginLeft: 23,
-  },
-  textStyle: {
-    color: '#fff',
+  textStyle: theme => ({
+    color: theme.colors.white,
     fontSize: 12,
     textAlign: 'center',
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: theme.colors.transparent,
+  }),
   iconWrapper: {
     marginTop: 5,
     marginRight: 10,
@@ -54,6 +45,15 @@ const styles = {
     height: 15,
     backgroundColor: 'red',
   },
+};
+
+CartBadge.propTypes = {
+  color: PropTypes.string.isRequired,
+  itemsCount: PropTypes.number,
+};
+
+CartBadge.defaultProps = {
+  itemsCount: 0,
 };
 
 const mapStateToProps = ({ cart }) => {

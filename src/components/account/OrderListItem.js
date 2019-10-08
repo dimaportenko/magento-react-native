@@ -1,59 +1,61 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
+import PropTypes from 'prop-types';
+import { Text } from '../common';
 import { NAVIGATION_ORDER_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
+import { ThemeContext } from '../../theme';
 
-class OrderListItem extends Component {
-  openOrdersScreen = (item) => {
+const OrderListItem = ({
+  item,
+  currencySymbol,
+}) => {
+  const theme = useContext(ThemeContext);
+
+  const openOrdersScreen = () => {
     NavigationService.navigate(NAVIGATION_ORDER_PATH, {
       item,
     });
   };
 
-  render() {
-    const { item, currencySymbol } = this.props;
-    const { code, text, container } = styles;
-
-    return (
-      <TouchableOpacity onPress={() => this.openOrdersScreen(item)}>
-        <View style={container}>
-          <Text style={code}>{`Order # ${item.increment_id}`}</Text>
-          <Text style={text}>{`Created: ${item.created_at}`}</Text>
-          <Text style={text}>
-            {`Ship to ${item.customer_firstname} ${item.customer_lastname}`}
-          </Text>
-          <Text style={text}>
-            {`Order Total: ${currencySymbol} ${item.grand_total}`}
-          </Text>
-          <Text style={text}>{`Status: ${item.status}`}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
-}
+  return (
+    <TouchableOpacity onPress={openOrdersScreen}>
+      <View style={styles.container(theme)}>
+        <Text bold>{`Order # ${item.increment_id}`}</Text>
+        <Text type="label">{`Created: ${item.created_at}`}</Text>
+        <Text type="label">
+          {`Ship to ${item.customer_firstname} ${item.customer_lastname}`}
+        </Text>
+        <Text type="label">
+          {`Order Total: ${currencySymbol} ${item.grand_total}`}
+        </Text>
+        <Text type="label">{`Status: ${item.status}`}</Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    borderRadius: 3,
-    marginTop: 8,
-    padding: 10,
+  container: theme => ({
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.dimens.borderRadius,
+    marginTop: theme.spacing.small,
+    padding: theme.spacing.small,
     borderBottomWidth: 1,
-    borderColor: '#ddd',
+    borderColor: theme.colors.border,
     flex: 1,
-  },
-  code: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-  text: {
-    fontSize: 14,
-  },
+  }),
 });
+
+OrderListItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  currencySymbol: PropTypes.string.isRequired,
+};
+
+OrderListItem.defaultProps = {};
 
 export default OrderListItem;

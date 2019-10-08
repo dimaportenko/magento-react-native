@@ -1,22 +1,42 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useContext } from 'react';
+import { View, ViewPropTypes } from 'react-native';
+import PropTypes from 'prop-types';
+import { ThemeContext } from '../../theme';
 
-const CardSection = props => (
-  <View style={[styles.containerStyles, props.style]}>
-    {props.children}
-  </View>
-);
+const CardSection = ({
+  children,
+  style,
+}) => {
+  const theme = useContext(ThemeContext);
+  return (
+    <View style={[styles.containerStyles(theme), style]}>
+      {children}
+    </View>
+  );
+};
 
 const styles = {
-  containerStyles: {
+  containerStyles: theme => ({
     borderBottomWidth: 1,
-    padding: 5,
-    backgroundColor: '#fff',
+    padding: theme.spacing.tiny,
+    backgroundColor: theme.colors.surface,
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    borderColor: '#ddd',
+    borderColor: theme.colors.border,
     position: 'relative',
-  },
+  }),
+};
+
+CardSection.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.arrayOf(PropTypes.element),
+  ]).isRequired,
+  style: ViewPropTypes.style,
+};
+
+CardSection.defaultProps = {
+  style: {},
 };
 
 export { CardSection };

@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
+import React, { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   View,
   FlatList,
-  Platform,
   TouchableOpacity,
-  Text,
   StyleSheet,
 } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import { ProductListItem, Spinner } from '.';
-import Sizes from '../../constants/Sizes';
-import { NAVIGATION_DRAWER_SCREEN, NAVIGATION_FILTER_DRAWER_SCREEN } from '../../navigation/routes';
+import { ProductListItem, Spinner, Text } from '.';
+import { ThemeContext } from '../../theme';
+
+const COLUMN_COUNT = 2;
 
 const sortData = [
   {
@@ -33,101 +32,109 @@ const sortData = [
   },
 ];
 
-class ProductList extends Component {
-  renderItemRow = product => (
+const ProductList = ({
+  onRowPress,
+  currencySymbol,
+  performSort,
+  navigation,
+  canLoadMoreContent,
+  products,
+  onEndReached,
+  refreshControl,
+  gridColumnsValue,
+  searchIndicator,
+}) => {
+  const theme = useContext(ThemeContext);
+  const selector = useRef(null);
+
+  const renderItemRow = ({ item, index }) => (
     <ProductListItem
       imageStyle={styles.imageStyle}
       viewContainerStyle={{ flex: 1 }}
-      product={product.item}
-      onRowPress={this.props.onRowPress}
-      currencySymbol={this.props.currencySymbol}
+      product={item}
+      onRowPress={onRowPress}
+      currencySymbol={currencySymbol}
     />
   );
 
-  renderItemColumn = (product) => {
-    const {
-      textStyle,
-      infoStyle,
-      priceStyle,
-      columnContainerStyle,
-    } = styles;
+  const renderItemColumn = ({ item, index }) => (
+    <ProductListItem
+      viewContainerStyle={{
+        width: theme.dimens.WINDOW_WIDTH / COLUMN_COUNT,
+        borderRightColor: theme.colors.border,
+        borderRightWidth: index % COLUMN_COUNT !== (COLUMN_COUNT - 1) ? theme.dimens.productListItemInBetweenSpace : 0,
+      }}
+      columnContainerStyle={styles.columnContainerStyle}
+      textStyle={styles.textStyle}
+      infoStyle={styles.infoStyle}
+      priceStyle={styles.priceStyle}
+      product={item}
+      onRowPress={onRowPress}
+      currencySymbol={currencySymbol}
+    />
+  );
 
-    return (
-      <ProductListItem
-        viewContainerStyle={{ width: Sizes.WINDOW_WIDTH / 2 }}
-        columnContainerStyle={columnContainerStyle}
-        textStyle={textStyle}
-        infoStyle={infoStyle}
-        priceStyle={priceStyle}
-        product={product.item}
-        onRowPress={this.props.onRowPress}
-        currencySymbol={this.props.currencySymbol}
-      />
-    );
-  };
-
-  renderHeader = () => (
-    <View style={styles.headerContainerStyle}>
+  const renderHeader = () => (
+    <View style={styles.headerContainerStyle(theme)}>
       <ModalSelector
-        style={styles.iconWrapper}
+        style={styles.iconWrapper(theme)}
         data={sortData}
-        ref={(selector) => { this.selector = selector; }}
+        ref={(component) => { selector.current = component; }}
         customSelector={(
           <TouchableOpacity
-            style={styles.iconWrapper}
-            onPress={() => this.selector.open()}
+            style={styles.iconWrapper(theme)}
+            onPress={() => selector.current.open()}
           >
             <Icon name="sort" size={24} color="#95989F" />
-            <Text style={styles.headerTextStyle}>Sort</Text>
+            <Text style={styles.headerTextStyle(theme)}>Sort</Text>
           </TouchableOpacity>
-)}
-        onChange={option => this.props.performSort(option.key)}
+        )}
+        onChange={option => performSort(option.key)}
       />
-      <View style={styles.separator} />
+      <View style={styles.separator(theme)} />
       <TouchableOpacity
-        style={styles.iconWrapper}
-        onPress={() => this.props.navigation.toggleFilterDrawer()}
+        style={styles.iconWrapper(theme)}
+        onPress={() => navigation.toggleFilterDrawer()}
       >
         <Icon name="filter" size={24} color="#95989F" />
-        <Text style={styles.headerTextStyle}>Filter</Text>
+        <Text style={styles.headerTextStyle(theme)}>Filter</Text>
       </TouchableOpacity>
     </View>
-  )
+  );
 
-  renderFooter = () => {
-    if (this.props.canLoadMoreContent) {
-      return <Spinner style={{ padding: 15 }} />;
+  const renderFooter = () => {
+    if (canLoadMoreContent) {
+      return <Spinner style={{ padding: theme.spacing.large }} />;
     }
 
     return null;
-  }
+  };
 
-  renderContent = () => {
-    const {
-      products, onEndReached, refreshControl, gridColumnsValue,
-    } = this.props;
+  const renderItemSeparator = () => <View style={styles.itemSeparator(theme)} />;
 
-    if (!this.props.products) {
+  const renderContent = () => {
+    if (!products) {
       return <Spinner />;
     }
 
-    if (this.props.products.length) {
+    if (products.length) {
       return (
         <FlatList
           refreshControl={refreshControl}
           data={products}
-          renderItem={gridColumnsValue ? this.renderItemRow : this.renderItemColumn}
+          renderItem={gridColumnsValue ? renderItemRow : renderItemColumn}
           keyExtractor={(item, index) => index.toString()}
           onEndReached={onEndReached}
           onEndReachedThreshold={0.1}
-          ListHeaderComponent={this.renderHeader}
-          ListFooterComponent={this.renderFooter}
+          ListHeaderComponent={renderHeader}
+          ListFooterComponent={renderFooter}
           numColumns={gridColumnsValue ? 1 : 2}
           key={(gridColumnsValue) ? 'ONE COLUMN' : 'TWO COLUMNS'}
+          ItemSeparatorComponent={renderItemSeparator}
         />
       );
     }
-    if (!this.props.searchIndicator) {
+    if (!searchIndicator) {
       return (
         <View style={styles.notFoundTextWrap}>
           <Text style={styles.notFoundText}>No products found</Text>
@@ -136,29 +143,21 @@ class ProductList extends Component {
     }
   };
 
-  render() {
-    return (
-      <View style={styles.containerStyle}>
-        {this.renderContent()}
-      </View>
-    );
-  }
-}
-
-ProductList.propTypes = {
-  currencySymbol: PropTypes.string.isRequired,
+  return (
+    <View style={styles.container}>
+      {renderContent()}
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
-  MainContainer: {
-    justifyContent: 'center',
+  itemSeparator: theme => ({
+    height: theme.dimens.productListItemInBetweenSpace,
+    backgroundColor: theme.colors.border,
     flex: 1,
-    margin: 5,
-    paddingTop: (Platform.OS) === 'ios' ? 20 : 0,
-  },
-  containerStyle: {
+  }),
+  container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   notFoundTextWrap: {
     flex: 1,
@@ -176,14 +175,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     flexDirection: 'column',
     marginTop: 0,
-    fontSize: 16,
     padding: 0,
-    fontWeight: '200',
-    color: '#555',
   },
   priceStyle: {
-    fontSize: 14,
-    fontWeight: '200',
     textAlign: 'center',
   },
   imageStyle: {
@@ -191,34 +185,53 @@ const styles = StyleSheet.create({
   },
   columnContainerStyle: {
     flexDirection: 'column',
-    borderBottomWidth: 0,
   },
-  headerContainerStyle: {
+  headerContainerStyle: theme => ({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'stretch',
     borderBottomWidth: 1,
-    borderBottomColor: '#D4D5D7',
-  },
-  iconWrapper: {
+    borderBottomColor: theme.colors.border,
+  }),
+  iconWrapper: theme => ({
     flex: 1,
     height: 32,
-    margin: 8,
+    margin: theme.spacing.small,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  headerTextStyle: {
-    color: '#545864',
+  }),
+  headerTextStyle: theme => ({
     textTransform: 'uppercase',
-    marginLeft: 4,
-  },
-  separator: {
+    marginLeft: theme.spacing.small,
+  }),
+  separator: theme => ({
     width: 1,
-    backgroundColor: '#D4D5D7',
-    marginTop: 8,
-    marginBottom: 8,
-  },
+    backgroundColor: theme.colors.border,
+    marginVertical: theme.spacing.small,
+  }),
 });
+
+ProductList.propTypes = {
+  onRowPress: PropTypes.func,
+  currencySymbol: PropTypes.string.isRequired,
+  performSort: PropTypes.func,
+  navigation: PropTypes.object.isRequired,
+  canLoadMoreContent: PropTypes.bool.isRequired,
+  products: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.bool]),
+  onEndReached: PropTypes.func,
+  refreshControl: PropTypes.element,
+  gridColumnsValue: PropTypes.bool.isRequired,
+  searchIndicator: PropTypes.bool,
+};
+
+
+ProductList.defaultProps = {
+  onRowPress: () => {},
+  performSort: () => console.log('Perform Sort function not sent in props'),
+  onEndReached: () => {},
+  refreshControl: <></>,
+  searchIndicator: false,
+};
 
 export { ProductList };

@@ -5,14 +5,15 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
-import { Text } from 'react-native-elements';
 import {
   getProductsForCategoryOrChild, addFilterData, getSearchProducts,
 } from '../../actions';
-import { Button } from '../common';
-
+import { Button, Text, Input } from '../common';
+import { ThemeContext } from '../../theme';
 
 class DrawerScreen extends Component {
+  static contextType = ThemeContext;
+
   static propTypes = {};
 
   static defaultProps = {};
@@ -40,6 +41,7 @@ class DrawerScreen extends Component {
   };
 
   render() {
+    const theme = this.context;
     const {
       buttonStyle,
       container,
@@ -48,29 +50,30 @@ class DrawerScreen extends Component {
       minInputStyle,
       maxInputStyle,
       dashTextStyle,
-      inputContainerStyle,
     } = styles;
 
     return (
-      <View style={container}>
-        <View style={InputContainer}>
-          <Text style={textStyle}>Price:</Text>
-          <View style={inputContainerStyle}>
-            <TextInput
-              style={minInputStyle}
-              placeholder="Min."
-              onChangeText={minValue => this.setState({ minValue })}
-            />
-            <Text style={dashTextStyle}>-</Text>
-            <TextInput
-              style={maxInputStyle}
-              placeholder="Max."
-              onChangeText={maxValue => this.setState({ maxValue })}
-            />
-          </View>
+      <View style={container(theme)}>
+        <View style={InputContainer(theme)}>
+          <Text type="heading" style={textStyle(theme)}>Price:</Text>
+          <Input
+            containerStyle={minInputStyle}
+            placeholder="Min."
+            value={this.state.minValue}
+            keyboardType="numeric"
+            onChangeText={minValue => this.setState({ minValue })}
+          />
+          <Text style={dashTextStyle(theme)}>-</Text>
+          <Input
+            containerStyle={maxInputStyle}
+            value={this.state.maxValue}
+            placeholder="Max."
+            keyboardType="numeric"
+            onChangeText={maxValue => this.setState({ maxValue })}
+          />
         </View>
-        <View style={buttonStyle}>
-          <Button onPress={this.onApplyPressed}>
+        <View style={styles.buttonStyleWrap}>
+          <Button onPress={this.onApplyPressed} style={styles.buttonStyle}>
             Apply
           </Button>
         </View>
@@ -80,44 +83,37 @@ class DrawerScreen extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
+  container: theme => ({
     flex: 1,
     flexDirection: 'column',
-    alignItems: 'center',
-  },
-  InputContainer: {
+    alignItems: 'stretch',
+    backgroundColor: theme.colors.background,
+  }),
+  InputContainer: theme => ({
     flexDirection: 'row',
-    backgroundColor: '#fff',
-  },
+    alignItems: 'center',
+    backgroundColor: theme.colors.surface,
+    paddingVertical: theme.spacing.large,
+  }),
   minInputStyle: {
-    marginTop: 25,
     width: 50,
   },
   maxInputStyle: {
-    marginTop: 25,
     width: 50,
   },
-  textStyle: {
-    marginTop: 20,
-    fontSize: 18,
-    lineHeight: 40,
+  textStyle: theme => ({
     paddingLeft: 50,
-  },
-  dashTextStyle: {
-    marginTop: 20,
-    fontSize: 18,
-    lineHeight: 40,
-    paddingRight: 23,
-  },
-  inputContainerStyle: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
+    paddingRight: theme.spacing.large,
+  }),
+  dashTextStyle: theme => ({
+    paddingHorizontal: theme.spacing.large,
+  }),
   buttonStyle: {
+    width: '100%',
+  },
+  buttonStyleWrap: {
     flex: 1,
     justifyContent: 'flex-end',
-    paddingBottom: 10,
   },
 });
 

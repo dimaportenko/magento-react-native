@@ -1,129 +1,143 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import {
-  View, Text, Image, TouchableOpacity, Alert,
+  View, Image, TouchableOpacity, Alert,
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { magento } from '../../magento';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
-import { Spinner } from '../common';
+import { Spinner, Text } from '../common';
 import { removeFromCartLoading, removeFromCart } from '../../actions';
+import { ThemeContext } from '../../theme';
 
-class CartListItem extends Component {
-  image() {
-    const { products, item } = this.props;
+const CartListItem = ({
+  products,
+  item,
+  cart,
+  removeFromCartLoading: _removeFromCartLoading,
+  removeFromCart: _removeFromCart,
+}) => {
+  const theme = useContext(ThemeContext);
+
+  const image = () => {
     if (products && products[item.sku]) {
       return getProductThumbnailFromAttribute(products[item.sku]);
     }
-  }
+  };
 
-  onPressRemoveItem = () => {
+  const onPressRemoveItem = () => {
     Alert.alert(
       'You sure?',
-      `Just double-checking you wanted to remove the item: ${this.props.item.name}`,
+      `Just double-checking you wanted to remove the item: ${item.name}`,
       [
         { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-        { text: 'Remove it', onPress: () => this.performRemoveItem() },
+        { text: 'Remove it', onPress: () => performRemoveItem() },
       ],
       { cancelable: true },
     );
   };
 
-  performRemoveItem() {
-    this.props.removeFromCartLoading(this.props.item.item_id);
+  const performRemoveItem = () => {
+    _removeFromCartLoading(item.item_id);
 
-    this.props.removeFromCart({
-      cart: this.props.cart,
-      item: this.props.item,
+    _removeFromCart({
+      cart,
+      item,
     });
-  }
+  };
 
-  render() {
-    const {
-      imageStyle,
-      containerStyle,
-      textStyle,
-      infoStyle,
-    } = styles;
-    const imageUri = this.image();
-    return (
-      <View style={containerStyle}>
-        <Image style={imageStyle} resizeMode="contain" source={{ uri: imageUri }} />
-        <View style={infoStyle}>
-          <Text style={textStyle}>{this.props.item.name}</Text>
-          <Text style={textStyle}>
-            {magento.storeConfig.default_display_currency_code}
-            {' '}
-            {this.props.item.price}
-          </Text>
-          <Text style={textStyle}>
-            Qty:
-            {this.props.item.qty}
-          </Text>
-        </View>
-        <View style={styles.removeContainer}>
-          {this.props.cart.removingItemId === this.props.item.item_id
-            ? (
-              <View style={styles.spinnerWrapper}>
-                <Spinner />
-              </View>
-            )
-            : (
-              <TouchableOpacity
-                style={styles.iconStyle}
-                onPress={this.onPressRemoveItem}
-              >
-                <View style={styles.iconWrapper}>
-                  <Icon
-                    name="md-trash"
-                    type="ionicon"
-                  />
-                </View>
+  const imageUri = image();
 
-              </TouchableOpacity>
-            )
-            }
-        </View>
+  return (
+    <View style={styles.container(theme)}>
+      <Image style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: imageUri }} />
+      <View style={styles.infoStyle}>
+        <Text style={styles.textStyle(theme)}>{item.name}</Text>
+        <Text style={styles.textStyle(theme)}>
+          {magento.storeConfig.default_display_currency_code}
+          {' '}
+          {item.price}
+        </Text>
+        <Text style={styles.textStyle(theme)}>
+          Qty:
+          {item.qty}
+        </Text>
       </View>
-    );
-  }
-}
+      <View style={styles.removeContainer}>
+        {cart.removingItemId === item.item_id
+          ? (
+            <View style={styles.spinnerWrapper(theme)}>
+              <Spinner />
+            </View>
+          )
+          : (
+            <TouchableOpacity
+              style={styles.iconStyle}
+              onPress={onPressRemoveItem}
+            >
+              <View style={styles.iconWrapper(theme)}>
+                <Icon
+                  name="md-trash"
+                  type="ionicon"
+                />
+              </View>
+
+            </TouchableOpacity>
+          )
+          }
+      </View>
+    </View>
+  );
+};
 
 const styles = {
-  containerStyle: {
+  container: theme => ({
     flexDirection: 'row',
     flex: 1,
-    borderColor: '#ddd',
+    borderColor: theme.colors.border,
     borderBottomWidth: 1,
-    backgroundColor: '#fff',
-  },
+    backgroundColor: theme.colors.surface,
+  }),
   infoStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
     flex: 2,
   },
-  textStyle: {
+  textStyle: theme => ({
     flex: 1,
-    padding: 10,
-  },
-  imageStyle: {
-    height: 100,
+    padding: theme.spacing.small,
+  }),
+  imageStyle: theme => ({
+    marginVertical: theme.spacing.small,
+    height: theme.dimens.cartItemImageHeight,
     flex: 1,
-    margin: 10,
     width: null,
-  },
-  iconWrapper: {
+  }),
+  iconWrapper: theme => ({
     alignSelf: 'flex-end',
-    marginRight: 20,
-  },
+    marginRight: theme.spacing.large,
+  }),
   removeContainer: {
     flexDirection: 'column',
     justifyContent: 'center',
     minWidth: 50,
   },
-  spinnerWrapper: {
-    marginRight: 10,
-  },
+  spinnerWrapper: theme => ({
+    marginRight: theme.spacing.small,
+  }),
+};
+
+CartListItem.propTypes = {
+  products: PropTypes.object,
+  item: PropTypes.object.isRequired,
+  cart: PropTypes.object.isRequired,
+  removeFromCartLoading: PropTypes.func.isRequired,
+  removeFromCart: PropTypes.func.isRequired,
+};
+
+CartListItem.defaultProps = {
+  products: {},
 };
 
 const mapStateToProps = ({ cart }) => {
