@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import Swiper from 'react-native-swiper';
-import { View, Image } from 'react-native';
+import { View } from 'react-native';
+import { FastImage } from 'react-native-fast-image';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
 import { ThemeContext } from '../../theme';
@@ -33,7 +34,7 @@ class ProductMedia extends PureComponent {
       console.log('media item');
       console.log(magento.getProductMediaUrl() + item.file);
       return (
-        <Image
+        <FastImage
           key={item.id}
           style={styles.imageStyle(theme)}
           resizeMode="contain"

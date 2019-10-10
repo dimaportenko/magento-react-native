@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View, StyleSheet, Image,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import { FastImage } from 'react-native-fast-image';
 import Swiper from 'react-native-swiper';
 import { Text } from '../common';
 import { magento } from '../../magento';
@@ -16,7 +15,7 @@ const HomeSlider = ({
 
   const renderMediaItems = () => slider.map((slide, index) => (
     <View key={index} style={styles.slide}>
-      <Image
+      <FastImage
         style={styles.imageStyle(theme)}
         resizeMode="cover"
         source={{ uri: magento.getMediaUrl() + slide.image }}

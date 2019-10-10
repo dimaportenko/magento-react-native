@@ -1,10 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import {
-  View,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
+import { FastImage } from 'react-native-fast-image';
 import { Text } from './Text';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
@@ -30,7 +27,7 @@ const ProductListItem = ({
         onPress={() => { onRowPress(product); }}
       >
 
-        <Image
+        <FastImage
           style={[styles.imageStyle(theme), imageStyle]}
           resizeMode="contain"
           source={{ uri: image() }}
