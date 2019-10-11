@@ -13,6 +13,6 @@ error Excluding files that failed to apply the diff:
   - android/settings.gradle
   - ios/magento_mobile_app.xcodeproj/project.pbxproj
   - ios/magento_mobile_app/Info.plist
- 
+
 
   https://react-native-community.github.io/upgrade-helper/?from=0.59.2&to=0.61.2
