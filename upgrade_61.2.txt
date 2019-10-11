@@ -1,0 +1,18 @@
+warn Excluding files that exist in the template, but not in your project:
+  - App.js
+  - android/app/debug.keystore
+error Excluding files that failed to apply the diff:
+  - .flowconfig
+  - .gitignore
+  - android/app/build.gradle
+  - android/app/debug.keystore
+  - android/app/src/main/java/com/magento_mobile_app/MainApplication.java
+  - android/build.gradle
+  - android/gradle.properties
+  - android/gradle/wrapper/gradle-wrapper.properties
+  - android/settings.gradle
+  - ios/magento_mobile_app.xcodeproj/project.pbxproj
+  - ios/magento_mobile_app/Info.plist
+ 
+
+  https://react-native-community.github.io/upgrade-helper/?from=0.59.2&to=0.61.2
