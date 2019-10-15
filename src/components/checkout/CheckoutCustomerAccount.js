@@ -17,7 +17,7 @@ import { ThemeContext } from '../../theme';
 class CheckoutCustomerAccount extends Component {
   static contextType = ThemeContext;
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.getCountries();
   }
 
