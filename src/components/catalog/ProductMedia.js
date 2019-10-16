@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import Swiper from 'react-native-swiper';
 import { View } from 'react-native';
-import { FastImage } from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
 import { ThemeContext } from '../../theme';

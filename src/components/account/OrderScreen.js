@@ -1,6 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { FastImage } from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Text } from '../common';

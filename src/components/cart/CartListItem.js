@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { View, TouchableOpacity, Alert } from 'react-native';
-import { FastImage } from 'react-native-fast-image';
+import FastImage from 'react-native-fast-image';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
