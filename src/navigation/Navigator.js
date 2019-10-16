@@ -1,11 +1,13 @@
 import React from 'react';
 import {
-  createStackNavigator,
   createSwitchNavigator,
-  createBottomTabNavigator,
-  createDrawerNavigator,
-  DrawerActions,
+  createAppContainer,
 } from 'react-navigation';
+import { createStackNavigator, StackViewTransitionConfigs } from 'react-navigation-stack';
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createDrawerNavigator } from 'react-navigation-drawer';
+import { DrawerActions } from 'react-navigation-drawer';
+
 import { Icon } from 'react-native-elements';
 
 import Category from '../components/catalog/Category';
@@ -168,7 +170,7 @@ const Drawer = createDrawerNavigator({
   contentComponent: CategoryTree,
 });
 
-export const Navigator = createDrawerNavigator(
+const DrawerNavigator = createDrawerNavigator(
   {
     Drawer,
   },
@@ -179,3 +181,5 @@ export const Navigator = createDrawerNavigator(
     }),
   },
 );
+
+export const Navigator = createAppContainer(DrawerNavigator);
