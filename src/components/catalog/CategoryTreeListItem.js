@@ -16,7 +16,7 @@ class CategoryTreeListItem extends Component {
 
   state = { expanded: false };
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     const switchAnimation = {
       duration: 150,
       update: {
