@@ -14,7 +14,7 @@ import { ThemeContext } from '../../theme';
 class CheckoutShippingMethod extends Component {
   static contextType = ThemeContext;
 
-  componentWillMount() {
+  componentDidMount() {
     const { shipping, selectedShipping } = this.props;
     if (!selectedShipping && shipping.length) {
       this.props.checkoutSelectedShippingChanged(shipping[0]);

@@ -14,7 +14,7 @@ import { ThemeContext } from '../../theme';
 class CheckoutPaymentMethod extends Component {
   static contextType = ThemeContext;
 
-  componentWillMount() {
+  componentDidMount() {
     const { payments, selectedPayment } = this.props;
     if (!selectedPayment && payments.length) {
       this.props.checkoutSelectedPaymentChanged(payments[0]);
