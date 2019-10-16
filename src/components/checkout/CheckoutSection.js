@@ -59,12 +59,8 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingLeft: theme.spacing.small,
-    shadowColor: theme.colors.black,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 2,
-    shadowRadius: 2,
-    elevation: 1,
     marginBottom: theme.spacing.tiny,
+    backgroundColor: theme.colors.white,
   }),
   textBackground: {
     backgroundColor: '#999',

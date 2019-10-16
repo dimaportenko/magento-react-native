@@ -150,6 +150,7 @@ class Product extends Component {
   }
 
   renderCustomOptions = () => {
+    const theme = this.context;
     const { customOptions } = this.props;
     if (customOptions) {
       return customOptions.map((option) => {
@@ -160,6 +161,7 @@ class Product extends Component {
 
         return (
           <ModalSelect
+            style={styles.modalStyle(theme)}
             disabled={data.length === 0}
             key={option.option_id}
             label={option.title}
