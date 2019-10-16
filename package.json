@@ -12,6 +12,7 @@
 		"lodash": "^4.17.15",
 		"metro-react-native-babel-preset": "0.51.0",
 		"moment": "^2.24.0",
+		"react-native-fast-image": "^7.0.2",
 		"prop-types": "^15.6.0",
 		"react": "16.9.0",
 		"react-native": "0.61.2",

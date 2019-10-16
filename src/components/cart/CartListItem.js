@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import {
-  View, Image, TouchableOpacity, Alert,
-} from 'react-native';
+import { View, TouchableOpacity, Alert } from 'react-native';
+import { FastImage } from 'react-native-fast-image';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -51,7 +50,7 @@ const CartListItem = ({
 
   return (
     <View style={styles.container(theme)}>
-      <Image style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: imageUri }} />
+      <FastImage style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: imageUri }} />
       <View style={styles.infoStyle}>
         <Text style={styles.textStyle(theme)}>{item.name}</Text>
         <Text style={styles.textStyle(theme)}>

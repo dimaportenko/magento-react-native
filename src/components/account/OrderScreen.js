@@ -1,10 +1,6 @@
 import React, { useEffect, useContext } from 'react';
-import {
-  View,
-  Image,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { FastImage } from 'react-native-fast-image';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Text } from '../common';
@@ -37,7 +33,7 @@ const OrderScreen = ({
   const renderItem = item => (
     <View style={styles.itemContainer(theme)}>
       <View style={styles.row}>
-        <Image style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: image(item.item) }} />
+        <FastImage style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: image(item.item) }} />
         <View>
           <Text bold>{item.item.name}</Text>
           <Text type="label">{`SKU: ${item.item.sku}`}</Text>
