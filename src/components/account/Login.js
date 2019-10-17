@@ -100,6 +100,7 @@ const Login = ({
         onChangeText={setEmail}
         onSubmitEditing={() => passwordInput.current.focus()}
         containerStyle={styles.inputContainer(theme)}
+        textContentType={"emailAddress"}
       />
       <Input
         autoCapitalize="none"
@@ -113,6 +114,7 @@ const Login = ({
         onSubmitEditing={onLoginPress}
         assignRef={(input) => { passwordInput.current = input; }}
         containerStyle={styles.inputContainer(theme)}
+        textContentType={"password"}
       />
       {renderButtons()}
       {renderMessages()}
