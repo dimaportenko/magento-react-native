@@ -47,6 +47,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://twitter.com/alexakasanjeev"><img src="https://avatars0.githubusercontent.com/u/13250741?v=4" width="100px;" alt="Sanjeev yadav"/><br /><sub><b>Sanjeev yadav</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=alexakasanjeev" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/Dtema1996"><img src="https://avatars3.githubusercontent.com/u/17969457?v=4" width="100px;" alt="Artem"/><br /><sub><b>Artem</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=Dtema1996" title="Code">💻</a></td>
     <td align="center"><a href="https://juanvqz.github.io"><img src="https://avatars2.githubusercontent.com/u/7331511?v=4" width="100px;" alt="iTox"/><br /><sub><b>iTox</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=JuanVqz" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.taylorsturtz.com"><img src="https://avatars2.githubusercontent.com/u/6409518?v=4" width="100px;" alt="Taylor Sturtz"/><br /><sub><b>Taylor Sturtz</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=tsturtz" title="Code">💻</a></td>
   </tr>
 </table>
 
