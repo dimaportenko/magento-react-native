@@ -19,9 +19,6 @@ class CheckoutCustomerAccount extends Component {
 
   componentDidMount() {
     this.props.getCountries();
-  }
-
-  componentDidMount() {
     // Hardcode US
     // this.props.updateCheckoutUI('countryId', 'US');
     // Clear the error
