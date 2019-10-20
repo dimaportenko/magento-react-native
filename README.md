@@ -9,7 +9,7 @@
 ![React Native](https://img.shields.io/badge/react--native-0.61.2-brightgreen)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/alexakasanjeev/magento_react_native/issues)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-informational.svg)](https://join.slack.com/t/magento-react-native/shared_invite/enQtNjE3ODY0MDUxOTQyLTgwNDY2YzczNTEyNjQyY2QzMmY5ZDY4MmZlYjMyYmRiYzgzZjBiMDhmOTYxMDZkZjAwODkwZGI2MjAxY2FkNTE)
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 [![License](https://img.shields.io/cocoapods/l/Sizes.svg?style=flat)](LICENSE)
 
 Magento React Native is a fully functional eCommerce App for your Magento 2 website. It uses [Magento 2 REST API](https://devdocs.magento.com/guides/v2.3/get-started/rest_front.html), to dispaly catalog, products, add products to cart, place an order and much more.
@@ -41,7 +41,14 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="https://github.com/troublediehard"><img src="https://avatars2.githubusercontent.com/u/6594232?v=4" width="100px;" alt="Dmytro Portenko"/><br /><sub><b>Dmytro Portenko</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=troublediehard" title="Code">💻</a></td><td align="center"><a href="http://twitter.com/alexakasanjeev"><img src="https://avatars0.githubusercontent.com/u/13250741?v=4" width="100px;" alt="Sanjeev yadav"/><br /><sub><b>Sanjeev yadav</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=alexakasanjeev" title="Code">💻</a></td><td align="center"><a href="https://github.com/Dtema1996"><img src="https://avatars3.githubusercontent.com/u/17969457?v=4" width="100px;" alt="Artem"/><br /><sub><b>Artem</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=Dtema1996" title="Code">💻</a></td></tr></table>
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/troublediehard"><img src="https://avatars2.githubusercontent.com/u/6594232?v=4" width="100px;" alt="Dmytro Portenko"/><br /><sub><b>Dmytro Portenko</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=troublediehard" title="Code">💻</a></td>
+    <td align="center"><a href="http://twitter.com/alexakasanjeev"><img src="https://avatars0.githubusercontent.com/u/13250741?v=4" width="100px;" alt="Sanjeev yadav"/><br /><sub><b>Sanjeev yadav</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=alexakasanjeev" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/Dtema1996"><img src="https://avatars3.githubusercontent.com/u/17969457?v=4" width="100px;" alt="Artem"/><br /><sub><b>Artem</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=Dtema1996" title="Code">💻</a></td>
+    <td align="center"><a href="http://www.taylorsturtz.com"><img src="https://avatars2.githubusercontent.com/u/6409518?v=4" width="100px;" alt="Taylor Sturtz"/><br /><sub><b>Taylor Sturtz</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=tsturtz" title="Code">💻</a></td>
+  </tr>
+</table>
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
