@@ -17,15 +17,12 @@ import { ThemeContext } from '../../theme';
 class AddAccountAddress extends Component {
   static contextType = ThemeContext;
 
-  componentDidMount() {
-    this.props.getCountries();
-  }
-
   componentWillUnmount() {
     this.props.updateAccountAddressUI('error', false);
   }
 
   componentDidMount() {
+    this.props.getCountries();
     this.props.resetAccountAddressUI();
 
     if (this.props.customer && this.props.customer.addresses && this.props.customer.addresses.length) {
