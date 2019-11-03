@@ -27,6 +27,13 @@ class Product extends Component {
   static propTypes = {
     currencySymbol: PropTypes.string,
     uiProductCustomOptionUpdate: PropTypes.func,
+    getConfigurableProductOptions: PropTypes.func,
+    getCustomOptions: PropTypes.func,
+    getProductMedia: PropTypes.func,
+    uiProductUpdateOptions: PropTypes.func,
+    addToCartLoading: PropTypes.func,
+    addToCart: PropTypes.func,
+    updateProductQtyInput: PropTypes.func,
   };
 
   static defaultProps = {
@@ -47,8 +54,9 @@ class Product extends Component {
 
     if (product.type_id === 'configurable') {
       this.props.getConfigurableProductOptions(product.sku);
-      this.props.getCustomOptions(product.sku);
     }
+
+    this.props.getCustomOptions(product.sku);
 
     if (!medias || !medias[product.sku]) {
       this.props.getProductMedia({ sku: product.sku });

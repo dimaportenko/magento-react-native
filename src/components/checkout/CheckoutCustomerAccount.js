@@ -19,9 +19,6 @@ class CheckoutCustomerAccount extends Component {
 
   componentDidMount() {
     this.props.getCountries();
-  }
-
-  componentDidMount() {
     // Hardcode US
     // this.props.updateCheckoutUI('countryId', 'US');
     // Clear the error
@@ -99,8 +96,8 @@ class CheckoutCustomerAccount extends Component {
 
     const regionValue = (typeof region === 'object') ? {
       region: region.region,
-      region_id: region.regionId,
-      region_code: region.regionCode,
+      regionId: region.regionId,
+      regionCode: region.regionCode,
     } : {
       region,
     };
