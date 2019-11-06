@@ -261,7 +261,7 @@ class CheckoutCustomerAccount extends Component {
           autoCapitalize="none"
           label={translate('common.email')}
           value={this.props.email}
-          placeholder="email@gmail.com"
+          placeholder={translate('common.email')}
           onChangeText={value => this.updateUI('email', value)}
         />
 
@@ -276,14 +276,14 @@ class CheckoutCustomerAccount extends Component {
         <Input
           label={translate('common.firstName')}
           value={this.props.firstname}
-          placeholder="Jose"
+          placeholder={translate('common.firstName')}
           onChangeText={value => this.updateUI('firstname', value)}
         />
 
         <Input
           label={translate('common.lastName')}
           value={this.props.lastname}
-          placeholder="Mourinho"
+          placeholder={translate('common.lastName')}
           onChangeText={value => this.updateUI('lastname', value)}
         />
       </View>
@@ -303,28 +303,28 @@ class CheckoutCustomerAccount extends Component {
         <Input
           label={translate('common.postcode')}
           value={this.props.postcode}
-          placeholder="01730"
+          placeholder={translate('common.postcode')}
           onChangeText={value => this.updateUI('postcode', value)}
         />
 
         <Input
           label={translate('common.street')}
           value={this.props.street}
-          placeholder="2622  Huntz Lane"
+          placeholder={translate('common.street')}
           onChangeText={value => this.updateUI('street', value)}
         />
 
         <Input
           label={translate('common.city')}
           value={this.props.city}
-          placeholder="Bedford"
+          placeholder={translate('common.city')}
           onChangeText={value => this.updateUI('city', value)}
         />
 
         <Input
           label={translate('common.telephone')}
           value={this.props.telephone}
-          placeholder="978-593-3482"
+          placeholder={translate('common.telephone')}
           onChangeText={value => this.updateUI('telephone', value)}
         />
 
