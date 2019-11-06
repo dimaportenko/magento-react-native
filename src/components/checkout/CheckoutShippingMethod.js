@@ -10,6 +10,7 @@ import {
   checkoutCustomerNextLoading,
 } from '../../actions';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 class CheckoutShippingMethod extends Component {
   static contextType = ThemeContext;
@@ -85,7 +86,7 @@ class CheckoutShippingMethod extends Component {
     const { shipping } = this.props;
 
     if (!shipping || !shipping.length) {
-      return <Text>Shipping methods not found for selected address</Text>;
+      return <Text>{translate('checkout.noShippingMethod')}</Text>;
     }
 
     const radioProps = shipping.map((item) => {
@@ -130,7 +131,7 @@ class CheckoutShippingMethod extends Component {
           onPress={this.onNextPressed}
           style={styles.buttonStyle(theme)}
         >
-          Next
+          {translate('common.next')}
         </Button>
       </View>
     );

@@ -20,6 +20,7 @@ import {
   NAVIGATION_RESET_PASSWORD_PATH,
 } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 const Login = ({
   loading,
@@ -58,16 +59,16 @@ const Login = ({
           disabled={email === '' || password === ''}
           onPress={onLoginPress}
         >
-          LOG IN
+          {translate('login.loginButton')}
         </Button>
         <Button
           onPress={onSigninPress}
           style={styles.buttonMargin(theme)}
         >
-          SIGN UP
+          {translate('login.signupButton')}
         </Button>
         <TouchableOpacity onPress={passwordForget} style={styles.link(theme)}>
-          <Text style={styles.linkTitle}>Forget password?</Text>
+          <Text style={styles.linkTitle}>{translate('login.forgetPassword')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -91,7 +92,7 @@ const Login = ({
       <Input
         autoCapitalize="none"
         underlineColorAndroid="transparent"
-        placeholder="Email"
+        placeholder={translate('common.email')}
         keyboardType="email-address"
         returnKeyType="next"
         autoCorrect={false}
@@ -100,13 +101,13 @@ const Login = ({
         onChangeText={setEmail}
         onSubmitEditing={() => passwordInput.current.focus()}
         containerStyle={styles.inputContainer(theme)}
-        textContentType={"emailAddress"}
+        textContentType="emailAddress"
       />
       <Input
         autoCapitalize="none"
         underlineColorAndroid="transparent"
         secureTextEntry
-        placeholder="Password"
+        placeholder={translate('common.password')}
         autoCorrect={false}
         value={password}
         editable={!loading}
@@ -114,7 +115,7 @@ const Login = ({
         onSubmitEditing={onLoginPress}
         assignRef={(input) => { passwordInput.current = input; }}
         containerStyle={styles.inputContainer(theme)}
-        textContentType={"password"}
+        textContentType="password"
       />
       {renderButtons()}
       {renderMessages()}
@@ -123,7 +124,7 @@ const Login = ({
 };
 
 Login.navigationOptions = {
-  title: 'Login',
+  title: translate('login.title'),
 };
 
 const styles = StyleSheet.create({

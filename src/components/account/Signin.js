@@ -10,7 +10,9 @@ import {
 } from '../common';
 import { signIn } from '../../actions';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
+// This file name should be Signup
 const Signin = ({
   loading,
   error,
@@ -56,7 +58,7 @@ const Signin = ({
         }
         onPress={onCreateAccountPress}
       >
-        CREATE ACCOUNT
+        {translate('signup.createAccountButton')}
       </Button>
     );
   };
@@ -76,7 +78,7 @@ const Signin = ({
       <Input
         autoCapitalize="none"
         underlineColorAndroid="transparent"
-        placeholder="Firstname"
+        placeholder={translate('common.firstName')}
         returnKeyType="next"
         autoCorrect={false}
         value={firstname}
@@ -88,7 +90,7 @@ const Signin = ({
       <Input
         autoCapitalize="none"
         underlineColorAndroid="transparent"
-        placeholder="Lastname"
+        placeholder={translate('common.lastName')}
         autoCorrect={false}
         returnKeyType="next"
         value={lastname}
@@ -101,7 +103,7 @@ const Signin = ({
       <Input
         autoCapitalize="none"
         underlineColorAndroid="transparent"
-        placeholder="Email"
+        placeholder={translate('common.email')}
         keyboardType="email-address"
         returnKeyType="next"
         autoCorrect={false}
@@ -116,7 +118,7 @@ const Signin = ({
         autoCapitalize="none"
         underlineColorAndroid="transparent"
         secureTextEntry
-        placeholder="Password"
+        placeholder={translate('common.password')}
         autoCorrect={false}
         value={password}
         editable={!loading}
@@ -133,7 +135,7 @@ const Signin = ({
 };
 
 Signin.navigationOptions = {
-  title: 'Sign Up',
+  title: translate('signup.title'),
 };
 
 const styles = StyleSheet.create({

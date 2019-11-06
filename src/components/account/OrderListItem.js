@@ -9,6 +9,7 @@ import { Text } from '../common';
 import { NAVIGATION_ORDER_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 const OrderListItem = ({
   item,
@@ -25,15 +26,15 @@ const OrderListItem = ({
   return (
     <TouchableOpacity onPress={openOrdersScreen}>
       <View style={styles.container(theme)}>
-        <Text bold>{`Order # ${item.increment_id}`}</Text>
-        <Text type="label">{`Created: ${item.created_at}`}</Text>
+        <Text bold>{`${translate('common.order')} # ${item.increment_id}`}</Text>
+        <Text type="label">{`${translate('orderListItem.created')}: ${item.created_at}`}</Text>
         <Text type="label">
-          {`Ship to ${item.customer_firstname} ${item.customer_lastname}`}
+          {`${translate('orderListItem.shipTo')} ${item.customer_firstname} ${item.customer_lastname}`}
         </Text>
         <Text type="label">
-          {`Order Total: ${currencySymbol} ${item.grand_total}`}
+          {`${translate('orderListItem.orderTotal')}: ${currencySymbol} ${item.grand_total}`}
         </Text>
-        <Text type="label">{`Status: ${item.status}`}</Text>
+        <Text type="label">{`${translate('orderListItem.status')}: ${item.status}`}</Text>
       </View>
     </TouchableOpacity>
   );

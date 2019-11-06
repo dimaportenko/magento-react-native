@@ -7,6 +7,7 @@ import CheckoutShippingMethod from './CheckoutShippingMethod';
 import CheckoutPaymentMethod from './CheckoutPaymentMethod';
 import CheckoutTotals from './CheckoutTotals';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 const Checkout = ({
   navigation,
@@ -17,16 +18,32 @@ const Checkout = ({
 
   return (
     <ScrollView style={styles.container(theme)}>
-      <CheckoutSection title="Customer Account" number="1" expanded={activeSection === 1}>
+      <CheckoutSection
+        title={translate('checkout.customerAccount')}
+        number="1"
+        expanded={activeSection === 1}
+      >
         <CheckoutCustomerAccount />
       </CheckoutSection>
-      <CheckoutSection title="Shipping Method" number="2" expanded={activeSection === 2}>
+      <CheckoutSection
+        title={translate('checkout.shippingMethod')}
+        number="2"
+        expanded={activeSection === 2}
+      >
         <CheckoutShippingMethod />
       </CheckoutSection>
-      <CheckoutSection title="Payment Method" number="3" expanded={activeSection === 3}>
+      <CheckoutSection
+        title={translate('checkout.paymentMethod')}
+        number="3"
+        expanded={activeSection === 3}
+      >
         <CheckoutPaymentMethod />
       </CheckoutSection>
-      <CheckoutSection title="Summary" number="4" expanded={activeSection === 4}>
+      <CheckoutSection
+        title={translate('checkout.summary')}
+        number="4"
+        expanded={activeSection === 4}
+      >
         <CheckoutTotals navigation={navigation} />
       </CheckoutSection>
     </ScrollView>
@@ -34,7 +51,7 @@ const Checkout = ({
 };
 
 Checkout.navigationOptions = {
-  title: 'Checkout',
+  title: translate('checkout.title'),
   headerBackTitle: ' ',
 };
 

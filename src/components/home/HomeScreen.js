@@ -14,12 +14,13 @@ import HomeSlider from './HomeSlider';
 import FeaturedProducts from './FeaturedProducts';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 class HomeScreen extends Component {
   static contextType = ThemeContext;
 
   static navigationOptions = ({ navigation }) => ({
-    title: 'Magento React Native',
+    title: translate('home.title'),
     headerBackTitle: ' ',
     headerLeft: (
       <MaterialHeaderButtons>

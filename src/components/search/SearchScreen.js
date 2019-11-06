@@ -13,12 +13,13 @@ import { ProductList, HeaderIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_SEARCH_PRODUCT_PATH } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 class SearchScreen extends Component {
   static contextType = ThemeContext;
 
   static navigationOptions = ({ navigation }) => ({
-    title: 'Search',
+    title: translate('search.title'),
     headerBackTitle: ' ',
     headerRight: (<HeaderIcon changeGridValueFunction={navigation.getParam('changeGridValueFunction')} />),
   });
@@ -94,7 +95,7 @@ class SearchScreen extends Component {
     return (
       <View style={styles.containerStyle(theme)}>
         <SearchBar
-          placeholder="Type here..."
+          placeholder={translate('search.searchPlaceholderText')}
           onChangeText={this.updateSearch}
           value={input}
           containerStyle={styles.searchStyle(theme)}

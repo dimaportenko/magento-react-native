@@ -20,6 +20,7 @@ import { getProductCustomAttribute } from '../../helper/product';
 import ProductMedia from './ProductMedia';
 import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 class Product extends Component {
   static contextType = ThemeContext;
@@ -268,7 +269,7 @@ class Product extends Component {
     }
     return (
       <Button style={styles.buttonStyle(theme)} onPress={this.onPressAddToCart}>
-        Add to Cart
+        {translate('product.addToCartButton')}
       </Button>
     );
   }
@@ -342,7 +343,7 @@ class Product extends Component {
         <Text type="subheading" bold style={styles.textStyle(theme)}>
           {`${this.props.currencySymbol}${this.renderPrice()}`}
         </Text>
-        <Text bold style={styles.textStyle(theme)}>Qty</Text>
+        <Text bold style={styles.textStyle(theme)}>{translate('common.quantity')}</Text>
         <Input
           containerStyle={styles.inputContainer(theme)}
           inputStyle={{ textAlign: 'center' }}

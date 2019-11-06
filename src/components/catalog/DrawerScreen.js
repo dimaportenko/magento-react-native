@@ -3,13 +3,13 @@ import { connect } from 'react-redux';
 import {
   View,
   StyleSheet,
-  TextInput,
 } from 'react-native';
 import {
   getProductsForCategoryOrChild, addFilterData, getSearchProducts,
 } from '../../actions';
 import { Button, Text, Input } from '../common';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 class DrawerScreen extends Component {
   static contextType = ThemeContext;
@@ -58,7 +58,7 @@ class DrawerScreen extends Component {
           <Text type="heading" style={textStyle(theme)}>Price:</Text>
           <Input
             containerStyle={minInputStyle}
-            placeholder="Min."
+            placeholder={translate('common.min')}
             value={this.state.minValue}
             keyboardType="numeric"
             onChangeText={minValue => this.setState({ minValue })}
@@ -67,14 +67,14 @@ class DrawerScreen extends Component {
           <Input
             containerStyle={maxInputStyle}
             value={this.state.maxValue}
-            placeholder="Max."
+            placeholder={translate('common.max')}
             keyboardType="numeric"
             onChangeText={maxValue => this.setState({ maxValue })}
           />
         </View>
         <View style={styles.buttonStyleWrap}>
           <Button onPress={this.onApplyPressed} style={styles.buttonStyle}>
-            Apply
+            {translate('common.apply')}
           </Button>
         </View>
       </View>

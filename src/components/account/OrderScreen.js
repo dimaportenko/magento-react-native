@@ -7,6 +7,7 @@ import { Text } from '../common';
 import { orderProductDetail } from '../../actions';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 const OrderScreen = ({
   products,
@@ -36,12 +37,12 @@ const OrderScreen = ({
         <FastImage style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: image(item.item) }} />
         <View>
           <Text bold>{item.item.name}</Text>
-          <Text type="label">{`SKU: ${item.item.sku}`}</Text>
+          <Text type="label">{`${translate('common.sku')}: ${item.item.sku}`}</Text>
           <Text type="label">
-            {`Price: ${currencySymbol} ${item.item.price}`}
+            {`${translate('common.price')}: ${currencySymbol} ${item.item.price}`}
           </Text>
-          <Text type="label">{`Qty: ${item.item.qty_ordered}`}</Text>
-          <Text type="label">{`Subtotal: ${currencySymbol} ${item.item.row_total}`}</Text>
+          <Text type="label">{`${translate('common.quantity')}: ${item.item.qty_ordered}`}</Text>
+          <Text type="label">{`${translate('common.subTotal')}: ${currencySymbol} ${item.item.row_total}`}</Text>
         </View>
       </View>
     </View>
@@ -56,22 +57,22 @@ const OrderScreen = ({
         renderItem={renderItem}
         keyExtractor={(_item, index) => index.toString()}
       />
-      <Text type="label">{`Status: ${item.status}`}</Text>
+      <Text type="label">{`${translate('orderListItem.status')}: ${item.status}`}</Text>
       <Text type="label">
-        {`Subtotal: ${currencySymbol} ${item.subtotal}`}
+        {`${translate('common.subTotal')}: ${currencySymbol} ${item.subtotal}`}
       </Text>
       <Text type="label">
-        {`Shipping & Handling: ${currencySymbol} ${item.shipping_amount}`}
+        {`${translate('orderListItem.shippingAndHandling')}: ${currencySymbol} ${item.shipping_amount}`}
       </Text>
       <Text type="label" bold>
-        {`Grand Total: ${currencySymbol} ${item.total_due}`}
+        {`${translate('common.grandTotal')}: ${currencySymbol} ${item.total_due}`}
       </Text>
     </View>
   );
 };
 
 OrderScreen.navigationOptions = ({ navigation }) => ({
-  title: `Order # ${navigation.state.params.item.increment_id}`,
+  title: `${translate('common.order')} # ${navigation.state.params.item.increment_id}`,
 });
 
 const styles = StyleSheet.create({

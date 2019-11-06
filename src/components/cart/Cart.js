@@ -17,12 +17,13 @@ import {
 } from '../../navigation/routes';
 import { Button, Text } from '../common';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 class Cart extends Component {
   static contextType = ThemeContext;
 
   static navigationOptions = {
-    title: 'Cart',
+    title: translate('cart.title'),
     headerBackTitle: ' ',
   };
 
@@ -56,7 +57,7 @@ class Cart extends Component {
 
   onPressAddToCheckout = () => {
     NavigationService.navigate(NAVIGATION_CHECKOUT_PATH, {
-      title: 'Cart',
+      title: translate('cart.title'),
     });
   };
 
@@ -97,9 +98,7 @@ class Cart extends Component {
     if (sum > 0) {
       return (
         <Text type="heading" style={totals(theme)}>
-          Totals
-          {' '}
-          {sum.toFixed(2)}
+          {`${translate('common.total')} ${sum.toFixed(2)}`}
         </Text>
       );
     }
@@ -118,13 +117,13 @@ class Cart extends Component {
     return (
       <View style={containerStyle(theme)}>
         <Text type="heading" style={totals(theme)}>
-          Your cart is empty
+          {translate('cart.emptyMessage')}
         </Text>
         <TouchableOpacity
           onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
         >
           <Text type="heading" bold style={buttonTextStyle(theme)}>
-            Continue Shopping
+            {translate('common.continueShopping')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -164,7 +163,7 @@ class Cart extends Component {
             onPress={this.onPressAddToCheckout}
             style={buttonStyle(theme)}
           >
-            Go to Checkout
+            {translate('cart.checkoutButton')}
           </Button>
         </View>
       </View>

@@ -10,6 +10,7 @@ import { Button, Text } from '../common';
 import { logout, currentCustomer } from '../../actions';
 import { NAVIGATION_ORDERS_PATH, NAVIGATION_ADDRESS_SCREEN_PATH } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 const Account = ({
   customer,
@@ -44,7 +45,13 @@ const Account = ({
     const { email, firstname, lastname } = customer;
     return (
       <View style={styles.textContainer(theme)}>
-        <Text type="subheading" bold style={styles.center}>Contact Information</Text>
+        <Text
+          bold
+          type="subheading"
+          style={styles.center}
+        >
+          {translate('account.contactInformation')}
+        </Text>
         <Text style={styles.center}>
           {firstname}
           {' '}
@@ -67,20 +74,20 @@ const Account = ({
     <View style={styles.container(theme)}>
       {renderCustomerData()}
       <Button onPress={onLogoutPress}>
-        LOG OUT
+        {translate('account.logoutButton')}
       </Button>
       <Button onPress={openOrders} style={styles.buttonMargin(theme)}>
-        My Orders
+        {translate('account.myOrdersButton')}
       </Button>
       <Button onPress={openAddAddress} style={styles.buttonMargin(theme)}>
-        My Address
+        {translate('account.myAddressButton')}
       </Button>
     </View>
   );
 };
 
 Account.navigationOptions = {
-  title: 'Account',
+  title: translate('account.title'),
 };
 
 const styles = StyleSheet.create({

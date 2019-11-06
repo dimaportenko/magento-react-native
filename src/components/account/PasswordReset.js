@@ -13,6 +13,7 @@ import {
 } from '../common';
 import { initiatePasswordReset, updatePasswordResetUI } from '../../actions';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 const PasswordReset = ({
   loading,
@@ -53,23 +54,28 @@ const PasswordReset = ({
         disabled={email === ''}
         onPress={onResetPress}
       >
-        RESET MY PASSWORD
+        {translate('passwordReset.resetButton')}
       </Button>
     );
   };
 
   return (
     <View style={styles.container(theme)}>
-      <Text type="subheading" bold style={styles.title(theme)}>PASSWORD RECOVERY</Text>
+      <Text
+        bold
+        type="subheading"
+        style={styles.title(theme)}
+      >
+        {translate('passwordReset.passwordRecovery')}
+      </Text>
       <Text style={styles.description}>
-        Please enter your email address below to receive a password reset
-        link
+        {translate('passwordReset.passwordRecoveryInstructions')}
       </Text>
       <Input
         autoCapitalize="none"
         underlineColorAndroid="transparent"
         keyboardType="email-address"
-        placeholder="Email"
+        placeholder={translate('common.email')}
         autoCorrect={false}
         containerStyle={styles.emailOffset(theme)}
         value={email}
@@ -84,7 +90,7 @@ const PasswordReset = ({
 };
 
 PasswordReset.navigationOptions = {
-  title: 'Reset Password',
+  title: translate('passwordReset.title'),
 };
 
 const styles = StyleSheet.create({
