@@ -29,7 +29,14 @@ export default (state = INITIAL_STATE, action) => {
       return state;
     }
     case MAGENTO_GET_CURRENCY:
-      return { ...state, errorMessage: null, currency: action.payload };
+      const currency = action.payload;
+      if (!currency.base_currency_symbol) {
+        currency.base_currency_symbol = currency.base_currency_code;
+      }
+      if (!currency.default_display_currency_symbol) {
+        currency.default_display_currency_symbol = currency.default_display_currency_code;
+      }
+      return { ...state, errorMessage: null, currency };
     case MAGENTO_GET_COUNTRIES: {
       return { ...state, countries: action.payload };
     }

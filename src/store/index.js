@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import { createBlacklistFilter } from 'redux-persist-transform-filter';
@@ -52,10 +52,11 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 
+const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
 export const store = createStore(
   persistedReducer,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(), // TODO: remove for production
-  applyMiddleware(thunk),
+  composeEnhancer(applyMiddleware(thunk)),
 );
 
 export const persistor = persistStore(store);
