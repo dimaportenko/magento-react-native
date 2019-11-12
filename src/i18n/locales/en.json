@@ -1,0 +1,115 @@
+{
+  "common": {
+    "brandName": "magento-react-native",
+    "ok": "OK!",
+    "cancel": "Cancel",
+    "continue": "Continue",
+    "select": "Select",
+    "save": "Save",
+    "update": "Update",
+    "apply": "Apply",
+    "next": "Next",
+    "back": "Back",
+    "total": "Total",
+    "subTotal": "Subtotal",
+    "grandTotal": "Grand Total",
+    "price": "Price",
+    "quantity": "Qty",
+    "sku": "SKU",
+    "discount": "Discount",
+    "order": "Order",
+    "email": "Email",
+    "password": "Password",
+    "continueShopping": "Continue Shopping",
+    "min": "Min.",
+    "max": "Max.",
+    "region": "Region",
+    "country": "Country",
+    "firstName": "Firstname",
+    "lastName": "Lastname",
+    "postcode": "Postcode",
+    "street": "Street",
+    "city": "City",
+    "telephone": "Telephone",
+    "shipping": "Shipping",
+    "sort": "Sort",
+    "filter": "Filter",
+    "sortOption": {
+      "aToZ": "Name: a to z",
+      "zToA": "Name: z to a",
+      "priceLowToHigh": "Price: low to high",
+      "priceHighToLow": "Price: high to low"
+    }
+  },
+  "errors": {
+    "error": "Error",
+    "noProduct": "No products found"
+  },
+  "account": {
+    "title": "Account",
+    "contactInformation": "Contact Information",
+    "logoutButton": "LOG OUT",
+    "myOrdersButton": "My Orders",
+    "myAddressButton": "My Address"
+  },
+  "addAccountAddress": {
+    "title": "My Address"
+  },
+  "login": {
+    "title": "Login",
+    "loginButton": "LOG IN",
+    "signupButton": "SIGN UP",
+    "forgetPassword": "Forget password?"
+  },
+  "orderListItem": {
+    "created": "Created",
+    "shipTo": "Ship to",
+    "orderTotal": "Order Total",
+    "status": "Status",
+    "shippingAndHandling": "Shipping & Handling"
+  },
+  "ordersScreen": {
+    "title": "Orders",
+    "noOrderMessage": "Oops, there is no orders yet!"
+  },
+  "passwordReset": {
+    "title": "Reset Password",
+    "resetButton": "RESET MY PASSWORD",
+    "passwordRecovery": "PASSWORD RECOVERY",
+    "passwordRecoveryInstructions": "Please enter your email address below to receive a password reset link"
+  },
+  "signup": {
+    "title": "Sign Up",
+    "createAccountButton": "CREATE ACCOUNT"
+  },
+  "cart": {
+    "title": "Cart",
+    "emptyMessage": "Your cart is empty",
+    "checkoutButton": "Go to Checkout"
+  },
+  "cartListItem": {
+    "removeItemDialogTitle": "You sure?",
+    "removeItemDialogMessage": "Just double-checking you wanted to remove the item"
+  },
+  "product": {
+    "addToCartButton": "Add to Cart"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "customerAccount": "Customer Account",
+    "shippingMethod": "Shipping Method",
+    "paymentMethod": "Payment Method",
+    "summary": "Summary",
+    "noPaymentMethod": "Payment methods not found",
+    "noShippingMethod": "Shipping methods not found for selected address",
+    "placeOrderButton": "Place Order",
+    "orderSuccessMessage": "Order placed successfully"
+  },
+  "search": {
+    "title": "Search",
+    "searchPlaceholderText": "Type here..."
+  },
+  "home": {
+    "title": "Magento React Native"
+  }
+}

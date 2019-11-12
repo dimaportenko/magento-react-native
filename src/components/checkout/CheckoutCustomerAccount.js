@@ -12,7 +12,7 @@ import {
   Input, Spinner, ModalSelect, Button, Text,
 } from '../common';
 import { ThemeContext } from '../../theme';
-
+import { translate } from '../../i18n';
 
 class CheckoutCustomerAccount extends Component {
   static contextType = ThemeContext;
@@ -177,7 +177,7 @@ class CheckoutCustomerAccount extends Component {
           onPress={this.onNextPressed}
           style={styles.buttonStyle(theme)}
         >
-          Next
+          {translate('common.next')}
         </Button>
       </View>
     );
@@ -197,9 +197,9 @@ class CheckoutCustomerAccount extends Component {
           <ModalSelect
             disabled={data.length === 0}
             key="regions"
-            label="Region"
-            attribute="Region"
-            value="Region"
+            label={translate('common.region')}
+            attribute={translate('common.region')}
+            value={translate('common.region')}
             data={data}
             onChange={this.regionSelect.bind(this)}
           />
@@ -210,9 +210,9 @@ class CheckoutCustomerAccount extends Component {
     const regionValue = typeof (this.props.region) === 'string' ? this.props.region : this.props.region.region;
     return (
       <Input
-        label="Region"
+        label={translate('common.region')}
         value={regionValue}
-        placeholder="region"
+        placeholder={translate('common.region')}
         onChangeText={value => this.updateUI('region', value)}
       />
     );
@@ -224,9 +224,9 @@ class CheckoutCustomerAccount extends Component {
     if (!countries || !countries.length) {
       return (
         <Input
-          label="Country"
+          label={translate('common.country')}
           value={this.props.country}
-          placeholder="country"
+          placeholder={translate('common.country')}
           onChangeText={value => this.updateUI('country', value)}
         />
       );
@@ -241,9 +241,9 @@ class CheckoutCustomerAccount extends Component {
       <ModalSelect
         disabled={data.length === 0}
         key="countries"
-        label="Country"
-        attribute="Country"
-        value="Country"
+        label={translate('common.country')}
+        attribute={translate('common.country')}
+        value={translate('common.country')}
         data={data}
         onChange={this.countrySelect.bind(this)}
       />
@@ -259,31 +259,31 @@ class CheckoutCustomerAccount extends Component {
       <View>
         <Input
           autoCapitalize="none"
-          label="Email"
+          label={translate('common.email')}
           value={this.props.email}
-          placeholder="email@gmail.com"
+          placeholder={translate('common.email')}
           onChangeText={value => this.updateUI('email', value)}
         />
 
         <Input
           secureTextEntry
-          label="Password"
+          label={translate('common.password')}
           value={this.props.password}
-          placeholder="password"
+          placeholder={translate('common.password')}
           onChangeText={value => this.updateUI('password', value)}
         />
 
         <Input
-          label="Firstname"
+          label={translate('common.firstName')}
           value={this.props.firstname}
-          placeholder="firstname"
+          placeholder={translate('common.firstName')}
           onChangeText={value => this.updateUI('firstname', value)}
         />
 
         <Input
-          label="Lastname"
+          label={translate('common.lastName')}
           value={this.props.lastname}
-          placeholder="lastname"
+          placeholder={translate('common.lastName')}
           onChangeText={value => this.updateUI('lastname', value)}
         />
       </View>
@@ -301,30 +301,30 @@ class CheckoutCustomerAccount extends Component {
         {this.renderRegions()}
 
         <Input
-          label="Postcode"
+          label={translate('common.postcode')}
           value={this.props.postcode}
-          placeholder="postcode"
+          placeholder={translate('common.postcode')}
           onChangeText={value => this.updateUI('postcode', value)}
         />
 
         <Input
-          label="Street"
+          label={translate('common.street')}
           value={this.props.street}
-          placeholder="street"
+          placeholder={translate('common.street')}
           onChangeText={value => this.updateUI('street', value)}
         />
 
         <Input
-          label="City"
+          label={translate('common.city')}
           value={this.props.city}
-          placeholder="city"
+          placeholder={translate('common.city')}
           onChangeText={value => this.updateUI('city', value)}
         />
 
         <Input
-          label="Telephone"
+          label={translate('common.telephone')}
           value={this.props.telephone}
-          placeholder="telephone"
+          placeholder={translate('common.telephone')}
           onChangeText={value => this.updateUI('telephone', value)}
         />
 

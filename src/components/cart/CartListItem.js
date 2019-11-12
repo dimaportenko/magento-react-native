@@ -9,6 +9,7 @@ import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { Spinner, Text } from '../common';
 import { removeFromCartLoading, removeFromCart } from '../../actions';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 const CartListItem = ({
   products,
@@ -27,11 +28,11 @@ const CartListItem = ({
 
   const onPressRemoveItem = () => {
     Alert.alert(
-      'You sure?',
-      `Just double-checking you wanted to remove the item: ${item.name}`,
+      translate('cartListItem.removeItemDialogTitle'),
+      `${translate('cartListItem.removeItemDialogMessage')}: ${item.name}`,
       [
-        { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
-        { text: 'Remove it', onPress: () => performRemoveItem() },
+        { text: translate('common.cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        { text: translate('common.ok'), onPress: () => performRemoveItem() },
       ],
       { cancelable: true },
     );
@@ -54,13 +55,10 @@ const CartListItem = ({
       <View style={styles.infoStyle}>
         <Text style={styles.textStyle(theme)}>{item.name}</Text>
         <Text style={styles.textStyle(theme)}>
-          {magento.storeConfig.default_display_currency_code}
-          {' '}
-          {item.price}
+          {`${magento.storeConfig.default_display_currency_code} ${item.price}`}
         </Text>
         <Text style={styles.textStyle(theme)}>
-          Qty:
-          {item.qty}
+          {`${translate('common.quantity')}: ${item.qty}`}
         </Text>
       </View>
       <View style={styles.removeContainer}>

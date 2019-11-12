@@ -15,6 +15,7 @@ import {
 import { NAVIGATION_HOME_STACK_PATH } from '../../navigation/routes';
 import { Button, Spinner, Text } from '../common';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 class CheckoutTotals extends Component {
   static contextType = ThemeContext;
@@ -55,25 +56,13 @@ class CheckoutTotals extends Component {
     return (
       <View style={styles.totalsStyle}>
         <Text>
-          Subtotals -
-          {' '}
-          {totals.subtotal_incl_tax}
-          {' '}
-          {totals.quote_currency_code}
+          {`${translate('common.subTotal')} - ${totals.subtotal_incl_tax} ${totals.quote_currency_code}`}
         </Text>
         <Text>
-          Shipping -
-          {' '}
-          {totals.shipping_incl_tax}
-          {' '}
-          {totals.quote_currency_code}
+          {`${translate('common.shipping')} - ${totals.shipping_incl_tax} ${totals.quote_currency_code}`}
         </Text>
         <Text>
-          Totals -
-          {' '}
-          {totals.grand_total}
-          {' '}
-          {totals.quote_currency_code}
+          {`${translate('common.total')} - ${totals.grand_total} ${totals.quote_currency_code}`}
         </Text>
       </View>
     );
@@ -100,18 +89,18 @@ class CheckoutTotals extends Component {
           disable={this.props.loading}
           style={styles.buttonStyle(theme)}
         >
-          Place Order
+          {translate('checkout.placeOrderButton')}
         </Button>
       </View>
     );
   }
 
-  componentDidUpdate(prevProps): void {
+  componentDidUpdate(prevProps) {
     if (this.props.orderId && this.props.orderId !== prevProps.orderId) {
-      this.showPopup('Order', 'Order placed successfully');
+      this.showPopup(translate('common.order'), translate('checkout.orderSuccessMessage'));
     }
     if (this.props.errorMessage && this.props.errorMessage !== prevProps.errorMessage) {
-      this.showPopup('Error', this.props.errorMessage);
+      this.showPopup(translate('errors.error'), this.props.errorMessage);
     }
   }
 
@@ -122,7 +111,7 @@ class CheckoutTotals extends Component {
     Alert.alert(
       title,
       message,
-      [{ text: 'OK', onPress: () => this.goHome() }],
+      [{ text: translate('common.ok'), onPress: () => this.goHome() }],
       { cancelable: false },
     );
   }

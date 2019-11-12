@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import AddAccountAddress from './AddAccountAddress';
+import { translate } from '../../i18n';
 
 const AddressScreen = () => (
   <View style={{ flex: 1 }}>
@@ -9,7 +10,7 @@ const AddressScreen = () => (
 );
 
 AddressScreen.navigationOptions = () => ({
-  title: 'My Address',
+  title: translate('addAccountAddress.title'),
   headerBackTitle: ' ',
 });
 

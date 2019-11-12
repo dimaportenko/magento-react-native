@@ -14,6 +14,7 @@ import {
 import { Text } from '../common';
 import OrderListItem from './OrderListItem';
 import { ThemeContext } from '../../theme';
+import { translate } from '../../i18n';
 
 import { NAVIGATION_HOME_SCREEN_PATH } from '../../navigation/routes';
 
@@ -62,13 +63,13 @@ const OrdersScreen = ({
     return (
       <View style={styles.emptyListContainerStyle(theme)}>
         <Text type="heading" style={styles.textStyle(theme)}>
-          Oops, there is no orders yet
+          {translate('ordersScreen.noOrderMessage')}
         </Text>
         <TouchableOpacity
           onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
         >
           <Text type="heading" bold style={styles.buttonTextStyle(theme)}>
-            Continue Shopping
+            {translate('common.continueShopping')}
           </Text>
         </TouchableOpacity>
       </View>
@@ -86,7 +87,7 @@ const OrdersScreen = ({
 };
 
 OrdersScreen.navigationOptions = () => ({
-  title: 'Orders',
+  title: translate('ordersScreen.title'),
   headerBackTitle: ' ',
 });
 
