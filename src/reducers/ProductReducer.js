@@ -23,7 +23,7 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case MAGENTO_CURRENT_PRODUCT: {
       let current = action.payload;
-      if (current && state.current && state.current.product.id === action.payload.product.id) {
+      if (current && state.current && state.current.product && state.current.product.id === action.payload.product.id) {
         current = { ...state.current, ...current };
       }
       return { ...state, selectedOptions: {}, current };
