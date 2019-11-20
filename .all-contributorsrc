@@ -49,6 +49,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "qualwebs",
+      "name": "Qualwebs",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/13719000?v=4",
+      "profile": "http://www.qualwebs.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
