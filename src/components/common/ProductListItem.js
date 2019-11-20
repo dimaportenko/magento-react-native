@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { Text } from './Text';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
+import { finalPrice } from '../../helper/helper';
 
 const ProductListItem = ({
   product,
@@ -35,7 +36,7 @@ const ProductListItem = ({
         <View style={[styles.infoStyle, infoStyle]}>
           <Text type="subheading" style={[styles.textStyle(theme), textStyle]}>{product.name}</Text>
           <Text type="heading" style={[styles.priceStyle(theme), priceStyle]}>
-            {`${currencySymbol} ${product.price}`}
+            {`${currencySymbol} ${finalPrice(product.custom_attributes, product.price)}`}
           </Text>
         </View>
       </TouchableOpacity>

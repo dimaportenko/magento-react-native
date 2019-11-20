@@ -5,6 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { Text } from '../common';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
+import { finalPrice } from '../../helper/helper';
 
 const FeaturedProductItem = ({
   onPress,
@@ -36,7 +37,7 @@ const FeaturedProductItem = ({
             type="caption"
             style={styles.priceStyle}
           >
-            {`${currencySymbol} ${product.price}`}
+            {`${currencySymbol} ${finalPrice(product.custom_attributes, product.price)}`}
           </Text>
         </View>
       </TouchableOpacity>
