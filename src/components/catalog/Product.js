@@ -21,6 +21,7 @@ import ProductMedia from './ProductMedia';
 import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { finalPrice } from '../../helper/helper';
 
 class Product extends Component {
   static contextType = ThemeContext;
@@ -310,7 +311,7 @@ class Product extends Component {
     if (selectedProduct) {
       return selectedProduct.price;
     }
-    return this.props.product.price;
+    return finalPrice(this.props.product.custom_attributes,this.props.product.price);
   }
 
   renderProductMedia = () => {
