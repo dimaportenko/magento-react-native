@@ -61,6 +61,7 @@ class HomeScreen extends Component {
         title={this.props.featuredCategories[key].title}
         onPress={this.onProductPress}
         currencySymbol={this.props.currencySymbol}
+        currencyRate={this.props.currencyRate}
       />
     ));
   }
@@ -113,6 +114,7 @@ HomeScreen.propTypes = {
   featuredCategories: PropTypes.object,
   setCurrentProduct: PropTypes.func,
   currencySymbol: PropTypes.string.isRequired,
+  currencyRate: PropTypes.number.isRequired,
   refreshing: PropTypes.bool,
 };
 
@@ -123,10 +125,19 @@ HomeScreen.defaultProps = {
 
 const mapStateToProps = (state) => {
   const { refreshing } = state.home;
-  const { errorMessage, currency } = state.magento;
-  const { default_display_currency_symbol: currencySymbol } = currency;
+  const {
+    errorMessage,
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = state.magento;
   return {
-    ...state.home, refreshing, errorMessage, currencySymbol,
+    ...state.home,
+    refreshing,
+    errorMessage,
+    currencySymbol,
+    currencyRate,
   };
 };
 

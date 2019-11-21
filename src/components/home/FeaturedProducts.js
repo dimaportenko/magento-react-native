@@ -10,6 +10,7 @@ const FeaturedProducts = ({
   title,
   products,
   currencySymbol,
+  currencyRate,
   onPress,
 }) => {
   const theme = useContext(ThemeContext);
@@ -30,6 +31,7 @@ const FeaturedProducts = ({
           <FeaturedProductItem
             product={item}
             currencySymbol={currencySymbol}
+            currencyRate={currencyRate}
             onPress={onPress}
           />
         )}
@@ -44,6 +46,7 @@ FeaturedProducts.propTypes = {
   title: PropTypes.string,
   style: PropTypes.object,
   currencySymbol: PropTypes.string.isRequired,
+  currencyRate: PropTypes.number.isRequired,
 };
 
 FeaturedProducts.defaultProps = {

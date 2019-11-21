@@ -1,3 +1,5 @@
+import { currencySymbols } from '../config/magento';
+
 export function finalPrice(data, price) {
   let specialPrice = price;
   const result = data.filter(item => item.attribute_code === 'special_price');
@@ -7,3 +9,12 @@ export function finalPrice(data, price) {
   }
   return specialPrice;
 }
+
+export const priceSignByCode = (code) => {
+  const sign = currencySymbols[code];
+  if (sign) {
+    return sign;
+  }
+  // If no currency symbol specified for currency code, return currency code
+  return code;
+};

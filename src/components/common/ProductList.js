@@ -36,6 +36,7 @@ const sortData = [
 const ProductList = ({
   onRowPress,
   currencySymbol,
+  currencyRate,
   performSort,
   navigation,
   canLoadMoreContent,
@@ -55,6 +56,7 @@ const ProductList = ({
       product={item}
       onRowPress={onRowPress}
       currencySymbol={currencySymbol}
+      currencyRate={currencyRate}
     />
   );
 
@@ -68,10 +70,10 @@ const ProductList = ({
       columnContainerStyle={styles.columnContainerStyle}
       textStyle={styles.textStyle}
       infoStyle={styles.infoStyle}
-      priceStyle={styles.priceStyle}
       product={item}
       onRowPress={onRowPress}
       currencySymbol={currencySymbol}
+      currencyRate={currencyRate}
     />
   );
 
@@ -170,6 +172,7 @@ const styles = StyleSheet.create({
   infoStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
+    alignItems: 'center',
   },
   textStyle: {
     justifyContent: 'center',
@@ -177,9 +180,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginTop: 0,
     padding: 0,
-  },
-  priceStyle: {
-    textAlign: 'center',
   },
   imageStyle: {
     flex: 1,
@@ -216,6 +216,7 @@ const styles = StyleSheet.create({
 ProductList.propTypes = {
   onRowPress: PropTypes.func,
   currencySymbol: PropTypes.string.isRequired,
+  currencyRate: PropTypes.number.isRequired,
   performSort: PropTypes.func,
   navigation: PropTypes.object.isRequired,
   canLoadMoreContent: PropTypes.bool.isRequired,

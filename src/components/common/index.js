@@ -9,3 +9,4 @@ export * from './Text';
 export * from './ProductList';
 export * from './ProductListHeaderIcon';
 export * from './ProductListItem';
+export * from './Price';

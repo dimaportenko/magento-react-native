@@ -8,7 +8,16 @@ const INITIAL_STATE = {
   magento: null,
   storeConfig: null,
   countries: null,
-  currency: {},
+  currency: {
+    default_display_currency_code: '',
+    default_display_currency_symbol: '',
+    /**
+     * Below three keys will be used in the APP
+     */
+    displayCurrencyCode: '',
+    displayCurrencySymbol: '',
+    displayCurrencyExchangeRate: 1,
+  },
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -28,15 +37,27 @@ export default (state = INITIAL_STATE, action) => {
       }
       return state;
     }
-    case MAGENTO_GET_CURRENCY:
-      const currency = action.payload;
-      if (!currency.base_currency_symbol) {
-        currency.base_currency_symbol = currency.base_currency_code;
-      }
-      if (!currency.default_display_currency_symbol) {
-        currency.default_display_currency_symbol = currency.default_display_currency_code;
-      }
-      return { ...state, errorMessage: null, currency };
+    case MAGENTO_GET_CURRENCY: {
+      const {
+        currencyData,
+        displayCurrency: {
+          code,
+          symbol,
+          rate
+        }
+      } = action.payload;
+      return {
+        ...state,
+        errorMessage: null,
+        currency: {
+          ...state.currency,
+          ...currencyData,
+          displayCurrencyCode: code,
+          displayCurrencySymbol: symbol,
+          displayCurrencyExchangeRate: rate,
+        }
+      };
+    }
     case MAGENTO_GET_COUNTRIES: {
       return { ...state, countries: action.payload };
     }

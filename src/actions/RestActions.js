@@ -58,6 +58,7 @@ import {
   MAGENTO_GET_CUSTOM_OPTIONS,
 } from './types';
 import { logError } from '../helper/logger';
+import { priceSignByCode } from '../helper/price';
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
@@ -81,11 +82,44 @@ export const initMagento = () => {
 const getCurrency = async (dispatch) => {
   try {
     const data = await magento.guest.getCurrency();
-    dispatch({ type: MAGENTO_GET_CURRENCY, payload: data });
+    const displayCurrency = await getCurrencyToBeDisplayed(data);
+    dispatch({
+      type: MAGENTO_GET_CURRENCY,
+      payload: {
+        displayCurrency,
+        currencyData: data,
+      },
+    });
   } catch (error) {
     logError(error);
   }
 };
+
+async function getCurrencyToBeDisplayed(currencyData) {
+  let code = currencyData.default_display_currency_code;
+  let symbol = currencyData.default_display_currency_symbol || priceSignByCode(code);
+  let rate = 1;
+
+  if ('available_currency_codes' in currencyData && currencyData.available_currency_codes.length > 0) {
+    const previousSelectedCurrencyCode = await AsyncStorage.getItem('currency_code');
+    if (previousSelectedCurrencyCode && previousSelectedCurrencyCode !== code && previousSelectedCurrencyCode in currencyData.available_currency_codes) {
+      code = previousSelectedCurrencyCode;
+      symbol = priceSignByCode(code);
+    }
+    // TODO: If not and currency get from RNLocalize is supported, then set that and update AsyncStorage
+  }
+
+  const exchangeRate = currencyData.exchange_rates.find(_exchangeRate => _exchangeRate.currency_to === code);
+  if (exchangeRate && 'rate' in exchangeRate) {
+    rate = exchangeRate.rate;
+  }
+
+  return {
+    code,
+    symbol,
+    rate,
+  };
+}
 
 export const getHomeData = refreshing => async (dispatch) => {
   if (refreshing) {
