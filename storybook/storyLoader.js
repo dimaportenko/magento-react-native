@@ -8,13 +8,15 @@ function loadStories() {
 	require('./stories/Input.stories');
 	require('./stories/Spinner.stories');
 	require('./stories/Text.stories');
+	require('./stories/Price.stories');
 }
 
 const stories = [
-	'../src/components/common/Button/Button.stories',
-	'../src/components/common/Input/Input.stories',
-	'../src/components/common/Spinner/Spinner.stories',
-	'../src/components/common/Text/Text.stories'
+	'./stories/Button.stories',
+	'./stories/Input.stories',
+	'./stories/Spinner.stories',
+	'./stories/Text.stories',
+	'./stories/Price.stories',
 ];
 
 module.exports = {
