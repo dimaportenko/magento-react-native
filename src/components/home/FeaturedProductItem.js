@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { Text } from '../common';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
-import { finalPrice } from '../../helper/helper';
+import { finalPrice } from '../../helper/price';
 
 const FeaturedProductItem = ({
   onPress,

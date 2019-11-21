@@ -21,7 +21,7 @@ import ProductMedia from './ProductMedia';
 import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
-import { finalPrice } from '../../helper/helper';
+import { finalPrice } from '../../helper/price';
 
 class Product extends Component {
   static contextType = ThemeContext;

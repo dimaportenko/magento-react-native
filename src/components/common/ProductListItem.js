@@ -5,7 +5,7 @@ import FastImage from 'react-native-fast-image';
 import { Text } from './Text';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
-import { finalPrice } from '../../helper/helper';
+import { finalPrice } from '../../helper/price';
 
 const ProductListItem = ({
   product,
