@@ -85,6 +85,7 @@ class SearchScreen extends Component {
       gridColumnsValue={this.state.gridColumnsValue}
       performSort={this.performSort}
       currencySymbol={this.props.currencySymbol}
+      currencyRate={this.props.currencyRate}
     />
   );
 
@@ -144,11 +145,23 @@ const styles = {
 const mapStateToProps = ({ search, filters, magento }) => {
   const { sortOrder, priceFilter } = filters;
   const { products, totalCount, loadingMore } = search;
-  const { default_display_currency_symbol: currencySymbol } = magento.currency;
+  const {
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = magento;
   const canLoadMoreContent = products.length < totalCount;
 
   return {
-    products, totalCount, canLoadMoreContent, loadingMore, sortOrder, priceFilter, currencySymbol,
+    products,
+    sortOrder,
+    totalCount,
+    loadingMore,
+    priceFilter,
+    currencyRate,
+    currencySymbol,
+    canLoadMoreContent,
   };
 };
 

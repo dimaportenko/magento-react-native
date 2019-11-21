@@ -4,6 +4,7 @@ import {
   View,
   StyleSheet,
 } from 'react-native';
+import PropTypes from 'prop-types';
 import {
   getProductsForCategoryOrChild, addFilterData, getSearchProducts,
 } from '../../actions';
@@ -14,9 +15,13 @@ import { translate } from '../../i18n';
 class DrawerScreen extends Component {
   static contextType = ThemeContext;
 
-  static propTypes = {};
+  static propTypes = {
+    currencyRate: PropTypes.number,
+  };
 
-  static defaultProps = {};
+  static defaultProps = {
+    currencyRate: 1,
+  };
 
   state = {
     maxValue: '',
@@ -24,10 +29,11 @@ class DrawerScreen extends Component {
   };
 
   onApplyPressed = () => {
+    const { currencyRate } = this.props;
     const priceFilter = {
       price: {
         condition: 'from,to',
-        value: `${this.state.minValue},${this.state.maxValue}`,
+        value: `${(this.state.minValue / currencyRate).toFixed(2)},${(this.state.maxValue / currencyRate).toFixed(2)}`,
       },
     };
     this.props.addFilterData(priceFilter);
@@ -117,10 +123,16 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ category, filters, search }) => {
+const mapStateToProps = ({ category, filters, search, magento }) => {
   const currentCategory = category.current.category;
   const { searchInput } = search;
-  return { category: currentCategory, filters, searchInput };
+  const { currency: { displayCurrencyExchangeRate: currencyRate } } = magento;
+  return {
+    filters,
+    searchInput,
+    currencyRate,
+    category: currentCategory,
+  };
 };
 
 export default connect(mapStateToProps, {

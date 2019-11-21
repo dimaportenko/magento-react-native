@@ -4,17 +4,18 @@ import FastImage from 'react-native-fast-image';
 import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { magento } from '../../magento';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
-import { Spinner, Text } from '../common';
+import { Spinner, Text, Price } from '../common';
 import { removeFromCartLoading, removeFromCart } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 const CartListItem = ({
-  products,
   item,
   cart,
+  products,
+  currencyRate,
+  currencySymbol,
   removeFromCartLoading: _removeFromCartLoading,
   removeFromCart: _removeFromCart,
 }) => {
@@ -54,9 +55,13 @@ const CartListItem = ({
       <FastImage style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: imageUri }} />
       <View style={styles.infoStyle}>
         <Text style={styles.textStyle(theme)}>{item.name}</Text>
-        <Text style={styles.textStyle(theme)}>
-          {`${magento.storeConfig.default_display_currency_code} ${item.price}`}
-        </Text>
+        <View style={styles.textStyle(theme)}>
+          <Price
+            basePrice={item.price}
+            currencySymbol={currencySymbol}
+            currencyRate={currencyRate}
+          />
+        </View>
         <Text style={styles.textStyle(theme)}>
           {`${translate('common.quantity')}: ${item.qty}`}
         </Text>
@@ -129,6 +134,8 @@ CartListItem.propTypes = {
   products: PropTypes.object,
   item: PropTypes.object.isRequired,
   cart: PropTypes.object.isRequired,
+  currencySymbol: PropTypes.string.isRequired,
+  currencyRate: PropTypes.number.isRequired,
   removeFromCartLoading: PropTypes.func.isRequired,
   removeFromCart: PropTypes.func.isRequired,
 };
@@ -139,7 +146,10 @@ CartListItem.defaultProps = {
 
 const mapStateToProps = ({ cart }) => {
   const { products } = cart;
-  return { products, cart };
+  return {
+    cart,
+    products,
+  };
 };
 
 export default connect(mapStateToProps, { removeFromCartLoading, removeFromCart })(CartListItem);

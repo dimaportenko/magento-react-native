@@ -29,6 +29,7 @@ const Category = ({
   refreshing,
   navigation,
   currencySymbol,
+  currencyRate,
   addFilterData: _addFilterData,
   getProductsForCategoryOrChild: _getProductsForCategoryOrChild,
   setCurrentProduct: _setCurrentProduct,
@@ -87,6 +88,7 @@ const Category = ({
         performSort={performSort}
         sortOrder={sortOrder}
         currencySymbol={currencySymbol}
+        currencyRate={currencyRate}
       />
     </View>
   );
@@ -114,6 +116,7 @@ Category.propTypes = {
   refreshing: PropTypes.bool.isRequired,
   navigation: PropTypes.object.isRequired,
   currencySymbol: PropTypes.string.isRequired,
+  currencyRate: PropTypes.number.isRequired,
   addFilterData: PropTypes.func.isRequired,
   getProductsForCategoryOrChild: PropTypes.func.isRequired,
   setCurrentProduct: PropTypes.func.isRequired,
@@ -127,7 +130,12 @@ const mapStateToProps = (state) => {
   const {
     products, totalCount, loadingMore, refreshing,
   } = state.category;
-  const { default_display_currency_symbol: currencySymbol } = state.magento.currency;
+  const {
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = state.magento;
   const { priceFilter, sortOrder } = state.filters;
   const canLoadMoreContent = products.length < totalCount;
 
@@ -141,6 +149,7 @@ const mapStateToProps = (state) => {
     priceFilter,
     sortOrder,
     currencySymbol,
+    currencyRate,
   };
 };
 

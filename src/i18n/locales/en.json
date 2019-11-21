@@ -103,7 +103,8 @@
     "noPaymentMethod": "Payment methods not found",
     "noShippingMethod": "Shipping methods not found for selected address",
     "placeOrderButton": "Place Order",
-    "orderSuccessMessage": "Order placed successfully"
+    "orderSuccessMessage": "Order placed successfully",
+    "youWillBeCharged": "You will be charged"
   },
   "search": {
     "title": "Search",

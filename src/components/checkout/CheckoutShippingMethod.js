@@ -83,14 +83,14 @@ class CheckoutShippingMethod extends Component {
 
   renderShippingMethods() {
     const theme = this.context;
-    const { shipping } = this.props;
+    const { shipping, currencySymbol, currencyRate } = this.props;
 
     if (!shipping || !shipping.length) {
       return <Text>{translate('checkout.noShippingMethod')}</Text>;
     }
 
     const radioProps = shipping.map((item) => {
-      const label = `${item.carrier_title} - ${item.method_title} - ${item.amount}`;
+      const label = `${item.carrier_title} - ${item.method_title} - ${currencySymbol + (item.base_amount * currencyRate).toFixed(2)}`;
       return {
         label,
         value: item,
@@ -168,7 +168,7 @@ const styles = {
   }),
 };
 
-const mapStateToProps = ({ cart, checkout }) => {
+const mapStateToProps = ({ cart, checkout, magento }) => {
   const {
     email,
     password,
@@ -183,6 +183,12 @@ const mapStateToProps = ({ cart, checkout }) => {
     region,
     loading,
   } = checkout.ui;
+  const {
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = magento;
 
   const { shipping, selectedShipping } = checkout;
   const { cartId } = cart;
@@ -203,6 +209,8 @@ const mapStateToProps = ({ cart, checkout }) => {
     loading,
     shipping,
     selectedShipping,
+    currencySymbol,
+    currencyRate,
   };
 };
 

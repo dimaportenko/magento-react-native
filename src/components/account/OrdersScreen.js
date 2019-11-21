@@ -21,7 +21,6 @@ import { NAVIGATION_HOME_SCREEN_PATH } from '../../navigation/routes';
 const OrdersScreen = ({
   orders,
   customerId,
-  currencySymbol,
   refreshing,
   getOrdersForCustomer: _getOrdersForCustomer,
   navigation,
@@ -37,7 +36,9 @@ const OrdersScreen = ({
   };
 
   const renderItem = orderItem => (
-    <OrderListItem item={orderItem.item} currencySymbol={currencySymbol} />
+    <OrderListItem
+      item={orderItem.item}
+    />
   );
 
   const renderOrderList = () => {
@@ -115,7 +116,6 @@ const styles = {
 OrdersScreen.propTypes = {
   orders: PropTypes.arrayOf(PropTypes.object),
   customerId: PropTypes.number,
-  currencySymbol: PropTypes.string.isRequired,
   refreshing: PropTypes.bool,
   getOrdersForCustomer: PropTypes.func.isRequired,
   navigation: PropTypes.object.isRequired,
@@ -128,13 +128,11 @@ OrdersScreen.defaultProps = {
 
 const mapStateToProps = ({ account, magento }) => {
   const customerId = account.customer ? account.customer.id : null;
-  const { default_display_currency_symbol: currencySymbol } = magento.currency;
   const orders = account.orderData ? account.orderData.items : [];
   return {
     customerId,
     orders,
     refreshing: account.refreshing,
-    currencySymbol,
   };
 };
 
