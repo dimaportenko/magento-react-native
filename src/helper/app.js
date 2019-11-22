@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { magento } from '../magento';
 import { initMagento, getCart, setCurrentCustomer } from '../actions';
 import { logError } from './logger';

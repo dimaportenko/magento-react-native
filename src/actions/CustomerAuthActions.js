@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { magento } from '../magento';
 import {
   MAGENTO_PASSWORD_RESET_LOADING,

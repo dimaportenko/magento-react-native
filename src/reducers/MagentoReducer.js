@@ -1,6 +1,11 @@
 import { REHYDRATE } from 'redux-persist/es/constants';
 import {
-  MAGENTO_GET_COUNTRIES, MAGENTO_INIT, MAGENTO_INIT_ERROR, MAGENTO_STORE_CONFIG, MAGENTO_GET_CURRENCY,
+  MAGENTO_INIT,
+  MAGENTO_INIT_ERROR,
+  UI_CHANGE_CURRENCY,
+  MAGENTO_STORE_CONFIG,
+  MAGENTO_GET_CURRENCY,
+  MAGENTO_GET_COUNTRIES,
 } from '../actions/types';
 import { magento } from '../magento';
 
@@ -55,9 +60,19 @@ export default (state = INITIAL_STATE, action) => {
           displayCurrencyCode: code,
           displayCurrencySymbol: symbol,
           displayCurrencyExchangeRate: rate,
-        }
+        },
       };
     }
+    case UI_CHANGE_CURRENCY:
+      return {
+        ...state,
+        currency: {
+          ...state.currency,
+          displayCurrencyCode: action.payload.currencyCode,
+          displayCurrencySymbol: action.payload.currencySymbol,
+          displayCurrencyExchangeRate: action.payload.currencyRate,
+        },
+      };
     case MAGENTO_GET_COUNTRIES: {
       return { ...state, countries: action.payload };
     }

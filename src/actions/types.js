@@ -63,6 +63,7 @@ export const UI_ACCOUNT_CUSTOMER_DATA_UPDATE = 'ui_account_customer_data_update'
 export const UI_ACCOUNT_CUSTOMER_DATA_LOADING = 'ui_account_customer_data_loading';
 export const RESET_ACCOUNT_ADDRESS_UI = 'reset_account_address_ui';
 export const MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR = 'magento_add_account_address_error';
+export const UI_CHANGE_CURRENCY = 'Change_Display_Currency';
 
 export const UI_CHECKOUT_ACTIVE_SECTION = 'ui_checkout_active_section';
 
