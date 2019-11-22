@@ -15,7 +15,7 @@ const ModalSelect = ({
   const [value, setValue] = useState('');
 
   const _onChange = (option) => {
-    setValue(`${label} : ${option.label}`);
+    setValue(attribute === 'CurrencyCode' ? option.label : `${label} : ${option.label}`);
 
     if (onChange) {
       onChange(attribute, option.key);

@@ -10,6 +10,7 @@ import {
   UI_ACCOUNT_CUSTOMER_DATA_UPDATE,
   UI_ACCOUNT_CUSTOMER_DATA_LOADING,
   UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
+  UI_CHANGE_CURRENCY,
 } from './types';
 
 export const updateProductQtyInput = qty => ({
@@ -65,4 +66,13 @@ export const updateAccountAddressUI = (key, value) => ({
 export const accountAddressNextLoading = loading => ({
   type: UI_ACCOUNT_CUSTOMER_DATA_LOADING,
   payload: loading,
+});
+
+export const changeCurrency = (currencyCode, currencySymbol, currencyRate) => ({
+  type: UI_CHANGE_CURRENCY,
+  payload: {
+    currencyCode,
+    currencySymbol,
+    currencyRate,
+  },
 });

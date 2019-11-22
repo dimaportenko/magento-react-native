@@ -3,8 +3,8 @@ import {
   View,
   StatusBar,
   StyleSheet,
-  AsyncStorage,
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Spinner } from '../common';
 import {
   NAVIGATION_ACCOUNT_STACK_PATH,

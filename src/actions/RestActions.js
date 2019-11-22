@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import _ from 'lodash';
 import { magento } from '../magento';
 import { magentoOptions } from '../config/magento';
@@ -102,7 +102,7 @@ async function getCurrencyToBeDisplayed(currencyData) {
 
   if ('available_currency_codes' in currencyData && currencyData.available_currency_codes.length > 0) {
     const previousSelectedCurrencyCode = await AsyncStorage.getItem('currency_code');
-    if (previousSelectedCurrencyCode && previousSelectedCurrencyCode !== code && previousSelectedCurrencyCode in currencyData.available_currency_codes) {
+    if (previousSelectedCurrencyCode && previousSelectedCurrencyCode !== code && currencyData.available_currency_codes.includes(previousSelectedCurrencyCode)) {
       code = previousSelectedCurrencyCode;
       symbol = priceSignByCode(code);
     }
