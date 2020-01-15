@@ -9,7 +9,7 @@ import {
   resetFilters,
   setCurrentProduct,
 } from '../../actions';
-import { ProductList, HeaderIcon } from '../common';
+import { ProductList, HeaderGridToggleIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_SEARCH_PRODUCT_PATH } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
@@ -21,21 +21,15 @@ class SearchScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: translate('search.title'),
     headerBackTitle: ' ',
-    headerRight: (<HeaderIcon changeGridValueFunction={navigation.getParam('changeGridValueFunction')} />),
+    headerRight: (<HeaderGridToggleIcon />),
   });
 
   constructor(props) {
     super(props);
     this.state = {
       input: '',
-      gridColumnsValue: true,
     };
     this.getSearchProducts = _.debounce(this.props.getSearchProducts, 1000);
-  }
-
-  componentDidMount() {
-    const { navigation } = this.props;
-    navigation.setParams({ changeGridValueFunction: this.changeGridValueFunction });
   }
 
   onRowPress = (product) => {
@@ -70,10 +64,6 @@ class SearchScreen extends Component {
     this.props.getSearchProducts(this.state.input, null, sortOrder, this.props.priceFilter);
   };
 
-  changeGridValueFunction = () => {
-    this.setState({ gridColumnsValue: !this.state.gridColumnsValue });
-  };
-
   renderContent = () => (
     <ProductList
       products={this.props.products}
@@ -82,7 +72,7 @@ class SearchScreen extends Component {
       canLoadMoreContent={this.props.canLoadMoreContent}
       searchIndicator
       onRowPress={this.onRowPress}
-      gridColumnsValue={this.state.gridColumnsValue}
+      gridColumnsValue={this.props.listTypeGrid}
       performSort={this.performSort}
       currencySymbol={this.props.currencySymbol}
       currencyRate={this.props.currencyRate}
@@ -142,7 +132,7 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ search, filters, magento }) => {
+const mapStateToProps = ({ search, filters, magento, ui }) => {
   const { sortOrder, priceFilter } = filters;
   const { products, totalCount, loadingMore } = search;
   const {
@@ -152,6 +142,7 @@ const mapStateToProps = ({ search, filters, magento }) => {
     },
   } = magento;
   const canLoadMoreContent = products.length < totalCount;
+  const { listTypeGrid } = ui;
 
   return {
     products,
@@ -160,6 +151,7 @@ const mapStateToProps = ({ search, filters, magento }) => {
     loadingMore,
     priceFilter,
     currencyRate,
+    listTypeGrid,
     currencySymbol,
     canLoadMoreContent,
   };

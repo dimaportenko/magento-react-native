@@ -11,6 +11,7 @@ import {
   UI_ACCOUNT_CUSTOMER_DATA_LOADING,
   UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
   UI_CHANGE_CURRENCY,
+  UI_PRODUCT_LIST_TYPE_GRID,
 } from './types';
 
 export const updateProductQtyInput = qty => ({
@@ -75,4 +76,9 @@ export const changeCurrency = (currencyCode, currencySymbol, currencyRate) => ({
     currencySymbol,
     currencyRate,
   },
+});
+
+export const uiProductListTypeGrid = data => ({
+  type: UI_PRODUCT_LIST_TYPE_GRID,
+  payload: data,
 });

@@ -1,6 +1,7 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -48,6 +49,7 @@ const persistConfig = {
     searchSubsetBlacklistFilter,
   ],
   storage: AsyncStorage,
+  stateReconciler: autoMergeLevel2,
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

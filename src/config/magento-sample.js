@@ -3,7 +3,7 @@
  * Follow instructions: https://github.com/troublediehard/magento-react-native/wiki/Setup
  *
  * url                     : Base url of the magento website
- * home_cms_block_id       : Block id which conatin json data,
+ * home_cms_block_id       : Block id which contain json data,
  *                           which will be shown in Home screen
  * access_token            : Token to access magento API, without it
  *                           app won't work

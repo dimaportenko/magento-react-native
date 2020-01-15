@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import {
   View,
   RefreshControl,
@@ -11,7 +11,7 @@ import {
   setCurrentProduct,
   updateProductsForCategoryOrChild,
 } from '../../actions';
-import { ProductList, HeaderIcon } from '../common';
+import { ProductList, HeaderGridToggleIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import {
   NAVIGATION_HOME_PRODUCT_PATH,
@@ -36,12 +36,11 @@ const Category = ({
   updateProductsForCategoryOrChild: _updateProductsForCategoryOrChild,
 }) => {
   const theme = useContext(ThemeContext);
-  const [gridColumnsValue, setGridColumnsValue] = useState(true);
+  const listTypeGrid = useSelector(({ ui }) => ui.listTypeGrid );
 
   useEffect(() => {
     _addFilterData({ categoryScreen: true });
     _getProductsForCategoryOrChild(category);
-    navigation.setParams({ changeGridValueFunction });
   }, []);
 
   const onRowPress = (product) => {
@@ -68,8 +67,6 @@ const Category = ({
     _getProductsForCategoryOrChild(category, null, _sortOrder, priceFilter);
   };
 
-  const changeGridValueFunction = () => setGridColumnsValue(!gridColumnsValue);
-
   return (
     <View style={styles.containerStyle(theme)}>
       <ProductList
@@ -84,7 +81,7 @@ const Category = ({
         canLoadMoreContent={canLoadMoreContent}
         onRowPress={onRowPress}
         navigation={navigation}
-        gridColumnsValue={gridColumnsValue}
+        gridColumnsValue={listTypeGrid}
         performSort={performSort}
         sortOrder={sortOrder}
         currencySymbol={currencySymbol}
@@ -97,7 +94,7 @@ const Category = ({
 Category.navigationOptions = ({ navigation }) => ({
   title: navigation.state.params.title.toUpperCase(),
   headerBackTitle: ' ',
-  headerRight: (<HeaderIcon changeGridValueFunction={navigation.getParam('changeGridValueFunction')} />),
+  headerRight: (<HeaderGridToggleIcon />),
 });
 
 const styles = {

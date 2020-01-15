@@ -1,28 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MaterialHeaderButtons, Item } from './Header';
+import { uiProductListTypeGrid } from '../../actions';
 
-const HeaderIcon = ({
-  changeGridValueFunction = () => {},
-}) => {
-  const GRID_LAYOUT_ICON = 'grid-on';
-  const LIST_LAYOUT_ICON = 'list';
-  const [icon, setIcon] = useState(GRID_LAYOUT_ICON);
+const HeaderGridToggleIcon = () => {
+  const dispatch = useDispatch();
+  const isGrid = useSelector(({ ui }) => ui.listTypeGrid );
 
   const onPress = () => {
-    setIcon(icon === GRID_LAYOUT_ICON ? LIST_LAYOUT_ICON : GRID_LAYOUT_ICON);
-    changeGridValueFunction();
+    dispatch(uiProductListTypeGrid(!isGrid));
   };
 
   return (
     <MaterialHeaderButtons>
-      <Item title="Change layout" iconName={icon} onPress={onPress} />
+      <Item title="Change layout" iconName={isGrid ? 'list' : 'grid-on'} onPress={onPress} />
     </MaterialHeaderButtons>
   );
 };
 
-HeaderIcon.propTypes = {
+HeaderGridToggleIcon.propTypes = {
   changeGridValueFunction: PropTypes.func,
 };
 
-export { HeaderIcon };
+export { HeaderGridToggleIcon };

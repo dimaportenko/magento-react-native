@@ -83,3 +83,5 @@ export const MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT = 'magento_update_refre
 
 export const ADD_FILTER_DATA = 'add_filter_data';
 export const RESET_FILTERS_DATA = 'reset_filters_data';
+
+export const UI_PRODUCT_LIST_TYPE_GRID = 'ui_product_list_type_grid';
