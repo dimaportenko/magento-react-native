@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useContext } from 'react';
 import Swiper from 'react-native-swiper';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -6,11 +6,11 @@ import { magento } from '../../magento';
 import { Spinner } from '../common';
 import { ThemeContext } from '../../theme';
 
-class ProductMedia extends PureComponent {
-  static contextType = ThemeContext;
+const ProductMedia = (props) => {
+  const theme = useContext(ThemeContext);
 
-  renderMedia() {
-    const { media } = this.props;
+  const renderMedia = () => {
+    const { media } = props;
 
     if (!media) {
       return <Spinner />;
@@ -21,14 +21,13 @@ class ProductMedia extends PureComponent {
         pagingEnabled
         autoplay={false}
       >
-        {this.renderMediaItems()}
+        {renderMediaItems()}
       </Swiper>
     );
   }
 
-  renderMediaItems() {
-    const theme = this.context;
-    const { media } = this.props;
+  const renderMediaItems = () => {
+    const { media } = props;
 
     return media.map((item) => {
       console.log('media item');
@@ -44,14 +43,11 @@ class ProductMedia extends PureComponent {
     });
   }
 
-  render() {
-    const theme = this.context;
-    return (
-      <View style={styles.imageContainer(theme)}>
-        {this.renderMedia()}
-      </View>
-    );
-  }
+  return (
+    <View style={styles.imageContainer(theme)}>
+      {renderMedia()}
+    </View>
+  );
 }
 
 const styles = {

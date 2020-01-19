@@ -11,23 +11,18 @@ import { Spinner } from './components/common';
 
 onAppStart(store);
 
-class App extends Component {
-  render() {
-    return (
-      <Provider store={store}>
-        <ThemeProvider theme={theme}>
-          <PersistGate loading={<Spinner />} persistor={persistor}>
-            <Navigator
-              ref={(navigatorRef) => {
-                NavigationService.setTopLevelNavigator(navigatorRef);
-              }}
-            />
-          </PersistGate>
-        </ThemeProvider>
-      </Provider>
-    );
-  }
-}
-
+const App = () => (
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <PersistGate loading={<Spinner />} persistor={persistor}>
+        <Navigator
+          ref={(navigatorRef) => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+      </PersistGate>
+    </ThemeProvider>
+  </Provider>
+);
 
 export default App;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   View,
   StatusBar,
@@ -14,21 +14,19 @@ import { magento } from '../../magento';
 import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
 
+const AuthLoading = (props) => {
+  const theme = useContext(ThemeContext);
 
-class AuthLoading extends Component {
-  static contextType = ThemeContext;
+  useEffect(() => {
+    bootstrapAsync();
+  }, []);
 
-  constructor() {
-    super();
-    this.bootstrapAsync();
-  }
-
-  bootstrapAsync = async () => {
+  const bootstrapAsync = async () => {
     try {
       const customerToken = await AsyncStorage.getItem('customerToken');
       magento.setCustomerToken(customerToken);
 
-      this.props.navigation.navigate(
+      props.navigation.navigate(
         customerToken
           ? NAVIGATION_ACCOUNT_STACK_PATH
           : NAVIGATION_LOGIN_STACK_PATH,
@@ -36,19 +34,16 @@ class AuthLoading extends Component {
     } catch (e) {
       logError(e);
       // TODO: add error screen via switch navigation
-      this.props.navigation.navigate(NAVIGATION_LOGIN_STACK_PATH);
+      props.navigation.navigate(NAVIGATION_LOGIN_STACK_PATH);
     }
   };
 
-  render() {
-    const theme = this.context;
-    return (
-      <View style={styles.container(theme)}>
-        <Spinner />
-        <StatusBar barStyle="default" />
-      </View>
-    );
-  }
+  return (
+    <View style={styles.container(theme)}>
+      <Spinner />
+      <StatusBar barStyle="default" />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

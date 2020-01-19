@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   View, TouchableOpacity, LayoutAnimation,
 } from 'react-native';
@@ -11,12 +11,12 @@ import { NAVIGATION_CATEGORY_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
 
-class CategoryTreeListItem extends Component {
-  static contextType = ThemeContext;
+const CategoryTreeListItem = (props) => {
+  const [expanded, setExpanded] = useState(false);
+  const dispatch = useDispatch();
+  const theme = useContext(ThemeContext);
 
-  state = { expanded: false };
-
-  componentDidUpdate() {
+  useEffect(() => {
     const switchAnimation = {
       duration: 150,
       update: {
@@ -25,31 +25,26 @@ class CategoryTreeListItem extends Component {
       },
     };
     LayoutAnimation.configureNext(switchAnimation);
-  }
+  });
 
-  onExpandPress() {
-    this.setState({ ...this.state, expanded: !this.state.expanded });
-  }
+  const onExpandPress = () => setExpanded(!expanded);
 
-  onRowPress() {
-    const { category } = this.props;
-    this.props.resetFilters();
-    this.props.setCurrentCategory({ category });
+  const onRowPress = () => {
+    const { category } = props;
+    dispatch(resetFilters());
+    dispatch(setCurrentCategory({ category }));
     NavigationService.navigate(NAVIGATION_CATEGORY_PATH, {
       title: category.name,
     });
-  }
+  };
 
-  renderExpandButton() {
-    const theme = this.context;
-    const { category } = this.props;
-    const { expanded } = this.state;
-    if (category.children_data.length) {
+  const renderExpandButton = () => {
+    if (props.category?.children_data?.length) {
       const icon = expanded
         ? 'ios-arrow-dropdown'
         : 'ios-arrow-dropright';
       return (
-        <TouchableOpacity onPress={this.onExpandPress.bind(this)}>
+        <TouchableOpacity onPress={onExpandPress}>
           <Icon
             iconStyle={styles.dropIcon(theme)}
             size={20}
@@ -60,11 +55,10 @@ class CategoryTreeListItem extends Component {
         </TouchableOpacity>
       );
     }
-  }
+  };
 
-  renderItem() {
-    const theme = this.context;
-    const { category } = this.props;
+  const renderItem = () => {
+    const { category } = props;
     const titleStyle = {
       alignSelf: 'flex-start',
       paddingLeft: 10 * category.level,
@@ -73,34 +67,32 @@ class CategoryTreeListItem extends Component {
     return (
       <View>
         <TouchableOpacity
-          onPress={this.onRowPress.bind(this)}
+          onPress={onRowPress}
           style={styles.rowStyles(theme)}
         >
           <Text type="heading" style={titleStyle}>{category.name}</Text>
-          {this.renderExpandButton()}
+          {renderExpandButton()}
         </TouchableOpacity>
       </View>
     );
-  }
+  };
 
-  renderChildren() {
-    if (this.state.expanded) {
+  const renderChildren = () => {
+    if (expanded) {
       return (
         <View>
-          <CategoryTreeList categories={this.props.category.children_data} />
+          <CategoryTreeList categories={props.category?.children_data} />
         </View>
       );
     }
-  }
+  };
 
-  render() {
-    return (
-      <View>
-        {this.renderItem()}
-        {this.renderChildren()}
-      </View>
-    );
-  }
+  return (
+    <View>
+      {renderItem()}
+      {renderChildren()}
+    </View>
+  );
 }
 
 const styles = {
@@ -120,4 +112,4 @@ const styles = {
   }),
 };
 
-export default connect(null, { setCurrentCategory, resetFilters })(CategoryTreeListItem);
+export default CategoryTreeListItem;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import {
   View,
@@ -12,81 +12,66 @@ import { Button, Text, Input } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
-class DrawerScreen extends Component {
-  static contextType = ThemeContext;
+const DrawerScreen = (props) => {
+  const [maxValue, setMaxValue] = useState('');
+  const [minValue, setMinValue] = useState('');
+  const theme = useContext(ThemeContext);
 
-  static propTypes = {
-    currencyRate: PropTypes.number,
-  };
-
-  static defaultProps = {
-    currencyRate: 1,
-  };
-
-  state = {
-    maxValue: '',
-    minValue: '',
-  };
-
-  onApplyPressed = () => {
-    const { currencyRate } = this.props;
+  const onApplyPressed = () => {
+    const { currencyRate } = props;
     const priceFilter = {
       price: {
         condition: 'from,to',
-        value: `${(this.state.minValue / currencyRate).toFixed(2)},${(this.state.maxValue / currencyRate).toFixed(2)}`,
+        value: `${(minValue / currencyRate).toFixed(2)},${(maxValue / currencyRate).toFixed(2)}`,
       },
     };
-    this.props.addFilterData(priceFilter);
-    if (this.props.filters.categoryScreen) {
-      this.props.getProductsForCategoryOrChild(this.props.category, null, this.props.filters.sortOrder, priceFilter);
-      this.props.addFilterData({ categoryScreen: false });
+    props.addFilterData(priceFilter);
+    if (props.filters.categoryScreen) {
+      props.getProductsForCategoryOrChild(props.category, null, props.filters.sortOrder, priceFilter);
+      props.addFilterData({ categoryScreen: false });
     } else {
-      this.props.getSearchProducts(this.props.searchInput, null, this.props.filters.sortOrder, priceFilter);
+      props.getSearchProducts(props.searchInput, null, props.filters.sortOrder, priceFilter);
     }
-    this.props.navigation.closeDrawer();
+    props.navigation.closeDrawer();
   };
 
-  render() {
-    const theme = this.context;
-    const {
-      buttonStyle,
-      container,
-      InputContainer,
-      textStyle,
-      minInputStyle,
-      maxInputStyle,
-      dashTextStyle,
-    } = styles;
+  const {
+    container,
+    InputContainer,
+    textStyle,
+    minInputStyle,
+    maxInputStyle,
+    dashTextStyle,
+  } = styles;
 
-    return (
-      <View style={container(theme)}>
-        <View style={InputContainer(theme)}>
-          <Text type="heading" style={textStyle(theme)}>Price:</Text>
-          <Input
-            containerStyle={minInputStyle}
-            placeholder={translate('common.min')}
-            value={this.state.minValue}
-            keyboardType="numeric"
-            onChangeText={minValue => this.setState({ minValue })}
-          />
-          <Text style={dashTextStyle(theme)}>-</Text>
-          <Input
-            containerStyle={maxInputStyle}
-            value={this.state.maxValue}
-            placeholder={translate('common.max')}
-            keyboardType="numeric"
-            onChangeText={maxValue => this.setState({ maxValue })}
-          />
-        </View>
-        <View style={styles.buttonStyleWrap}>
-          <Button onPress={this.onApplyPressed} style={styles.buttonStyle}>
-            {translate('common.apply')}
-          </Button>
-        </View>
+  return (
+    <View style={container(theme)}>
+      <View style={InputContainer(theme)}>
+        <Text type="heading" style={textStyle(theme)}>Price:</Text>
+        <Input
+          containerStyle={minInputStyle}
+          placeholder={translate('common.min')}
+          value={minValue}
+          keyboardType="numeric"
+          onChangeText={minValue => setMinValue(minValue)}
+        />
+        <Text style={dashTextStyle(theme)}>-</Text>
+        <Input
+          containerStyle={maxInputStyle}
+          value={maxValue}
+          placeholder={translate('common.max')}
+          keyboardType="numeric"
+          onChangeText={maxValue => setMaxValue(maxValue)}
+        />
       </View>
-    );
-  }
-}
+      <View style={styles.buttonStyleWrap}>
+        <Button onPress={onApplyPressed} style={styles.buttonStyle}>
+          {translate('common.apply')}
+        </Button>
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: theme => ({
@@ -122,6 +107,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 });
+
+DrawerScreen.propTypes = {
+  currencyRate: PropTypes.number,
+};
+
+DrawerScreen.defaultProps = {
+  currencyRate: 1,
+};
 
 const mapStateToProps = ({ category, filters, search, magento }) => {
   const currentCategory = category.current.category;
