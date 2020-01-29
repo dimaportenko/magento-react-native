@@ -59,6 +59,7 @@ import {
 } from './types';
 import { logError } from '../helper/logger';
 import { priceSignByCode } from '../helper/price';
+import { checkoutSetActiveSection } from './UIActions';
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
@@ -420,6 +421,7 @@ const dispatchAddToCart = async (dispatch, cartId, item) => {
     } else {
       result = await magento.guest.addItemToCart(cartId, item);
     }
+    dispatch(checkoutSetActiveSection(1));
     dispatch({ type: MAGENTO_ADD_TO_CART, payload: result });
     dispatchGetGuestCart(dispatch, cartId);
   } catch (e) {
@@ -643,6 +645,7 @@ export const removeFromCart = ({ cart, item }) => async (dispatch) => {
     console.log('removeFromCart', cart, item);
     if (cart.quote) {
       dispatchRemoveFromCart(dispatch, cart, item);
+      dispatch(checkoutSetActiveSection(1));
     }
   } catch (error) {
     logError(error);
