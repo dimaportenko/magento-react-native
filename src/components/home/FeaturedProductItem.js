@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
@@ -6,6 +6,7 @@ import { Text, Price } from '../common';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
 import { finalPrice } from '../../helper/price';
+import { useSelector } from 'react-redux';
 
 const FeaturedProductItem = ({
   onPress,
@@ -14,6 +15,24 @@ const FeaturedProductItem = ({
   product,
 }) => {
   const theme = useContext(ThemeContext);
+  const [themeStyles, setThemeStyle] = useState({});
+  const [imageURI, setImageURI] = useState('');
+  const price = useMemo(
+    () => finalPrice(product.custom_attributes, product.price),
+    [product.custom_attributes, product.price]
+  );
+  useEffect(
+    () => setImageURI(getProductThumbnailFromAttribute(product)),
+    [product]
+  );
+   useEffect(
+    () => setThemeStyle({
+      image: styles.imageStyle(theme),
+      text: styles.textStyle(theme),
+    }),
+    [theme]
+  );
+
   return (
     <View style={styles.container(theme)}>
       <TouchableOpacity
@@ -21,14 +40,14 @@ const FeaturedProductItem = ({
         onPress={() => { onPress(product); }}
       >
         <FastImage
-          style={styles.imageStyle(theme)}
+          style={themeStyles.image}
           resizeMode="contain"
-          source={{ uri: getProductThumbnailFromAttribute(product) }}
+          source={{ uri: imageURI }}
         />
         <View style={styles.infoStyle}>
           <Text
             type="subheading"
-            style={styles.textStyle(theme)}
+            style={themeStyles.text}
             ellipsizeMode="tail"
             numberOfLines={2}
           >
@@ -36,7 +55,7 @@ const FeaturedProductItem = ({
           </Text>
           <Price
             basePrice={product.price}
-            discountPrice={finalPrice(product.custom_attributes, product.price)}
+            discountPrice={price}
             currencySymbol={currencySymbol}
             currencyRate={currencyRate}
           />
