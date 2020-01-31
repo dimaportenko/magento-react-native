@@ -36,4 +36,5 @@ export const currencySymbols = Object.freeze({
   CHF: 'CHF',
   INR: '₹',
   KWD: 'د.ك',
+  RON: 'RON',
 });
