@@ -129,7 +129,9 @@ export const getHomeData = refreshing => async (dispatch) => {
 
   try {
     const storeConfig = await magento.admin.getStoreConfig();
-    magento.setStoreConfig(storeConfig[0]);
+    const config = storeConfig.filter(conf => conf.code === magentoOptions.store);
+    magento.setStoreConfig(config);
+
     const value = await magento.getHomeData();
     if (!value) {
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
