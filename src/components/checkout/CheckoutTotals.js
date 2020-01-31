@@ -42,12 +42,6 @@ class CheckoutTotals extends Component {
   }
 
   goHome = () => {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: 'Cart' })],
-    });
-
-    this.props.navigation.dispatch(resetAction);
     this.props.navigation.navigate(NAVIGATION_HOME_STACK_PATH);
   };
 
