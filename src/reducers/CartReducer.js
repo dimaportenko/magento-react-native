@@ -11,6 +11,8 @@ import {
   MAGENTO_LOGOUT,
   MAGENTO_CURRENT_PRODUCT,
   MAGENTO_LOGIN_SUCCESS,
+  MAGENTO_COUPON_LOADING,
+  MAGENTO_COUPON_ERROR,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -22,6 +24,8 @@ const INITIAL_STATE = {
   products: {},
   refreshing: false,
   removingItemId: false,
+  couponLoading: false,
+  couponError: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -43,7 +47,7 @@ export default (state = INITIAL_STATE, action) => {
     case NAVIGATION_GO_TO_SCREEN:
       return { ...state, errorMessage: false };
     case MAGENTO_GET_CART:
-      return { ...state, quote: action.payload };
+      return { ...state, couponError: '', quote: action.payload };
     case MAGENTO_REMOVE_FROM_CART_LOADING:
       return { ...state, removingItemId: action.payload };
     case MAGENTO_REMOVE_FROM_CART:
@@ -56,6 +60,11 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_LOGIN_SUCCESS: {
       return { ...state, cartId: false, quote: { items: [] } };
     }
+    case MAGENTO_COUPON_LOADING:
+      const couponError = action.payload ? '' : state.couponError;
+      return { ...state, couponLoading: action.payload, couponError };
+    case MAGENTO_COUPON_ERROR:
+      return { ...state, couponError: action.payload };
     default:
       return state;
   }

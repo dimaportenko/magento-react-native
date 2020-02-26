@@ -7,6 +7,12 @@ export default magento => ({
 
   getGuestCart: cartId => magento.get(`/V1/guest-carts/${cartId}`, undefined, undefined, GUEST_TYPE),
 
+  addCouponToCart: (cartId, couponCode) => magento.put(`/V1/guest-carts/${cartId}/coupons/${couponCode}`, undefined, undefined, GUEST_TYPE),
+
+  removeCouponFromCart: (cartId) => magento.delete(`/V1/guest-carts/${cartId}/coupons`, undefined, GUEST_TYPE),
+
+  getCartTotals: (cartId) => magento.get(`/V1/guest-carts/${cartId}/totals`, undefined, undefined, GUEST_TYPE),
+
   addGuestCartBillingAddress: (cartId, address) => magento.post(`/V1/guest-carts/${cartId}/billing-address`, address, GUEST_TYPE),
 
   guestCartEstimateShippingMethods: (cartId, address) => magento.post(`/V1/guest-carts/${cartId}/estimate-shipping-methods`, address, GUEST_TYPE),

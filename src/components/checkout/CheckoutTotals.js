@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  Alert, View, StyleSheet,
+  Alert, View, StyleSheet, TextInput, Dimensions,
 } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -11,15 +11,22 @@ import {
   placeGuestCartOrder,
   getCart,
   checkoutSetActiveSection,
+  removeCouponFromCart,
+  addCouponToCart,
 } from '../../actions';
 import { NAVIGATION_HOME_STACK_PATH } from '../../navigation/routes';
 import { Button, Spinner, Text, Price } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
+import { Row, Spacer } from 'react-native-markup-kit';
 
 class CheckoutTotals extends Component {
   static contextType = ThemeContext;
+
+  state = {
+    couponCodeInput: '',
+  };
 
   onPlacePressed = () => {
     const { cartId, selectedPayment } = this.props;
@@ -71,6 +78,20 @@ class CheckoutTotals extends Component {
             currencyRate={currencyRate}
           />
         </View>
+        {
+          !!this.props?.totals?.coupon_code && (
+            <View style={styles.row}>
+              <Text>
+                {`${translate('common.discount')}: `}
+              </Text>
+              <Price
+                basePrice={this.props?.totals?.discount_amount}
+                currencySymbol={currencySymbol}
+                currencyRate={currencyRate}
+              />
+            </View>
+          )
+        }
         <View style={styles.row}>
           <Text>
             {`${translate('common.shipping')}: `}
@@ -134,12 +155,25 @@ class CheckoutTotals extends Component {
     );
   }
 
+  componentDidMount() {
+    if (this.props?.totals?.coupon_code) {
+      this.setState({
+        couponCodeInput: this.props?.totals?.coupon_code,
+      });
+    }
+  }
+
   componentDidUpdate(prevProps) {
     if (this.props.orderId && this.props.orderId !== prevProps.orderId) {
       this.showPopup(translate('common.order'), translate('checkout.orderSuccessMessage'));
     }
     if (this.props.errorMessage && this.props.errorMessage !== prevProps.errorMessage) {
       this.showPopup(translate('errors.error'), this.props.errorMessage);
+    }
+    if (this.props?.totals?.coupon_code !== prevProps?.totals?.coupon_code) {
+      this.setState({
+        couponCodeInput: this.props?.totals?.coupon_code,
+      });
     }
   }
 
@@ -155,10 +189,58 @@ class CheckoutTotals extends Component {
     );
   }
 
+  couponAction = () => {
+    if (!!this.props?.totals?.coupon_code) {
+      this.props.removeCouponFromCart();
+    } else {
+      this.props.addCouponToCart(this.state.couponCodeInput);
+    }
+  };
+
+  renderCoupon = () => {
+    const theme = this.context;
+
+    return (
+      <View>
+        <View style={[styles.row, { justifyContent: 'space-between' } ]}>
+          <View style={styles.couponInputContainer(theme)}>
+            <TextInput
+              // style={{ width: '100%' }}
+              editable={!this.props?.totals?.coupon_code}
+              value={this.state.couponCodeInput}
+              placeholder="Coupon Code"
+              onChangeText={value => this.setState({ couponCodeInput: value })}
+            />
+          </View>
+          <Spacer size={50} />
+          {
+            this.props.couponLoading
+              ? (
+                <View style={{ width: 100 }}>
+                  <Spinner />
+                </View>
+              )
+              : (
+                <Button onPress={this.couponAction} style={{ width: 100, alignSelf: 'auto' }}>
+                  {!!this.props?.totals?.coupon_code ? 'Cancel' : 'Apply'}
+                </Button>
+              )
+          }
+        </View>
+        {
+          !!(this.props?.couponError.length) && (
+            <Text style={{ color: 'red', marginBottom: 10, textAlign: 'center' }}>{this.props.couponError}</Text>
+          )
+        }
+      </View>
+    );
+  };
+
   render() {
     const theme = this.context;
     return (
       <View style={styles.container(theme)}>
+        {this.renderCoupon()}
         {this.renderTotals()}
         {this.renderButton()}
       </View>
@@ -191,10 +273,17 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: theme.dimens.WINDOW_WIDTH * 0.9,
   }),
+  couponInputContainer: theme => ({
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    marginBottom: 20,
+    padding: 10,
+    width: Dimensions.get('window').width - 100 - 30 - 50,
+  }),
 });
 
 const mapStateToProps = ({ cart, checkout, magento }) => {
-  const { cartId } = cart;
+  const { cartId, couponLoading, couponError } = cart;
   const { loading } = checkout.ui;
   const {
     payments, selectedPayment, totals, orderId, errorMessage,
@@ -217,6 +306,8 @@ const mapStateToProps = ({ cart, checkout, magento }) => {
     currencyCode,
     currencySymbol,
     currencyRate,
+    couponError,
+    couponLoading,
   };
 };
 
@@ -227,4 +318,6 @@ export default connect(mapStateToProps, {
   checkoutOrderPopupShown,
   placeGuestCartOrder,
   getCart,
+  addCouponToCart,
+  removeCouponFromCart,
 })(CheckoutTotals);

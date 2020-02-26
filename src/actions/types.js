@@ -85,3 +85,7 @@ export const ADD_FILTER_DATA = 'add_filter_data';
 export const RESET_FILTERS_DATA = 'reset_filters_data';
 
 export const UI_PRODUCT_LIST_TYPE_GRID = 'ui_product_list_type_grid';
+
+export const MAGENTO_COUPON_LOADING = 'MAGENTO_COUPON_LOADING';
+export const MAGENTO_COUPON_ERROR = 'MAGENTO_COUPON_ERROR';
+export const MAGENTO_CHECKOUT_TOTALS = 'MAGENTO_CHECKOUT_TOTALS';

@@ -10,6 +10,7 @@ import {
   MAGENTO_PLACE_GUEST_CART_ORDER,
   MAGENTO_ADD_SHIPPING_TO_CART,
   MAGENTO_ERROR_MESSAGE_CART_ORDER,
+  MAGENTO_CHECKOUT_TOTALS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -52,6 +53,9 @@ export default (state = INITIAL_STATE, action) => {
         payments: action.payload.payment_methods,
         totals: action.payload.totals,
       };
+    }
+    case MAGENTO_CHECKOUT_TOTALS: {
+      return { ...state, totals: action.payload };
     }
     case MAGENTO_PLACE_GUEST_CART_ORDER:
       return { ...state, orderId: action.payload };

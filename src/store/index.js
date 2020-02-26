@@ -25,7 +25,7 @@ const accountSubsetBlacklistFilter = createBlacklistFilter(
 
 const cartSubsetBlacklistFilter = createBlacklistFilter(
   'cart',
-  ['addToCartLoading', 'errorMessage', 'refreshing'],
+  ['addToCartLoading', 'errorMessage', 'refreshing', 'couponLoading'],
 );
 
 const homeSubsetBlacklistFilter = createBlacklistFilter(

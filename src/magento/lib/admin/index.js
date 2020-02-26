@@ -32,6 +32,12 @@ export default magento => ({
 
   updateCustomerData: (id, customer) => magento.put(`/V1/customers/${id}`, customer, undefined, ADMIN_TYPE),
 
+  addCouponToCart: (cartId, couponCode) => magento.put(`/V1/carts/${cartId}/coupons/${couponCode}`, undefined, undefined, ADMIN_TYPE),
+
+  removeCouponFromCart: (cartId) => magento.delete(`/V1/carts/${cartId}/coupons`, undefined, ADMIN_TYPE),
+
+  getCartTotals: (cartId) => magento.get(`/V1/carts/${cartId}/totals`, undefined, undefined, ADMIN_TYPE),
+
   getCategoriesTree: () => magento.get('/V1/categories', undefined, undefined, ADMIN_TYPE),
 
   getCategory: id => magento.get(`/V1/categories/${id}`, undefined, undefined, ADMIN_TYPE),
