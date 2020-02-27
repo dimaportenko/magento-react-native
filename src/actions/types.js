@@ -38,6 +38,7 @@ export const MAGENTO_GET_FILTERED_PRODUCTS = 'magento_get_filtered_products';
 
 export const NAVIGATION_GO_TO_SCREEN = 'navigation_go_to_screen';
 
+export const MAGENTO_CREATE_CUSTOMER = 'magento_create_customer';
 export const MAGENTO_CREATE_CUSTOMER_LOADING = 'magento_checkout_create_customer_loading';
 export const MAGENTO_CREATE_CUSTOMER_SUCCESS = 'magento_checkout_create_customer_success';
 export const MAGENTO_CREATE_CUSTOMER_ERROR = 'magento_checkout_create_customer_error';

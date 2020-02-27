@@ -137,7 +137,7 @@ export const getHomeData = refreshing => async (dispatch) => {
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
       return;
     }
-    console.log('home', value);
+    logError(value);
     const payload = JSON.parse(value.content.replace(/<\/?[^>]+(>|$)/g, ''));
     dispatch({ type: HOME_SCREEN_DATA, payload });
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });

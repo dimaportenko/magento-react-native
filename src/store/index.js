@@ -63,4 +63,5 @@ export const store = createStore(
 
 export const persistor = persistStore(store);
 
-// persistor.purge();
+// TODO: remove `persistor.purge()` to persist your application data
+persistor.purge();
