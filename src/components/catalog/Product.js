@@ -282,7 +282,7 @@ class Product extends Component {
 
     if (!product.children || !selectedKeys.length) return;
 
-    if (selectedKeys.length === this.props.options.length) {
+    if (selectedKeys.length === this.props.options?.length) {
       const searchOption = {};
       selectedKeys.forEach((attribute_id) => {
         const code = this.props.attributes[attribute_id].attributeCode;
