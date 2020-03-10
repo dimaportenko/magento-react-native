@@ -8,7 +8,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { cartItemProduct, getCart } from '../../actions';
+import { cartItemProduct, refreshCart } from '../../actions';
 import CartListItem from './CartListItem';
 import NavigationService from '../../navigation/NavigationService';
 import {
@@ -31,7 +31,7 @@ class Cart extends Component {
     cart: PropTypes.object,
     products: PropTypes.object,
     cartItemProduct: PropTypes.func,
-    getCart: PropTypes.func,
+    refreshCart: PropTypes.func,
     refreshing: PropTypes.bool,
   };
 
@@ -62,7 +62,7 @@ class Cart extends Component {
   };
 
   onRefresh = () => {
-    this.props.getCart(true);
+    this.props.refreshCart();
   };
 
   updateCartItemsProducts = () => {
@@ -247,4 +247,4 @@ const mapStateToProps = ({ cart, magento }) => {
   };
 };
 
-export default connect(mapStateToProps, { cartItemProduct, getCart })(Cart);
+export default connect(mapStateToProps, { cartItemProduct, refreshCart })(Cart);
