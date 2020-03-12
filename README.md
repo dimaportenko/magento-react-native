@@ -17,7 +17,7 @@ Magento React Native is a fully functional eCommerce App for your Magento 2 webs
 
 ## 📲 Setup
 
-Follow the [Documentation](https://github.com/troublediehard/magento-react-native/wiki/Setup) for detailed step by step instructions on how to setup project locally and run the project.
+Follow the [Documentation](https://github.com/troublediehard/magento-react-native/wiki/Setup) for detailed step by step instructions on how to setup project locally and run the project. Or watch [Video Tutorial](https://youtu.be/W82p3WfwxrA).
 
 ## 🎨 Theme editing
 
