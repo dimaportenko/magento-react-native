@@ -228,7 +228,7 @@ class CheckoutTotals extends Component {
           }
         </View>
         {
-          !!(this.props?.couponError.length) && (
+          !!(this.props.couponError?.length) && (
             <Text style={{ color: 'red', marginBottom: 10, textAlign: 'center' }}>{this.props.couponError}</Text>
           )
         }
