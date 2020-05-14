@@ -19,7 +19,7 @@ import { ProductOptions } from './ProductOptions';
 import { ProductCustomOptions } from './ProductCustomOptions';
 import { useAddToCart } from '../../hooks/useAddToCart';
 import { useProductDescription } from '../../hooks/useProductDescription';
-import { RelatedProduct } from './RelatedProduct';
+import { RelatedProducts } from './RelatedProducts';
 
 export const ProductScreen = (props) => {
   const {
@@ -123,7 +123,12 @@ export const ProductScreen = (props) => {
       {renderAddToCartButton()}
       <Text style={styles.errorStyle(theme)}>{cart.errorMessage}</Text>
       <Text style={styles.descriptionStyle(theme)}>{description}</Text>
-      <RelatedProduct product={product} />
+      <RelatedProducts
+        product={product}
+        currencyRate={currencyRate}
+        currencySymbol={currencySymbol}
+        navigation={props.navigation}
+      />
     </ScrollView>
   );
 };

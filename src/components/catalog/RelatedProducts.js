@@ -12,17 +12,17 @@ import { useDispatch } from 'react-redux';
 import { setCurrentProduct } from '../../actions';
 import { useRelatedProducts } from '../../hooks/useRelatedProducts';
 
-export const RelatedProduct = ({ product, currencySymbol, currencyRate, navigation }) => {
+export const RelatedProducts = ({ product, currencySymbol, currencyRate, navigation }) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
 
   const { relatedProducts } = useRelatedProducts({ product });
 
-  const onProductPress = () => {
-    dispatch(setCurrentProduct({ product }));
+  const onProductPress = (pressedProduct) => {
+    dispatch(setCurrentProduct({ product: pressedProduct }));
     navigation.push(NAVIGATION_HOME_PRODUCT_PATH, {
-      title: product.name,
-      product: product,
+      title: pressedProduct.name,
+      product: pressedProduct,
     });
   };
 

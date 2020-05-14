@@ -1,4 +1,5 @@
 import { ADMIN_TYPE } from '../../types';
+import { getParamsFromSearchCriterias } from '../../utils/params';
 
 
 const getSortFieldName = (sortOrder) => {
@@ -182,6 +183,11 @@ export default magento => ({
     }
 
     return magento.admin.getProductsWithSearchCritaria(params);
+  },
+
+  getProductsBy: searchCriteria => {
+    const params = getParamsFromSearchCriterias(searchCriteria);
+    return magento.get('/V1/products', params, undefined, ADMIN_TYPE);
   },
 
   getProductsWithSearchCritaria: searchCriteria => magento.get('/V1/products', searchCriteria, undefined, ADMIN_TYPE),
