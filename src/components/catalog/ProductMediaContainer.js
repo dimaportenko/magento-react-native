@@ -17,7 +17,7 @@ export const ProductMediaContainer = ({ product, selectedProductSku }) => {
     if (!medias || !medias[product.sku]) {
       dispatch(getProductMedia({ sku: product.sku, id: product.id }));
     }
-  }, []);
+  }, []); // eslint-disable-line
 
   const { medias } = current[product.id];
   if (!medias) {

@@ -11,7 +11,7 @@ import { ThemeContext } from '../../theme';
 import {
   getConfigurableProductOptions,
   getCustomOptions,
-  updateProductQtyInput
+  updateProductQtyInput,
 } from '../../actions';
 import { ProductMediaContainer } from './ProductMediaContainer';
 import { finalPrice } from '../../helper/price';
@@ -32,7 +32,7 @@ export const ProductScreen = (props) => {
   const dispatch = useDispatch();
   const params = props.navigation?.state?.params ? props.navigation?.state?.params : {};
   const theme = useContext(ThemeContext);
-  const [product, setProduct] = useState(params.product);
+  const [product] = useState(params.product);
   const [currentProduct, setCurProduct] = useState(current[product.id]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const { onPressAddToCart } = useAddToCart({ product, cart, customer, currentProduct });
@@ -43,18 +43,11 @@ export const ProductScreen = (props) => {
       dispatch(getConfigurableProductOptions(product.sku, product.id));
       dispatch(getCustomOptions(product.sku, product.id));
     }
-
-    // const categoryIds = getProductCustomAttributeValue(product, 'category_ids');
-    // if (categoryIds && categoryIds.length) {
-    //   this.props.getRelatedProduct(categoryIds, product.sku);
-    // } else {
-    //   // No category id present in custom_attributes
-    //   this.setState({ showRelatedProduct: false });
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     setCurProduct(current[product.id]);
-  }, [current])
+  }, [current, product.id]);
 
   const renderPrice = () => {
     if (selectedProduct) {
@@ -144,11 +137,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginBottom: theme.spacing.extraLarge,
   }),
-  modalStyle: theme => ({
-    alignSelf: 'center',
-    width: theme.dimens.WINDOW_WIDTH * 0.9,
-    marginBottom: theme.spacing.large,
-  }),
   buttonStyle: theme => ({
     alignSelf: 'center',
     marginTop: 10,
@@ -165,10 +153,6 @@ const styles = StyleSheet.create({
   }),
   priceContainer: {
     alignSelf: 'center',
-  },
-  relatedProductTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
   },
 });
 

@@ -24,7 +24,7 @@ const ProductMedia = (props) => {
         {renderMediaItems()}
       </Swiper>
     );
-  }
+  };
 
   const renderMediaItems = () => {
     const { media } = props;
@@ -41,14 +41,14 @@ const ProductMedia = (props) => {
         />
       );
     });
-  }
+  };
 
   return (
     <View style={styles.imageContainer(theme)}>
       {renderMedia()}
     </View>
   );
-}
+};
 
 const styles = {
   imageContainer: theme => ({
