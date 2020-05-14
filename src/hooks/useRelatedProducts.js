@@ -47,18 +47,23 @@ const updateConfigurableProductPrice = async (product) => {
 
 export const useRelatedProducts = ({ product }) => {
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const getRelatedProducts = async (product) => {
     try {
+      setLoading(true);
+      setError(false);
       const linksData = await magento.admin.getLinkedProducts(product.sku, 'related');
       const skus = linksData.map(item => item.linked_product_sku);
       const data = await magento.admin.getProductsBy(getSearchCriteriaWithSkus(skus));
       const products = await Promise.all(updateConfigurableProductsPrices(data.items));
 
       setRelatedProducts(products);
-    } catch (e) {
-      // TODO: handle error
-      console.warn('error', e);
+      setLoading(false);
+    } catch (error) {
+      setError(error);
+      logError(error);
     }
   };
 
@@ -66,5 +71,5 @@ export const useRelatedProducts = ({ product }) => {
     getRelatedProducts(product);
   }, [product]);
 
-  return { relatedProducts };
+  return { relatedProducts, error, loading };
 };

@@ -2,23 +2,30 @@
  * @flow
  * Created by Dima Portenko on 14.05.2020
  */
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getProductCustomAttribute } from '../helper/product';
-import { logError } from '../helper/logger';
 
 export const useProductDescription = ({ product }) => {
-  const description = useMemo(() => {
+  const [description, setDescription] = useState('');
+
+  const decode = async (desc) => {
+    let _desc = desc;
+    try {
+      _desc = decodeURI(desc);
+    } catch (e) {
+
+    }
+    setDescription(_desc);
+  };
+
+  useEffect(() => {
     let desc = '';
     const attribute = getProductCustomAttribute(product, 'description');
     if (attribute) {
       desc = attribute.value.replace(/<\/?[^>]+(>|$)/g, '');
-      // try {
-      //   desc = decodeURI(description);
-      // } catch (e) {
-      //   logError(e);
-      // }
+      desc = desc.replace('&bull;', '\n•');
+      decode(desc);
     }
-    return desc;
   }, [product]);
 
   return {

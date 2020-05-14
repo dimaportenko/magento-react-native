@@ -25,9 +25,6 @@ export const ProductScreen = (props) => {
   const {
     cart,
     currencyRate,
-    relatedProducts,
-    relatedProductsLoading,
-    relatedProductsError,
     currencySymbol,
     customer,
     current,
@@ -177,14 +174,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
   const {
-    relatedProducts: {
-      items: relatedProducts,
-      loading: relatedProductsLoading,
-      error: relatedProductsError,
-    }
-  } = state.product;
-
-  const {
     currency: {
       displayCurrencySymbol: currencySymbol,
       displayCurrencyExchangeRate: currencyRate,
@@ -196,9 +185,6 @@ const mapStateToProps = (state) => {
   return {
     cart,
     currencyRate,
-    relatedProducts,
-    relatedProductsLoading,
-    relatedProductsError,
     currencySymbol,
     customer: account.customer,
     current: state.product.current,

@@ -11,12 +11,20 @@ import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
 import { useDispatch } from 'react-redux';
 import { setCurrentProduct } from '../../actions';
 import { useRelatedProducts } from '../../hooks/useRelatedProducts';
+import { Spinner } from '../common';
 
 export const RelatedProducts = ({ product, currencySymbol, currencyRate, navigation }) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
+  const { relatedProducts, loading, error } = useRelatedProducts({ product });
 
-  const { relatedProducts } = useRelatedProducts({ product });
+  if (!relatedProducts?.length && !loading || error) {
+    return <View />;
+  }
+
+  if (loading) {
+    return <Spinner />;
+  }
 
   const onProductPress = (pressedProduct) => {
     dispatch(setCurrentProduct({ product: pressedProduct }));
