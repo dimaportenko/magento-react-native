@@ -14,6 +14,7 @@ import {
   uiProductUpdate,
   uiProductCustomOptionUpdate,
   getCustomOptions,
+  setCurrentProduct,
   getRelatedProduct,
 } from '../../actions';
 import { Spinner, ModalSelect, Button, Text, Input, Price } from '../common';
@@ -23,6 +24,9 @@ import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { finalPrice } from '../../helper/price';
+import {
+  NAVIGATION_HOME_PRODUCT_PATH,
+} from '../../navigation/routes';
 import FeaturedProducts from '../home/FeaturedProducts';
 
 class Product extends Component {
@@ -38,11 +42,13 @@ class Product extends Component {
     uiProductUpdateOptions: PropTypes.func,
     addToCartLoading: PropTypes.func,
     addToCart: PropTypes.func,
+    setCurrentProduct: PropTypes.func,
     getRelatedProduct: PropTypes.func,
     updateProductQtyInput: PropTypes.func,
     relatedProducts: PropTypes.arrayOf(PropTypes.object),
     relatedProductsLoading: PropTypes.bool,
     relatedProductsError: PropTypes.string,
+    current: PropTypes.object,
   };
 
   static defaultProps = {
@@ -59,17 +65,27 @@ class Product extends Component {
     showRelatedProduct: true,
   };
 
+  constructor(props) {
+    super(props);
+
+    const { navigation } = props;
+    const params = navigation && navigation.state.params ? navigation.state.params : {};
+    const { product } = params;
+    this.state.product = product;
+  }
+
   componentDidMount() {
-    const { product, medias } = this.props;
+    const { product } = this.state;
+    const { medias } = this.props.current[product.id] ? this.props.current[product.id] : {};
 
     if (product.type_id === 'configurable') {
-      this.props.getConfigurableProductOptions(product.sku);
+      this.props.getConfigurableProductOptions(product.sku, product.id);
+      this.props.getCustomOptions(product.sku, product.id);
     }
 
-    this.props.getCustomOptions(product.sku);
 
     if (!medias || !medias[product.sku]) {
-      this.props.getProductMedia({ sku: product.sku });
+      this.props.getProductMedia({ sku: product.sku, id: product.id });
     }
 
     const categoryIds = getProductCustomAttributeValue(product, 'category_ids');
@@ -81,11 +97,26 @@ class Product extends Component {
     }
   }
 
+  componentDidUpdate(props) {
+    if (
+      props.current
+      && props.current[this.state.product.id]
+      && props.current[this.state.product.id].product
+      && props.current[this.state.product.id].product.price !== this.state.product.price
+    ) {
+      this.setState({
+        product: props.current[this.state.product.id].product,
+      });
+    }
+  }
+
   onPressAddToCart = () => {
     console.log('onPressAddToCart');
+    const { product } = this.state;
+    const { cart, customer } = this.props;
     const {
-      cart, product, qty, selectedOptions, customer, selectedCustomOptions,
-    } = this.props;
+      qtyInput: qty, selectedOptions, selectedCustomOptions,
+    } = this.props.current[product.id];
     const options = [];
     Object.keys(selectedOptions).forEach((key) => {
       console.log(selectedOptions[key]);
@@ -146,22 +177,24 @@ class Product extends Component {
 
   // TODO: refactor action name
   optionSelect = (attributeId, optionValue) => {
-    const { selectedOptions } = this.props;
+    const { product } = this.state;
+    const { selectedOptions } = this.props.current[product.id];
     const updatedOptions = { ...selectedOptions, [attributeId]: optionValue };
-    this.props.uiProductUpdateOptions(updatedOptions);
+    this.props.uiProductUpdateOptions(updatedOptions, product.id);
 
     this.updateSelectedProduct(updatedOptions);
   }
 
   customOptionSelect = (optionId, optionValue) => {
-    const { selectedCustomOptions } = this.props;
+    const { product } = this.state;
+    const { selectedCustomOptions } = this.props.current[product.id];
     const updatedCustomOptions = { ...selectedCustomOptions, [optionId]: optionValue };
-    this.props.uiProductCustomOptionUpdate(updatedCustomOptions);
+    this.props.uiProductCustomOptionUpdate(updatedCustomOptions, product.id);
   };
 
   renderDescription() {
     const theme = this.context;
-    const { product } = this.props;
+    const { product } = this.state;
     const attribute = getProductCustomAttribute(product, 'description');
     if (attribute) {
       let description = attribute.value.replace(/<\/?[^>]+(>|$)/g, '');
@@ -175,13 +208,12 @@ class Product extends Component {
     }
   }
 
-  onProductPress() {
-    alert('Not implemented yet!');
-    // this.props.setCurrentProduct({ product });
-    // this.props.navigation.push(NAVIGATION_HOME_PRODUCT_PATH, {
-    //   title: product.name,
-    //   product: product,
-    // });
+  onProductPress(product) {
+    this.props.setCurrentProduct({ product });
+    this.props.navigation.push(NAVIGATION_HOME_PRODUCT_PATH, {
+      title: product.name,
+      product: product,
+    });
   }
 
   renderRelatedProduct() {
@@ -193,15 +225,17 @@ class Product extends Component {
         products={{ items: products }}
         title={translate('product.relatedProductsTitle')}
         titleStyle={styles.relatedProductTitle}
-        onPress={this.onProductPress}
+        onPress={this.onProductPress.bind(this)}
         currencySymbol={this.props.currencySymbol}
+        currencyRate={this.props.currencyRate}
       />
     );
   }
 
   renderCustomOptions = () => {
     const theme = this.context;
-    const { customOptions } = this.props;
+    const { product } = this.state;
+    const { customOptions } = this.props.current[product.id];
     if (customOptions) {
       return customOptions.map((option) => {
         const data = option.values.map(value => ({
@@ -227,9 +261,10 @@ class Product extends Component {
 
   renderOptions = () => {
     const theme = this.context;
+    const { product } = this.state;
     const {
-      options, attributes, product, selectedOptions,
-    } = this.props;
+      options, attributes, selectedOptions,
+    } = this.props.current[product.id];
 
     if (Array.isArray(options) && product.children) {
       const prevOptions = [];
@@ -316,15 +351,16 @@ class Product extends Component {
   }
 
   updateSelectedProduct = (selectedOptions) => {
-    const { product } = this.props;
+    const { product } = this.state;
+    const { attributes, options } = this.props.current[product.id];
     const selectedKeys = Object.keys(selectedOptions);
 
     if (!product.children || !selectedKeys.length) return;
 
-    if (selectedKeys.length === this.props.options?.length) {
+    if (selectedKeys.length === options.length) {
       const searchOption = {};
       selectedKeys.forEach((attribute_id) => {
-        const code = this.props.attributes[attribute_id].attributeCode;
+        const code = attributes[attribute_id].attributeCode;
         searchOption[code] = selectedOptions[attribute_id];
       });
 
@@ -337,10 +373,10 @@ class Product extends Component {
       });
 
       if (selectedProduct) {
-        const { medias } = this.props;
+        const { medias } = this.props.current[this.state.product.id];
         this.setState({ selectedProduct });
         if (!medias || !medias[selectedProduct.sku]) {
-          this.props.getProductMedia({ sku: selectedProduct.sku });
+          this.props.getProductMedia({ sku: selectedProduct.sku, id: product.id });
         }
       }
     }
@@ -361,8 +397,8 @@ class Product extends Component {
     return (
       <Price
         style={styles.priceContainer}
-        basePrice={this.props.product.price}
-        discountPrice={finalPrice(this.props.product.custom_attributes, this.props.product.price)}
+        basePrice={this.state.product.price}
+        discountPrice={finalPrice(this.state.product.custom_attributes, this.state.product.price)}
         currencySymbol={this.props.currencySymbol}
         currencyRate={this.props.currencyRate}
       />
@@ -370,8 +406,8 @@ class Product extends Component {
   }
 
   renderProductMedia = () => {
-    const { medias, product } = this.props;
-    const { selectedProduct } = this.state;
+    const { selectedProduct, product } = this.state;
+    const { medias } = this.props.current[product.id];
     if (!medias) {
       return (
         <ProductMedia media={null} />
@@ -389,15 +425,16 @@ class Product extends Component {
 
   render() {
     const theme = this.context;
-    const { showRelatedProduct } = this.state;
+    const { showRelatedProduct, product } = this.state;
     const { relatedProductsError } = this.props;
+    const current = this.props.current[product.id];
     console.log('Product screen render');
     return (
       <ScrollView
         style={styles.container(theme)}
       >
         {this.renderProductMedia()}
-        <Text type="heading" bold style={styles.textStyle(theme)}>{this.props.product.name}</Text>
+        <Text type="heading" bold style={styles.textStyle(theme)}>{product.name}</Text>
         {this.renderPrice()}
         <Text bold style={styles.textStyle(theme)}>{translate('common.quantity')}</Text>
         <Input
@@ -405,8 +442,8 @@ class Product extends Component {
           inputStyle={{ textAlign: 'center' }}
           autoCorrect={false}
           keyboardType="numeric"
-          value={`${this.props.qty}`}
-          onChangeText={qty => this.props.updateProductQtyInput(qty)}
+          value={`${current.qtyInput}`}
+          onChangeText={qty => this.props.updateProductQtyInput(qty, product.id)}
         />
         {this.renderOptions()}
         {this.renderCustomOptions()}
@@ -462,11 +499,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const { product, options, medias, customOptions } = state.product.current;
   const {
-    attributes,
-    selectedOptions,
-    selectedCustomOptions,
     relatedProducts: {
       items: relatedProducts,
       loading: relatedProductsLoading,
@@ -480,26 +513,18 @@ const mapStateToProps = (state) => {
       displayCurrencyExchangeRate: currencyRate,
     },
   } = state.magento;
+
   const { cart, account } = state;
-  console.log('Product Component');
-  console.log(state.product);
-  console.log(cart);
+
   return {
     cart,
-    medias,
-    product,
-    options,
-    attributes,
     currencyRate,
     relatedProducts,
     relatedProductsLoading,
     relatedProductsError,
-    customOptions,
     currencySymbol,
-    selectedOptions,
-    selectedCustomOptions,
     customer: account.customer,
-    qty: state.product.qtyInput,
+    current: state.product.current,
   };
 };
 
@@ -511,6 +536,7 @@ export default connect(mapStateToProps, {
   updateProductQtyInput,
   getCustomOptions,
   uiProductCustomOptionUpdate,
+  setCurrentProduct,
   getRelatedProduct,
   uiProductUpdateOptions: uiProductUpdate,
 })(Product);

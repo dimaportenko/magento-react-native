@@ -44,9 +44,10 @@ const Category = ({
   }, []);
 
   const onRowPress = (product) => {
-    _setCurrentProduct({ product });
+    _setCurrentProduct({ product });_setCurrentProduct
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name,
+      product: product,
     });
   };
 

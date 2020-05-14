@@ -14,19 +14,19 @@ import {
   UI_PRODUCT_LIST_TYPE_GRID,
 } from './types';
 
-export const updateProductQtyInput = qty => ({
+export const updateProductQtyInput = (qty, id) => ({
   type: UI_PRODUCT_QTY_INPUT,
-  payload: qty,
+  payload: { qty, id },
 });
 
-export const uiProductUpdate = selectedOptions => ({
+export const uiProductUpdate = (selectedOptions, id) => ({
   type: UI_PRODUCT_UPDATE_OPTIONS,
-  payload: selectedOptions,
+  payload: { selectedOptions, id },
 });
 
-export const uiProductCustomOptionUpdate = selectedOptions => ({
+export const uiProductCustomOptionUpdate = (selectedOptions, id) => ({
   type: UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
-  payload: selectedOptions,
+  payload: { selectedOptions, id },
 });
 
 export const checkoutSelectedShippingChanged = shipping => ({

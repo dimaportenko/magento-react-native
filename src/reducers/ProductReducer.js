@@ -17,11 +17,16 @@ import {
 import { getPriceFromChildren } from '../helper/product';
 
 const INITIAL_STATE = {
-  current: false,
-  attributes: {},
-  qtyInput: 1,
-  selectedOptions: {},
-  selectedCustomOptions: {},
+  current:  {
+    default: {
+      product: {},
+      attributes: {},
+      qtyInput: 1,
+      selectedOptions: {},
+      selectedCustomOptions: {},
+      medias: {},
+    },
+  },
   relatedProducts: {
     loading: false,
     error: '',
@@ -38,57 +43,87 @@ export default (state = INITIAL_STATE, action) => {
         error: null,
         items: [],
       };
-      if (current && state.current && state.current.product && state.current.product.id === action.payload.product.id) {
-        current = { ...state.current, ...current };
-      }
-      return { ...state, relatedProducts, selectedOptions: {}, current };
+      current = { ...INITIAL_STATE.current.default, ...current };
+      return {
+        ...state,
+        relatedProducts,
+        current: { ...state.current, [current.product.id]: current }
+      };
     }
     case MAGENTO_GET_PRODUCT_MEDIA: {
       if (!action.payload.media || !action.payload.media.length) {
         return state;
       }
-      const medias = state.current && state.current.medias ? state.current.media : {};
+      const { id, sku, media } = action.payload;
+      const medias = state.current[id] && state.current[id].medias ? state.current[id].media : {};
       const current = {
         ...state.current,
-        medias: {
-          ...medias, [action.payload.sku]: action.payload.media,
+        [id]: {
+          ...state.current[id],
+          medias: {
+            ...medias, [sku]: media,
+          },
         },
       };
       return { ...state, current };
     }
     case MAGENTO_GET_CONF_OPTIONS: {
-      const current = { ...state.current, options: action.payload };
+      const { id, data } = action.payload;
+      const current = { ...state.current, [id]: { ...state.current[id], options: data } };
       return { ...state, current };
     }
     case MAGENTO_GET_CUSTOM_OPTIONS: {
-      const current = { ...state.current, customOptions: action.payload };
+      const { id, data } = action.payload;
+      const current = { ...state.current, [id]: { ...state.current[id], customOptions: data } };
       return { ...state, current };
     }
     case MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS: {
+      const { productId: id, attributeId, options, attributeCode } = action.payload;
       const attributes = {
-        ...state.attributes,
-        [action.payload.attributeId]: {
-          options: action.payload.options,
-          attributeCode: action.payload.attributeCode,
+        ...state.current[id].attributes,
+        [attributeId]: {
+          options,
+          attributeCode,
         },
       };
-      return { ...state, attributes };
+      const current = { ...state.current, [id]: { ...state.current[id], attributes } };
+      return { ...state, current };
     }
     case UI_PRODUCT_UPDATE_OPTIONS: {
-      return { ...state, selectedOptions: action.payload };
+      const { id, selectedOptions } = action.payload;
+      const current = { ...state.current, [id]: { ...state.current[id], selectedOptions } };
+      return { ...state, current };
     }
     case UI_PRODUCT_UPDATE_CUSTOM_OPTIONS: {
-      return { ...state, selectedCustomOptions: action.payload };
+      const { id, selectedOptions } = action.payload;
+      const current = {
+        ...state.current,
+        [id]: { ...state.current[id], selectedCustomOptions: selectedOptions },
+      };
+      return { ...state, current };
     }
-    case UI_PRODUCT_QTY_INPUT:
-      return { ...state, qtyInput: action.payload };
-    case NAVIGATION_GO_TO_SCREEN:
-      return { ...state, qtyInput: INITIAL_STATE.qtyInput };
+    case UI_PRODUCT_QTY_INPUT: {
+      const { id, qty } = action.payload;
+      const current = { ...state.current, [id]: { ...state.current[id], qtyInput: qty } };
+      return { ...state, current };
+    }
+    // case NAVIGATION_GO_TO_SCREEN:
+    //   return { ...state, qtyInput: INITIAL_STATE.qtyInput };
     case MAGENTO_UPDATE_CONF_PRODUCT: {
-      const { sku, children } = action.payload;
+      const { sku, children, id } = action.payload;
       let { current } = state;
-      if (current && current.product && current.product.sku === sku) {
-        current = { ...current, product: { ...current.product, children } };
+      if (current[id] && current[id].product && current[id].product.sku === sku) {
+        current = {
+          ...current,
+          [id]: {
+            ...current[id],
+            product: {
+              ...current[id].product,
+              children,
+              price: getPriceFromChildren(children),
+            },
+          },
+        };
       }
 
       return { ...state, current };
