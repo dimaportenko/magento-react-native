@@ -225,4 +225,6 @@ export default magento => ({
     };
     return magento.get(path, params, undefined, ADMIN_TYPE);
   },
+
+  getLinkedProducts: (sku, type) => magento.get(`/V1/products/${sku}/links/${type}`, undefined, undefined, ADMIN_TYPE),
 });

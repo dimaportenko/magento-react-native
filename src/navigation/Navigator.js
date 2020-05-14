@@ -33,6 +33,7 @@ import CartBadge from '../components/cart/CartBadge';
 import * as routes from './routes';
 
 import { theme } from '../theme';
+import { ProductScreen } from '../components/catalog/ProductScreen';
 
 const defaultHeader = {
   headerStyle: {
@@ -50,7 +51,8 @@ const HomeStack = createStackNavigator(
   {
     [routes.NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
     [routes.NAVIGATION_CATEGORY_PATH]: Category,
-    [routes.NAVIGATION_HOME_PRODUCT_PATH]: Product,
+    // [routes.NAVIGATION_HOME_PRODUCT_PATH]: Product,
+    [routes.NAVIGATION_HOME_PRODUCT_PATH]: ProductScreen,
   },
   {
     initialRouteName: routes.NAVIGATION_HOME_SCREEN_PATH,
