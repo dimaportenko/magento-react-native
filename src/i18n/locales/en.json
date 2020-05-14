@@ -92,7 +92,8 @@
     "removeItemDialogMessage": "Just double-checking you wanted to remove the item"
   },
   "product": {
-    "addToCartButton": "Add to Cart"
+    "addToCartButton": "Add to Cart",
+    "relatedProductsTitle":"You may also like"
   },
   "checkout": {
     "title": "Checkout",

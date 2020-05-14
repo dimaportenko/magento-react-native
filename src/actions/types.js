@@ -90,3 +90,11 @@ export const UI_PRODUCT_LIST_TYPE_GRID = 'ui_product_list_type_grid';
 export const MAGENTO_COUPON_LOADING = 'MAGENTO_COUPON_LOADING';
 export const MAGENTO_COUPON_ERROR = 'MAGENTO_COUPON_ERROR';
 export const MAGENTO_CHECKOUT_TOTALS = 'MAGENTO_CHECKOUT_TOTALS';
+
+/**
+ * Action Names for "Related Product" in Product Screen
+ */
+export const MAGENTO_RELATED_PRODUCTS_LOADING = 'magento_related_products_loading';
+export const MAGENTO_RELATED_PRODUCTS_SUCCESS = 'magento_related_products_success';
+export const MAGENTO_RELATED_PRODUCTS_ERROR = 'magento_related_products_error';
+export const MAGENTO_RELATED_PRODUCTS_CONF_PRODUCT = 'magento_related_products_conf_product_update';

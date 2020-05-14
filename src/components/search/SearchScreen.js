@@ -35,6 +35,7 @@ class SearchScreen extends Component {
   onRowPress = (product) => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_SEARCH_PRODUCT_PATH, {
+      product,
       title: product.name,
     });
   }

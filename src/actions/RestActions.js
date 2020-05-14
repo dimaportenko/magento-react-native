@@ -268,20 +268,20 @@ export const getSearchProducts = (searchInput, offset, sortOrder, filter) => asy
   }
 };
 
-export const getCustomOptions = sku => async (dispatch) => {
+export const getCustomOptions = (sku, id) => async (dispatch) => {
   try {
     const data = await magento.admin.getProductOptions(sku);
-    dispatch({ type: MAGENTO_GET_CUSTOM_OPTIONS, payload: data });
+    dispatch({ type: MAGENTO_GET_CUSTOM_OPTIONS, payload: { data, id } });
   } catch (e) {
     logError(e);
   }
 };
 
-export const getConfigurableProductOptions = sku => (dispatch) => {
+export const getConfigurableProductOptions = (sku, id) => (dispatch) => {
   magento.admin
     .getConfigurableProductOptions(sku)
     .then((data) => {
-      dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: data });
+      dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: { data, id } });
       data.forEach((option) => {
         magento.admin
           .getAttributeByCode(option.attribute_id)
@@ -289,6 +289,7 @@ export const getConfigurableProductOptions = sku => (dispatch) => {
             dispatch({
               type: MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
               payload: {
+                productId: id,
                 attributeId: option.attribute_id,
                 options: attributeOptions.options,
                 attributeCode: attributeOptions.attribute_code,
@@ -305,7 +306,7 @@ export const getConfigurableProductOptions = sku => (dispatch) => {
     });
 };
 
-const updateConfigurableProductsPrices = (products, dispatch, type) => {
+export const updateConfigurableProductsPrices = (products, dispatch, type) => {
   products.forEach((product) => {
     if (product.type_id === 'configurable') {
       updateConfigurableProductPrice(product, dispatch, type);
@@ -318,20 +319,20 @@ const updateConfigurableProductPrice = async (
   dispatch,
   type = MAGENTO_UPDATE_CONF_PRODUCT,
 ) => {
-  const { sku } = product;
+  const { sku, id } = product;
   try {
     const data = await magento.admin.getConfigurableChildren(sku);
-    dispatch({ type, payload: { sku, children: data } });
+    dispatch({ type, payload: { sku, children: data, id } });
   } catch (e) {
     logError(e);
   }
 };
 
-export const getProductMedia = ({ sku }) => (dispatch) => {
+export const getProductMedia = ({ sku, id }) => (dispatch) => {
   magento.admin
     .getProductMedia(sku)
     .then((media) => {
-      dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: { sku, media } });
+      dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: { sku, media, id } });
     })
     .catch((error) => {
       logError(error);
