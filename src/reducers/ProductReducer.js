@@ -9,7 +9,12 @@ import {
   MAGENTO_GET_CUSTOM_OPTIONS,
   UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
   MAGENTO_UPDATE_CONF_PRODUCT,
+  MAGENTO_RELATED_PRODUCTS_LOADING,
+  MAGENTO_RELATED_PRODUCTS_SUCCESS,
+  MAGENTO_RELATED_PRODUCTS_ERROR,
+  MAGENTO_RELATED_PRODUCTS_CONF_PRODUCT,
 } from '../actions/types';
+import { getPriceFromChildren } from '../helper/product';
 
 const INITIAL_STATE = {
   current: false,
@@ -17,16 +22,26 @@ const INITIAL_STATE = {
   qtyInput: 1,
   selectedOptions: {},
   selectedCustomOptions: {},
+  relatedProducts: {
+    loading: false,
+    error: '',
+    items: [],
+  },
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case MAGENTO_CURRENT_PRODUCT: {
       let current = action.payload;
+      const relatedProducts = {
+        loading: false,
+        error: null,
+        items: [],
+      };
       if (current && state.current && state.current.product && state.current.product.id === action.payload.product.id) {
         current = { ...state.current, ...current };
       }
-      return { ...state, selectedOptions: {}, current };
+      return { ...state, relatedProducts, selectedOptions: {}, current };
     }
     case MAGENTO_GET_PRODUCT_MEDIA: {
       if (!action.payload.media || !action.payload.media.length) {
@@ -77,6 +92,47 @@ export default (state = INITIAL_STATE, action) => {
       }
 
       return { ...state, current };
+    }
+    case MAGENTO_RELATED_PRODUCTS_LOADING: {
+      const relatedProducts = { ...state.relatedProducts, loading: action.payload };
+      return {
+        ...state,
+        relatedProducts,
+      };
+    }
+    case MAGENTO_RELATED_PRODUCTS_SUCCESS: {
+      const relatedProducts = { ...state.relatedProducts, loading: false, items: action.payload };
+      return {
+        ...state,
+        relatedProducts,
+      };
+    }
+    case MAGENTO_RELATED_PRODUCTS_ERROR: {
+      const relatedProducts = { ...state.relatedProducts, loading: false, error: action.payload.errorMessage };
+      return {
+        ...state,
+        relatedProducts,
+      };
+    }
+    case MAGENTO_RELATED_PRODUCTS_CONF_PRODUCT: {
+      const { sku, children } = action.payload;
+
+      const items = state.relatedProducts.items.map((product) => {
+        if (product.sku === sku) {
+          return {
+            ...product,
+            children,
+            price: getPriceFromChildren(children),
+          };
+        }
+        return product;
+      });
+
+      const relatedProducts = { ...state.relatedProducts, items };
+      return {
+        ...state,
+        relatedProducts,
+      };
     }
     default:
       return state;

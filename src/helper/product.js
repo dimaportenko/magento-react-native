@@ -11,6 +11,12 @@ export const getProductThumbnailFromAttribute = (product) => {
   return result;
 };
 
+export const getProductCustomAttributeValue = (product, key) => {
+  const attribute = getProductCustomAttribute(product, key);
+  const value = attribute ? attribute.value : attribute;
+  return value;
+}
+
 export const getProductCustomAttribute = (product, key) => {
   const attributes = product.custom_attributes.filter(attribute => attribute.attribute_code === key);
 

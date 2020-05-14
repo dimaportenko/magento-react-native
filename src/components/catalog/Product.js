@@ -14,14 +14,16 @@ import {
   uiProductUpdate,
   uiProductCustomOptionUpdate,
   getCustomOptions,
+  getRelatedProduct,
 } from '../../actions';
 import { Spinner, ModalSelect, Button, Text, Input, Price } from '../common';
-import { getProductCustomAttribute } from '../../helper/product';
+import { getProductCustomAttribute, getProductCustomAttributeValue, } from '../../helper/product';
 import ProductMedia from './ProductMedia';
 import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { finalPrice } from '../../helper/price';
+import FeaturedProducts from '../home/FeaturedProducts';
 
 class Product extends Component {
   static contextType = ThemeContext;
@@ -36,7 +38,11 @@ class Product extends Component {
     uiProductUpdateOptions: PropTypes.func,
     addToCartLoading: PropTypes.func,
     addToCart: PropTypes.func,
+    getRelatedProduct: PropTypes.func,
     updateProductQtyInput: PropTypes.func,
+    relatedProducts: PropTypes.arrayOf(PropTypes.object),
+    relatedProductsLoading: PropTypes.bool,
+    relatedProductsError: PropTypes.string,
   };
 
   static defaultProps = {
@@ -50,6 +56,7 @@ class Product extends Component {
 
   state = {
     selectedProduct: null,
+    showRelatedProduct: true,
   };
 
   componentDidMount() {
@@ -63,6 +70,14 @@ class Product extends Component {
 
     if (!medias || !medias[product.sku]) {
       this.props.getProductMedia({ sku: product.sku });
+    }
+
+    const categoryIds = getProductCustomAttributeValue(product, 'category_ids');
+    if (categoryIds && categoryIds.length) {
+      this.props.getRelatedProduct(categoryIds, product.sku);
+    } else {
+      // No category id present in custom_attributes
+      this.setState({ showRelatedProduct: false });
     }
   }
 
@@ -158,6 +173,30 @@ class Product extends Component {
 
       return <Text style={styles.descriptionStyle(theme)}>{description}</Text>;
     }
+  }
+
+  onProductPress() {
+    alert('Not implemented yet!');
+    // this.props.setCurrentProduct({ product });
+    // this.props.navigation.push(NAVIGATION_HOME_PRODUCT_PATH, {
+    //   title: product.name,
+    //   product: product,
+    // });
+  }
+
+  renderRelatedProduct() {
+    const theme = this.context;
+    const products = this.props.relatedProducts || [];
+    return (
+      <FeaturedProducts
+        style={{ marginBottom: theme.spacing.large }}
+        products={{ items: products }}
+        title={translate('product.relatedProductsTitle')}
+        titleStyle={styles.relatedProductTitle}
+        onPress={this.onProductPress}
+        currencySymbol={this.props.currencySymbol}
+      />
+    );
   }
 
   renderCustomOptions = () => {
@@ -350,6 +389,8 @@ class Product extends Component {
 
   render() {
     const theme = this.context;
+    const { showRelatedProduct } = this.state;
+    const { relatedProductsError } = this.props;
     console.log('Product screen render');
     return (
       <ScrollView
@@ -372,6 +413,7 @@ class Product extends Component {
         {this.renderAddToCartButton()}
         <Text style={styles.errorStyle(theme)}>{this.props.cart.errorMessage}</Text>
         {this.renderDescription()}
+        {showRelatedProduct && !relatedProductsError && this.renderRelatedProduct()}
       </ScrollView>
     );
   }
@@ -413,11 +455,25 @@ const styles = StyleSheet.create({
   priceContainer: {
     alignSelf: 'center',
   },
+  relatedProductTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
 });
 
 const mapStateToProps = (state) => {
   const { product, options, medias, customOptions } = state.product.current;
-  const { attributes, selectedOptions, selectedCustomOptions } = state.product;
+  const {
+    attributes,
+    selectedOptions,
+    selectedCustomOptions,
+    relatedProducts: {
+      items: relatedProducts,
+      loading: relatedProductsLoading,
+      error: relatedProductsError,
+    }
+  } = state.product;
+
   const {
     currency: {
       displayCurrencySymbol: currencySymbol,
@@ -435,6 +491,9 @@ const mapStateToProps = (state) => {
     options,
     attributes,
     currencyRate,
+    relatedProducts,
+    relatedProductsLoading,
+    relatedProductsError,
     customOptions,
     currencySymbol,
     selectedOptions,
@@ -452,5 +511,6 @@ export default connect(mapStateToProps, {
   updateProductQtyInput,
   getCustomOptions,
   uiProductCustomOptionUpdate,
+  getRelatedProduct,
   uiProductUpdateOptions: uiProductUpdate,
 })(Product);

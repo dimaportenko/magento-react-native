@@ -305,7 +305,7 @@ export const getConfigurableProductOptions = sku => (dispatch) => {
     });
 };
 
-const updateConfigurableProductsPrices = (products, dispatch, type) => {
+export const updateConfigurableProductsPrices = (products, dispatch, type) => {
   products.forEach((product) => {
     if (product.type_id === 'configurable') {
       updateConfigurableProductPrice(product, dispatch, type);
