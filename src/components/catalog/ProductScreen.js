@@ -1,5 +1,4 @@
 /**
- * @flow
  * Created by Dima Portenko on 14.05.2020
  */
 import React, { useContext, useState, useEffect } from 'react';
