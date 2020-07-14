@@ -17,6 +17,7 @@ export const magentoOptions = {
       access_token: 'cdlodltsj3wfwd1jrx08q9nfprb5idq4',
     },
   },
+  reviewEnabled: false, // set true ONLY if you install https://github.com/troublediehard/mma-customapi on the magento backend
 };
 
 /**

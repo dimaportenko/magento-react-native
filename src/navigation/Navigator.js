@@ -85,7 +85,7 @@ const AccountSwitch = createSwitchNavigator({
 
 const SearchStack = createStackNavigator({
   [routes.NAVIGATION_SEARCH_SCREEN_PATH]: SearchScreen,
-  [routes.NAVIGATION_SEARCH_PRODUCT_PATH]: Product,
+  [routes.NAVIGATION_SEARCH_PRODUCT_PATH]: ProductScreen,
 }, {
   navigationOptions: defaultHeader,
 });

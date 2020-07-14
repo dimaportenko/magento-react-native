@@ -19,6 +19,9 @@ import { ProductCustomOptions } from './ProductCustomOptions';
 import { useAddToCart } from '../../hooks/useAddToCart';
 import { useProductDescription } from '../../hooks/useProductDescription';
 import { RelatedProducts } from './RelatedProducts';
+import { ProductReviews } from './reviews/ProductReviews';
+import { ReviewFormContainer } from './reviews/ReviewFormContainer';
+import { magentoOptions } from '../../config/magento';
 
 export const ProductScreen = (props) => {
   const {
@@ -112,6 +115,14 @@ export const ProductScreen = (props) => {
       {renderAddToCartButton()}
       <Text style={styles.errorStyle(theme)}>{cart.errorMessage}</Text>
       <Text style={styles.descriptionStyle(theme)}>{description}</Text>
+      {
+        magentoOptions.reviewEnabled && (
+          <>
+            <ProductReviews product={product} />
+            <ReviewFormContainer product={product} />
+          </>
+        )
+      }
       <RelatedProducts
         product={product}
         currencyRate={currencyRate}

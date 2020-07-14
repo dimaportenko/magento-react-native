@@ -20,4 +20,6 @@ export default magento => ({
   getCartPaymentMethods: () => magento.get('/V1/carts/mine/payment-methods', undefined, undefined, CUSTOMER_TYPE),
 
   placeCartOrder: payment => magento.put('/V1/carts/mine/order', payment, CUSTOMER_TYPE),
+
+  postReview: review => magento.post('/V1/mma/review/mine/post', review, CUSTOMER_TYPE),
 });
