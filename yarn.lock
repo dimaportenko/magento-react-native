@@ -6702,10 +6702,10 @@ react-native-markup-kit@^0.0.4:
   resolved "https://registry.yarnpkg.com/react-native-markup-kit/-/react-native-markup-kit-0.0.4.tgz#860d259decdd4f2fcf995cf4dbb52077b8351dd4"
   integrity sha512-DvIqvYcmWWTmkC4LAx3vwQSz9Jjq4OUc8UG6FCEI3jMEGny3Yng8VaZMapamZExdSidtE5F1a5iAdT2j/XYV0Q==
 
-react-native-modal-selector@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-modal-selector/-/react-native-modal-selector-2.0.1.tgz#ae75bbe23d5bff06165f18476eb1088ae3d361ba"
-  integrity sha512-biDUC51MnH3aIbCL4tGJjqN6MPd+H3iPy/EsoPwY5qcUjYn1owbCXs+RY80wOOYpu9OLi6RZQ+C87v2JQ8TxOA==
+react-native-modal-selector@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-modal-selector/-/react-native-modal-selector-2.0.2.tgz#dd3589cfe0a3f176a8dc6f7dc79b3f638341864b"
+  integrity sha512-kPUKgQCy1Z3k6S+9bKwbboy4l8F0GOL4fsYg0+89eEp0Gqeey5Gy5Rlv7jSOLUjZp4kzOcexdr62DOUCVU2Y1w==
   dependencies:
     prop-types "^15.5.10"
 
