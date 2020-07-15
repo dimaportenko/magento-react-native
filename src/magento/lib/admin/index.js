@@ -75,6 +75,11 @@ export default magento => ({
           value: '4',
           conditionType: 'eq',
         }],
+        [{
+          field: 'status',
+          value: '1',
+          conditionType: 'eq',
+        }],
       ],
     };
 
@@ -99,7 +104,6 @@ export default magento => ({
         .forEach((key) => {
           let value = filter[key];
           let condition = null;
-          // let subQuery = '';
           if (typeof value === 'object') {
             condition = value.condition;
             value = value.value;
@@ -160,6 +164,9 @@ export default magento => ({
       'searchCriteria[filterGroups][1][filters][0][field]': 'visibility',
       'searchCriteria[filterGroups][1][filters][0][value]': '4',
       'searchCriteria[filterGroups][1][filters][0][conditionType]': 'eq',
+      'searchCriteria[filterGroups][2][filters][0][field]': 'status',
+      'searchCriteria[filterGroups][2][filters][0][value]': '1',
+      'searchCriteria[filterGroups][2][filters][0][conditionType]': 'eq',
       'searchCriteria[pageSize]': pageSize,
       'searchCriteria[currentPage]': currentPage,
     };
@@ -179,12 +186,12 @@ export default magento => ({
             if (condition.includes('from')) {
               const conditions = condition.split(',');
               const values = value.split(',');
-              params['searchCriteria[filterGroups][2][filters][0][field]'] = key;
-              params['searchCriteria[filterGroups][2][filters][0][value]'] = values[0];
-              params['searchCriteria[filterGroups][2][filters][0][condition_type]'] = conditions[0];
               params['searchCriteria[filterGroups][3][filters][0][field]'] = key;
-              params['searchCriteria[filterGroups][3][filters][0][value]'] = values[1];
-              params['searchCriteria[filterGroups][3][filters][0][condition_type]'] = conditions[1];
+              params['searchCriteria[filterGroups][3][filters][0][value]'] = values[0];
+              params['searchCriteria[filterGroups][3][filters][0][condition_type]'] = conditions[0];
+              params['searchCriteria[filterGroups][4][filters][0][field]'] = key;
+              params['searchCriteria[filterGroups][4][filters][0][value]'] = values[1];
+              params['searchCriteria[filterGroups][4][filters][0][condition_type]'] = conditions[1];
             }
           }
         });
