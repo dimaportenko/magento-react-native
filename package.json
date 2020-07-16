@@ -12,7 +12,7 @@
     "@react-native-community/async-storage": "^1.11.0",
     "bugsnag-react-native": "^2.23.2",
     "i18n-js": "^3.3.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "moment": "^2.24.0",
     "prop-types": "^15.6.0",
     "react": "16.11.0",
