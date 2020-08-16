@@ -3,16 +3,25 @@
  */
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { ModalSelect } from '../common';
+import { uiProductCustomOptionUpdate } from '../../actions';
 import { ThemeContext } from '../../theme';
 
-export const ProductCustomOptions = ({ currentProduct }) => {
+export const ProductCustomOptions = ({ currentProduct, product }) => {
   const theme = useContext(ThemeContext);
+  const dispatch = useDispatch();
   const { customOptions } = currentProduct;
 
   if (!customOptions) {
     return <View />;
   }
+
+  const customOptionSelect = (optionId, optionValue) => {
+    const { selectedCustomOptions } = currentProduct;
+    const updatedCustomOptions = { ...selectedCustomOptions, [optionId]: optionValue };
+    dispatch(uiProductCustomOptionUpdate(updatedCustomOptions, product.id));
+  };
 
   return customOptions.map((option) => {
     const data = option.values.map(value => ({
@@ -29,7 +38,7 @@ export const ProductCustomOptions = ({ currentProduct }) => {
         attribute={option.option_id}
         value={option.option_id}
         data={data}
-        onChange={this.customOptionSelect}
+        onChange={customOptionSelect}
       />
     );
   });
@@ -42,4 +51,3 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.large,
   }),
 });
-

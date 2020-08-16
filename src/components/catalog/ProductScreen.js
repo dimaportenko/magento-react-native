@@ -43,8 +43,8 @@ export const ProductScreen = (props) => {
   useEffect(() => {
     if (product.type_id === 'configurable') {
       dispatch(getConfigurableProductOptions(product.sku, product.id));
-      dispatch(getCustomOptions(product.sku, product.id));
     }
+    dispatch(getCustomOptions(product.sku, product.id)); /*The custom options are available on all product types. */
   }, []); // eslint-disable-line
 
   useEffect(() => {
@@ -110,6 +110,7 @@ export const ProductScreen = (props) => {
         setSelectedProduct={setSelectedProduct}
       />
       <ProductCustomOptions
+        product={product}
         currentProduct={currentProduct}
       />
       {renderAddToCartButton()}
