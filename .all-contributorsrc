@@ -58,11 +58,21 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "hungvt",
+      "name": "Hungvt",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/367271?v=4",
+      "profile": "https://www.vnecoms.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
   "projectName": "magento-react-native",
   "projectOwner": "troublediehard",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
