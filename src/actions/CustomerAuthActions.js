@@ -90,8 +90,10 @@ export const errorMessage = error => ({ type: MAGENTO_AUTH_ERROR, payload: error
 export const logout = () => (dispatch) => {
   dispatch({ type: MAGENTO_AUTH, payload: '' });
   dispatch({ type: MAGENTO_LOGOUT });
+  dispatch(getCart());
   NavigationService.navigate(NAVIGATION_LOGIN_STACK_PATH);
   AsyncStorage.setItem('customerToken', '');
+  magento.setCustomerToken(false);
 };
 
 export const initiatePasswordReset = email => async (dispatch) => {
