@@ -368,8 +368,14 @@ export const getCart = (refreshing = false) => async (dispatch, getState) => {
 
   try {
     let cart;
-    const cartId = await AsyncStorage.getItem('cartId');
+    let cartId = await AsyncStorage.getItem('cartId');
     if (magento.isCustomerLogin()) {
+      if(cartId){
+        /*Merge Cart*/
+        /*the code to merge cart will be here*/
+
+        AsyncStorage.removeItem('cartId');
+      }
       cart = await magento.customer.getCustomerCart();
     } else {
       if(cartId){
@@ -385,9 +391,9 @@ export const getCart = (refreshing = false) => async (dispatch, getState) => {
         AsyncStorage.setItem('cartId', cartId);
         cart = await magento.guest.getGuestCart(cartId);
       }
-
       dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
     }
+
     dispatch({ type: MAGENTO_GET_CART, payload: cart });
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT, payload: false });
   } catch (error) {
