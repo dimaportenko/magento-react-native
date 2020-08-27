@@ -9,7 +9,7 @@
  *                           app won't work
  */
 export const magentoOptions = {
-  url: 'http://mage2.local/',
+  url: 'http://mage2.local/', // make sure you have trail slash in the end
   home_cms_block_id: '19',
   store: 'default', // store code // Stores > All Stores > Store View > Code
   authentication: {
