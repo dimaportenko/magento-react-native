@@ -53,6 +53,7 @@
     "eslint-plugin-react-hooks": "^1.6.1",
     "flow-bin": "^0.113.0",
     "jest": "^24.9.0",
+    "jsc-android": "^241213.1.0",
     "metro-react-native-babel-preset": "^0.58.0",
     "react-native-storybook-loader": "^1.8.1",
     "react-test-renderer": "16.11.0"

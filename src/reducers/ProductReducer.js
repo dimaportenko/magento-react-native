@@ -17,7 +17,7 @@ import {
 import { getPriceFromChildren } from '../helper/product';
 
 const INITIAL_STATE = {
-  current:  {
+  current: {
     default: {
       product: {},
       attributes: {},
