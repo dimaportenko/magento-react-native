@@ -93,6 +93,8 @@
   },
   "product": {
     "addToCartButton": "Add to Cart",
+    "productDetailLabel": "Product Details",
+    "noProductDetail": "No description available!",
     "relatedProductsTitle":"You may also like"
   },
   "checkout": {
