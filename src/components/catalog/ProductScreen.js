@@ -4,6 +4,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
+import HTML from 'react-native-render-html';
 import { Button, Input, Price, Spinner, Text } from '../common';
 import { translate } from '../../i18n';
 import { ThemeContext } from '../../theme';
@@ -23,28 +24,33 @@ import { ProductReviews } from './reviews/ProductReviews';
 import { ReviewFormContainer } from './reviews/ReviewFormContainer';
 import { magentoOptions } from '../../config/magento';
 
-export const ProductScreen = (props) => {
-  const {
-    cart,
-    currencyRate,
-    currencySymbol,
-    customer,
-    current,
-  } = useSelector(state => mapStateToProps(state));
+export const ProductScreen = props => {
+  const { cart, currencyRate, currencySymbol, customer, current } = useSelector(
+    state => mapStateToProps(state),
+  );
   const dispatch = useDispatch();
-  const params = props.navigation?.state?.params ? props.navigation?.state?.params : {};
+  const params = props.navigation?.state?.params
+    ? props.navigation?.state?.params
+    : {};
   const theme = useContext(ThemeContext);
   const [product] = useState(params.product);
   const [currentProduct, setCurProduct] = useState(current[product.id]);
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const { onPressAddToCart } = useAddToCart({ product, cart, customer, currentProduct });
+  const { onPressAddToCart } = useAddToCart({
+    product,
+    cart,
+    customer,
+    currentProduct,
+  });
   const { description } = useProductDescription({ product });
 
   useEffect(() => {
     if (product.type_id === 'configurable') {
       dispatch(getConfigurableProductOptions(product.sku, product.id));
     }
-    dispatch(getCustomOptions(product.sku, product.id)); /*The custom options are available on all product types. */
+    dispatch(
+      getCustomOptions(product.sku, product.id),
+    ); /*The custom options are available on all product types. */
   }, []); // eslint-disable-line
 
   useEffect(() => {
@@ -84,18 +90,19 @@ export const ProductScreen = (props) => {
     );
   };
 
-
   return (
-    <ScrollView
-      style={styles.container(theme)}
-    >
+    <ScrollView style={styles.container(theme)}>
       <ProductMediaContainer
         product={product}
         selectedProductSku={selectedProduct?.sku}
       />
-      <Text type="heading" bold style={styles.textStyle(theme)}>{product.name}</Text>
+      <Text type="heading" bold style={styles.textStyle(theme)}>
+        {product.name}
+      </Text>
       {renderPrice()}
-      <Text bold style={styles.textStyle(theme)}>{translate('common.quantity')}</Text>
+      <Text bold style={styles.textStyle(theme)}>
+        {translate('common.quantity')}
+      </Text>
       <Input
         containerStyle={styles.inputContainer(theme)}
         inputStyle={{ textAlign: 'center' }}
@@ -109,21 +116,27 @@ export const ProductScreen = (props) => {
         currentProduct={currentProduct}
         setSelectedProduct={setSelectedProduct}
       />
-      <ProductCustomOptions
-        product={product}
-        currentProduct={currentProduct}
-      />
+      <ProductCustomOptions product={product} currentProduct={currentProduct} />
       {renderAddToCartButton()}
       <Text style={styles.errorStyle(theme)}>{cart.errorMessage}</Text>
-      <Text style={styles.descriptionStyle(theme)}>{description}</Text>
-      {
-        magentoOptions.reviewEnabled && (
-          <>
-            <ProductReviews product={product} />
-            <ReviewFormContainer product={product} />
-          </>
-        )
-      }
+      {description !== '' ? (
+        <View style={styles.descriptionStyle}>
+          <Text bold type="subheading" style={styles.productDetailTitle}>
+            {translate('product.productDetailLabel')}
+          </Text>
+          <HTML html={description} />
+        </View>
+      ) : (
+        <Text style={styles.descriptionStyle}>
+          {translate('product.noProductDetail')}
+        </Text>
+      )}
+      {magentoOptions.reviewEnabled && (
+        <>
+          <ProductReviews product={product} />
+          <ReviewFormContainer product={product} />
+        </>
+      )}
       <RelatedProducts
         product={product}
         currencyRate={currencyRate}
@@ -153,10 +166,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     width: theme.dimens.WINDOW_WIDTH * 0.9,
   }),
-  descriptionStyle: theme => ({
-    padding: theme.spacing.large,
-    lineHeight: 25,
-  }),
+  descriptionStyle: {
+    padding: 16,
+  },
+  productDetailTitle: {
+    marginBottom: 4,
+  },
   errorStyle: theme => ({
     textAlign: 'center',
     padding: theme.spacing.small,
@@ -167,7 +182,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const {
     currency: {
       displayCurrencySymbol: currencySymbol,

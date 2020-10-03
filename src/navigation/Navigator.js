@@ -12,7 +12,6 @@ import { Icon } from 'react-native-elements';
 
 import Category from '../components/catalog/Category';
 import CategoryTree from '../components/catalog/CategoryTree';
-import Product from '../components/catalog/Product';
 import Cart from '../components/cart/Cart';
 import Checkout from '../components/checkout/Checkout';
 import Login from '../components/account/Login';
@@ -51,7 +50,6 @@ const HomeStack = createStackNavigator(
   {
     [routes.NAVIGATION_HOME_SCREEN_PATH]: HomeScreen,
     [routes.NAVIGATION_CATEGORY_PATH]: Category,
-    // [routes.NAVIGATION_HOME_PRODUCT_PATH]: Product,
     [routes.NAVIGATION_HOME_PRODUCT_PATH]: ProductScreen,
   },
   {
