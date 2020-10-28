@@ -100,7 +100,7 @@ class Magento {
           // Possible 401 or other network error
           return response.json().then(errorResponse => {
             logError(errorResponse);
-            Promise.reject(errorResponse);
+            reject(errorResponse);
           });
         })
         .then(responseData => {
