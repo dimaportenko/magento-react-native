@@ -7,7 +7,7 @@ import { createCustomerCart } from './RestActions';
 export const addCouponToCart = (couponCode) => async (dispatch, getState) => {
   dispatch({ type: types.MAGENTO_COUPON_LOADING, payload: true });
   try {
-    const cartId = getState().cart?.cartId;
+    const cartId = getState().cart?.cartId || getState().cart?.quote?.id;
     let totals;
     if (magento.isCustomerLogin()) {
       await magento.admin.addCouponToCart(cartId, couponCode);
