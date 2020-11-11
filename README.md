@@ -14,6 +14,9 @@
 
 Magento React Native is a fully functional eCommerce App for your Magento 2 website. It uses [Magento 2 REST API](https://devdocs.magento.com/guides/v2.3/get-started/rest_front.html), to dispaly catalog, products, add products to cart, place an order and much more.
 
+## 📣 Annoncement
+
+This project is over 3 years old and I'm currently working on the [new version](https://github.com/troublediehard/magento-react-native-community) of it. It will use Magento 2 GraphQL API and a more modern tech stack. The key feature of the new project is that I'm covering the development process with video tutorials on [YouTube](https://www.youtube.com/playlist?list=PL97fL9DAn9QyNAWAh-X-mFJdXKm96AqVM). 
 
 ## 📲 Setup
 
