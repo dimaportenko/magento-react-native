@@ -251,7 +251,7 @@ export default magento => ({
 
   getProductReviews: productId => magento.get(`/V1/mma/review/reviews/${productId}`, undefined, undefined, ADMIN_TYPE),
 
-  getRatingOptions: () => magento.get(`/V1/mma/rating/ratings/${magento.storeId}`, undefined, undefined, ADMIN_TYPE),
+  getRatingOptions: () => magento.get(`/V1/mma/rating/ratings/${magento.storeConfig?.id}`, undefined, undefined, ADMIN_TYPE),
 
   postGuestReview: review => magento.post('/V1/mma/review/guest/post', review, ADMIN_TYPE),
 
