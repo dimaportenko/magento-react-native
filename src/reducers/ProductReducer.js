@@ -15,6 +15,7 @@ import {
   MAGENTO_RELATED_PRODUCTS_CONF_PRODUCT,
 } from '../actions/types';
 import { getPriceFromChildren } from '../helper/product';
+import * as types from '../actions/types';
 
 const INITIAL_STATE = {
   current: {
@@ -32,6 +33,7 @@ const INITIAL_STATE = {
     error: '',
     items: [],
   },
+  ratingOptions: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -168,6 +170,9 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         relatedProducts,
       };
+    }
+    case types.MAGENTO_PRODUCT_RATING_OPTIONS: {
+      return { ...state, ratingOptions: action.payload };
     }
     default:
       return state;

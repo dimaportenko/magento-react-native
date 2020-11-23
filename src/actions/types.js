@@ -98,3 +98,5 @@ export const MAGENTO_RELATED_PRODUCTS_LOADING = 'magento_related_products_loadin
 export const MAGENTO_RELATED_PRODUCTS_SUCCESS = 'magento_related_products_success';
 export const MAGENTO_RELATED_PRODUCTS_ERROR = 'magento_related_products_error';
 export const MAGENTO_RELATED_PRODUCTS_CONF_PRODUCT = 'magento_related_products_conf_product_update';
+
+export const MAGENTO_PRODUCT_RATING_OPTIONS = 'MAGENTO_PRODUCT_RATING_OPTIONS';
