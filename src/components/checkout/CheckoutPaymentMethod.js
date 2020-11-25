@@ -28,30 +28,8 @@ class CheckoutPaymentMethod extends Component {
 
   onNextPressed = () => {
     const { cartId, selectedPayment } = this.props;
-    // const payment = {
-    // 	paymentMethod: {
-    // 		// po_number: selectedPayment.code,
-    // 		method: selectedPayment.code
-    // 		// additional_data: [
-    // 		// 	"string"
-    // 		// ],
-    // 		// extension_attributes: {
-    // 		// 	agreement_ids: [
-    // 		// 		"string"
-    // 		// 	]
-    // 		// }
-    // 	}
-    // };
-    // this.props.placeGuestCartOrder(cartId, payment);
     this.props.checkoutCustomerNextLoading(true);
-    // setTimeout(
-    // 	() => {
-    // this.props.checkoutCustomerNextLoading(false);
     this.props.getGuestCartPaymentMethods(cartId);
-    // 	},
-    // 	1000
-    // );
-    // this.props.checkoutSetActiveSection(4);
   }
 
   renderPaymentMethods() {
