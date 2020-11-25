@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import {
   getCountries,
@@ -126,7 +126,7 @@ class AddAccountAddress extends Component {
   renderRegions = () => {
     const theme = this.context;
     const { countryId, countries } = this.props;
-    if (countryId && countryId.length && countries.length) {
+    if (countryId && countryId.length && countries && countries.length) {
       const country = countries.find(item => item.id === countryId);
       if (country && country.available_regions) {
         const data = country.available_regions.map(value => ({
@@ -139,11 +139,10 @@ class AddAccountAddress extends Component {
             disabled={data.length === 0}
             key="regions"
             label={translate('common.region')}
-            attribute="Region"
-            value="Region"
+            attribute={translate('common.region')}
+            value={translate('common.region')}
             data={data}
-            onChange={this.regionSelect}
-            style={styles.inputContainer(theme)}
+            onChange={this.regionSelect.bind(this)}
           />
         );
       }
@@ -155,7 +154,6 @@ class AddAccountAddress extends Component {
         value={regionValue}
         placeholder={translate('common.region')}
         onChangeText={value => this.updateUI('region', value)}
-        containerStyle={styles.inputContainer(theme)}
       />
     );
   };
@@ -170,7 +168,6 @@ class AddAccountAddress extends Component {
           value={this.props.country}
           placeholder={translate('common.country')}
           onChangeText={value => this.updateUI('country', value)}
-          containerStyle={styles.inputContainer(theme)}
         />
       );
     }
@@ -187,12 +184,11 @@ class AddAccountAddress extends Component {
       <ModalSelect
         disabled={data.length === 0}
         key="countries"
-        label={label}
+        label={translate('common.country')}
         attribute={translate('common.country')}
         value={translate('common.country')}
         data={data}
-        onChange={this.countrySelect}
-        style={styles.inputContainer(theme)}
+        onChange={this.countrySelect.bind(this)}
       />
     );
   };
@@ -200,41 +196,43 @@ class AddAccountAddress extends Component {
   render() {
     const theme = this.context;
     return (
-      <View style={styles.container(theme)}>
-        {this.renderCountries()}
+      <ScrollView>
+        <View style={styles.container(theme)}>
+          {this.renderCountries()}
 
-        {this.renderRegions()}
+          {this.renderRegions()}
 
-        <Input
-          value={this.props.postcode}
-          placeholder={translate('common.postcode')}
-          onChangeText={value => this.updateUI('postcode', value)}
-          containerStyle={styles.inputContainer(theme)}
-        />
+          <Input
+            value={this.props.postcode}
+            placeholder={translate('common.postcode')}
+            onChangeText={value => this.updateUI('postcode', value)}
+            containerStyle={styles.inputContainer(theme)}
+          />
 
-        <Input
-          value={this.props.street}
-          placeholder={translate('common.street')}
-          onChangeText={value => this.updateUI('street', value)}
-          containerStyle={styles.inputContainer(theme)}
-        />
+          <Input
+            value={this.props.street}
+            placeholder={translate('common.street')}
+            onChangeText={value => this.updateUI('street', value)}
+            containerStyle={styles.inputContainer(theme)}
+          />
 
-        <Input
-          value={this.props.city}
-          placeholder={translate('common.city')}
-          onChangeText={value => this.updateUI('city', value)}
-          containerStyle={styles.inputContainer(theme)}
-        />
+          <Input
+            value={this.props.city}
+            placeholder={translate('common.city')}
+            onChangeText={value => this.updateUI('city', value)}
+            containerStyle={styles.inputContainer(theme)}
+          />
 
-        <Input
-          value={this.props.telephone}
-          placeholder={translate('common.telephone')}
-          onChangeText={value => this.updateUI('telephone', value)}
-          containerStyle={styles.inputContainer(theme)}
-        />
-        {this.renderButton()}
-        <Text type="heading" style={styles.errorTextStyle(theme)}>{this.props.error}</Text>
-      </View>
+          <Input
+            value={this.props.telephone}
+            placeholder={translate('common.telephone')}
+            onChangeText={value => this.updateUI('telephone', value)}
+            containerStyle={styles.inputContainer(theme)}
+          />
+          {this.renderButton()}
+          <Text type="heading" style={styles.errorTextStyle(theme)}>{this.props.error}</Text>
+        </View>
+      </ScrollView>
     );
   }
 }
@@ -242,20 +240,24 @@ class AddAccountAddress extends Component {
 const styles = StyleSheet.create({
   container: theme => ({
     flex: 1,
-    backgroundColor: theme.colors.background,
+    backgroundColor: '#fff',
     padding: theme.spacing.large,
   }),
   inputContainer: theme => ({
-    marginBottom: theme.spacing.large,
+    height: 60,
+    padding: 10, 
+    marginTop: theme.spacing.tiny,
   }),
   errorTextStyle: theme => ({
     color: theme.colors.error,
     alignSelf: 'center',
   }),
   buttonStyle: theme => ({
-    marginVertical: theme.spacing.large,
+    backgroundColor: theme.colors.primary,
     alignSelf: 'center',
-    width: theme.dimens.WINDOW_WIDTH * 0.9,
+    marginTop: 10,
+    width: '100%',
+    padding: 30,
   }),
 });
 
