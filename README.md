@@ -55,6 +55,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="http://www.qualwebs.com/"><img src="https://avatars3.githubusercontent.com/u/13719000?v=4" width="100px;" alt=""/><br /><sub><b>Qualwebs</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=qualwebs" title="Code">💻</a></td>
     <td align="center"><a href="https://www.vnecoms.com"><img src="https://avatars2.githubusercontent.com/u/367271?v=4" width="100px;" alt=""/><br /><sub><b>Hungvt</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=hungvt" title="Code">💻</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="http://www.linkedin.com/in/sidneybarbosa"><img src="https://avatars2.githubusercontent.com/u/66479859?v=4" width="100px;" alt=""/><br /><sub><b>Sidney Lopes</b></sub></a><br /><a href="https://github.com/troublediehard/magento-react-native/commits?author=sidneylopes" title="Code">💻</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
