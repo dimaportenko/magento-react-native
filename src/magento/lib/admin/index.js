@@ -156,7 +156,7 @@ export default magento => ({
     conditionType = 'like',
   ) => {
     const currentPage = parseInt(offset / pageSize, 10) + 1;
-    const currentAttributeValue = conditionType === 'eq' ? attributeValue : `%${attributeValue}%`;
+    const currentAttributeValue = conditionType === 'eq' ? attributeValue : `%\\${attributeValue}%`;
     const params = {
       'searchCriteria[filterGroups][0][filters][0][field]': attributeCode,
       'searchCriteria[filterGroups][0][filters][0][value]': currentAttributeValue,
