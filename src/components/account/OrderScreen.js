@@ -16,17 +16,19 @@ const OrderScreen = ({
   orderProductDetail: _orderProductDetail,
 }) => {
   const theme = useContext(ThemeContext);
-  const currencySymbol = priceSignByCode(navigation.state.params.item.order_currency_code);
+  const currencySymbol = priceSignByCode(
+    navigation.state.params.item.order_currency_code,
+  );
 
   useEffect(() => {
-    navigation.state.params.item.items.forEach((item) => {
+    navigation.state.params.item.items.forEach(item => {
       if (!(item.sku in products)) {
         _orderProductDetail(item.sku);
       }
     });
-  }, []);
+  }, [_orderProductDetail, navigation.state.params.item.items, products]);
 
-  const image = (item) => {
+  const image = item => {
     if (products[item.sku]) {
       return getProductThumbnailFromAttribute(products[item.sku]);
     }
@@ -35,21 +37,27 @@ const OrderScreen = ({
   const renderItem = item => (
     <View style={styles.itemContainer(theme)}>
       <View style={styles.row}>
-        <FastImage style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: image(item.item) }} />
+        <FastImage
+          style={styles.imageStyle(theme)}
+          resizeMode="contain"
+          source={{ uri: image(item.item) }}
+        />
         <View>
           <Text bold>{item.item.name}</Text>
-          <Text type="label">{`${translate('common.sku')}: ${item.item.sku}`}</Text>
+          <Text type="label">{`${translate('common.sku')}: ${
+            item.item.sku
+          }`}</Text>
           <View style={styles.row}>
-            <Text type="label">
-              {`${translate('common.price')}: `}
-            </Text>
+            <Text type="label">{`${translate('common.price')}: `}</Text>
             <Price
               currencyRate={1}
               currencySymbol={currencySymbol}
               basePrice={item.item.price}
             />
           </View>
-          <Text type="label">{`${translate('common.quantity')}: ${item.item.qty_ordered}`}</Text>
+          <Text type="label">{`${translate('common.quantity')}: ${
+            item.item.qty_ordered
+          }`}</Text>
           <View style={styles.row}>
             <Text type="label">{`${translate('common.subTotal')}: `}</Text>
             <Price
@@ -72,11 +80,11 @@ const OrderScreen = ({
         renderItem={renderItem}
         keyExtractor={(_item, index) => index.toString()}
       />
-      <Text type="label">{`${translate('orderListItem.status')}: ${item.status}`}</Text>
+      <Text type="label">{`${translate('orderListItem.status')}: ${
+        item.status
+      }`}</Text>
       <View style={styles.row}>
-        <Text type="label">
-          {`${translate('common.subTotal')}: `}
-        </Text>
+        <Text type="label">{`${translate('common.subTotal')}: `}</Text>
         <Price
           basePrice={item.subtotal}
           currencyRate={1}
@@ -108,7 +116,9 @@ const OrderScreen = ({
 };
 
 OrderScreen.navigationOptions = ({ navigation }) => ({
-  title: `${translate('common.order')} # ${navigation.state.params.item.increment_id}`,
+  title: `${translate('common.order')} # ${
+    navigation.state.params.item.increment_id
+  }`,
 });
 
 const styles = StyleSheet.create({

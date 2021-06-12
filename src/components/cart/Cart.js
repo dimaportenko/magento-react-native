@@ -47,9 +47,9 @@ class Cart extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (
-      prevProps.cart.items
-      && this.props.cart.items
-      && prevProps.cart.items.length !== this.props.cart.items.length
+      prevProps.cart.items &&
+      this.props.cart.items &&
+      prevProps.cart.items.length !== this.props.cart.items.length
     ) {
       this.updateCartItemsProducts();
     }
@@ -74,7 +74,7 @@ class Cart extends Component {
 
     const { products } = this.props;
 
-    items.forEach((item) => {
+    items.forEach(item => {
       if (!item.thumbnail) {
         if (!products[item.sku]) {
           this.props.cartItemProduct(item.sku);
@@ -90,7 +90,7 @@ class Cart extends Component {
 
     let sum = 0;
     if (items) {
-      items.forEach((item) => {
+      items.forEach(item => {
         sum += item.price * item.qty;
       });
     }
@@ -98,9 +98,7 @@ class Cart extends Component {
     if (sum > 0) {
       return (
         <View style={styles.totalPriceContainer}>
-          <Text type="heading">
-            {`${translate('common.total')} `}
-          </Text>
+          <Text type="heading">{`${translate('common.total')} `}</Text>
           <Price
             currencyRate={this.props.currencyRate}
             currencySymbol={this.props.currencySymbol}
@@ -114,21 +112,14 @@ class Cart extends Component {
   renderEmptyCart = () => {
     const theme = this.context;
     const { navigate } = this.props.navigation;
-    const {
-      containerStyle,
-      totals,
-      buttonTextStyle,
-    } = styles;
-
+    const { containerStyle, totals, buttonTextStyle } = styles;
 
     return (
       <View style={containerStyle(theme)}>
         <Text type="heading" style={totals(theme)}>
           {translate('cart.emptyMessage')}
         </Text>
-        <TouchableOpacity
-          onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
-        >
+        <TouchableOpacity onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}>
           <Text type="heading" bold style={buttonTextStyle(theme)}>
             {translate('common.continueShopping')}
           </Text>
@@ -149,23 +140,18 @@ class Cart extends Component {
   renderCart = () => {
     const theme = this.context;
     const { items } = this.props.cart;
-    const {
-      container,
-      content,
-      footer,
-      buttonStyle,
-    } = styles;
+    const { container, content, footer, buttonStyle } = styles;
 
     return (
       <View style={container(theme)}>
         <View style={content}>
           <FlatList
-            refreshControl={(
+            refreshControl={
               <RefreshControl
                 refreshing={this.props.refreshing}
                 onRefresh={this.onRefresh}
               />
-            )}
+            }
             data={[...items]}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
@@ -175,8 +161,7 @@ class Cart extends Component {
           {this.renderTotals()}
           <Button
             onPress={this.onPressAddToCheckout}
-            style={buttonStyle(theme)}
-          >
+            style={buttonStyle(theme)}>
             {translate('cart.checkoutButton')}
           </Button>
         </View>

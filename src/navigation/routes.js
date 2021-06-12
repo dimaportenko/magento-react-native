@@ -7,6 +7,7 @@ export const NAVIGATION_ORDERS_PATH = 'Order_Products';
 export const NAVIGATION_ORDER_PATH = 'Order_List_Items';
 export const NAVIGATION_CART_PATH = 'Cart';
 export const NAVIGATION_CHECKOUT_PATH = 'Checkout';
+export const NAVIGATION_CHECKOUT_STACK_PATH = 'Checkout_STACK';
 export const NAVIGATION_HOME_STACK_PATH = 'Home';
 export const NAVIGATION_ACCOUNT_PATH = 'Account';
 export const NAVIGATION_LOGIN_PATH = 'Login';
@@ -19,6 +20,7 @@ export const NAVIGATION_ACCOUNT_STACK_PATH = 'Account_Stack';
 export const NAVIGATION_SEARCH_SCREEN_PATH = 'Search';
 export const NAVIGATION_ADDRESS_SCREEN_PATH = 'Address';
 export const NAVIGATION_DRAWER_SCREEN = 'Drawer_Screen';
-export const NAVIGATION_FILTER_DRAWER_SCREEN = 'NAVIGATION_FILTER_DRAWER_SCREEN';
+export const NAVIGATION_FILTER_DRAWER_SCREEN =
+  'NAVIGATION_FILTER_DRAWER_SCREEN';
 export const BOTTOM_TAB_NAVIGATOR = 'Bottom_Tab_Navigator';
 export const NAVIGATION_DRAWER_NAVIGATOR = 'NAVIGATION_DRAWER_NAVIGATOR';

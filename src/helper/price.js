@@ -10,7 +10,7 @@ export function finalPrice(data, price) {
   return specialPrice;
 }
 
-export const priceSignByCode = (code) => {
+export const priceSignByCode = code => {
   const sign = currencySymbols[code];
   if (sign) {
     return sign;
@@ -20,7 +20,9 @@ export const priceSignByCode = (code) => {
 };
 
 export const currencyExchangeRateByCode = (code, exchangeRates) => {
-  const result = exchangeRates.find(exchangeRate => exchangeRate.currency_to === code);
+  const result = exchangeRates.find(
+    exchangeRate => exchangeRate.currency_to === code,
+  );
   if (result) {
     return result.rate;
   }

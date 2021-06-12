@@ -3,7 +3,10 @@ import PropTypes from 'prop-types';
 import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
 import { ModalSelect } from '../common';
-import { priceSignByCode, currencyExchangeRateByCode } from '../../helper/price';
+import {
+  priceSignByCode,
+  currencyExchangeRateByCode,
+} from '../../helper/price';
 import { changeCurrency } from '../../actions';
 
 const CurrencyPicker = ({
@@ -47,10 +50,12 @@ const styles = {
 
 CurrencyPicker.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string),
-  exchangeRates: PropTypes.arrayOf(PropTypes.shape({
-    currency_to: PropTypes.string.isRequired,
-    rate: PropTypes.number.isRequired,
-  })),
+  exchangeRates: PropTypes.arrayOf(
+    PropTypes.shape({
+      currency_to: PropTypes.string.isRequired,
+      rate: PropTypes.number.isRequired,
+    }),
+  ),
   selectedCurrencyCode: PropTypes.string,
   changeCurrency: PropTypes.func.isRequired,
 };

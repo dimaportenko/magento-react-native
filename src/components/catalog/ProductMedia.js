@@ -6,7 +6,7 @@ import { magento } from '../../magento';
 import { Spinner } from '../common';
 import { ThemeContext } from '../../theme';
 
-const ProductMedia = (props) => {
+const ProductMedia = props => {
   const theme = useContext(ThemeContext);
 
   const renderMedia = () => {
@@ -16,11 +16,7 @@ const ProductMedia = (props) => {
       return <Spinner />;
     }
     return (
-      <Swiper
-        showsPagination
-        pagingEnabled
-        autoplay={false}
-      >
+      <Swiper showsPagination pagingEnabled autoplay={false}>
         {renderMediaItems()}
       </Swiper>
     );
@@ -29,7 +25,7 @@ const ProductMedia = (props) => {
   const renderMediaItems = () => {
     const { media } = props;
 
-    return media.map((item) => {
+    return media.map(item => {
       console.log('media item');
       console.log(magento.getProductMediaUrl() + item.file);
       return (
@@ -43,11 +39,7 @@ const ProductMedia = (props) => {
     });
   };
 
-  return (
-    <View style={styles.imageContainer(theme)}>
-      {renderMedia()}
-    </View>
-  );
+  return <View style={styles.imageContainer(theme)}>{renderMedia()}</View>;
 };
 
 const styles = {
@@ -55,7 +47,7 @@ const styles = {
     height: theme.dimens.productDetailImageHeight,
   }),
   imageStyle: theme => ({
-    height: (theme.dimens.productDetailImageHeight - 10),
+    height: theme.dimens.productDetailImageHeight - 10,
     top: 0,
   }),
 };

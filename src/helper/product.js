@@ -1,8 +1,8 @@
 import { magento } from '../magento';
 
-export const getProductThumbnailFromAttribute = (product) => {
+export const getProductThumbnailFromAttribute = product => {
   let result = magento.getProductMediaUrl();
-  product.custom_attributes.some((attribute) => {
+  product.custom_attributes.some(attribute => {
     if (attribute.attribute_code === 'thumbnail') {
       result += attribute.value;
       return true;
@@ -15,10 +15,12 @@ export const getProductCustomAttributeValue = (product, key) => {
   const attribute = getProductCustomAttribute(product, key);
   const value = attribute ? attribute.value : attribute;
   return value;
-}
+};
 
 export const getProductCustomAttribute = (product, key) => {
-  const attributes = product.custom_attributes.filter(attribute => attribute.attribute_code === key);
+  const attributes = product.custom_attributes.filter(
+    attribute => attribute.attribute_code === key,
+  );
 
   if (attributes.length) {
     return attributes[0];
@@ -26,12 +28,13 @@ export const getProductCustomAttribute = (product, key) => {
   return false;
 };
 
-export const getPriceFromChildren = (products) => {
+export const getPriceFromChildren = products => {
   if (products) {
     const newPrice = products.reduce((minPrice, child) => {
       if (!minPrice) {
         return child.price;
-      } if (minPrice > child.price) {
+      }
+      if (minPrice > child.price) {
         return child.price;
       }
       return minPrice;

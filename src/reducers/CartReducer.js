@@ -35,7 +35,10 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_CREATE_CART:
       return { ...state, cartId: action.payload, quote: { items: [] } };
     case MAGENTO_CART_ITEM_PRODUCT: {
-      const products = { ...state.products, [action.payload.sku]: action.payload };
+      const products = {
+        ...state.products,
+        [action.payload.sku]: action.payload,
+      };
       return { ...state, products };
     }
     case MAGENTO_CURRENT_PRODUCT:
@@ -43,7 +46,11 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_LOGOUT:
       return { ...INITIAL_STATE };
     case MAGENTO_ADD_TO_CART:
-      return { ...state, addToCartLoading: false, errorMessage: action.payload.message };
+      return {
+        ...state,
+        addToCartLoading: false,
+        errorMessage: action.payload.message,
+      };
     case NAVIGATION_GO_TO_SCREEN:
       return { ...state, errorMessage: false };
     case MAGENTO_GET_CART:

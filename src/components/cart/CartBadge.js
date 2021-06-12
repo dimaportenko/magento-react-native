@@ -7,22 +7,17 @@ import IconBadge from 'react-native-icon-badge';
 import { Text } from '../common';
 import { ThemeContext } from '../../theme';
 
-const CartBadge = ({
-  color,
-  itemsCount,
-}) => {
+const CartBadge = ({ color, itemsCount }) => {
   const theme = useContext(ThemeContext);
 
   return (
     <IconBadge
-      MainElement={(
+      MainElement={
         <View style={styles.iconWrapper}>
           <Icon name="md-cart" type="ionicon" color={color} />
         </View>
-      )}
-      BadgeElement={
-        <Text style={styles.textStyle(theme)}>{itemsCount}</Text>
       }
+      BadgeElement={<Text style={styles.textStyle(theme)}>{itemsCount}</Text>}
       IconBadgeStyle={styles.iconBadgeStyle}
       Hidden={itemsCount === 0}
     />
@@ -57,7 +52,8 @@ CartBadge.defaultProps = {
 };
 
 const mapStateToProps = ({ cart }) => {
-  const itemsCount = cart.quote && cart.quote.items_qty ? cart.quote.items_qty : 0;
+  const itemsCount =
+    cart.quote && cart.quote.items_qty ? cart.quote.items_qty : 0;
   return { itemsCount };
 };
 

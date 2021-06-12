@@ -20,9 +20,11 @@ const Input = ({
 
   return (
     <View style={[styles.containerStyle(theme), containerStyle]}>
-      {
-        label && <Text type="heading" style={[styles.labelStyle(theme), labelStyle]}>{label}</Text>
-      }
+      {label && (
+        <Text type="heading" style={[styles.labelStyle(theme), labelStyle]}>
+          {label}
+        </Text>
+      )}
       <TextInput
         {...props}
         secureTextEntry={secureTextEntry}
@@ -32,7 +34,9 @@ const Input = ({
         style={[styles.inputStyle(theme), inputStyle]}
         value={value}
         onChangeText={onChangeText}
-        ref={(component) => { assignRef && assignRef(component); }}
+        ref={component => {
+          assignRef && assignRef(component);
+        }}
       />
     </View>
   );

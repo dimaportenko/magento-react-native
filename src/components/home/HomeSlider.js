@@ -7,22 +7,20 @@ import { Text } from '../common';
 import { magento } from '../../magento';
 import { ThemeContext } from '../../theme';
 
-const HomeSlider = ({
-  slider,
-  style,
-}) => {
+const HomeSlider = ({ slider, style }) => {
   const theme = useContext(ThemeContext);
 
-  const renderMediaItems = () => slider.map((slide, index) => (
-    <View key={index} style={styles.slide}>
-      <FastImage
-        style={styles.imageStyle(theme)}
-        resizeMode="cover"
-        source={{ uri: magento.getMediaUrl() + slide.image }}
-      />
-      <Text style={styles.slideTitle(theme)}>{slide.title}</Text>
-    </View>
-  ));
+  const renderMediaItems = () =>
+    slider.map((slide, index) => (
+      <View key={index} style={styles.slide}>
+        <FastImage
+          style={styles.imageStyle(theme)}
+          resizeMode="cover"
+          source={{ uri: magento.getMediaUrl() + slide.image }}
+        />
+        <Text style={styles.slideTitle(theme)}>{slide.title}</Text>
+      </View>
+    ));
 
   return (
     <View style={[styles.imageContainer(theme), style]}>

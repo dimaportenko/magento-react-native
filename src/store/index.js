@@ -5,7 +5,6 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import AsyncStorage from '@react-native-community/async-storage';
 
-
 import reducers from '../reducers';
 
 const categoryTreeSubsetBlacklistFilter = createBlacklistFilter(
@@ -18,25 +17,22 @@ const customerAuthSubsetBlacklistFilter = createBlacklistFilter(
   ['loading', 'reset_loading'],
 );
 
-const accountSubsetBlacklistFilter = createBlacklistFilter(
-  'account',
-  ['refreshing'],
-);
+const accountSubsetBlacklistFilter = createBlacklistFilter('account', [
+  'refreshing',
+]);
 
-const cartSubsetBlacklistFilter = createBlacklistFilter(
-  'cart',
-  ['addToCartLoading', 'errorMessage', 'refreshing', 'couponLoading'],
-);
+const cartSubsetBlacklistFilter = createBlacklistFilter('cart', [
+  'addToCartLoading',
+  'errorMessage',
+  'refreshing',
+  'couponLoading',
+]);
 
-const homeSubsetBlacklistFilter = createBlacklistFilter(
-  'home',
-  ['refreshing'],
-);
+const homeSubsetBlacklistFilter = createBlacklistFilter('home', ['refreshing']);
 
-const searchSubsetBlacklistFilter = createBlacklistFilter(
-  'search',
-  ['loadingMore'],
-);
+const searchSubsetBlacklistFilter = createBlacklistFilter('search', [
+  'loadingMore',
+]);
 
 const persistConfig = {
   key: 'root',

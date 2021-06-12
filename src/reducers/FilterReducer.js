@@ -1,7 +1,4 @@
-import {
-  ADD_FILTER_DATA,
-  RESET_FILTERS_DATA,
-} from '../actions/types';
+import { ADD_FILTER_DATA, RESET_FILTERS_DATA } from '../actions/types';
 
 const INITIAL_STATE = {
   priceFilter: undefined,
@@ -14,7 +11,8 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_FILTER_DATA: {
       if (typeof action.payload === 'number') {
         return { ...state, sortOrder: action.payload };
-      } if (action.payload.price) {
+      }
+      if (action.payload.price) {
         return { ...state, priceFilter: action.payload };
       }
       return { ...state, categoryScreen: true };

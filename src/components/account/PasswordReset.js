@@ -1,16 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
-import {
-  View,
-  StyleSheet,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  Spinner,
-  Button,
-  Text,
-  Input,
-} from '../common';
+import { Spinner, Button, Text, Input } from '../common';
 import { initiatePasswordReset, updatePasswordResetUI } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
@@ -25,10 +17,13 @@ const PasswordReset = ({
   const theme = useContext(ThemeContext);
   const [email, setEmail] = useState('');
 
-  useEffect(() => (() => {
-    // componentWillUnmount
-    _updatePasswordResetUI();
-  }), []);
+  useEffect(
+    () => () => {
+      // componentWillUnmount
+      _updatePasswordResetUI();
+    },
+    [_updatePasswordResetUI],
+  );
 
   const onResetPress = () => {
     _initiatePasswordReset(email);
@@ -50,10 +45,7 @@ const PasswordReset = ({
     }
 
     return (
-      <Button
-        disabled={email === ''}
-        onPress={onResetPress}
-      >
+      <Button disabled={email === ''} onPress={onResetPress}>
         {translate('passwordReset.resetButton')}
       </Button>
     );
@@ -61,11 +53,7 @@ const PasswordReset = ({
 
   return (
     <View style={styles.container(theme)}>
-      <Text
-        bold
-        type="subheading"
-        style={styles.title(theme)}
-      >
+      <Text bold type="subheading" style={styles.title(theme)}>
         {translate('passwordReset.passwordRecovery')}
       </Text>
       <Text style={styles.description}>
@@ -130,7 +118,6 @@ PasswordReset.propTypes = {
   error: PropTypes.oneOfType([PropTypes.string, null]),
   initiatePasswordReset: PropTypes.func.isRequired,
   updatePasswordResetUI: PropTypes.func.isRequired,
-
 };
 
 PasswordReset.defaultProps = {

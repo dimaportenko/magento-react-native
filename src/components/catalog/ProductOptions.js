@@ -10,7 +10,11 @@ import { ThemeContext } from '../../theme';
 import { getProductMedia, uiProductUpdate } from '../../actions';
 import _ from 'lodash';
 
-export const ProductOptions = ({ currentProduct, product, setSelectedProduct }) => {
+export const ProductOptions = ({
+  currentProduct,
+  product,
+  setSelectedProduct,
+}) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const { options, attributes, selectedOptions } = currentProduct;
@@ -27,20 +31,22 @@ export const ProductOptions = ({ currentProduct, product, setSelectedProduct }) 
     updateSelectedProduct(updatedOptions);
   };
 
-  const updateSelectedProduct = (selectedOptions) => {
+  const updateSelectedProduct = selectedOptions => {
     const { attributes, options } = currentProduct;
     const selectedKeys = Object.keys(selectedOptions);
 
-    if (!product.children || !selectedKeys.length) {return;}
+    if (!product.children || !selectedKeys.length) {
+      return;
+    }
 
     if (selectedKeys.length === options.length) {
       const searchOption = {};
-      selectedKeys.forEach((attribute_id) => {
+      selectedKeys.forEach(attribute_id => {
         const code = attributes[attribute_id].attributeCode;
         searchOption[code] = selectedOptions[attribute_id];
       });
 
-      const _selectedProduct = product.children.find((child) => {
+      const _selectedProduct = product.children.find(child => {
         const found = _.every(searchOption, (value, code) => {
           const childOption = getProductCustomAttribute(child, code);
           return Number(childOption.value) === Number(value);
@@ -52,7 +58,9 @@ export const ProductOptions = ({ currentProduct, product, setSelectedProduct }) 
         const { medias } = currentProduct;
         setSelectedProduct(_selectedProduct);
         if (!medias || !medias[_selectedProduct.sku]) {
-          dispatch(getProductMedia({ sku: _selectedProduct.sku, id: product.id }));
+          dispatch(
+            getProductMedia({ sku: _selectedProduct.sku, id: product.id }),
+          );
         }
       }
     }
@@ -60,16 +68,18 @@ export const ProductOptions = ({ currentProduct, product, setSelectedProduct }) 
 
   const prevOptions = [];
   let first = true;
-  return options.map((option) => {
+  return options.map(option => {
     if (!attributes[option.attribute_id]) {
       return <View key={option.id} />;
     }
 
-    let data = option.values.map((value) => {
+    let data = option.values.map(value => {
       let optionLabel = value.value_index;
 
       if (attributes && attributes[option.attribute_id]) {
-        const findedValue = attributes[option.attribute_id].options.find(optionData => Number(optionData.value) === Number(value.value_index));
+        const findedValue = attributes[option.attribute_id].options.find(
+          optionData => Number(optionData.value) === Number(value.value_index),
+        );
         if (findedValue) {
           optionLabel = findedValue.label;
         }
@@ -82,16 +92,22 @@ export const ProductOptions = ({ currentProduct, product, setSelectedProduct }) 
         };
       }
 
-      const match = product.children.find((child) => {
+      const match = product.children.find(child => {
         let found = 0;
-        prevOptions.every((prevOption) => {
+        prevOptions.every(prevOption => {
           const { attributeCode } = attributes[prevOption.attribute_id];
-          const currentAttributeCode = attributes[option.attribute_id].attributeCode;
+          const currentAttributeCode =
+            attributes[option.attribute_id].attributeCode;
           const childOption = getProductCustomAttribute(child, attributeCode);
-          const currentOption = getProductCustomAttribute(child, currentAttributeCode);
+          const currentOption = getProductCustomAttribute(
+            child,
+            currentAttributeCode,
+          );
           const selectedValue = selectedOptions[prevOption.attribute_id];
-          if (Number(childOption.value) === Number(selectedValue)
-            && Number(currentOption.value) === Number(value.value_index)) {
+          if (
+            Number(childOption.value) === Number(selectedValue) &&
+            Number(currentOption.value) === Number(value.value_index)
+          ) {
             found++;
             return false;
           }

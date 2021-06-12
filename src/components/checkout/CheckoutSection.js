@@ -10,7 +10,7 @@ const CheckoutSection = ({
   expanded,
   children,
   title,
-  checkoutSetActiveSection: _checkoutSetActiveSection
+  checkoutSetActiveSection: _checkoutSetActiveSection,
 }) => {
   const theme = useContext(ThemeContext);
 
@@ -22,11 +22,7 @@ const CheckoutSection = ({
 
   const renderExpanded = () => {
     if (expanded) {
-      return (
-        <View style={styles.expandedStyle}>
-          {children}
-        </View>
-      );
+      return <View style={styles.expandedStyle}>{children}</View>;
     }
     return <></>;
   };

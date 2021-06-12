@@ -6,7 +6,7 @@ import { uiProductListTypeGrid } from '../../actions';
 
 const HeaderGridToggleIcon = () => {
   const dispatch = useDispatch();
-  const isGrid = useSelector(({ ui }) => ui.listTypeGrid );
+  const isGrid = useSelector(({ ui }) => ui.listTypeGrid);
 
   const onPress = () => {
     dispatch(uiProductListTypeGrid(!isGrid));
@@ -14,7 +14,11 @@ const HeaderGridToggleIcon = () => {
 
   return (
     <MaterialHeaderButtons>
-      <Item title="Change layout" iconName={isGrid ? 'list' : 'grid-on'} onPress={onPress} />
+      <Item
+        title="Change layout"
+        iconName={isGrid ? 'list' : 'grid-on'}
+        onPress={onPress}
+      />
     </MaterialHeaderButtons>
   );
 };

@@ -27,16 +27,18 @@ const ProductListItem = ({
     <View style={viewContainerStyle}>
       <TouchableOpacity
         style={[styles.containerStyle(theme), columnContainerStyle]}
-        onPress={() => { onRowPress(product); }}
-      >
-
+        onPress={() => {
+          onRowPress(product);
+        }}>
         <FastImage
           style={[styles.imageStyle(theme), imageStyle]}
           resizeMode="contain"
           source={{ uri: image() }}
         />
         <View style={[styles.infoStyle, infoStyle]}>
-          <Text type="subheading" style={[styles.textStyle(theme), textStyle]}>{product.name}</Text>
+          <Text type="subheading" style={[styles.textStyle(theme), textStyle]}>
+            {product.name}
+          </Text>
           <Price
             style={styles.textStyle(theme)}
             basePrice={product.price}
@@ -56,10 +58,12 @@ ProductListItem.propTypes = {
     sku: PropTypes.string.isRequired,
     type_id: PropTypes.string,
     price: PropTypes.number,
-    custom_attributes: PropTypes.arrayOf(PropTypes.shape({
-      attribute_code: PropTypes.string,
-      value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-    })),
+    custom_attributes: PropTypes.arrayOf(
+      PropTypes.shape({
+        attribute_code: PropTypes.string,
+        value: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+      }),
+    ),
   }).isRequired,
   onRowPress: PropTypes.func,
   imageStyle: PropTypes.object,
@@ -73,7 +77,7 @@ ProductListItem.propTypes = {
 };
 
 ProductListItem.defaultProps = {
-  onRowPress: () => { },
+  onRowPress: () => {},
   imageStyle: {},
   infoStyle: {},
   textStyle: {},

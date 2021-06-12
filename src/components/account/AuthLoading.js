@@ -1,9 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  View,
-  StatusBar,
-  StyleSheet,
-} from 'react-native';
+import { View, StatusBar, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Spinner } from '../common';
 import {
@@ -14,12 +10,12 @@ import { magento } from '../../magento';
 import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
 
-const AuthLoading = (props) => {
+const AuthLoading = props => {
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
     bootstrapAsync();
-  }, []);
+  }, [bootstrapAsync]);
 
   const bootstrapAsync = async () => {
     try {
@@ -44,7 +40,7 @@ const AuthLoading = (props) => {
       <StatusBar barStyle="default" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: theme => ({

@@ -21,7 +21,7 @@ class SearchScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: translate('search.title'),
     headerBackTitle: ' ',
-    headerRight: (<HeaderGridToggleIcon />),
+    headerRight: () => <HeaderGridToggleIcon />,
   });
 
   constructor(props) {
@@ -32,37 +32,48 @@ class SearchScreen extends Component {
     this.getSearchProducts = _.debounce(this.props.getSearchProducts, 1000);
   }
 
-  onRowPress = (product) => {
+  onRowPress = product => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_SEARCH_PRODUCT_PATH, {
       product,
       title: product.name,
     });
-  }
+  };
 
   onEndReached = () => {
-    const {
-      canLoadMoreContent,
-      loadingMore,
-      products,
-    } = this.props;
+    const { canLoadMoreContent, loadingMore, products } = this.props;
     const { sortOrder, priceFilter } = this.props;
 
     if (!loadingMore && canLoadMoreContent) {
-      this.props.getSearchProducts(this.state.input, products.length, sortOrder, priceFilter);
+      this.props.getSearchProducts(
+        this.state.input,
+        products.length,
+        sortOrder,
+        priceFilter,
+      );
     }
   };
 
-  updateSearch = (input) => {
+  updateSearch = input => {
     this.setState({ input }, () => {
       this.props.resetFilters();
-      this.getSearchProducts(input, null, this.props.sortOrder, this.props.priceFilter);
+      this.getSearchProducts(
+        input,
+        null,
+        this.props.sortOrder,
+        this.props.priceFilter,
+      );
     });
   };
 
-  performSort = (sortOrder) => {
+  performSort = sortOrder => {
     this.props.addFilterData(sortOrder);
-    this.props.getSearchProducts(this.state.input, null, sortOrder, this.props.priceFilter);
+    this.props.getSearchProducts(
+      this.state.input,
+      null,
+      sortOrder,
+      this.props.priceFilter,
+    );
   };
 
   renderContent = () => (
@@ -95,9 +106,7 @@ class SearchScreen extends Component {
           inputContainerStyle={styles.inputContainerStyle(theme)}
           showLoading={this.props.loadingMore}
         />
-        <View style={{ flex: 1 }}>
-          {this.renderContent()}
-        </View>
+        <View style={{ flex: 1 }}>{this.renderContent()}</View>
       </View>
     );
   }

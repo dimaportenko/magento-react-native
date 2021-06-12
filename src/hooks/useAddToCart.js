@@ -5,22 +5,17 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { addToCart, addToCartLoading } from '../actions';
 
-export const useAddToCart = (
-  {
-    product,
-    cart,
-    customer,
-    currentProduct,
-  }
- ) => {
+export const useAddToCart = ({ product, cart, customer, currentProduct }) => {
   const dispatch = useDispatch();
 
   const onPressAddToCart = () => {
     const {
-      qtyInput: qty, selectedOptions, selectedCustomOptions,
+      qtyInput: qty,
+      selectedOptions,
+      selectedCustomOptions,
     } = currentProduct;
     const options = [];
-    Object.keys(selectedOptions).forEach((key) => {
+    Object.keys(selectedOptions).forEach(key => {
       console.log(selectedOptions[key]);
       options.push({
         optionId: key,
@@ -30,14 +25,15 @@ export const useAddToCart = (
     });
 
     const customOptions = [];
-    selectedCustomOptions && Object.keys(selectedCustomOptions).forEach((key) => {
-      console.log(selectedCustomOptions[key]);
-      customOptions.push({
-        optionId: key,
-        optionValue: selectedCustomOptions[key],
-        extensionAttributes: {},
+    selectedCustomOptions &&
+      Object.keys(selectedCustomOptions).forEach(key => {
+        console.log(selectedCustomOptions[key]);
+        customOptions.push({
+          optionId: key,
+          optionValue: selectedCustomOptions[key],
+          extensionAttributes: {},
+        });
       });
-    });
 
     let productOptions = {};
     if (options.length) {
@@ -50,8 +46,12 @@ export const useAddToCart = (
       };
     }
 
-    if (productOptions.productOption && productOptions.productOption.extensionAttributes) {
-      productOptions.productOption.extensionAttributes.customOptions = customOptions;
+    if (
+      productOptions.productOption &&
+      productOptions.productOption.extensionAttributes
+    ) {
+      productOptions.productOption.extensionAttributes.customOptions =
+        customOptions;
     } else {
       productOptions = {
         productOption: {
@@ -63,18 +63,20 @@ export const useAddToCart = (
     }
 
     dispatch(addToCartLoading(true));
-    dispatch(addToCart({
-      cartId: cart.cartId,
-      item: {
-        cartItem: {
-          sku: product.sku,
-          qty,
-          quoteId: cart.cartId,
-          ...productOptions,
+    dispatch(
+      addToCart({
+        cartId: cart.cartId,
+        item: {
+          cartItem: {
+            sku: product.sku,
+            qty,
+            quoteId: cart.cartId,
+            ...productOptions,
+          },
         },
-      },
-      customer,
-    }));
+        customer,
+      }),
+    );
   };
 
   return {

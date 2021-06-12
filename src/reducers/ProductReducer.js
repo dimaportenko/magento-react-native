@@ -49,7 +49,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         relatedProducts,
-        current: { ...state.current, [current.product.id]: current }
+        current: { ...state.current, [current.product.id]: current },
       };
     }
     case MAGENTO_GET_PRODUCT_MEDIA: {
@@ -57,13 +57,17 @@ export default (state = INITIAL_STATE, action) => {
         return state;
       }
       const { id, sku, media } = action.payload;
-      const medias = state.current[id] && state.current[id].medias ? state.current[id].media : {};
+      const medias =
+        state.current[id] && state.current[id].medias
+          ? state.current[id].media
+          : {};
       const current = {
         ...state.current,
         [id]: {
           ...state.current[id],
           medias: {
-            ...medias, [sku]: media,
+            ...medias,
+            [sku]: media,
           },
         },
       };
@@ -71,16 +75,27 @@ export default (state = INITIAL_STATE, action) => {
     }
     case MAGENTO_GET_CONF_OPTIONS: {
       const { id, data } = action.payload;
-      const current = { ...state.current, [id]: { ...state.current[id], options: data } };
+      const current = {
+        ...state.current,
+        [id]: { ...state.current[id], options: data },
+      };
       return { ...state, current };
     }
     case MAGENTO_GET_CUSTOM_OPTIONS: {
       const { id, data } = action.payload;
-      const current = { ...state.current, [id]: { ...state.current[id], customOptions: data } };
+      const current = {
+        ...state.current,
+        [id]: { ...state.current[id], customOptions: data },
+      };
       return { ...state, current };
     }
     case MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS: {
-      const { productId: id, attributeId, options, attributeCode } = action.payload;
+      const {
+        productId: id,
+        attributeId,
+        options,
+        attributeCode,
+      } = action.payload;
       const attributes = {
         ...state.current[id].attributes,
         [attributeId]: {
@@ -88,12 +103,18 @@ export default (state = INITIAL_STATE, action) => {
           attributeCode,
         },
       };
-      const current = { ...state.current, [id]: { ...state.current[id], attributes } };
+      const current = {
+        ...state.current,
+        [id]: { ...state.current[id], attributes },
+      };
       return { ...state, current };
     }
     case UI_PRODUCT_UPDATE_OPTIONS: {
       const { id, selectedOptions } = action.payload;
-      const current = { ...state.current, [id]: { ...state.current[id], selectedOptions } };
+      const current = {
+        ...state.current,
+        [id]: { ...state.current[id], selectedOptions },
+      };
       return { ...state, current };
     }
     case UI_PRODUCT_UPDATE_CUSTOM_OPTIONS: {
@@ -106,7 +127,10 @@ export default (state = INITIAL_STATE, action) => {
     }
     case UI_PRODUCT_QTY_INPUT: {
       const { id, qty } = action.payload;
-      const current = { ...state.current, [id]: { ...state.current[id], qtyInput: qty } };
+      const current = {
+        ...state.current,
+        [id]: { ...state.current[id], qtyInput: qty },
+      };
       return { ...state, current };
     }
     // case NAVIGATION_GO_TO_SCREEN:
@@ -114,7 +138,11 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_UPDATE_CONF_PRODUCT: {
       const { sku, children, id } = action.payload;
       let { current } = state;
-      if (current[id] && current[id].product && current[id].product.sku === sku) {
+      if (
+        current[id] &&
+        current[id].product &&
+        current[id].product.sku === sku
+      ) {
         current = {
           ...current,
           [id]: {
@@ -131,21 +159,32 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, current };
     }
     case MAGENTO_RELATED_PRODUCTS_LOADING: {
-      const relatedProducts = { ...state.relatedProducts, loading: action.payload };
+      const relatedProducts = {
+        ...state.relatedProducts,
+        loading: action.payload,
+      };
       return {
         ...state,
         relatedProducts,
       };
     }
     case MAGENTO_RELATED_PRODUCTS_SUCCESS: {
-      const relatedProducts = { ...state.relatedProducts, loading: false, items: action.payload };
+      const relatedProducts = {
+        ...state.relatedProducts,
+        loading: false,
+        items: action.payload,
+      };
       return {
         ...state,
         relatedProducts,
       };
     }
     case MAGENTO_RELATED_PRODUCTS_ERROR: {
-      const relatedProducts = { ...state.relatedProducts, loading: false, error: action.payload.errorMessage };
+      const relatedProducts = {
+        ...state.relatedProducts,
+        loading: false,
+        error: action.payload.errorMessage,
+      };
       return {
         ...state,
         relatedProducts,
@@ -154,7 +193,7 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_RELATED_PRODUCTS_CONF_PRODUCT: {
       const { sku, children } = action.payload;
 
-      const items = state.relatedProducts.items.map((product) => {
+      const items = state.relatedProducts.items.map(product => {
         if (product.sku === sku) {
           return {
             ...product,

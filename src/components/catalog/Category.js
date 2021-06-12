@@ -1,9 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { connect, useSelector } from 'react-redux';
-import {
-  View,
-  RefreshControl,
-} from 'react-native';
+import { View, RefreshControl } from 'react-native';
 import PropTypes from 'prop-types';
 import {
   addFilterData,
@@ -13,9 +10,7 @@ import {
 } from '../../actions';
 import { ProductList, HeaderGridToggleIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
-import {
-  NAVIGATION_HOME_PRODUCT_PATH,
-} from '../../navigation/routes';
+import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 
 const Category = ({
@@ -36,14 +31,14 @@ const Category = ({
   updateProductsForCategoryOrChild: _updateProductsForCategoryOrChild,
 }) => {
   const theme = useContext(ThemeContext);
-  const listTypeGrid = useSelector(({ ui }) => ui.listTypeGrid );
+  const listTypeGrid = useSelector(({ ui }) => ui.listTypeGrid);
 
   useEffect(() => {
     _addFilterData({ categoryScreen: true });
     _getProductsForCategoryOrChild(category);
-  }, []);
+  }, [_addFilterData, _getProductsForCategoryOrChild, category]);
 
-  const onRowPress = (product) => {
+  const onRowPress = product => {
     _setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name,
@@ -59,11 +54,16 @@ const Category = ({
     console.log('On end reached called!');
     console.log(loadingMore, totalCount, canLoadMoreContent);
     if (!loadingMore && canLoadMoreContent) {
-      _getProductsForCategoryOrChild(category, products.length, sortOrder, priceFilter);
+      _getProductsForCategoryOrChild(
+        category,
+        products.length,
+        sortOrder,
+        priceFilter,
+      );
     }
   };
 
-  const performSort = (_sortOrder) => {
+  const performSort = _sortOrder => {
     _addFilterData(_sortOrder);
     _getProductsForCategoryOrChild(category, null, _sortOrder, priceFilter);
   };
@@ -71,12 +71,9 @@ const Category = ({
   return (
     <View style={styles.containerStyle(theme)}>
       <ProductList
-        refreshControl={(
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         products={products}
         onEndReached={onEndReached}
         canLoadMoreContent={canLoadMoreContent}
@@ -95,7 +92,7 @@ const Category = ({
 Category.navigationOptions = ({ navigation }) => ({
   title: navigation.state.params.title.toUpperCase(),
   headerBackTitle: ' ',
-  headerRight: (<HeaderGridToggleIcon />),
+  headerRight: () => <HeaderGridToggleIcon />,
 });
 
 const styles = {
@@ -108,7 +105,10 @@ const styles = {
 Category.propTypes = {
   canLoadMoreContent: PropTypes.bool.isRequired,
   loadingMore: PropTypes.bool.isRequired,
-  products: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.bool]),
+  products: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.object),
+    PropTypes.bool,
+  ]),
   totalCount: PropTypes.number.isRequired,
   category: PropTypes.object,
   refreshing: PropTypes.bool.isRequired,
@@ -123,11 +123,9 @@ Category.propTypes = {
 
 Category.defaultProps = {};
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { category } = state.category.current;
-  const {
-    products, totalCount, loadingMore, refreshing,
-  } = state.category;
+  const { products, totalCount, loadingMore, refreshing } = state.category;
   const {
     currency: {
       displayCurrencySymbol: currencySymbol,

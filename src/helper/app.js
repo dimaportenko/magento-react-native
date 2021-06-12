@@ -3,8 +3,7 @@ import { magento } from '../magento';
 import { initMagento, getCart, setCurrentCustomer } from '../actions';
 import { logError } from './logger';
 
-
-export const onAppStart = async (store) => {
+export const onAppStart = async store => {
   store.dispatch(initMagento());
 
   const customerToken = await AsyncStorage.getItem('customerToken');

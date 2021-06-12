@@ -1,9 +1,5 @@
 import React, { useContext } from 'react';
-import {
-  View,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { Text, Price } from '../common';
 import { NAVIGATION_ORDER_PATH } from '../../navigation/routes';
@@ -12,9 +8,7 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
 
-const OrderListItem = ({
-  item,
-}) => {
+const OrderListItem = ({ item }) => {
   const theme = useContext(ThemeContext);
   const currencySymbol = priceSignByCode(item.order_currency_code);
 
@@ -27,10 +21,16 @@ const OrderListItem = ({
   return (
     <TouchableOpacity onPress={openOrdersScreen}>
       <View style={styles.container(theme)}>
-        <Text bold>{`${translate('common.order')} # ${item.increment_id}`}</Text>
-        <Text type="label">{`${translate('orderListItem.created')}: ${item.created_at}`}</Text>
+        <Text bold>{`${translate('common.order')} # ${
+          item.increment_id
+        }`}</Text>
+        <Text type="label">{`${translate('orderListItem.created')}: ${
+          item.created_at
+        }`}</Text>
         <Text type="label">
-          {`${translate('orderListItem.shipTo')} ${item.customer_firstname} ${item.customer_lastname}`}
+          {`${translate('orderListItem.shipTo')} ${item.customer_firstname} ${
+            item.customer_lastname
+          }`}
         </Text>
         <View style={styles.row}>
           <Text type="label">
@@ -42,7 +42,9 @@ const OrderListItem = ({
             currencyRate={1}
           />
         </View>
-        <Text type="label">{`${translate('orderListItem.status')}: ${item.status}`}</Text>
+        <Text type="label">{`${translate('orderListItem.status')}: ${
+          item.status
+        }`}</Text>
       </View>
     </TouchableOpacity>
   );

@@ -8,19 +8,25 @@ import NavigationService from './navigation/NavigationService';
 import { onAppStart } from './helper/app';
 
 import { Spinner } from './components/common';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-navigation';
 
 onAppStart(store);
 
 const App = () => (
   <Provider store={store}>
     <ThemeProvider theme={theme}>
-      <PersistGate loading={<Spinner />} persistor={persistor}>
-        <Navigator
-          ref={(navigatorRef) => {
-            NavigationService.setTopLevelNavigator(navigatorRef);
-          }}
-        />
-      </PersistGate>
+      <SafeAreaProvider>
+        <SafeAreaView style={{ flex: 1 }} forceInset={{ bottom: 'never' }}>
+          <PersistGate loading={<Spinner />} persistor={persistor}>
+            <Navigator
+              ref={navigatorRef => {
+                NavigationService.setTopLevelNavigator(navigatorRef);
+              }}
+            />
+          </PersistGate>
+        </SafeAreaView>
+      </SafeAreaProvider>
     </ThemeProvider>
   </Provider>
 );

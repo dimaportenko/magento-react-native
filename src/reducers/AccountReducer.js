@@ -44,7 +44,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, ui: INITIAL_STATE.ui };
     }
     case MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR: {
-      return { ...state, ui: { ...state.ui, loading: false, error: action.payload } };
+      return {
+        ...state,
+        ui: { ...state.ui, loading: false, error: action.payload },
+      };
     }
     case MAGENTO_ADD_ACCOUNT_ADDRESS: {
       return {

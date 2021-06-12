@@ -10,7 +10,7 @@ import {
 /**
  * Get product from a category
  */
-export const getRelatedProduct = (categoryIds, sku) => async (dispatch) => {
+export const getRelatedProduct = (categoryIds, sku) => async dispatch => {
   try {
     dispatch({ type: MAGENTO_RELATED_PRODUCTS_LOADING, payload: true });
     const result = await magento.admin.getProductsWithAttribute(
@@ -29,9 +29,15 @@ export const getRelatedProduct = (categoryIds, sku) => async (dispatch) => {
       MAGENTO_RELATED_PRODUCTS_CONF_PRODUCT,
     );
     if (result && result.items) {
-      dispatch({ type: MAGENTO_RELATED_PRODUCTS_SUCCESS, payload: result.items });
+      dispatch({
+        type: MAGENTO_RELATED_PRODUCTS_SUCCESS,
+        payload: result.items,
+      });
     }
   } catch (error) {
-    dispatch({ type: MAGENTO_RELATED_PRODUCTS_ERROR, payload: { errorMessage: error.message } });
+    dispatch({
+      type: MAGENTO_RELATED_PRODUCTS_ERROR,
+      payload: { errorMessage: error.message },
+    });
   }
 };
