@@ -56,6 +56,7 @@ import {
   RESET_FILTERS_DATA,
   MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR,
   MAGENTO_GET_CUSTOM_OPTIONS,
+  MAGENTO_CART_RESET,
 } from './types';
 import { logError } from '../helper/logger';
 import { priceSignByCode } from '../helper/price';
@@ -416,6 +417,19 @@ export const createCustomerCart = customerId => async dispatch => {
       logError(error);
     }
   }
+};
+
+export const resetCart = () => {
+  return async dispatch => {
+    try {
+      await AsyncStorage.removeItem('cartId');
+    } catch (error) {
+      logError(error);
+    }
+    return dispatch({
+      type: MAGENTO_CART_RESET,
+    });
+  };
 };
 
 export const getCart =

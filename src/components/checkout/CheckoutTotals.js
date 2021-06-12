@@ -8,6 +8,7 @@ import {
   checkoutOrderPopupShown,
   placeGuestCartOrder,
   getCart,
+  resetCart,
   checkoutSetActiveSection,
   removeCouponFromCart,
   addCouponToCart,
@@ -172,7 +173,7 @@ class CheckoutTotals extends Component {
 
   showPopup(title, message) {
     this.props.checkoutSetActiveSection(1);
-    this.props.getCart();
+    this.props.resetCart();
     // this.props.checkoutOrderPopupShown();
     Alert.alert(
       title,
@@ -307,6 +308,7 @@ export default connect(mapStateToProps, {
   checkoutOrderPopupShown,
   placeGuestCartOrder,
   getCart,
+  resetCart,
   addCouponToCart,
   removeCouponFromCart,
 })(CheckoutTotals);

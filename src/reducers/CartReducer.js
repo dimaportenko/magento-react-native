@@ -12,7 +12,7 @@ import {
   MAGENTO_CURRENT_PRODUCT,
   MAGENTO_LOGIN_SUCCESS,
   MAGENTO_COUPON_LOADING,
-  MAGENTO_COUPON_ERROR,
+  MAGENTO_COUPON_ERROR, MAGENTO_CART_RESET,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -44,6 +44,7 @@ export default (state = INITIAL_STATE, action) => {
     case MAGENTO_CURRENT_PRODUCT:
       return { ...state, errorMessage: false };
     case MAGENTO_LOGOUT:
+    case MAGENTO_CART_RESET:
       return { ...INITIAL_STATE };
     case MAGENTO_ADD_TO_CART:
       return {
