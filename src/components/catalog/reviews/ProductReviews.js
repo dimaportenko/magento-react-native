@@ -19,14 +19,14 @@ export const ProductReviews = ({ product }) => {
 
   useEffect(() => {
     setIconName(expanded ? 'angle-up' : 'angle-down');
-  }, [expanded])
+  }, [expanded]);
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Spinner />
       </View>
-    )
+    );
   }
 
   if (!(reviews && reviews.count && reviews.reviews)) {
@@ -37,23 +37,21 @@ export const ProductReviews = ({ product }) => {
     <View style={styles.customerReviewsWrap}>
       <TouchableOpacity
         style={styles.expandHeaderRow}
-        onPress={() => { setExpanded(!expanded) }}
-      >
+        onPress={() => {
+          setExpanded(!expanded);
+        }}>
         <Row style={styles.expandHeaderWrap}>
           <Text style={styles.customerReviewsTitle}>Customer Reviews</Text>
-          <Icon name={iconName} type="font-awesome" color={'#737373'}/>
+          <Icon name={iconName} type="font-awesome" color={'#737373'} />
         </Row>
         <Spacer size={10} />
       </TouchableOpacity>
-      {
-        expanded
-        && (
-          <View>
-            <Spacer size={10} />
-            <CustomerReviews reviews={reviews.reviews} />
-          </View>
-        )
-      }
+      {expanded && (
+        <View>
+          <Spacer size={10} />
+          <CustomerReviews reviews={reviews.reviews} />
+        </View>
+      )}
     </View>
   );
 };
@@ -62,7 +60,7 @@ const styles = StyleSheet.create({
   customerReviewsWrap: {
     // marginLeft: Sizes.WINDOW_WIDTH * 0.05,
     marginTop: Sizes.WINDOW_WIDTH * 0.05,
-    margin: 10
+    margin: 10,
   },
   expandHeaderRow: {
     // borderBottomWidth: 1,
@@ -74,6 +72,6 @@ const styles = StyleSheet.create({
     width: Sizes.WINDOW_WIDTH * 0.9,
   },
   customerReviewsTitle: {
-    ...Typography.headingText
+    ...Typography.headingText,
   },
-})
+});

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { Text } from './Text';
 import { ThemeContext } from '../../theme';
 
-const formatPrice = (price, currencyRate) => parseFloat((price * currencyRate).toFixed(2));
+const formatPrice = (price, currencyRate) =>
+  parseFloat((price * currencyRate).toFixed(2));
 
 /**
  * Component to display price of the product. If discount price is
@@ -28,12 +29,31 @@ const Price = ({
 }) => {
   const theme = useContext(ThemeContext);
   const isBold = () => discountPrice && discountPrice < basePrice;
-  const renderDiscountPrice = () => (discountPrice === basePrice ? null : <Text type="label" bold={isBold()} style={styles.discountPriceText(theme)}>{`${currencySymbol} ${formatPrice(discountPrice, currencyRate)}`}</Text>);
+  const renderDiscountPrice = () =>
+    discountPrice === basePrice ? null : (
+      <Text
+        type="label"
+        bold={isBold()}
+        style={styles.discountPriceText(
+          theme,
+        )}>{`${currencySymbol} ${formatPrice(
+        discountPrice,
+        currencyRate,
+      )}`}</Text>
+    );
 
   return (
     <View style={[styles.container, style]}>
-      {discountPrice && discountPrice < basePrice ? renderDiscountPrice() : null}
-      <Text type="label" bold={!isBold()} style={styles.basePriceText(basePrice, discountPrice)}>{`${currencySymbol} ${formatPrice(basePrice, currencyRate)}`}</Text>
+      {discountPrice && discountPrice < basePrice
+        ? renderDiscountPrice()
+        : null}
+      <Text
+        type="label"
+        bold={!isBold()}
+        style={styles.basePriceText(
+          basePrice,
+          discountPrice,
+        )}>{`${currencySymbol} ${formatPrice(basePrice, currencyRate)}`}</Text>
     </View>
   );
 };
@@ -46,7 +66,8 @@ const styles = {
     marginEnd: theme.spacing.tiny,
   }),
   basePriceText: (basePrice, discountPrice) => ({
-    textDecorationLine: discountPrice && discountPrice < basePrice ? 'line-through' : 'none',
+    textDecorationLine:
+      discountPrice && discountPrice < basePrice ? 'line-through' : 'none',
   }),
 };
 
@@ -54,7 +75,7 @@ Price.propTypes = {
   currencySymbol: PropTypes.string.isRequired,
   currencyRate: PropTypes.number.isRequired,
   basePrice: PropTypes.number,
-  discountPrice: PropTypes.number,
+  discountPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: ViewPropTypes.style,
 };
 

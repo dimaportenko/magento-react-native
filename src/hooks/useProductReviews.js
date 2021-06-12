@@ -8,21 +8,19 @@ import { logError } from '../helper/logger';
 
 type Props = {
   product: {
-    id: number
-  }
+    id: number,
+  },
 };
 
 type Result = {
-  reviews: {
-
-  },
-  loading: boolean
+  reviews: {},
+  loading: boolean,
 };
 
 export const useProductReviews = ({ product }: Props): Result => {
-  const [reviews, setReviews] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(false)
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const getReviews = async () => {
     try {
@@ -42,11 +40,11 @@ export const useProductReviews = ({ product }: Props): Result => {
     if (product?.id) {
       getReviews();
     }
-  }, [product])
+  }, [getReviews, product]);
 
   return {
     reviews,
     error,
-    loading
+    loading,
   };
 };

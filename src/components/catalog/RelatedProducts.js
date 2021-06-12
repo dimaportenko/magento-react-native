@@ -12,12 +12,17 @@ import { setCurrentProduct } from '../../actions';
 import { useRelatedProducts } from '../../hooks/useRelatedProducts';
 import { Spinner } from '../common';
 
-export const RelatedProducts = ({ product, currencySymbol, currencyRate, navigation }) => {
+export const RelatedProducts = ({
+  product,
+  currencySymbol,
+  currencyRate,
+  navigation,
+}) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const { relatedProducts, loading, error } = useRelatedProducts({ product });
 
-  if (!relatedProducts?.length && !loading || error) {
+  if ((!relatedProducts?.length && !loading) || error) {
     return <View />;
   }
 
@@ -25,7 +30,7 @@ export const RelatedProducts = ({ product, currencySymbol, currencyRate, navigat
     return <Spinner />;
   }
 
-  const onProductPress = (pressedProduct) => {
+  const onProductPress = pressedProduct => {
     dispatch(setCurrentProduct({ product: pressedProduct }));
     navigation.push(NAVIGATION_HOME_PRODUCT_PATH, {
       title: pressedProduct.name,

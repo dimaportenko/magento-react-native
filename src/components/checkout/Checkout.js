@@ -9,10 +9,7 @@ import CheckoutTotals from './CheckoutTotals';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
-const Checkout = ({
-  navigation,
-  activeSection: _activeSection,
-}) => {
+const Checkout = ({ navigation, activeSection: _activeSection }) => {
   const theme = useContext(ThemeContext);
   const activeSection = Number(_activeSection);
 
@@ -21,29 +18,25 @@ const Checkout = ({
       <CheckoutSection
         title={translate('checkout.customerAccount')}
         number="1"
-        expanded={activeSection === 1}
-      >
+        expanded={activeSection === 1}>
         <CheckoutCustomerAccount />
       </CheckoutSection>
       <CheckoutSection
         title={translate('checkout.shippingMethod')}
         number="2"
-        expanded={activeSection === 2}
-      >
+        expanded={activeSection === 2}>
         <CheckoutShippingMethod />
       </CheckoutSection>
       <CheckoutSection
         title={translate('checkout.paymentMethod')}
         number="3"
-        expanded={activeSection === 3}
-      >
+        expanded={activeSection === 3}>
         <CheckoutPaymentMethod />
       </CheckoutSection>
       <CheckoutSection
         title={translate('checkout.summary')}
         number="4"
-        expanded={activeSection === 4}
-      >
+        expanded={activeSection === 4}>
         <CheckoutTotals navigation={navigation} />
       </CheckoutSection>
     </ScrollView>

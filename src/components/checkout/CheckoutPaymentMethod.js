@@ -30,7 +30,7 @@ class CheckoutPaymentMethod extends Component {
     const { cartId, selectedPayment } = this.props;
     this.props.checkoutCustomerNextLoading(true);
     this.props.getGuestCartPaymentMethods(cartId);
-  }
+  };
 
   renderPaymentMethods() {
     const theme = this.context;
@@ -54,7 +54,9 @@ class CheckoutPaymentMethod extends Component {
         radio_props={radioProps}
         initial={0}
         animation={false}
-        onPress={(value) => { this.onPaymentSelect(value); }}
+        onPress={value => {
+          this.onPaymentSelect(value);
+        }}
       />
     );
   }
@@ -75,11 +77,8 @@ class CheckoutPaymentMethod extends Component {
     }
     return (
       <View style={styles.nextButtonStyle}>
-        <Button
-          onPress={this.onNextPressed}
-          style={styles.buttonStyle(theme)}
-        >
-              {translate('common.next')}
+        <Button onPress={this.onNextPressed} style={styles.buttonStyle(theme)}>
+          {translate('common.next')}
         </Button>
       </View>
     );
@@ -121,7 +120,10 @@ const mapStateToProps = ({ cart, checkout }) => {
   const { payments, selectedPayment } = checkout;
   const { loading } = checkout.ui;
   return {
-    cartId, payments, selectedPayment, loading,
+    cartId,
+    payments,
+    selectedPayment,
+    loading,
   };
 };
 

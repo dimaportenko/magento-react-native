@@ -7,7 +7,7 @@ import ProductMedia from './ProductMedia';
 import { getProductMedia } from '../../actions';
 
 export const ProductMediaContainer = ({ product, selectedProductSku }) => {
-  const current = useSelector(({ product }) => (product.current));
+  const current = useSelector(({ product }) => product.current);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -20,16 +20,10 @@ export const ProductMediaContainer = ({ product, selectedProductSku }) => {
 
   const { medias } = current[product.id];
   if (!medias) {
-    return (
-      <ProductMedia media={null} />
-    );
+    return <ProductMedia media={null} />;
   }
   if (selectedProductSku && medias[selectedProductSku]) {
-    return (
-      <ProductMedia media={medias[selectedProductSku]} />
-    );
+    return <ProductMedia media={medias[selectedProductSku]} />;
   }
-  return (
-    <ProductMedia media={medias[product.sku]} />
-  );
+  return <ProductMedia media={medias[product.sku]} />;
 };

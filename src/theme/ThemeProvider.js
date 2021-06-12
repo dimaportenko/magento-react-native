@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 import ThemeContext from './ThemeContext';
 
 const ThemeProvider = ({ theme, children }) => (
-  <ThemeContext.Provider value={theme}>
-    {children}
-  </ThemeContext.Provider>
+  <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
 );
 
 ThemeProvider.propTypes = {

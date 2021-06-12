@@ -1,14 +1,13 @@
 import React, { useEffect, useContext } from 'react';
 import { connect } from 'react-redux';
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import PropTypes from 'prop-types';
 import { Button, Text } from '../common';
 import { logout, currentCustomer } from '../../actions';
-import { NAVIGATION_ORDERS_PATH, NAVIGATION_ADDRESS_SCREEN_PATH } from '../../navigation/routes';
+import {
+  NAVIGATION_ORDERS_PATH,
+  NAVIGATION_ADDRESS_SCREEN_PATH,
+} from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
@@ -25,7 +24,7 @@ const Account = ({
     if (!customer) {
       _currentCustomer();
     }
-  }, []);
+  }, [_currentCustomer, customer]);
 
   const onLogoutPress = () => {
     _logout();
@@ -45,17 +44,11 @@ const Account = ({
     const { email, firstname, lastname } = customer;
     return (
       <View style={styles.textContainer(theme)}>
-        <Text
-          bold
-          type="subheading"
-          style={styles.center}
-        >
+        <Text bold type="subheading" style={styles.center}>
           {translate('account.contactInformation')}
         </Text>
         <Text style={styles.center}>
-          {firstname}
-          {' '}
-          {lastname}
+          {firstname} {lastname}
         </Text>
         <Text style={styles.center}>{email}</Text>
       </View>

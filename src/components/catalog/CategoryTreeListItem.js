@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import {
-  View, TouchableOpacity, LayoutAnimation,
-} from 'react-native';
+import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
 import CategoryTreeList from './CategoryTreeList';
 import { Text } from '../common';
@@ -11,7 +9,7 @@ import { NAVIGATION_CATEGORY_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
 
-const CategoryTreeListItem = (props) => {
+const CategoryTreeListItem = props => {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
   const theme = useContext(ThemeContext);
@@ -40,9 +38,7 @@ const CategoryTreeListItem = (props) => {
 
   const renderExpandButton = () => {
     if (props.category?.children_data?.length) {
-      const icon = expanded
-        ? 'ios-arrow-dropdown'
-        : 'ios-arrow-dropright';
+      const icon = expanded ? 'ios-arrow-dropdown' : 'ios-arrow-dropright';
       return (
         <TouchableOpacity onPress={onExpandPress}>
           <Icon
@@ -66,11 +62,10 @@ const CategoryTreeListItem = (props) => {
 
     return (
       <View>
-        <TouchableOpacity
-          onPress={onRowPress}
-          style={styles.rowStyles(theme)}
-        >
-          <Text type="heading" style={titleStyle}>{category.name}</Text>
+        <TouchableOpacity onPress={onRowPress} style={styles.rowStyles(theme)}>
+          <Text type="heading" style={titleStyle}>
+            {category.name}
+          </Text>
           {renderExpandButton()}
         </TouchableOpacity>
       </View>
@@ -93,7 +88,7 @@ const CategoryTreeListItem = (props) => {
       {renderChildren()}
     </View>
   );
-}
+};
 
 const styles = {
   rowStyles: theme => ({

@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {
-  ScrollView, View, StyleSheet, RefreshControl,
-} from 'react-native';
+import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import { MaterialHeaderButtons, Text, Item } from '../common';
-import {
-  NAVIGATION_HOME_PRODUCT_PATH,
-} from '../../navigation/routes';
+import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
 import { getHomeData, setCurrentProduct } from '../../actions';
 import HomeSlider from './HomeSlider';
 import CurrencyPicker from './CurrencyPicker';
@@ -23,12 +19,16 @@ class HomeScreen extends Component {
   static navigationOptions = ({ navigation }) => ({
     title: translate('home.title'),
     headerBackTitle: ' ',
-    headerLeft: (
+    headerLeft: () => (
       <MaterialHeaderButtons>
-        <Item title="menu" iconName="menu" onPress={navigation.getParam('toggleDrawer')} />
+        <Item
+          title="menu"
+          iconName="menu"
+          onPress={navigation.getParam('toggleDrawer')}
+        />
       </MaterialHeaderButtons>
     ),
-    headerRight: <CurrencyPicker />,
+    headerRight: () => <CurrencyPicker />,
   });
 
   componentDidMount() {
@@ -44,7 +44,7 @@ class HomeScreen extends Component {
     navigation.toggleDrawer();
   };
 
-  onProductPress = (product) => {
+  onProductPress = product => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       product,
@@ -83,13 +83,12 @@ class HomeScreen extends Component {
     return (
       <ScrollView
         style={styles.container(theme)}
-        refreshControl={(
+        refreshControl={
           <RefreshControl
             refreshing={this.props.refreshing}
             onRefresh={this.onRefresh}
           />
-          )}
-      >
+        }>
         <HomeSlider slider={this.props.slider} />
         {this.renderFeatured()}
       </ScrollView>
@@ -125,8 +124,7 @@ HomeScreen.defaultProps = {
   slider: [],
 };
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const { refreshing } = state.home;
   const {
     errorMessage,
@@ -144,4 +142,6 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(HomeScreen);
+export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(
+  HomeScreen,
+);

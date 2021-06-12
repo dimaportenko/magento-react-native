@@ -8,12 +8,7 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  Spinner,
-  Button,
-  Input,
-  Text,
-} from '../common';
+import { Spinner, Button, Input, Text } from '../common';
 import { auth } from '../../actions/CustomerAuthActions';
 import {
   NAVIGATION_SIGNIN_PATH,
@@ -22,13 +17,7 @@ import {
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
-const Login = ({
-  loading,
-  error,
-  success,
-  navigation,
-  auth: _auth,
-}) => {
+const Login = ({ loading, error, success, navigation, auth: _auth }) => {
   const theme = useContext(ThemeContext);
   // Internal State
   const [email, setEmail] = useState('');
@@ -57,18 +46,16 @@ const Login = ({
       <View>
         <Button
           disabled={email === '' || password === ''}
-          onPress={onLoginPress}
-        >
+          onPress={onLoginPress}>
           {translate('login.loginButton')}
         </Button>
-        <Button
-          onPress={onSigninPress}
-          style={styles.buttonMargin(theme)}
-        >
+        <Button onPress={onSigninPress} style={styles.buttonMargin(theme)}>
           {translate('login.signupButton')}
         </Button>
         <TouchableOpacity onPress={passwordForget} style={styles.link(theme)}>
-          <Text style={styles.linkTitle}>{translate('login.forgetPassword')}</Text>
+          <Text style={styles.linkTitle}>
+            {translate('login.forgetPassword')}
+          </Text>
         </TouchableOpacity>
       </View>
     );
@@ -87,8 +74,7 @@ const Login = ({
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
-      style={styles.container(theme)}
-    >
+      style={styles.container(theme)}>
       <Input
         autoCapitalize="none"
         underlineColorAndroid="transparent"
@@ -113,7 +99,9 @@ const Login = ({
         editable={!loading}
         onChangeText={setPassword}
         onSubmitEditing={onLoginPress}
-        assignRef={(input) => { passwordInput.current = input; }}
+        assignRef={input => {
+          passwordInput.current = input;
+        }}
         containerStyle={styles.inputContainer(theme)}
         textContentType="password"
       />

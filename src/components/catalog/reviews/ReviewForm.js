@@ -1,4 +1,10 @@
-import React, { useState, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet, Keyboard } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
@@ -25,41 +31,59 @@ const ReviewForm = forwardRef((props, ref) => {
 
   useEffect(() => {
     if (props.onMountRefs) {
-      props.onMountRefs([nicknameEl.current, summaryEl.current, reviewEl.current]);
+      props.onMountRefs([
+        nicknameEl.current,
+        summaryEl.current,
+        reviewEl.current,
+      ]);
     }
-  }, []);
+  }, [props]);
 
   useEffect(() => {
-    if (price && value && quality && nickname.length && summary.length && review.length) {
+    if (
+      price &&
+      value &&
+      quality &&
+      nickname.length &&
+      summary.length &&
+      review.length
+    ) {
       setSubmitEnabled(true);
     } else {
       setSubmitEnabled(false);
     }
   }, [price, value, quality, nickname, summary, review]);
 
-  useImperativeHandle(ref, () => ({
-    reset: () => {
-      setPrice(0);
-      setValue(0);
-      setQuality(0);
-      setNickname('');
-      setSummary('');
-      setReview('');
-    },
-  }), []);
+  useImperativeHandle(
+    ref,
+    () => ({
+      reset: () => {
+        setPrice(0);
+        setValue(0);
+        setQuality(0);
+        setNickname('');
+        setSummary('');
+        setReview('');
+      },
+    }),
+    [],
+  );
 
   const onSubmit = () => {
     if (!nickname.length || !summary.length || !review.length) {
       alert('Please fill all required fields');
     } else {
-      props.onSubmit({
-        price,
-        value,
-        quality,
-        nickname,
-        title: summary,
-        detail: review,
-      }, props.ratingOptions);
+      props.onSubmit(
+        {
+          price,
+          value,
+          quality,
+          nickname,
+          title: summary,
+          detail: review,
+        },
+        props.ratingOptions,
+      );
       Keyboard.dismiss();
     }
   };
@@ -72,7 +96,9 @@ const ReviewForm = forwardRef((props, ref) => {
         <Text style={[styles.preview, styles.gray]}>{props.productName}</Text>
       </Row>
       <Spacer size={15} />
-      <Text style={styles.ratingsTitle}>Your Rating <Required/></Text>
+      <Text style={styles.ratingsTitle}>
+        Your Rating <Required />
+      </Text>
       <Spacer size={10} />
       <Row>
         <Text style={styles.ratingTitle}>Price</Text>
@@ -104,7 +130,9 @@ const ReviewForm = forwardRef((props, ref) => {
         />
       </Row>
       <Spacer size={15} />
-      <Text style={styles.ratingsTitle}>Nickname <Required/></Text>
+      <Text style={styles.ratingsTitle}>
+        Nickname <Required />
+      </Text>
       <Spacer size={10} />
       <Input
         textContentType="username"
@@ -118,7 +146,9 @@ const ReviewForm = forwardRef((props, ref) => {
         onSubmitEditing={() => summaryEl.current.focus()}
       />
       <Spacer size={25} />
-      <Text style={styles.ratingsTitle}>Summary <Required/></Text>
+      <Text style={styles.ratingsTitle}>
+        Summary <Required />
+      </Text>
       <Spacer size={10} />
       <Input
         ref={summaryEl}
@@ -131,7 +161,9 @@ const ReviewForm = forwardRef((props, ref) => {
         onSubmitEditing={() => reviewEl.current.focus()}
       />
       <Spacer size={25} />
-      <Text style={styles.ratingsTitle}>Review <Required/></Text>
+      <Text style={styles.ratingsTitle}>
+        Review <Required />
+      </Text>
       <Spacer size={10} />
       <Input
         ref={reviewEl}
@@ -146,14 +178,20 @@ const ReviewForm = forwardRef((props, ref) => {
         onSubmitEditing={onSubmit}
       />
       <Spacer size={25} />
-      {props.loading
-        ? <Spinner />
-        : (
-          <View style={{ alignItems: "center" }}>
-            <Button titleColor="black" borderColor="black" disabled={!submitEnabled} onPress={onSubmit} style={{ borderRadius: 5 }}>Submit Review</Button>
-          </View>
-        )
-      }
+      {props.loading ? (
+        <Spinner />
+      ) : (
+        <View style={{ alignItems: 'center' }}>
+          <Button
+            titleColor="black"
+            borderColor="black"
+            disabled={!submitEnabled}
+            onPress={onSubmit}
+            style={{ borderRadius: 5 }}>
+            Submit Review
+          </Button>
+        </View>
+      )}
       <Spacer size={25} />
     </View>
   );

@@ -32,7 +32,8 @@ class Magento {
 
   init() {
     if (this.configuration.authentication.integration.access_token) {
-      this.access_token = this.configuration.authentication.integration.access_token;
+      this.access_token =
+        this.configuration.authentication.integration.access_token;
       return;
     }
     throw new Error('Need Integration Token!');
@@ -216,20 +217,12 @@ class Magento {
             const values = value.split(',');
             index++;
             subQuery = `searchCriteria[filter_groups][${index}][filters][0][field]=${key}&`;
-            subQuery += `searchCriteria[filter_groups][${index}][filters][0][value]=${
-              values[0]
-            }&`;
-            subQuery += `searchCriteria[filter_groups][${index}][filters][0][condition_type]=${
-              conditions[0]
-            }&`;
+            subQuery += `searchCriteria[filter_groups][${index}][filters][0][value]=${values[0]}&`;
+            subQuery += `searchCriteria[filter_groups][${index}][filters][0][condition_type]=${conditions[0]}&`;
             index++;
             subQuery += `searchCriteria[filter_groups][${index}][filters][0][field]=${key}&`;
-            subQuery += `searchCriteria[filter_groups][${index}][filters][0][value]=${
-              values[1]
-            }&`;
-            subQuery += `searchCriteria[filter_groups][${index}][filters][0][condition_type]=${
-              conditions[1]
-            }&`;
+            subQuery += `searchCriteria[filter_groups][${index}][filters][0][value]=${values[1]}&`;
+            subQuery += `searchCriteria[filter_groups][${index}][filters][0][condition_type]=${conditions[1]}&`;
           }
         } else {
           condition = 'eq';

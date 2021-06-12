@@ -56,6 +56,7 @@ import {
   RESET_FILTERS_DATA,
   MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR,
   MAGENTO_GET_CUSTOM_OPTIONS,
+  MAGENTO_CART_RESET,
 } from './types';
 import { logError } from '../helper/logger';
 import { priceSignByCode } from '../helper/price';
@@ -64,7 +65,7 @@ import { checkoutSetActiveSection } from './UIActions';
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
 
-  return async (dispatch) => {
+  return async dispatch => {
     try {
       magento.init();
       dispatch({ type: MAGENTO_INIT, payload: magento });
@@ -75,12 +76,15 @@ export const initMagento = () => {
       getCurrency(dispatch);
     } catch (error) {
       logError(error);
-      dispatch({ type: MAGENTO_INIT_ERROR, payload: { errorMessage: error.message } });
+      dispatch({
+        type: MAGENTO_INIT_ERROR,
+        payload: { errorMessage: error.message },
+      });
     }
   };
 };
 
-const getCurrency = async (dispatch) => {
+const getCurrency = async dispatch => {
   try {
     const data = await magento.guest.getCurrency();
     const displayCurrency = await getCurrencyToBeDisplayed(data);
@@ -98,19 +102,33 @@ const getCurrency = async (dispatch) => {
 
 async function getCurrencyToBeDisplayed(currencyData) {
   let code = currencyData.default_display_currency_code;
-  let symbol = currencyData.default_display_currency_symbol || priceSignByCode(code);
+  let symbol =
+    currencyData.default_display_currency_symbol || priceSignByCode(code);
   let rate = 1;
 
-  if ('available_currency_codes' in currencyData && currencyData.available_currency_codes.length > 0) {
-    const previousSelectedCurrencyCode = await AsyncStorage.getItem('currency_code');
-    if (previousSelectedCurrencyCode && previousSelectedCurrencyCode !== code && currencyData.available_currency_codes.includes(previousSelectedCurrencyCode)) {
+  if (
+    'available_currency_codes' in currencyData &&
+    currencyData.available_currency_codes.length > 0
+  ) {
+    const previousSelectedCurrencyCode = await AsyncStorage.getItem(
+      'currency_code',
+    );
+    if (
+      previousSelectedCurrencyCode &&
+      previousSelectedCurrencyCode !== code &&
+      currencyData.available_currency_codes.includes(
+        previousSelectedCurrencyCode,
+      )
+    ) {
       code = previousSelectedCurrencyCode;
       symbol = priceSignByCode(code);
     }
     // TODO: If not and currency get from RNLocalize is supported, then set that and update AsyncStorage
   }
 
-  const exchangeRate = currencyData.exchange_rates.find(_exchangeRate => _exchangeRate.currency_to === code);
+  const exchangeRate = currencyData.exchange_rates.find(
+    _exchangeRate => _exchangeRate.currency_to === code,
+  );
   if (exchangeRate && 'rate' in exchangeRate) {
     rate = exchangeRate.rate;
   }
@@ -122,7 +140,7 @@ async function getCurrencyToBeDisplayed(currencyData) {
   };
 }
 
-export const getHomeData = refreshing => async (dispatch) => {
+export const getHomeData = refreshing => async dispatch => {
   if (refreshing) {
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: true });
   }
@@ -142,7 +160,9 @@ export const getHomeData = refreshing => async (dispatch) => {
     dispatch({ type: HOME_SCREEN_DATA, payload });
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
 
-    _.forEach(payload.featuredCategories, (details, categoryId) => getFeaturedCategoryProducts(categoryId, dispatch));
+    _.forEach(payload.featuredCategories, (details, categoryId) =>
+      getFeaturedCategoryProducts(categoryId, dispatch),
+    );
   } catch (e) {
     logError(e);
   }
@@ -165,7 +185,7 @@ const getFeaturedCategoryProducts = async (categoryId, dispatch) => {
   }
 };
 
-export const getCategoryTree = refreshing => async (dispatch) => {
+export const getCategoryTree = refreshing => async dispatch => {
   if (refreshing) {
     dispatch({ type: MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE, payload: true });
   }
@@ -183,21 +203,23 @@ export const resetAccountAddressUI = () => ({
   type: RESET_ACCOUNT_ADDRESS_UI,
 });
 
-export const getProductsForCategory = ({ id, offset }) => (dispatch) => {
-  if (offset) {
-    dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
-  }
-  magento.admin
-    .getProducts(id, 10, offset)
-    .then((payload) => {
-      dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
-      dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
-      updateConfigurableProductsPrices(payload.items, dispatch);
-    })
-    .catch((error) => {
-      logError(error);
-    });
-};
+export const getProductsForCategory =
+  ({ id, offset }) =>
+  dispatch => {
+    if (offset) {
+      dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
+    }
+    magento.admin
+      .getProducts(id, 10, offset)
+      .then(payload => {
+        dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
+        dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
+        updateConfigurableProductsPrices(payload.items, dispatch);
+      })
+      .catch(error => {
+        logError(error);
+      });
+  };
 
 export const addFilterData = data => ({
   type: ADD_FILTER_DATA,
@@ -208,67 +230,98 @@ export const resetFilters = () => ({
   type: RESET_FILTERS_DATA,
 });
 
-export const getProductsForCategoryOrChild = (category, offset, sortOrder, filter) => async (dispatch) => {
-  if (offset) {
-    dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
-  }
+export const getProductsForCategoryOrChild =
+  (category, offset, sortOrder, filter) => async dispatch => {
+    if (offset) {
+      dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
+    }
 
-  if (!offset && (typeof sortOrder === 'number' || typeof filter !== 'undefined')) {
-    dispatch({ type: MAGENTO_RESET_CATEGORY_PRODUCTS });
-  }
+    if (
+      !offset &&
+      (typeof sortOrder === 'number' || typeof filter !== 'undefined')
+    ) {
+      dispatch({ type: MAGENTO_RESET_CATEGORY_PRODUCTS });
+    }
 
-  try {
-    const payload = await magento.admin
-      .getSearchCreteriaForCategoryAndChild(category, 10, offset, sortOrder, filter);
-    dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
-    dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
-    updateConfigurableProductsPrices(payload.items, dispatch);
-  } catch (e) {
-    logError(e);
-  }
-};
+    try {
+      const payload = await magento.admin.getSearchCreteriaForCategoryAndChild(
+        category,
+        10,
+        offset,
+        sortOrder,
+        filter,
+      );
+      dispatch({ type: MAGENTO_GET_CATEGORY_PRODUCTS, payload });
+      dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: false });
+      updateConfigurableProductsPrices(payload.items, dispatch);
+    } catch (e) {
+      logError(e);
+    }
+  };
 
-export const updateProductsForCategoryOrChild = (category, refreshing) => async (dispatch) => {
-  if (refreshing) {
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS, payload: true });
-  }
+export const updateProductsForCategoryOrChild =
+  (category, refreshing) => async dispatch => {
+    if (refreshing) {
+      dispatch({
+        type: MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS,
+        payload: true,
+      });
+    }
 
-  try {
-    const payload = await magento.admin
-      .getSearchCreteriaForCategoryAndChild(category, 10);
-    dispatch({ type: MAGENTO_UPDATE_CATEGORY_PRODUCTS, payload });
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS, payload: false });
-    updateConfigurableProductsPrices(payload.items, dispatch);
-  } catch (e) {
-    logError(e);
-  }
-};
+    try {
+      const payload = await magento.admin.getSearchCreteriaForCategoryAndChild(
+        category,
+        10,
+      );
+      dispatch({ type: MAGENTO_UPDATE_CATEGORY_PRODUCTS, payload });
+      dispatch({
+        type: MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS,
+        payload: false,
+      });
+      updateConfigurableProductsPrices(payload.items, dispatch);
+    } catch (e) {
+      logError(e);
+    }
+  };
 
-export const getSearchProducts = (searchInput, offset, sortOrder, filter) => async (dispatch) => {
-  if (offset) {
-    dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: true });
-  }
+export const getSearchProducts =
+  (searchInput, offset, sortOrder, filter) => async dispatch => {
+    if (offset) {
+      dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: true });
+    }
 
-  if (!offset && (typeof sortOrder === 'number' || typeof filter !== 'undefined')) {
-    dispatch({ type: MAGENTO_RESET_SEARCH_PRODUCTS });
-  }
+    if (
+      !offset &&
+      (typeof sortOrder === 'number' || typeof filter !== 'undefined')
+    ) {
+      dispatch({ type: MAGENTO_RESET_SEARCH_PRODUCTS });
+    }
 
-  try {
-    const data = await magento.admin
-      .getProductsWithAttribute('name', searchInput, 10, offset, sortOrder, filter);
-    dispatch({ type: MAGENTO_GET_SEARCH_PRODUCTS, payload: { searchInput, data } });
-    dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: false });
-    updateConfigurableProductsPrices(
-      data.items,
-      dispatch,
-      MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
-    );
-  } catch (e) {
-    logError(e);
-  }
-};
+    try {
+      const data = await magento.admin.getProductsWithAttribute(
+        'name',
+        searchInput,
+        10,
+        offset,
+        sortOrder,
+        filter,
+      );
+      dispatch({
+        type: MAGENTO_GET_SEARCH_PRODUCTS,
+        payload: { searchInput, data },
+      });
+      dispatch({ type: MAGENTO_LOAD_MORE_SEARCH_PRODUCTS, payload: false });
+      updateConfigurableProductsPrices(
+        data.items,
+        dispatch,
+        MAGENTO_UPDATE_SEARCH_CONF_PRODUCT,
+      );
+    } catch (e) {
+      logError(e);
+    }
+  };
 
-export const getCustomOptions = (sku, id) => async (dispatch) => {
+export const getCustomOptions = (sku, id) => async dispatch => {
   try {
     const data = await magento.admin.getProductOptions(sku);
     dispatch({ type: MAGENTO_GET_CUSTOM_OPTIONS, payload: { data, id } });
@@ -277,15 +330,15 @@ export const getCustomOptions = (sku, id) => async (dispatch) => {
   }
 };
 
-export const getConfigurableProductOptions = (sku, id) => (dispatch) => {
+export const getConfigurableProductOptions = (sku, id) => dispatch => {
   magento.admin
     .getConfigurableProductOptions(sku)
-    .then((data) => {
+    .then(data => {
       dispatch({ type: MAGENTO_GET_CONF_OPTIONS, payload: { data, id } });
-      data.forEach((option) => {
+      data.forEach(option => {
         magento.admin
           .getAttributeByCode(option.attribute_id)
-          .then((attributeOptions) => {
+          .then(attributeOptions => {
             dispatch({
               type: MAGENTO_PRODUCT_ATTRIBUTE_OPTIONS,
               payload: {
@@ -296,18 +349,18 @@ export const getConfigurableProductOptions = (sku, id) => (dispatch) => {
               },
             });
           })
-          .catch((error) => {
+          .catch(error => {
             logError(error);
           });
       });
     })
-    .catch((error) => {
+    .catch(error => {
       logError(error);
     });
 };
 
 export const updateConfigurableProductsPrices = (products, dispatch, type) => {
-  products.forEach((product) => {
+  products.forEach(product => {
     if (product.type_id === 'configurable') {
       updateConfigurableProductPrice(product, dispatch, type);
     }
@@ -328,16 +381,21 @@ const updateConfigurableProductPrice = async (
   }
 };
 
-export const getProductMedia = ({ sku, id }) => (dispatch) => {
-  magento.admin
-    .getProductMedia(sku)
-    .then((media) => {
-      dispatch({ type: MAGENTO_GET_PRODUCT_MEDIA, payload: { sku, media, id } });
-    })
-    .catch((error) => {
-      logError(error);
-    });
-};
+export const getProductMedia =
+  ({ sku, id }) =>
+  dispatch => {
+    magento.admin
+      .getProductMedia(sku)
+      .then(media => {
+        dispatch({
+          type: MAGENTO_GET_PRODUCT_MEDIA,
+          payload: { sku, media, id },
+        });
+      })
+      .catch(error => {
+        logError(error);
+      });
+  };
 
 export const setCurrentCategory = category => ({
   type: MAGENTO_CURRENT_CATEGORY,
@@ -349,7 +407,7 @@ export const setCurrentProduct = product => ({
   payload: product,
 });
 
-export const createCustomerCart = customerId => async (dispatch) => {
+export const createCustomerCart = customerId => async dispatch => {
   if (customerId) {
     try {
       const cartId = await magento.admin.getCart(customerId);
@@ -361,79 +419,105 @@ export const createCustomerCart = customerId => async (dispatch) => {
   }
 };
 
-export const getCart = (refreshing = false) => async (dispatch, getState) => {
-  if (refreshing) {
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT, payload: true });
-  }
+export const resetCart = () => {
+  return async dispatch => {
+    try {
+      await AsyncStorage.removeItem('cartId');
+    } catch (error) {
+      logError(error);
+    }
+    return dispatch({
+      type: MAGENTO_CART_RESET,
+    });
+  };
+};
 
-  try {
-    let cart;
-    let cartId = await AsyncStorage.getItem('cartId');
-    if (magento.isCustomerLogin()) {
-      if(cartId){
-        /*Merge Cart*/
-        /*the code to merge cart will be here*/
+export const getCart =
+  (refreshing = false) =>
+  async (dispatch, getState) => {
+    if (refreshing) {
+      dispatch({
+        type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
+        payload: true,
+      });
+    }
 
-        AsyncStorage.removeItem('cartId');
-      }
-      cart = await magento.customer.getCustomerCart();
-    } else {
-      if(cartId){
-        try{
+    try {
+      let cart;
+      let cartId = await AsyncStorage.getItem('cartId');
+      if (magento.isCustomerLogin()) {
+        if (cartId) {
+          /*Merge Cart*/
+          /*the code to merge cart will be here*/
+
+          AsyncStorage.removeItem('cartId');
+        }
+        cart = await magento.customer.getCustomerCart();
+      } else {
+        if (cartId) {
+          try {
+            cart = await magento.guest.getGuestCart(cartId);
+          } catch (err) {
+            logError('Cart id ' + cartId + ' is no longer exist');
+          }
+        }
+
+        if (!cartId || !cart) {
+          cartId = await magento.guest.createGuestCart();
+          AsyncStorage.setItem('cartId', cartId);
           cart = await magento.guest.getGuestCart(cartId);
-        }catch(err){
-          logError('Cart id '+cartId+' is no longer exist');
+        }
+        dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
+      }
+
+      dispatch({ type: MAGENTO_GET_CART, payload: cart });
+      dispatch({
+        type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
+        payload: false,
+      });
+    } catch (error) {
+      logError(error);
+      if (
+        error.message &&
+        error.message.includes('No such entity with customerId')
+      ) {
+        const { customer } = getState().account;
+        if (customer && customer.id) {
+          dispatch(createCustomerCart(customer.id));
         }
       }
-
-      if(!cartId || !cart){
-        cartId = await magento.guest.createGuestCart();
-        AsyncStorage.setItem('cartId', cartId);
-        cart = await magento.guest.getGuestCart(cartId);
-      }
-      dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
     }
-
-    dispatch({ type: MAGENTO_GET_CART, payload: cart });
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT, payload: false });
-  } catch (error) {
-    logError(error);
-    if (error.message && error.message.includes('No such entity with customerId')) {
-      const { customer } = getState().account;
-      if (customer && customer.id) {
-        dispatch(createCustomerCart(customer.id));
-      }
-    }
-  }
-};
+  };
 
 export const addToCartLoading = isLoading => ({
   type: MAGENTO_ADD_TO_CART_LOADING,
   payload: isLoading,
 });
 
-export const addToCart = ({ cartId, item, customer }) => async (dispatch) => {
-  try {
-    if (cartId) {
-      return dispatchAddToCart(dispatch, cartId, item);
-    }
+export const addToCart =
+  ({ cartId, item, customer }) =>
+  async dispatch => {
+    try {
+      if (cartId) {
+        return dispatchAddToCart(dispatch, cartId, item);
+      }
 
-    const updatedItem = item;
-    if (magento.isCustomerLogin()) {
-      const customerCartId = await magento.admin.getCart(customer.id);
-      dispatch({ type: MAGENTO_CREATE_CART, payload: customerCartId });
-      updatedItem.cartItem.quoteId = customerCartId;
-      return dispatchAddToCart(dispatch, customerCartId, updatedItem);
-    }
+      const updatedItem = item;
+      if (magento.isCustomerLogin()) {
+        const customerCartId = await magento.admin.getCart(customer.id);
+        dispatch({ type: MAGENTO_CREATE_CART, payload: customerCartId });
+        updatedItem.cartItem.quoteId = customerCartId;
+        return dispatchAddToCart(dispatch, customerCartId, updatedItem);
+      }
 
-    const guestCartId = await magento.guest.createGuestCart();
-    dispatch({ type: MAGENTO_CREATE_CART, payload: guestCartId });
-    updatedItem.cartItem.quoteId = guestCartId;
-    return dispatchAddToCart(dispatch, guestCartId, updatedItem);
-  } catch (error) {
-    logError(error);
-  }
-};
+      const guestCartId = await magento.guest.createGuestCart();
+      dispatch({ type: MAGENTO_CREATE_CART, payload: guestCartId });
+      updatedItem.cartItem.quoteId = guestCartId;
+      return dispatchAddToCart(dispatch, guestCartId, updatedItem);
+    } catch (error) {
+      logError(error);
+    }
+  };
 
 const dispatchAddToCart = async (dispatch, cartId, item) => {
   try {
@@ -466,7 +550,7 @@ const dispatchGetGuestCart = async (dispatch, cartId) => {
   }
 };
 
-export const cartItemProduct = sku => async (dispatch) => {
+export const cartItemProduct = sku => async dispatch => {
   try {
     const data = await magento.admin.getProductBySku(sku);
     dispatch({ type: MAGENTO_CART_ITEM_PRODUCT, payload: data });
@@ -475,38 +559,39 @@ export const cartItemProduct = sku => async (dispatch) => {
   }
 };
 
-export const getOrdersForCustomer = (customerId, refreshing) => async (dispatch) => {
-  if (refreshing) {
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: true });
-  }
+export const getOrdersForCustomer =
+  (customerId, refreshing) => async dispatch => {
+    if (refreshing) {
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: true });
+    }
 
-  try {
-    const data = await magento.admin.getOrderList(customerId);
-    console.log('getOrderList response:', data);
-    const orders = data.items.map((order) => {
-      const { items } = order;
-      const simpleItems = items.filter(i => i.product_type === 'simple');
-      const simpleItemsWithPriceAndName = simpleItems.map((simpleItem) => {
-        if (simpleItem.parent_item) {
-          simpleItem.price = simpleItem.parent_item.price;
-          simpleItem.row_total = simpleItem.parent_item.row_total;
-          simpleItem.name = simpleItem.parent_item.name || simpleItem.name;
-        }
-        return simpleItem;
+    try {
+      const data = await magento.admin.getOrderList(customerId);
+      console.log('getOrderList response:', data);
+      const orders = data.items.map(order => {
+        const { items } = order;
+        const simpleItems = items.filter(i => i.product_type === 'simple');
+        const simpleItemsWithPriceAndName = simpleItems.map(simpleItem => {
+          if (simpleItem.parent_item) {
+            simpleItem.price = simpleItem.parent_item.price;
+            simpleItem.row_total = simpleItem.parent_item.row_total;
+            simpleItem.name = simpleItem.parent_item.name || simpleItem.name;
+          }
+          return simpleItem;
+        });
+        order.items = simpleItemsWithPriceAndName;
+        return order;
       });
-      order.items = simpleItemsWithPriceAndName;
-      return order;
-    });
-    data.items = orders;
-    dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: false });
-  } catch (error) {
-    logError(error);
-  }
-};
+      data.items = orders;
+      dispatch({ type: MAGENTO_GET_ORDERS, payload: data });
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: false });
+    } catch (error) {
+      logError(error);
+    }
+  };
 
 // Fetch product_data for product in OrderScreen
-export const orderProductDetail = sku => async (dispatch) => {
+export const orderProductDetail = sku => async dispatch => {
   try {
     const product = await magento.admin.getProductBySku(sku);
     dispatch({
@@ -521,49 +606,52 @@ export const orderProductDetail = sku => async (dispatch) => {
   }
 };
 
-export const addAccountAddress = (id, customer) => async (dispatch) => {
+export const addAccountAddress = (id, customer) => async dispatch => {
   try {
     const data = await magento.admin.updateCustomerData(id, customer);
     dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS, payload: data });
   } catch (error) {
     logError(error);
-    const message = error.message ? error.message : 'Sorry, something went wrong. Please check your internet connection and try again';
+    const message = error.message
+      ? error.message
+      : 'Sorry, something went wrong. Please check your internet connection and try again';
     dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR, payload: message });
   }
 };
 
-export const addGuestCartBillingAddress = (cartId, address) => async (dispatch) => {
-  try {
-    let data;
-    if (magento.isCustomerLogin()) {
-      data = await magento.customer.addCartBillingAddress(address);
-    } else {
-      data = await magento.guest.addGuestCartBillingAddress(cartId, address);
+export const addGuestCartBillingAddress =
+  (cartId, address) => async dispatch => {
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.addCartBillingAddress(address);
+      } else {
+        data = await magento.guest.addGuestCartBillingAddress(cartId, address);
+      }
+      dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
+    } catch (error) {
+      logError(error);
     }
-    dispatch({ type: MAGENTO_ADD_CART_BILLING_ADDRESS, payload: data });
-  } catch (error) {
-    logError(error);
-  }
 
-  try {
-    let data;
-    if (magento.isCustomerLogin()) {
-      data = await magento.customer.cartEstimateShippingMethods(address);
-    } else {
-      data = await magento.guest.guestCartEstimateShippingMethods(
-        cartId,
-        address,
-      );
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.cartEstimateShippingMethods(address);
+      } else {
+        data = await magento.guest.guestCartEstimateShippingMethods(
+          cartId,
+          address,
+        );
+      }
+      dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
+      dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
+      dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+    } catch (error) {
+      logError(error);
     }
-    dispatch({ type: MAGENTO_GET_CART_SHIPPING_METHODS, payload: data });
-    dispatch({ type: UI_CHECKOUT_ACTIVE_SECTION, payload: 2 });
-    dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
-  } catch (error) {
-    logError(error);
-  }
-};
+  };
 
-export const getGuestCartShippingMethods = cartId => async (dispatch) => {
+export const getGuestCartShippingMethods = cartId => async dispatch => {
   try {
     let data;
     if (magento.isCustomerLogin()) {
@@ -577,7 +665,7 @@ export const getGuestCartShippingMethods = cartId => async (dispatch) => {
   }
 };
 
-export const addGuestCartShippingInfo = (cartId, address) => async (dispatch) => {
+export const addGuestCartShippingInfo = (cartId, address) => async dispatch => {
   try {
     let data;
     if (magento.isCustomerLogin()) {
@@ -593,7 +681,7 @@ export const addGuestCartShippingInfo = (cartId, address) => async (dispatch) =>
   }
 };
 
-export const getGuestCartPaymentMethods = cartId => async (dispatch) => {
+export const getGuestCartPaymentMethods = cartId => async dispatch => {
   try {
     let data;
     if (magento.isCustomerLogin()) {
@@ -609,18 +697,18 @@ export const getGuestCartPaymentMethods = cartId => async (dispatch) => {
   }
 };
 
-export const getCountries = () => (dispatch) => {
+export const getCountries = () => dispatch => {
   magento.guest
     .getCountries()
-    .then((data) => {
+    .then(data => {
       dispatch({ type: MAGENTO_GET_COUNTRIES, payload: data });
     })
-    .catch((error) => {
+    .catch(error => {
       logError(error);
     });
 };
 
-export const placeGuestCartOrder = (cartId, payment) => async (dispatch) => {
+export const placeGuestCartOrder = (cartId, payment) => async dispatch => {
   try {
     let data;
     if (magento.isCustomerLogin()) {
@@ -637,13 +725,13 @@ export const placeGuestCartOrder = (cartId, payment) => async (dispatch) => {
   }
 };
 
-export const createCustomer = customer => (dispatch) => {
+export const createCustomer = customer => dispatch => {
   magento.guest
     .createCustomer(customer)
-    .then((data) => {
+    .then(data => {
       dispatch({ type: MAGENTO_CREATE_CUSTOMER, payload: data });
     })
-    .catch((error) => {
+    .catch(error => {
       logError(error);
     });
 };
@@ -653,31 +741,42 @@ export const removeFromCartLoading = isLoading => ({
   payload: isLoading,
 });
 
-export const getFilteredProducts = ({ page, pageSize, filter }) => async (dispatch) => {
-  try {
-    const data = await magento.admin.getFeaturedChildren({ page, pageSize, filter });
-    dispatch({ type: MAGENTO_GET_FILTERED_PRODUCTS, payload: data });
-  } catch (error) {
-    logError(error);
-  }
-};
-
-export const removeFromCart = ({ cart, item }) => async (dispatch) => {
-  try {
-    console.log('removeFromCart', cart, item);
-    if (cart.quote) {
-      dispatchRemoveFromCart(dispatch, cart, item);
-      dispatch(checkoutSetActiveSection(1));
+export const getFilteredProducts =
+  ({ page, pageSize, filter }) =>
+  async dispatch => {
+    try {
+      const data = await magento.admin.getFeaturedChildren({
+        page,
+        pageSize,
+        filter,
+      });
+      dispatch({ type: MAGENTO_GET_FILTERED_PRODUCTS, payload: data });
+    } catch (error) {
+      logError(error);
     }
-  } catch (error) {
-    logError(error);
-    dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: error.message });
-  }
-};
+  };
+
+export const removeFromCart =
+  ({ cart, item }) =>
+  async dispatch => {
+    try {
+      console.log('removeFromCart', cart, item);
+      if (cart.quote) {
+        dispatchRemoveFromCart(dispatch, cart, item);
+        dispatch(checkoutSetActiveSection(1));
+      }
+    } catch (error) {
+      logError(error);
+      dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: error.message });
+    }
+  };
 
 const dispatchRemoveFromCart = async (dispatch, cart, item) => {
   try {
-    const result = await magento.admin.removeItemFromCart(cart.quote.id, item.item_id);
+    const result = await magento.admin.removeItemFromCart(
+      cart.quote.id,
+      item.item_id,
+    );
     dispatch({ type: MAGENTO_REMOVE_FROM_CART, payload: result });
     dispatchGetCart(dispatch, cart.cartId);
     dispatch({ type: MAGENTO_REMOVE_FROM_CART_LOADING, payload: false });

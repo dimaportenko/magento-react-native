@@ -32,7 +32,11 @@ const CartListItem = ({
       translate('cartListItem.removeItemDialogTitle'),
       `${translate('cartListItem.removeItemDialogMessage')}: ${item.name}`,
       [
-        { text: translate('common.cancel'), onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+        {
+          text: translate('common.cancel'),
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
         { text: translate('common.ok'), onPress: () => performRemoveItem() },
       ],
       { cancelable: true },
@@ -52,7 +56,11 @@ const CartListItem = ({
 
   return (
     <View style={styles.container(theme)}>
-      <FastImage style={styles.imageStyle(theme)} resizeMode="contain" source={{ uri: imageUri }} />
+      <FastImage
+        style={styles.imageStyle(theme)}
+        resizeMode="contain"
+        source={{ uri: imageUri }}
+      />
       <View style={styles.infoStyle}>
         <Text style={styles.textStyle(theme)}>{item.name}</Text>
         <View style={styles.textStyle(theme)}>
@@ -67,27 +75,19 @@ const CartListItem = ({
         </Text>
       </View>
       <View style={styles.removeContainer}>
-        {cart.removingItemId === item.item_id
-          ? (
-            <View style={styles.spinnerWrapper(theme)}>
-              <Spinner />
+        {cart.removingItemId === item.item_id ? (
+          <View style={styles.spinnerWrapper(theme)}>
+            <Spinner />
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={styles.iconStyle}
+            onPress={onPressRemoveItem}>
+            <View style={styles.iconWrapper(theme)}>
+              <Icon name="md-trash" type="ionicon" />
             </View>
-          )
-          : (
-            <TouchableOpacity
-              style={styles.iconStyle}
-              onPress={onPressRemoveItem}
-            >
-              <View style={styles.iconWrapper(theme)}>
-                <Icon
-                  name="md-trash"
-                  type="ionicon"
-                />
-              </View>
-
-            </TouchableOpacity>
-          )
-          }
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -152,4 +152,7 @@ const mapStateToProps = ({ cart }) => {
   };
 };
 
-export default connect(mapStateToProps, { removeFromCartLoading, removeFromCart })(CartListItem);
+export default connect(mapStateToProps, {
+  removeFromCartLoading,
+  removeFromCart,
+})(CartListItem);

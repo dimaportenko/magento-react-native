@@ -1,16 +1,9 @@
 import React, { useEffect, useContext } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import {
-  TouchableOpacity,
-  View,
-  FlatList,
-  RefreshControl,
-} from 'react-native';
+import { TouchableOpacity, View, FlatList, RefreshControl } from 'react-native';
 import PropTypes from 'prop-types';
-import {
-  getOrdersForCustomer,
-} from '../../actions';
+import { getOrdersForCustomer } from '../../actions';
 import { Text } from '../common';
 import OrderListItem from './OrderListItem';
 import { ThemeContext } from '../../theme';
@@ -29,29 +22,22 @@ const OrdersScreen = ({
 
   useEffect(() => {
     _getOrdersForCustomer(customerId);
-  }, []);
+  }, [_getOrdersForCustomer, customerId]);
 
   const onRefresh = () => {
     _getOrdersForCustomer(customerId, true);
   };
 
-  const renderItem = orderItem => (
-    <OrderListItem
-      item={orderItem.item}
-    />
-  );
+  const renderItem = orderItem => <OrderListItem item={orderItem.item} />;
 
   const renderOrderList = () => {
     const data = orders.sort((b, a) => moment(a.created_at).diff(b.created_at));
 
     return (
       <FlatList
-        refreshControl={(
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-)}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
         data={data}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
@@ -66,9 +52,7 @@ const OrdersScreen = ({
         <Text type="heading" style={styles.textStyle(theme)}>
           {translate('ordersScreen.noOrderMessage')}
         </Text>
-        <TouchableOpacity
-          onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}
-        >
+        <TouchableOpacity onPress={() => navigate(NAVIGATION_HOME_SCREEN_PATH)}>
           <Text type="heading" bold style={styles.buttonTextStyle(theme)}>
             {translate('common.continueShopping')}
           </Text>
@@ -78,11 +62,7 @@ const OrdersScreen = ({
   };
 
   if (orders && orders.length) {
-    return (
-      <View style={styles.container(theme)}>
-        {renderOrderList()}
-      </View>
-    );
+    return <View style={styles.container(theme)}>{renderOrderList()}</View>;
   }
   return renderEmptyOrderList();
 };

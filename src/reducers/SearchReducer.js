@@ -39,7 +39,7 @@ export default (state = INITIAL_STATE, action) => {
     }
     case MAGENTO_UPDATE_SEARCH_CONF_PRODUCT: {
       const { sku, children } = action.payload;
-      const products = state.products.map((product) => {
+      const products = state.products.map(product => {
         if (product.sku === sku) {
           return {
             ...product,

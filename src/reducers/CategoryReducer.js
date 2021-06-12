@@ -24,7 +24,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...INITIAL_STATE, current: action.payload };
     case MAGENTO_RESET_CATEGORY_PRODUCTS:
       return {
-        ...state, products: false, loadingMore: false, totalCount: false,
+        ...state,
+        products: false,
+        loadingMore: false,
+        totalCount: false,
       };
     case MAGENTO_GET_CATEGORY_PRODUCTS: {
       const products = state.products ? state.products : [];
@@ -60,7 +63,7 @@ export default (state = INITIAL_STATE, action) => {
       };
     case MAGENTO_UPDATE_CONF_PRODUCT: {
       const { sku, children } = action.payload;
-      const products = state.products.map((product) => {
+      const products = state.products.map(product => {
         if (product.sku === sku) {
           return {
             ...product,

@@ -79,7 +79,7 @@ class CheckoutShippingMethod extends Component {
 
     this.props.checkoutCustomerNextLoading(true);
     this.props.addGuestCartShippingInfo(cartId, address);
-  }
+  };
 
   renderShippingMethods() {
     const theme = this.context;
@@ -89,8 +89,10 @@ class CheckoutShippingMethod extends Component {
       return <Text>{translate('checkout.noShippingMethod')}</Text>;
     }
 
-    const radioProps = shipping.map((item) => {
-      const label = `${item.carrier_title} - ${item.method_title} - ${currencySymbol + (item.base_amount * currencyRate).toFixed(2)}`;
+    const radioProps = shipping.map(item => {
+      const label = `${item.carrier_title} - ${item.method_title} - ${
+        currencySymbol + (item.base_amount * currencyRate).toFixed(2)
+      }`;
       return {
         label,
         value: item,
@@ -106,7 +108,9 @@ class CheckoutShippingMethod extends Component {
         radio_props={radioProps}
         initial={0}
         animation={false}
-        onPress={(value) => { this.onShippingSelect(value); }}
+        onPress={value => {
+          this.onShippingSelect(value);
+        }}
       />
     );
   }
@@ -127,10 +131,7 @@ class CheckoutShippingMethod extends Component {
     }
     return (
       <View style={styles.nextButtonStyle}>
-        <Button
-          onPress={this.onNextPressed}
-          style={styles.buttonStyle(theme)}
-        >
+        <Button onPress={this.onNextPressed} style={styles.buttonStyle(theme)}>
           {translate('common.next')}
         </Button>
       </View>

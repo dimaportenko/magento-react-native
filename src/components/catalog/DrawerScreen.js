@@ -1,18 +1,17 @@
 import React, { Component, useContext, useState } from 'react';
 import { connect } from 'react-redux';
-import {
-  View,
-  StyleSheet,
-} from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import {
-  getProductsForCategoryOrChild, addFilterData, getSearchProducts,
+  getProductsForCategoryOrChild,
+  addFilterData,
+  getSearchProducts,
 } from '../../actions';
 import { Button, Text, Input } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
-const DrawerScreen = (props) => {
+const DrawerScreen = props => {
   const [maxValue, setMaxValue] = useState('');
   const [minValue, setMinValue] = useState('');
   const theme = useContext(ThemeContext);
@@ -22,15 +21,27 @@ const DrawerScreen = (props) => {
     const priceFilter = {
       price: {
         condition: 'from,to',
-        value: `${(minValue / currencyRate).toFixed(2)},${(maxValue / currencyRate).toFixed(2)}`,
+        value: `${(minValue / currencyRate).toFixed(2)},${(
+          maxValue / currencyRate
+        ).toFixed(2)}`,
       },
     };
     props.addFilterData(priceFilter);
     if (props.filters.categoryScreen) {
-      props.getProductsForCategoryOrChild(props.category, null, props.filters.sortOrder, priceFilter);
+      props.getProductsForCategoryOrChild(
+        props.category,
+        null,
+        props.filters.sortOrder,
+        priceFilter,
+      );
       props.addFilterData({ categoryScreen: false });
     } else {
-      props.getSearchProducts(props.searchInput, null, props.filters.sortOrder, priceFilter);
+      props.getSearchProducts(
+        props.searchInput,
+        null,
+        props.filters.sortOrder,
+        priceFilter,
+      );
     }
     props.navigation.closeDrawer();
   };
@@ -47,7 +58,9 @@ const DrawerScreen = (props) => {
   return (
     <View style={container(theme)}>
       <View style={InputContainer(theme)}>
-        <Text type="heading" style={textStyle(theme)}>Price:</Text>
+        <Text type="heading" style={textStyle(theme)}>
+          Price:
+        </Text>
         <Input
           containerStyle={minInputStyle}
           placeholder={translate('common.min')}
@@ -119,7 +132,9 @@ DrawerScreen.defaultProps = {
 const mapStateToProps = ({ category, filters, search, magento }) => {
   const currentCategory = category.current.category;
   const { searchInput } = search;
-  const { currency: { displayCurrencyExchangeRate: currencyRate } } = magento;
+  const {
+    currency: { displayCurrencyExchangeRate: currencyRate },
+  } = magento;
   return {
     filters,
     searchInput,
@@ -129,5 +144,7 @@ const mapStateToProps = ({ category, filters, search, magento }) => {
 };
 
 export default connect(mapStateToProps, {
-  getProductsForCategoryOrChild, addFilterData, getSearchProducts,
+  getProductsForCategoryOrChild,
+  addFilterData,
+  getSearchProducts,
 })(DrawerScreen);

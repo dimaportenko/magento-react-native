@@ -20,7 +20,7 @@ export default (state = INITIAL_STATE, action) => {
 
       let featuredProducts = {};
       _.forEach(state.featuredProducts, (products, categoryId) => {
-        const items = products.items.map((product) => {
+        const items = products.items.map(product => {
           if (product.sku === sku) {
             return {
               ...product,
@@ -31,14 +31,20 @@ export default (state = INITIAL_STATE, action) => {
           return product;
         });
 
-        featuredProducts = { ...featuredProducts, [categoryId]: { ...products, items } };
+        featuredProducts = {
+          ...featuredProducts,
+          [categoryId]: { ...products, items },
+        };
       });
 
       return { ...state, featuredProducts };
     }
     case MAGENTO_GET_FEATURED_PRODUCTS: {
       const { categoryId, products } = action.payload;
-      const featuredProducts = { ...state.featuredProducts, [categoryId]: products };
+      const featuredProducts = {
+        ...state.featuredProducts,
+        [categoryId]: products,
+      };
       return { ...state, featuredProducts };
     }
     case HOME_SCREEN_DATA:

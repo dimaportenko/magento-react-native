@@ -15,7 +15,7 @@ const CategoryTree = ({
 
   useEffect(() => {
     _getCategoryTree();
-  }, []);
+  }, [_getCategoryTree]);
 
   const onRefresh = () => {
     _getCategoryTree(true);
@@ -26,23 +26,16 @@ const CategoryTree = ({
       return (
         <CategoryTreeList
           categories={categoryTree.children_data}
-          refreshControl={(
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       );
     }
     return <Spinner />;
   };
 
-  return (
-    <View style={styles.container(theme)}>
-      {renderContent()}
-    </View>
-  );
+  return <View style={styles.container(theme)}>{renderContent()}</View>;
 };
 
 CategoryTree.navigationOptions = {
@@ -57,6 +50,11 @@ const styles = {
   }),
 };
 
-const mapStateToProps = ({ categoryTree }) => ({ categoryTree, refreshing: categoryTree.refreshing });
+const mapStateToProps = ({ categoryTree }) => ({
+  categoryTree,
+  refreshing: categoryTree.refreshing,
+});
 
-export default connect(mapStateToProps, { initMagento, getCategoryTree })(CategoryTree);
+export default connect(mapStateToProps, { initMagento, getCategoryTree })(
+  CategoryTree,
+);

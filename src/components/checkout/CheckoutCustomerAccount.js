@@ -8,9 +8,7 @@ import {
   updateCheckoutUI,
   checkoutCustomerNextLoading,
 } from '../../actions';
-import {
-  Input, Spinner, ModalSelect, Button, Text,
-} from '../common';
+import { Input, Spinner, ModalSelect, Button, Text } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
@@ -94,13 +92,16 @@ class CheckoutCustomerAccount extends Component {
       password,
     };
 
-    const regionValue = (typeof region === 'object') ? {
-      region: region.region,
-      regionId: region.regionId,
-      regionCode: region.regionCode,
-    } : {
-      region,
-    };
+    const regionValue =
+      typeof region === 'object'
+        ? {
+            region: region.region,
+            regionId: region.regionId,
+            regionCode: region.regionCode,
+          }
+        : {
+            region,
+          };
 
     const address = {
       address: {
@@ -142,7 +143,7 @@ class CheckoutCustomerAccount extends Component {
     // this.props.createCustomer(customer);
     this.props.checkoutCustomerNextLoading(true);
     this.props.addGuestCartBillingAddress(cartId, address);
-  }
+  };
 
   updateUI = (key, value) => {
     this.props.updateCheckoutUI(key, value);
@@ -156,7 +157,9 @@ class CheckoutCustomerAccount extends Component {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
       const country = countries.find(item => item.id === countryId);
-      const regionData = country.available_regions.find(item => item.id === selectedRegion);
+      const regionData = country.available_regions.find(
+        item => item.id === selectedRegion,
+      );
       const region = {
         regionCode: regionData.code,
         region: regionData.name,
@@ -173,10 +176,7 @@ class CheckoutCustomerAccount extends Component {
     }
     return (
       <View style={styles.nextButtonStyle}>
-        <Button
-          onPress={this.onNextPressed}
-          style={styles.buttonStyle(theme)}
-        >
+        <Button onPress={this.onNextPressed} style={styles.buttonStyle(theme)}>
           {translate('common.next')}
         </Button>
       </View>
@@ -207,7 +207,10 @@ class CheckoutCustomerAccount extends Component {
       }
     }
 
-    const regionValue = typeof (this.props.region) === 'string' ? this.props.region : this.props.region.region;
+    const regionValue =
+      typeof this.props.region === 'string'
+        ? this.props.region
+        : this.props.region.region;
     return (
       <Input
         label={translate('common.region')}
@@ -328,7 +331,9 @@ class CheckoutCustomerAccount extends Component {
           onChangeText={value => this.updateUI('telephone', value)}
         />
 
-        <Text type="heading" style={styles.errorTextStyle(theme)}>{this.props.error}</Text>
+        <Text type="heading" style={styles.errorTextStyle(theme)}>
+          {this.props.error}
+        </Text>
 
         {this.renderButton()}
       </View>
@@ -355,9 +360,7 @@ const styles = StyleSheet.create({
   }),
 });
 
-const mapStateToProps = ({
-  checkout, cart, account, magento,
-}) => {
+const mapStateToProps = ({ checkout, cart, account, magento }) => {
   const { countries } = magento;
   const { cartId } = cart;
   const { customer } = account;

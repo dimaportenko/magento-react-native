@@ -5,21 +5,22 @@ import { Text } from '../../common';
 import { Spacer } from 'react-native-markup-kit';
 import { AirbnbRating, Rating } from 'react-native-ratings';
 import moment from 'moment';
-import Typography from '../../../theme/typography'
+import Typography from '../../../theme/typography';
 
 const CustomerReviews = ({ reviews }) => {
-  const renderRatings = ratings => ratings.map(rating => (
-    <View style={[styles.row, styles.ratingsWrap]}>
-      <Text style={styles.ratingTitle}>{rating.rating_code}</Text>
-      <AirbnbRating
-        showRating={false}
-        size={20}
-        isDisabled
-        // onFinishRating={val => setValue(val)}
-        defaultRating={rating.value}
-      />
-    </View>
-  ));
+  const renderRatings = ratings =>
+    ratings.map(rating => (
+      <View style={[styles.row, styles.ratingsWrap]}>
+        <Text style={styles.ratingTitle}>{rating.rating_code}</Text>
+        <AirbnbRating
+          showRating={false}
+          size={20}
+          isDisabled
+          // onFinishRating={val => setValue(val)}
+          defaultRating={rating.value}
+        />
+      </View>
+    ));
 
   return (
     <View style={styles.container}>
@@ -40,21 +41,17 @@ const CustomerReviews = ({ reviews }) => {
             </Text>
             <Spacer size={20} />
             <Text style={styles.reviewByText}>
-              Posted on
-              {' '}
-              {moment(review.created_at).format('MM/DD/YY')}
+              Posted on {moment(review.created_at).format('MM/DD/YY')}
             </Text>
           </View>
         </View>
-      ))
-      }
+      ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-  },
+  container: {},
   title: {
     ...Typography.headingText,
     marginBottom: 10,

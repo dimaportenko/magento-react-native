@@ -2,23 +2,13 @@ import React, { useRef, useState, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import {
-  Spinner,
-  Button,
-  Text,
-  Input,
-} from '../common';
+import { Spinner, Button, Text, Input } from '../common';
 import { signIn } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 // This file name should be Signup
-const Signin = ({
-  loading,
-  error,
-  success,
-  signIn: _signIn,
-}) => {
+const Signin = ({ loading, error, success, signIn: _signIn }) => {
   const theme = useContext(ThemeContext);
   // Internal State
   const [firstname, setFirstname] = useState('');
@@ -51,13 +41,9 @@ const Signin = ({
     return (
       <Button
         disabled={
-          firstname === ''
-          || lastname === ''
-          || email === ''
-          || password === ''
+          firstname === '' || lastname === '' || email === '' || password === ''
         }
-        onPress={onCreateAccountPress}
-      >
+        onPress={onCreateAccountPress}>
         {translate('signup.createAccountButton')}
       </Button>
     );
@@ -84,7 +70,9 @@ const Signin = ({
         value={firstname}
         editable={!loading}
         onChangeText={setFirstname}
-        onSubmitEditing={() => { lastnameInput.current.focus(); }}
+        onSubmitEditing={() => {
+          lastnameInput.current.focus();
+        }}
         containerStyle={styles.inputContainer(theme)}
       />
       <Input
@@ -96,8 +84,12 @@ const Signin = ({
         value={lastname}
         editable={!loading}
         onChangeText={setLastname}
-        assignRef={(input) => { lastnameInput.current = input; }}
-        onSubmitEditing={() => { emailInput.current.focus(); }}
+        assignRef={input => {
+          lastnameInput.current = input;
+        }}
+        onSubmitEditing={() => {
+          emailInput.current.focus();
+        }}
         containerStyle={styles.inputContainer(theme)}
       />
       <Input
@@ -110,8 +102,12 @@ const Signin = ({
         value={email}
         editable={!loading}
         onChangeText={setEmail}
-        assignRef={(input) => { emailInput.current = input; }}
-        onSubmitEditing={() => { passwordInput.current.focus(); }}
+        assignRef={input => {
+          emailInput.current = input;
+        }}
+        onSubmitEditing={() => {
+          passwordInput.current.focus();
+        }}
         containerStyle={styles.inputContainer(theme)}
       />
       <Input
@@ -123,7 +119,9 @@ const Signin = ({
         value={password}
         editable={!loading}
         onChangeText={setPassword}
-        assignRef={(input) => { passwordInput.current = input; }}
+        assignRef={input => {
+          passwordInput.current = input;
+        }}
         onSubmitEditing={onCreateAccountPress}
         containerStyle={styles.inputContainer(theme)}
       />

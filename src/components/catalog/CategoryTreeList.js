@@ -3,11 +3,8 @@ import { FlatList, SafeAreaView } from 'react-native';
 import PropTypes from 'prop-types';
 import CategoryTreeListItem from './CategoryTreeListItem';
 
-const CategoryTreeList = ({
-  categories,
-  refreshControl,
-}) => {
-  const renderItem = (category) => {
+const CategoryTreeList = ({ categories, refreshControl }) => {
+  const renderItem = category => {
     return <CategoryTreeListItem category={category.item} expanded={false} />;
   };
 

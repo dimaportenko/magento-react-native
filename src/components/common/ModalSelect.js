@@ -4,18 +4,15 @@ import ModalSelector from 'react-native-modal-selector';
 import PropTypes from 'prop-types';
 import { Input } from './Input';
 
-const ModalSelect = ({
-  data,
-  disabled,
-  label,
-  onChange,
-  attribute,
-  style,
-}) => {
+const ModalSelect = ({ data, disabled, label, onChange, attribute, style }) => {
   const [value, setValue] = useState('');
 
-  const _onChange = (option) => {
-    setValue(attribute === 'CurrencyCode' ? option.label : `${label} : ${option.label}`);
+  const _onChange = option => {
+    setValue(
+      attribute === 'CurrencyCode'
+        ? option.label
+        : `${label} : ${option.label}`,
+    );
 
     if (onChange) {
       onChange(attribute, option.key);
@@ -28,8 +25,7 @@ const ModalSelect = ({
         disabled={disabled}
         data={data}
         initValue={label}
-        onChange={_onChange}
-      >
+        onChange={_onChange}>
         <Input
           inputStyle={styles.inputStyle}
           editable={false}
@@ -49,13 +45,12 @@ const styles = {
 };
 
 ModalSelect.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.shape({
-    key: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.number,
-    ]).isRequired,
-    label: PropTypes.string,
-  })).isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      label: PropTypes.string,
+    }),
+  ).isRequired,
   label: PropTypes.string.isRequired,
   attribute: PropTypes.string,
   onChange: PropTypes.func,

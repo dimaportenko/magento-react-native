@@ -1,6 +1,4 @@
-import {
-  UI_PRODUCT_LIST_TYPE_GRID,
-} from '../actions/types';
+import { UI_PRODUCT_LIST_TYPE_GRID } from '../actions/types';
 
 const INITIAL_STATE = {
   listTypeGrid: true,

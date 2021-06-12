@@ -3,16 +3,9 @@ import { View, ViewPropTypes } from 'react-native';
 import PropTypes from 'prop-types';
 import { ThemeContext } from '../../theme';
 
-const Card = ({
-  children,
-  style,
-}) => {
+const Card = ({ children, style }) => {
   const theme = useContext(ThemeContext);
-  return (
-    <View style={[styles.containerStyles(theme), style]}>
-      {children}
-    </View>
-  );
+  return <View style={[styles.containerStyles(theme), style]}>{children}</View>;
 };
 
 const styles = {

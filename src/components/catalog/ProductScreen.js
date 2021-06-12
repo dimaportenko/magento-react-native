@@ -5,7 +5,14 @@ import React, { useContext, useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import HTML from 'react-native-render-html';
-import { Button, Input, Price, Spinner, Text } from '../common';
+import {
+  Button,
+  HeaderGridToggleIcon,
+  Input,
+  Price,
+  Spinner,
+  Text,
+} from '../common';
 import { translate } from '../../i18n';
 import { ThemeContext } from '../../theme';
 import {
@@ -146,6 +153,10 @@ export const ProductScreen = props => {
     </ScrollView>
   );
 };
+
+ProductScreen.navigationOptions = ({ navigation }) => ({
+  title: navigation.state.params.title.toUpperCase(),
+});
 
 const styles = StyleSheet.create({
   container: theme => ({

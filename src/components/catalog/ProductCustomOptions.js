@@ -19,11 +19,14 @@ export const ProductCustomOptions = ({ currentProduct, product }) => {
 
   const customOptionSelect = (optionId, optionValue) => {
     const { selectedCustomOptions } = currentProduct;
-    const updatedCustomOptions = { ...selectedCustomOptions, [optionId]: optionValue };
+    const updatedCustomOptions = {
+      ...selectedCustomOptions,
+      [optionId]: optionValue,
+    };
     dispatch(uiProductCustomOptionUpdate(updatedCustomOptions, product.id));
   };
 
-  return customOptions.map((option) => {
+  return customOptions.map(option => {
     const data = option.values.map(value => ({
       label: value.title,
       key: value.option_type_id,

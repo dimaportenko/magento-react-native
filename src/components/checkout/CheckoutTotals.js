@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import {
-  Alert, View, StyleSheet, TextInput, Dimensions,
-} from 'react-native';
+import { Alert, View, StyleSheet, TextInput, Dimensions } from 'react-native';
 import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import {
@@ -10,6 +8,7 @@ import {
   checkoutOrderPopupShown,
   placeGuestCartOrder,
   getCart,
+  resetCart,
   checkoutSetActiveSection,
   removeCouponFromCart,
   addCouponToCart,
@@ -46,7 +45,7 @@ class CheckoutTotals extends Component {
     };
     this.props.checkoutCustomerNextLoading(true);
     this.props.placeGuestCartOrder(cartId, payment);
-  }
+  };
 
   goHome = () => {
     this.props.navigation.navigate(NAVIGATION_HOME_STACK_PATH);
@@ -69,33 +68,25 @@ class CheckoutTotals extends Component {
     return (
       <View style={styles.totalsStyle}>
         <View style={styles.row}>
-          <Text>
-            {`${translate('common.subTotal')}: `}
-          </Text>
+          <Text>{`${translate('common.subTotal')}: `}</Text>
           <Price
             basePrice={baseSubTotal}
             currencySymbol={currencySymbol}
             currencyRate={currencyRate}
           />
         </View>
-        {
-          !!this.props?.totals?.coupon_code && (
-            <View style={styles.row}>
-              <Text>
-                {`${translate('common.discount')}: `}
-              </Text>
-              <Price
-                basePrice={this.props?.totals?.discount_amount}
-                currencySymbol={currencySymbol}
-                currencyRate={currencyRate}
-              />
-            </View>
-          )
-        }
+        {!!this.props?.totals?.coupon_code && (
+          <View style={styles.row}>
+            <Text>{`${translate('common.discount')}: `}</Text>
+            <Price
+              basePrice={this.props?.totals?.discount_amount}
+              currencySymbol={currencySymbol}
+              currencyRate={currencyRate}
+            />
+          </View>
+        )}
         <View style={styles.row}>
-          <Text>
-            {`${translate('common.shipping')}: `}
-          </Text>
+          <Text>{`${translate('common.shipping')}: `}</Text>
           <Price
             basePrice={shippingTotal}
             currencySymbol={currencySymbol}
@@ -103,27 +94,25 @@ class CheckoutTotals extends Component {
           />
         </View>
         <View style={styles.row}>
-          <Text>
-            {`${translate('common.total')}: `}
-          </Text>
+          <Text>{`${translate('common.total')}: `}</Text>
           <Price
             basePrice={grandTotal}
             currencySymbol={currencySymbol}
             currencyRate={currencyRate}
           />
         </View>
-        {
-          baseCurrencyCode !== currencyCode && (
-            <View style={styles.row}>
-              <Text>{`${translate('checkout.youWillBeCharged')}: `}</Text>
-              <Price
-                basePrice={grandTotal}
-                currencySymbol={baseCurrencySymbol || priceSignByCode(baseCurrencyCode)}
-                currencyRate={1}
-              />
-            </View>
-          )
-        }
+        {baseCurrencyCode !== currencyCode && (
+          <View style={styles.row}>
+            <Text>{`${translate('checkout.youWillBeCharged')}: `}</Text>
+            <Price
+              basePrice={grandTotal}
+              currencySymbol={
+                baseCurrencySymbol || priceSignByCode(baseCurrencyCode)
+              }
+              currencyRate={1}
+            />
+          </View>
+        )}
       </View>
     );
   }
@@ -147,8 +136,7 @@ class CheckoutTotals extends Component {
         <Button
           onPress={this.onPlacePressed}
           disable={this.props.loading}
-          style={styles.buttonStyle(theme)}
-        >
+          style={styles.buttonStyle(theme)}>
           {translate('checkout.placeOrderButton')}
         </Button>
       </View>
@@ -165,9 +153,15 @@ class CheckoutTotals extends Component {
 
   componentDidUpdate(prevProps) {
     if (this.props.orderId && this.props.orderId !== prevProps.orderId) {
-      this.showPopup(translate('common.order'), translate('checkout.orderSuccessMessage'));
+      this.showPopup(
+        translate('common.order'),
+        translate('checkout.orderSuccessMessage'),
+      );
     }
-    if (this.props.errorMessage && this.props.errorMessage !== prevProps.errorMessage) {
+    if (
+      this.props.errorMessage &&
+      this.props.errorMessage !== prevProps.errorMessage
+    ) {
       this.showPopup(translate('errors.error'), this.props.errorMessage);
     }
     if (this.props?.totals?.coupon_code !== prevProps?.totals?.coupon_code) {
@@ -179,7 +173,7 @@ class CheckoutTotals extends Component {
 
   showPopup(title, message) {
     this.props.checkoutSetActiveSection(1);
-    this.props.getCart();
+    this.props.resetCart();
     // this.props.checkoutOrderPopupShown();
     Alert.alert(
       title,
@@ -190,7 +184,7 @@ class CheckoutTotals extends Component {
   }
 
   couponAction = () => {
-    if (!!this.props?.totals?.coupon_code) {
+    if (this.props?.totals?.coupon_code) {
       this.props.removeCouponFromCart();
     } else {
       this.props.addCouponToCart(this.state.couponCodeInput);
@@ -202,7 +196,7 @@ class CheckoutTotals extends Component {
 
     return (
       <View>
-        <View style={[styles.row, { justifyContent: 'space-between' } ]}>
+        <View style={[styles.row, { justifyContent: 'space-between' }]}>
           <View style={styles.couponInputContainer(theme)}>
             <TextInput
               // style={{ width: '100%' }}
@@ -213,25 +207,23 @@ class CheckoutTotals extends Component {
             />
           </View>
           <Spacer size={50} />
-          {
-            this.props.couponLoading
-              ? (
-                <View style={{ width: 100 }}>
-                  <Spinner />
-                </View>
-              )
-              : (
-                <Button onPress={this.couponAction} style={{ width: 100, alignSelf: 'auto' }}>
-                  {!!this.props?.totals?.coupon_code ? 'Cancel' : 'Apply'}
-                </Button>
-              )
-          }
+          {this.props.couponLoading ? (
+            <View style={{ width: 100 }}>
+              <Spinner />
+            </View>
+          ) : (
+            <Button
+              onPress={this.couponAction}
+              style={{ width: 100, alignSelf: 'auto' }}>
+              {this.props?.totals?.coupon_code ? 'Cancel' : 'Apply'}
+            </Button>
+          )}
         </View>
-        {
-          !!(this.props.couponError?.length) && (
-            <Text style={{ color: 'red', marginBottom: 10, textAlign: 'center' }}>{this.props.couponError}</Text>
-          )
-        }
+        {!!this.props.couponError?.length && (
+          <Text style={{ color: 'red', marginBottom: 10, textAlign: 'center' }}>
+            {this.props.couponError}
+          </Text>
+        )}
       </View>
     );
   };
@@ -285,9 +277,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({ cart, checkout, magento }) => {
   const { cartId, couponLoading, couponError } = cart;
   const { loading } = checkout.ui;
-  const {
-    payments, selectedPayment, totals, orderId, errorMessage,
-  } = checkout;
+  const { payments, selectedPayment, totals, orderId, errorMessage } = checkout;
   const {
     base_currency_symbol: baseCurrencySymbol,
     displayCurrencyCode: currencyCode,
@@ -318,6 +308,7 @@ export default connect(mapStateToProps, {
   checkoutOrderPopupShown,
   placeGuestCartOrder,
   getCart,
+  resetCart,
   addCouponToCart,
   removeCouponFromCart,
 })(CheckoutTotals);

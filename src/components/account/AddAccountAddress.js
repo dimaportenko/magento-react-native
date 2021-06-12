@@ -8,9 +8,7 @@ import {
   accountAddressNextLoading,
   resetAccountAddressUI,
 } from '../../actions';
-import {
-  Input, Spinner, ModalSelect, Button, Text,
-} from '../common';
+import { Input, Spinner, ModalSelect, Button, Text } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
@@ -25,7 +23,11 @@ class AddAccountAddress extends Component {
     this.props.getCountries();
     this.props.resetAccountAddressUI();
 
-    if (this.props.customer && this.props.customer.addresses && this.props.customer.addresses.length) {
+    if (
+      this.props.customer &&
+      this.props.customer.addresses &&
+      this.props.customer.addresses.length
+    ) {
       const address = this.props.customer.addresses[0];
       const regionData = address.region;
       const region = {
@@ -43,23 +45,19 @@ class AddAccountAddress extends Component {
   }
 
   onNextPressed = () => {
-    const {
-      postcode,
-      countryId,
-      city,
-      street,
-      region,
-      customer,
-      telephone,
-    } = this.props;
+    const { postcode, countryId, city, street, region, customer, telephone } =
+      this.props;
 
-    const regionValue = (typeof region === 'object') ? {
-      region: region.region,
-      region_id: region.regionId,
-      region_code: region.regionCode,
-    } : {
-      region,
-    };
+    const regionValue =
+      typeof region === 'object'
+        ? {
+            region: region.region,
+            region_id: region.regionId,
+            region_code: region.regionCode,
+          }
+        : {
+            region,
+          };
 
     const data = {
       customer: {
@@ -98,7 +96,9 @@ class AddAccountAddress extends Component {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
       const country = countries.find(item => item.id === countryId);
-      const regionData = country.available_regions.find(item => item.id === selectedRegion);
+      const regionData = country.available_regions.find(
+        item => item.id === selectedRegion,
+      );
       const region = {
         regionCode: regionData.code,
         region: regionData.name,
@@ -114,10 +114,7 @@ class AddAccountAddress extends Component {
       return <Spinner />;
     }
     return (
-      <Button
-        onPress={this.onNextPressed}
-        style={styles.buttonStyle(theme)}
-      >
+      <Button onPress={this.onNextPressed} style={styles.buttonStyle(theme)}>
         {translate('common.update')}
       </Button>
     );
@@ -149,7 +146,10 @@ class AddAccountAddress extends Component {
       }
     }
 
-    const regionValue = typeof (this.props.region) === 'string' ? this.props.region : this.props.region.region;
+    const regionValue =
+      typeof this.props.region === 'string'
+        ? this.props.region
+        : this.props.region.region;
     return (
       <Input
         value={regionValue}
@@ -181,7 +181,9 @@ class AddAccountAddress extends Component {
     }));
 
     const country = countries.find(item => item.id === countryId);
-    const label = country ? country.full_name_locale : translate('common.country');
+    const label = country
+      ? country.full_name_locale
+      : translate('common.country');
 
     return (
       <ModalSelect
@@ -233,7 +235,9 @@ class AddAccountAddress extends Component {
           containerStyle={styles.inputContainer(theme)}
         />
         {this.renderButton()}
-        <Text type="heading" style={styles.errorTextStyle(theme)}>{this.props.error}</Text>
+        <Text type="heading" style={styles.errorTextStyle(theme)}>
+          {this.props.error}
+        </Text>
       </View>
     );
   }
