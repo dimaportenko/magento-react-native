@@ -184,7 +184,7 @@ class CheckoutCustomerAccount extends Component {
   }
 
   renderRegions() {
-    const { countryId, countries } = this.props;
+    const { countryId, countries, region } = this.props;
     if (countryId && countryId.length && countries && countries.length) {
       const country = countries.find(item => item.id === countryId);
       if (country && country.available_regions) {
@@ -193,11 +193,16 @@ class CheckoutCustomerAccount extends Component {
           key: value.id,
         }));
 
+        const label = region?.region
+          ? region?.region
+          : translate('common.region');
+
         return (
           <ModalSelect
+            withLabel={false}
             disabled={data.length === 0}
             key="regions"
-            label={translate('common.region')}
+            label={label}
             attribute={translate('common.region')}
             value={translate('common.region')}
             data={data}
@@ -240,11 +245,17 @@ class CheckoutCustomerAccount extends Component {
       key: value.id,
     }));
 
+    const country = countries.find(item => item.id === countryId);
+    const label = country
+      ? country.full_name_locale
+      : translate('common.country');
+
     return (
       <ModalSelect
+        withLabel={false}
         disabled={data.length === 0}
         key="countries"
-        label={translate('common.country')}
+        label={label}
         attribute={translate('common.country')}
         value={translate('common.country')}
         data={data}

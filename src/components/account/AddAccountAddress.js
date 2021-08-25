@@ -137,6 +137,7 @@ class AddAccountAddress extends Component {
 
         return (
           <ModalSelect
+            withLabel={false}
             disabled={data.length === 0}
             key="regions"
             label={label}
@@ -191,6 +192,7 @@ class AddAccountAddress extends Component {
 
     return (
       <ModalSelect
+        withLabel={false}
         disabled={data.length === 0}
         key="countries"
         label={label}
