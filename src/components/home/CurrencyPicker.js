@@ -34,6 +34,7 @@ const CurrencyPicker = ({
       disabled={data.length === 0}
       label={selectedCurrencyCode}
       attribute="CurrencyCode"
+      withLabel={false}
       data={data}
       onChange={onChange}
       style={styles.currencyContainer}
