@@ -11,18 +11,20 @@ import {
 import { Input, Spinner, ModalSelect, Button, Text } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { CustomerType } from '../../magento/types';
 
-class AddAccountAddress extends Component {
-	public props: any;
-	public context: any;
-	public postcode: any;
-	public countryId: any;
-	public city: any;
-	public street: any;
-	public region: any;
-	public customer: any;
-	public telephone: any;
-	public countries: any;
+type Props = {
+  getCountries: typeof getCountries;
+  addAccountAddress: typeof addAccountAddress;
+  updateAccountAddressUI: typeof updateAccountAddressUI;
+  accountAddressNextLoading: typeof accountAddressNextLoading;
+  resetAccountAddressUI: typeof resetAccountAddressUI;
+  customer: CustomerType;
+};
+
+type State = {};
+
+class AddAccountAddress extends Component<Props, State> {
   static contextType = ThemeContext;
 
   componentWillUnmount() {

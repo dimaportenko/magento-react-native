@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, FC } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,7 +7,6 @@ import {
   Platform,
 } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Spinner, Button, Input, Text } from '../common';
 import { auth } from '../../actions/CustomerAuthActions';
 import {
@@ -17,7 +16,13 @@ import {
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
-const Login = ({ loading, error, success, navigation, auth: _auth }) => {
+const Login: FC<{
+  loading: boolean;
+  error?: string;
+  success?: string;
+  navigation: any;
+  auth: typeof auth;
+}> = ({ loading, error, success, navigation, auth: _auth }) => {
   const theme = useContext(ThemeContext);
   // Internal State
   const [email, setEmail] = useState('');
@@ -149,23 +154,18 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ customerAuth }) => {
+const mapStateToProps = ({
+  customerAuth,
+}: {
+  customerAuth: {
+    loading: boolean;
+    error?: string;
+    success?: string;
+  };
+}) => {
   const { error, success, loading } = customerAuth;
 
   return { error, success, loading };
-};
-
-Login.propTypes = {
-  loading: PropTypes.bool,
-  error: PropTypes.oneOfType(PropTypes.string, null),
-  success: PropTypes.oneOfType(PropTypes.string, null),
-  auth: PropTypes.func.isRequired,
-};
-
-Login.defaultProps = {
-  error: null,
-  success: null,
-  loading: false,
 };
 
 export default connect(mapStateToProps, { auth })(Login);

@@ -560,7 +560,7 @@ export const cartItemProduct = sku => async dispatch => {
 };
 
 export const getOrdersForCustomer =
-  (customerId, refreshing) => async dispatch => {
+  (customerId: number, refreshing: boolean) => async dispatch => {
     if (refreshing) {
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_ORDERS_DATA, payload: true });
     }

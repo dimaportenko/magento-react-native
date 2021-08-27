@@ -1,13 +1,18 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Spinner, Button, Text, Input } from '../common';
 import { initiatePasswordReset, updatePasswordResetUI } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
-const PasswordReset = ({
+const PasswordReset: FC<{
+  loading: boolean;
+  error?: string;
+  success?: string;
+  initiatePasswordReset: typeof initiatePasswordReset;
+  updatePasswordResetUI: typeof updatePasswordResetUI;
+}> = ({
   loading,
   error,
   success,
@@ -111,19 +116,6 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.extraLarge,
   }),
 });
-
-PasswordReset.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  success: PropTypes.oneOfType([PropTypes.string, null]),
-  error: PropTypes.oneOfType([PropTypes.string, null]),
-  initiatePasswordReset: PropTypes.func.isRequired,
-  updatePasswordResetUI: PropTypes.func.isRequired,
-};
-
-PasswordReset.defaultProps = {
-  success: null,
-  error: null,
-};
 
 const mapStateToProps = ({ customerAuth }) => {
   const {

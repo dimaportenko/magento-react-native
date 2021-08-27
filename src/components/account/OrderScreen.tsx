@@ -1,40 +1,44 @@
-import React, { useEffect, useContext } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect, useContext, FC } from 'react';
+import { View, StyleSheet, FlatList, ListRenderItemInfo } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Text, Price } from '../common';
 import { orderProductDetail } from '../../actions';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
+import { OrderItemType, OrderType, ProductType } from '../../magento/types';
 
-const OrderScreen = ({
-  products,
-  navigation,
-  orderProductDetail: _orderProductDetail,
-}) => {
+const OrderScreen: FC<{
+  navigation: any;
+  orderProductDetail: typeof orderProductDetail;
+  products: Record<string, ProductType>;
+}> = ({ products, navigation, orderProductDetail: _orderProductDetail }) => {
   const theme = useContext(ThemeContext);
   const currencySymbol = priceSignByCode(
     navigation.state.params.item.order_currency_code,
   );
 
   useEffect(() => {
-    navigation.state.params.item.items.forEach(item => {
+    console.warn(products);
+  }, [products]);
+
+  useEffect(() => {
+    navigation.state.params.item.items.forEach((item: OrderItemType) => {
       if (!(item.sku in products)) {
         _orderProductDetail(item.sku);
       }
     });
   }, [_orderProductDetail, navigation.state.params.item.items, products]);
 
-  const image = item => {
+  const image = (item: OrderItemType) => {
     if (products[item.sku]) {
       return getProductThumbnailFromAttribute(products[item.sku]);
     }
   };
 
-  const renderItem = item => (
+  const renderItem = (item: ListRenderItemInfo<OrderItemType>) => (
     <View style={styles.itemContainer(theme)}>
       <View style={styles.row}>
         <FastImage
@@ -71,7 +75,7 @@ const OrderScreen = ({
     </View>
   );
 
-  const { item } = navigation.state.params;
+  const { item }: { item: OrderType } = navigation.state.params;
 
   return (
     <View style={styles.container(theme)}>
@@ -115,7 +119,7 @@ const OrderScreen = ({
   );
 };
 
-OrderScreen.navigationOptions = ({ navigation }) => ({
+OrderScreen.navigationOptions = ({ navigation }: { navigation: any }) => ({
   title: `${translate('common.order')} # ${
     navigation.state.params.item.increment_id
   }`,
@@ -143,14 +147,6 @@ const styles = StyleSheet.create({
     height: theme.dimens.orderImageHeight,
   }),
 });
-
-OrderScreen.propTypes = {
-  products: PropTypes.object.isRequired,
-  navigation: PropTypes.object.isRequired,
-  orderProductDetail: PropTypes.func.isRequired,
-};
-
-OrderScreen.defaultProps = {};
 
 const mapStateToProps = ({ account, magento }) => {
   const { products } = account;

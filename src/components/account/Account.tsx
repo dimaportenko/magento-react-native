@@ -1,7 +1,6 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, FC } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
 import { Button, Text } from '../common';
 import { logout, currentCustomer } from '../../actions';
 import {
@@ -10,9 +9,15 @@ import {
 } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { CustomerType } from '../../magento/types';
 
-const Account = ({
-  customer,
+const Account: FC<{
+  customer: CustomerType | null;
+  navigation: any;
+  currentCustomer: typeof currentCustomer;
+  logout: typeof logout;
+}> = ({
+  customer = null,
   navigation,
   currentCustomer: _currentCustomer,
   logout: _logout,
@@ -103,17 +108,6 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.large,
   }),
 });
-
-Account.propTypes = {
-  customer: PropTypes.object,
-  navigation: PropTypes.object.isRequired,
-  currentCustomer: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-};
-
-Account.defaultProps = {
-  customer: null,
-};
 
 const mapStateToProps = ({ account }) => {
   const { customer } = account;

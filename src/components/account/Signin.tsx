@@ -1,14 +1,18 @@
-import React, { useRef, useState, useContext } from 'react';
+import React, { useRef, useState, useContext, FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Spinner, Button, Text, Input } from '../common';
 import { signIn } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 // This file name should be Signup
-const Signin = ({ loading, error, success, signIn: _signIn }) => {
+const Signin: FC<{
+  loading: boolean;
+  error?: string;
+  success?: string;
+  signIn: typeof signIn;
+}> = ({ loading, error, success, signIn: _signIn }) => {
   const theme = useContext(ThemeContext);
   // Internal State
   const [firstname, setFirstname] = useState('');
@@ -160,18 +164,6 @@ const styles = StyleSheet.create({
     marginTop: theme.soacing.extraLarge,
   }),
 });
-
-Signin.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  error: PropTypes.oneOfType(PropTypes.string, null),
-  success: PropTypes.oneOfType(PropTypes.string, null),
-  signIn: PropTypes.func.isRequired,
-};
-
-Signin.defaultProps = {
-  error: null,
-  success: null,
-};
 
 const mapStateToProps = ({ customerAuth }) => {
   const { error, success, loading } = customerAuth;

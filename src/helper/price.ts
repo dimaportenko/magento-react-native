@@ -10,7 +10,7 @@ export function finalPrice(data, price) {
   return specialPrice;
 }
 
-export const priceSignByCode = code => {
+export const priceSignByCode = (code: string) => {
   const sign = currencySymbols[code];
   if (sign) {
     return sign;

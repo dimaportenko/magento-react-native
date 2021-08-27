@@ -1,14 +1,16 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { View, StyleSheet, TouchableOpacity } from 'react-native';
-import PropTypes from 'prop-types';
 import { Text, Price } from '../common';
 import { NAVIGATION_ORDER_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
+import { OrderType } from '../../magento/types';
 
-const OrderListItem = ({ item }) => {
+const OrderListItem: FC<{
+  item: OrderType;
+}> = ({ item }) => {
   const theme = useContext(ThemeContext);
   const currencySymbol = priceSignByCode(item.order_currency_code);
 
@@ -64,12 +66,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-
-OrderListItem.propTypes = {
-  item: PropTypes.object.isRequired,
-  currencySymbol: PropTypes.string.isRequired,
-};
-
-OrderListItem.defaultProps = {};
 
 export default OrderListItem;

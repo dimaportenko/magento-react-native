@@ -1,8 +1,13 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, FC } from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { TouchableOpacity, View, FlatList, RefreshControl } from 'react-native';
-import PropTypes from 'prop-types';
+import {
+  TouchableOpacity,
+  View,
+  FlatList,
+  RefreshControl,
+  ListRenderItemInfo,
+} from 'react-native';
 import { getOrdersForCustomer } from '../../actions';
 import { Text } from '../common';
 import OrderListItem from './OrderListItem';
@@ -10,9 +15,16 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 import { NAVIGATION_HOME_SCREEN_PATH } from '../../navigation/routes';
+import { OrderType } from '../../magento/types';
 
-const OrdersScreen = ({
-  orders,
+const OrdersScreen: FC<{
+  customerId: number;
+  orders: OrderType[] | null;
+  refreshing: boolean;
+  getOrdersForCustomer: typeof getOrdersForCustomer;
+  navigation: any;
+}> = ({
+  orders = null,
   customerId,
   refreshing,
   getOrdersForCustomer: _getOrdersForCustomer,
@@ -21,17 +33,21 @@ const OrdersScreen = ({
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
-    _getOrdersForCustomer(customerId);
+    _getOrdersForCustomer(customerId, true);
   }, [_getOrdersForCustomer, customerId]);
 
   const onRefresh = () => {
     _getOrdersForCustomer(customerId, true);
   };
 
-  const renderItem = orderItem => <OrderListItem item={orderItem.item} />;
+  const renderItem = (orderItem: ListRenderItemInfo<OrderType>) => (
+    <OrderListItem item={orderItem.item} />
+  );
 
   const renderOrderList = () => {
-    const data = orders.sort((b, a) => moment(a.created_at).diff(b.created_at));
+    const data = orders?.sort((b, a) =>
+      moment(a.created_at).diff(b.created_at),
+    );
 
     return (
       <FlatList
@@ -91,19 +107,6 @@ const styles = {
     top: 0,
     color: theme.colors.secondary,
   }),
-};
-
-OrdersScreen.propTypes = {
-  orders: PropTypes.arrayOf(PropTypes.object),
-  customerId: PropTypes.number,
-  refreshing: PropTypes.bool,
-  getOrdersForCustomer: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired,
-};
-
-OrdersScreen.defaultProps = {
-  orders: null,
-  customerId: null,
 };
 
 const mapStateToProps = ({ account, magento }) => {
