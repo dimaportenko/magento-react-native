@@ -16,6 +16,17 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 class SearchScreen extends Component {
+	public state: any;
+	public getSearchProducts: any;
+	public props: any;
+	public setState: any;
+	public context: any;
+	public canLoadMoreContent: any;
+	public loadingMore: any;
+	public products: any;
+	public sortOrder: any;
+	public priceFilter: any;
+	public input: any;
   static contextType = ThemeContext;
 
   static navigationOptions = ({ navigation }) => ({

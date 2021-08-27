@@ -19,6 +19,18 @@ const defaultOptions = {
 };
 
 class Magento {
+	public configuration: any;
+	public base_url: any;
+	public root_path: any;
+	public admin: any;
+	public guest: any;
+	public customer: any;
+	public access_token: any;
+	public customerToken: any;
+	public storeConfig: any;
+	public version: any;
+	public message: any;
+
   setOptions(options) {
     this.configuration = { ...defaultOptions, ...options };
     this.base_url = this.configuration.url;

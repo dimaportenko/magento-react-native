@@ -60,6 +60,7 @@ buck-out/
 
 # Magento configuration file
 src/config/magento.js
+src/config/magento.ts
 
 coverage
 

@@ -13,6 +13,12 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 class CheckoutPaymentMethod extends Component {
+	public props: any;
+	public context: any;
+	public payments: any;
+	public selectedPayment: any;
+	public cartId: any;
+	public checkout: any;
   static contextType = ThemeContext;
 
   componentDidMount() {

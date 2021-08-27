@@ -13,6 +13,21 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 class CheckoutCustomerAccount extends Component {
+	public props: any;
+	public context: any;
+	public customer: any;
+	public email: any;
+	public password: any;
+	public postcode: any;
+	public countryId: any;
+	public firstname: any;
+	public lastname: any;
+	public telephone: any;
+	public city: any;
+	public street: any;
+	public region: any;
+	public cartId: any;
+	public countries: any;
   static contextType = ThemeContext;
 
   componentDidMount() {
@@ -149,11 +164,11 @@ class CheckoutCustomerAccount extends Component {
     this.props.updateCheckoutUI(key, value);
   };
 
-  countrySelect(attributeId, optionValue) {
+  countrySelect(attributeId, optionValue?) {
     this.props.updateCheckoutUI('countryId', optionValue);
   }
 
-  regionSelect(attributeId, selectedRegion) {
+  regionSelect(attributeId, selectedRegion?) {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
       const country = countries.find(item => item.id === countryId);

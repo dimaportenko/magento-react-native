@@ -13,6 +13,16 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 class AddAccountAddress extends Component {
+	public props: any;
+	public context: any;
+	public postcode: any;
+	public countryId: any;
+	public city: any;
+	public street: any;
+	public region: any;
+	public customer: any;
+	public telephone: any;
+	public countries: any;
   static contextType = ThemeContext;
 
   componentWillUnmount() {

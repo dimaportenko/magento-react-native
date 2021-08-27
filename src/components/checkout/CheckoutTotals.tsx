@@ -21,6 +21,16 @@ import { priceSignByCode } from '../../helper/price';
 import { Row, Spacer } from 'react-native-markup-kit';
 
 class CheckoutTotals extends Component {
+	public props: any;
+	public context: any;
+	public setState: any;
+	public cartId: any;
+	public selectedPayment: any;
+	public baseCurrencySymbol: any;
+	public currencyCode: any;
+	public currencySymbol: any;
+	public currencyRate: any;
+	public payments: any;
   static contextType = ThemeContext;
 
   state = {

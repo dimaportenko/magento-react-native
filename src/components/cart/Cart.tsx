@@ -20,6 +20,18 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 class Cart extends Component {
+	public props: any;
+	public context: any;
+	public items: any;
+	public products: any;
+	public totals: any;
+	public navigate: any;
+	public containerStyle: any;
+	public buttonTextStyle: any;
+	public container: any;
+	public content: any;
+	public footer: any;
+	public buttonStyle: any;
   static contextType = ThemeContext;
 
   static navigationOptions = {

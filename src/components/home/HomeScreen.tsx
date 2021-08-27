@@ -14,6 +14,9 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
 class HomeScreen extends Component {
+	public props: any;
+	public context: any;
+	public navigation: any;
   static contextType = ThemeContext;
 
   static navigationOptions = ({ navigation }) => ({
