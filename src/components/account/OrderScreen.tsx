@@ -21,10 +21,6 @@ const OrderScreen: FC<{
   );
 
   useEffect(() => {
-    console.warn(products);
-  }, [products]);
-
-  useEffect(() => {
     navigation.state.params.item.items.forEach((item: OrderItemType) => {
       if (!(item.sku in products)) {
         _orderProductDetail(item.sku);
