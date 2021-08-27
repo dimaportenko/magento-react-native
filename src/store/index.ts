@@ -6,6 +6,7 @@ import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import reducers from '../reducers';
+import { magentoOptions } from '../config/magento';
 
 const categoryTreeSubsetBlacklistFilter = createBlacklistFilter(
   'categoryTree',
@@ -59,5 +60,6 @@ export const store = createStore(
 
 export const persistor = persistStore(store);
 
-// TODO: remove `persistor.purge()` to persist your application data
-persistor.purge();
+if (!magentoOptions.persistAppData) {
+  persistor.purge();
+}

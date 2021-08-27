@@ -18,6 +18,7 @@ export const magentoOptions = {
     },
   },
   reviewEnabled: false, // set true ONLY if you install https://github.com/troublediehard/mma-customapi on the magento backend
+  persistAppData: false,
 };
 
 /**
