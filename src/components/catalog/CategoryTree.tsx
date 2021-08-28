@@ -1,16 +1,18 @@
-import React, { useContext, useEffect } from 'react';
+import React, { FC, useContext, useEffect } from 'react';
 import { RefreshControl, View } from 'react-native';
 import { connect } from 'react-redux';
 import { Spinner } from '../common/index';
 import { initMagento, getCategoryTree } from '../../actions/index';
 import CategoryTreeList from './CategoryTreeList';
 import { ThemeContext } from '../../theme';
+import { StoreStateType } from '../../reducers';
+import { CategoryTreeReducerType } from '../../reducers/CategoryTreeReducer';
 
-const CategoryTree = ({
-  categoryTree,
-  refreshing,
-  getCategoryTree: _getCategoryTree,
-}) => {
+const CategoryTree: FC<{
+  getCategoryTree: typeof getCategoryTree;
+  categoryTree: CategoryTreeReducerType;
+  refreshing: boolean;
+}> = ({ categoryTree, refreshing, getCategoryTree: _getCategoryTree }) => {
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
@@ -50,7 +52,7 @@ const styles = {
   }),
 };
 
-const mapStateToProps = ({ categoryTree }) => ({
+const mapStateToProps = ({ categoryTree }: StoreStateType) => ({
   categoryTree,
   refreshing: categoryTree.refreshing,
 });

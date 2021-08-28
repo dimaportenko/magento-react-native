@@ -1,18 +1,28 @@
 import { combineReducers } from 'redux';
-import CategoryTreeReducer from './CategoryTreeReducer';
+import CategoryTreeReducer, { CategoryTreeReducerType } from './CategoryTreeReducer';
 import CustomerAuthReducer from './CustomerAuthReducer';
-import CategoryReducer from './CategoryReducer';
+import CategoryReducer, { CategoryReducerType } from './CategoryReducer';
 import CheckoutReducer from './CheckoutReducer';
-import MagentoReducer from './MagentoReducer';
+import MagentoReducer, { MagentoReducerType } from './MagentoReducer';
 import ProductReducer from './ProductReducer';
 import AccountReducer from './AccountReducer';
-import CartReducer from './CartReducer';
+import CartReducer, { CartReducerType } from './CartReducer';
 import HomeReducer from './HomeReducer';
-import SearchReducer from './SearchReducer';
-import FilterReducer from './FilterReducer';
-import UIReducer from './UIReducer';
+import SearchReducer, { SearchReducerType } from './SearchReducer';
+import FilterReducer, { FilterReducerType } from './FilterReducer';
+import UIReducer, { UIReducerType } from './UIReducer';
 
-export default combineReducers({
+export type StoreStateType = {
+  cart: CartReducerType;
+  magento: MagentoReducerType;
+  category: CategoryReducerType;
+  filters: FilterReducerType;
+  ui: UIReducerType;
+  categoryTree: CategoryTreeReducerType;
+  search: SearchReducerType;
+};
+
+export default combineReducers<StoreStateType>({
   categoryTree: CategoryTreeReducer,
   customerAuth: CustomerAuthReducer,
   category: CategoryReducer,

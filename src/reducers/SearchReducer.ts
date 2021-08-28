@@ -5,12 +5,20 @@ import {
   MAGENTO_RESET_SEARCH_PRODUCTS,
 } from '../actions/types';
 import { getPriceFromChildren } from '../helper/product';
+import { ProductType } from '../magento/types';
 
-const INITIAL_STATE = {
+export type SearchReducerType = {
+  products: ProductType[];
+  searchInput?: string;
+  totalCount?: number;
+  loadingMore?: boolean;
+};
+
+const INITIAL_STATE: SearchReducerType = {
   products: [],
-  searchInput: null,
-  totalCount: null,
-  loadingMore: null,
+  searchInput: undefined,
+  totalCount: undefined,
+  loadingMore: undefined,
 };
 
 export default (state = INITIAL_STATE, action) => {

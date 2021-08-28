@@ -1,7 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, FC } from 'react';
 import { connect, useSelector } from 'react-redux';
 import { View, RefreshControl } from 'react-native';
-import PropTypes from 'prop-types';
 import {
   addFilterData,
   getProductsForCategoryOrChild,
@@ -12,8 +11,27 @@ import { ProductList, HeaderGridToggleIcon } from '../common';
 import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
+import { StoreStateType } from '../../reducers';
+import { CategoryType, ProductType } from '../../magento/types';
+import { PriceFilterType } from '../../reducers/FilterReducer';
 
-const Category = ({
+const Category: FC<{
+  canLoadMoreContent: boolean;
+  addFilterData: typeof addFilterData;
+  getProductsForCategoryOrChild: typeof getProductsForCategoryOrChild;
+  setCurrentProduct: typeof setCurrentProduct;
+  updateProductsForCategoryOrChild: typeof updateProductsForCategoryOrChild;
+  category: CategoryType | undefined;
+  loadingMore: boolean;
+  products: ProductType[] | undefined;
+  totalCount: number;
+  sortOrder: number | undefined;
+  priceFilter: PriceFilterType;
+  refreshing: boolean;
+  navigation: any;
+  currencySymbol: string;
+  currencyRate: number;
+}> = ({
   canLoadMoreContent,
   loadingMore,
   products,
@@ -31,14 +49,16 @@ const Category = ({
   updateProductsForCategoryOrChild: _updateProductsForCategoryOrChild,
 }) => {
   const theme = useContext(ThemeContext);
-  const listTypeGrid = useSelector(({ ui }) => ui.listTypeGrid);
+  const listTypeGrid = useSelector(({ ui }: StoreStateType) => ui.listTypeGrid);
 
   useEffect(() => {
     _addFilterData({ categoryScreen: true });
-    _getProductsForCategoryOrChild(category);
+    if (category) {
+      _getProductsForCategoryOrChild(category);
+    }
   }, [_addFilterData, _getProductsForCategoryOrChild, category]);
 
-  const onRowPress = product => {
+  const onRowPress = (product: ProductType) => {
     _setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       title: product.name,
@@ -53,19 +73,26 @@ const Category = ({
   const onEndReached = () => {
     console.log('On end reached called!');
     console.log(loadingMore, totalCount, canLoadMoreContent);
-    if (!loadingMore && canLoadMoreContent) {
+    if (!loadingMore && canLoadMoreContent && category) {
       _getProductsForCategoryOrChild(
         category,
-        products.length,
+        products?.length,
         sortOrder,
         priceFilter,
       );
     }
   };
 
-  const performSort = _sortOrder => {
+  const performSort = (_sortOrder: number) => {
     _addFilterData(_sortOrder);
-    _getProductsForCategoryOrChild(category, null, _sortOrder, priceFilter);
+    if (category) {
+      _getProductsForCategoryOrChild(
+        category,
+        undefined,
+        _sortOrder,
+        priceFilter,
+      );
+    }
   };
 
   return (
@@ -89,7 +116,7 @@ const Category = ({
   );
 };
 
-Category.navigationOptions = ({ navigation }) => ({
+Category.navigationOptions = ({ navigation }: { navigation: any }) => ({
   title: navigation.state.params.title.toUpperCase(),
   headerBackTitle: ' ',
   headerRight: () => <HeaderGridToggleIcon />,
@@ -102,29 +129,8 @@ const styles = {
   }),
 };
 
-Category.propTypes = {
-  canLoadMoreContent: PropTypes.bool.isRequired,
-  loadingMore: PropTypes.bool.isRequired,
-  products: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.object),
-    PropTypes.bool,
-  ]),
-  totalCount: PropTypes.number.isRequired,
-  category: PropTypes.object,
-  refreshing: PropTypes.bool.isRequired,
-  navigation: PropTypes.object.isRequired,
-  currencySymbol: PropTypes.string.isRequired,
-  currencyRate: PropTypes.number.isRequired,
-  addFilterData: PropTypes.func.isRequired,
-  getProductsForCategoryOrChild: PropTypes.func.isRequired,
-  setCurrentProduct: PropTypes.func.isRequired,
-  updateProductsForCategoryOrChild: PropTypes.func.isRequired,
-};
-
-Category.defaultProps = {};
-
-const mapStateToProps = state => {
-  const { category } = state.category.current;
+const mapStateToProps = (state: StoreStateType) => {
+  const category = state.category.current?.category;
   const { products, totalCount, loadingMore, refreshing } = state.category;
   const {
     currency: {
@@ -133,7 +139,8 @@ const mapStateToProps = state => {
     },
   } = state.magento;
   const { priceFilter, sortOrder } = state.filters;
-  const canLoadMoreContent = products.length < totalCount;
+  const productsLength = products?.length ? products.length : 0;
+  const canLoadMoreContent = productsLength < totalCount;
 
   return {
     category,

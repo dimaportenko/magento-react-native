@@ -1,6 +1,19 @@
 import { ADD_FILTER_DATA, RESET_FILTERS_DATA } from '../actions/types';
 
-const INITIAL_STATE = {
+export type PriceFilterType = {
+  price: {
+    condition: string;
+    value: string;
+  };
+};
+
+export type FilterReducerType = {
+  priceFilter?: PriceFilterType;
+  sortOrder?: number;
+  categoryScreen?: boolean;
+};
+
+const INITIAL_STATE: FilterReducerType = {
   priceFilter: undefined,
   sortOrder: undefined,
   categoryScreen: undefined,

@@ -61,6 +61,9 @@ import {
 import { logError } from '../helper/logger';
 import { priceSignByCode } from '../helper/price';
 import { checkoutSetActiveSection } from './UIActions';
+import { CategoryType } from '../magento/types';
+import { PriceFilterType } from '../reducers/FilterReducer';
+import { Dispatch } from 'redux';
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
@@ -185,19 +188,26 @@ const getFeaturedCategoryProducts = async (categoryId, dispatch) => {
   }
 };
 
-export const getCategoryTree = refreshing => async dispatch => {
-  if (refreshing) {
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE, payload: true });
-  }
+export const getCategoryTree =
+  (refreshing?: boolean) => async (dispatch: Dispatch) => {
+    if (refreshing) {
+      dispatch({
+        type: MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE,
+        payload: true,
+      });
+    }
 
-  try {
-    const data = await magento.admin.getCategoriesTree();
-    dispatch({ type: MAGENTO_GET_CATEGORY_TREE, payload: data });
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE, payload: false });
-  } catch (error) {
-    logError(error);
-  }
-};
+    try {
+      const data = await magento.admin.getCategoriesTree();
+      dispatch({ type: MAGENTO_GET_CATEGORY_TREE, payload: data });
+      dispatch({
+        type: MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE,
+        payload: false,
+      });
+    } catch (error) {
+      logError(error);
+    }
+  };
 
 export const resetAccountAddressUI = () => ({
   type: RESET_ACCOUNT_ADDRESS_UI,
@@ -231,7 +241,13 @@ export const resetFilters = () => ({
 });
 
 export const getProductsForCategoryOrChild =
-  (category, offset, sortOrder, filter) => async dispatch => {
+  (
+    category: CategoryType,
+    offset?: number,
+    sortOrder?: number,
+    filter?: PriceFilterType,
+  ) =>
+  async (dispatch: Dispatch) => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
     }

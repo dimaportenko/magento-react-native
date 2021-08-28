@@ -1,7 +1,6 @@
-import React, { Component, useContext, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { connect } from 'react-redux';
 import { View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
 import {
   getProductsForCategoryOrChild,
   addFilterData,
@@ -10,8 +9,20 @@ import {
 import { Button, Text, Input } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { FilterReducerType } from '../../reducers/FilterReducer';
+import { CategoryType } from '../../magento/types';
 
-const DrawerScreen = props => {
+const DrawerScreen: FC<{
+  currencyRate: number;
+  getProductsForCategoryOrChild: typeof getProductsForCategoryOrChild;
+  addFilterData: typeof addFilterData;
+  getSearchProducts: typeof getSearchProducts;
+  filters: FilterReducerType;
+  searchInput: string;
+  category: CategoryType;
+  navigation: any;
+}> = props => {
   const [maxValue, setMaxValue] = useState('');
   const [minValue, setMinValue] = useState('');
   const theme = useContext(ThemeContext);
@@ -30,7 +41,7 @@ const DrawerScreen = props => {
     if (props.filters.categoryScreen) {
       props.getProductsForCategoryOrChild(
         props.category,
-        null,
+        undefined,
         props.filters.sortOrder,
         priceFilter,
       );
@@ -121,16 +132,13 @@ const styles = StyleSheet.create({
   },
 });
 
-DrawerScreen.propTypes = {
-  currencyRate: PropTypes.number,
-};
-
-DrawerScreen.defaultProps = {
-  currencyRate: 1,
-};
-
-const mapStateToProps = ({ category, filters, search, magento }) => {
-  const currentCategory = category.current.category;
+const mapStateToProps = ({
+  category,
+  filters,
+  search,
+  magento,
+}: StoreStateType) => {
+  const currentCategory = category.current?.category;
   const { searchInput } = search;
   const {
     currency: { displayCurrencyExchangeRate: currencyRate },

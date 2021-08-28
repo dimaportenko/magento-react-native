@@ -2,8 +2,13 @@ import {
   MAGENTO_GET_CATEGORY_TREE,
   MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE,
 } from '../actions/types';
+import { CategoryType } from '../magento/types';
 
-const INITIAL_STATE = {
+export type CategoryTreeReducerType = Partial<CategoryType> & {
+  refreshing: boolean;
+};
+
+const INITIAL_STATE: CategoryTreeReducerType = {
   refreshing: false,
 };
 

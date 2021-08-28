@@ -1,10 +1,18 @@
-import React from 'react';
-import { FlatList, SafeAreaView } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { FC } from 'react';
+import {
+  FlatList,
+  ListRenderItemInfo,
+  RefreshControlProps,
+  SafeAreaView,
+} from 'react-native';
 import CategoryTreeListItem from './CategoryTreeListItem';
+import { CategoryType } from '../../magento/types';
 
-const CategoryTreeList = ({ categories, refreshControl }) => {
-  const renderItem = category => {
+const CategoryTreeList: FC<{
+  categories: CategoryType[];
+  refreshControl?: React.ReactElement<RefreshControlProps> | undefined;
+}> = ({ categories, refreshControl }) => {
+  const renderItem = (category: ListRenderItemInfo<CategoryType>) => {
     return <CategoryTreeListItem category={category.item} expanded={false} />;
   };
 
@@ -18,15 +26,6 @@ const CategoryTreeList = ({ categories, refreshControl }) => {
       />
     </SafeAreaView>
   );
-};
-
-CategoryTreeList.propTypes = {
-  categories: PropTypes.arrayOf(PropTypes.object),
-  refreshControl: PropTypes.element,
-};
-
-CategoryTreeList.defaultProps = {
-  refreshControl: <></>,
 };
 
 export default CategoryTreeList;

@@ -150,7 +150,7 @@ export type ProductType = {
   // extension_attributes: Object
   // id: 575
   // media_gallery_entries: Array(1)
-  // name: "Ryker LumaTech&trade; Tee (V-neck)-L-Blue"
+  name: string;
   // options: Array(0)
   // price: 28
   // product_links: Array(0)
@@ -226,4 +226,15 @@ export type CountryType = {
   three_letter_abbreviation: string;
   two_letter_abbreviation: string;
   available_regions: CountryRegionType[];
+};
+
+export type CategoryType = {
+  children_data: CategoryType[];
+  id: number;
+  is_active: boolean;
+  name: string;
+  level: number;
+  parent_id: number;
+  position: number;
+  product_count: number;
 };

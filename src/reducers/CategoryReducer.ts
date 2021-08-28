@@ -9,10 +9,21 @@ import {
   MAGENTO_UPDATE_REFRESHING_CATEGORY_PRODUCTS,
   MAGENTO_GET_FILTERED_PRODUCTS,
 } from '../actions/types';
+import { CategoryType, ProductType } from '../magento/types';
 
-const INITIAL_STATE = {
-  current: false,
-  products: false,
+export type CategoryReducerType = {
+  current?: {
+    category: CategoryType;
+  };
+  products?: ProductType[];
+  loadingMore: boolean;
+  refreshing: boolean;
+  totalCount: number;
+};
+
+const INITIAL_STATE: CategoryReducerType = {
+  current: undefined,
+  products: undefined,
   totalCount: 0,
   loadingMore: false,
   refreshing: false,
@@ -63,7 +74,7 @@ export default (state = INITIAL_STATE, action) => {
       };
     case MAGENTO_UPDATE_CONF_PRODUCT: {
       const { sku, children } = action.payload;
-      const products = state.products.map(product => {
+      const products = state.products?.map(product => {
         if (product.sku === sku) {
           return {
             ...product,

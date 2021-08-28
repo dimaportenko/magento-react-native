@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
 import { Icon } from 'react-native-elements';
@@ -8,8 +8,11 @@ import { setCurrentCategory, resetFilters } from '../../actions/index';
 import { NAVIGATION_CATEGORY_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
+import { CategoryType } from '../../magento/types';
 
-const CategoryTreeListItem = props => {
+const CategoryTreeListItem: FC<{
+  category: CategoryType;
+}> = props => {
   const [expanded, setExpanded] = useState(false);
   const dispatch = useDispatch();
   const theme = useContext(ThemeContext);
