@@ -1,7 +1,7 @@
 /**
  * Created by Dima Portenko on 14.05.2020
  */
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import FeaturedProducts from '../home/FeaturedProducts';
 import { translate } from '../../i18n';
@@ -11,13 +11,14 @@ import { useDispatch } from 'react-redux';
 import { setCurrentProduct } from '../../actions';
 import { useRelatedProducts } from '../../hooks/useRelatedProducts';
 import { Spinner } from '../common';
+import { ProductType } from '../../magento/types';
 
-export const RelatedProducts = ({
-  product,
-  currencySymbol,
-  currencyRate,
-  navigation,
-}) => {
+export const RelatedProducts: FC<{
+  product: ProductType;
+  currencySymbol: string;
+  currencyRate: number;
+  navigation: any;
+}> = ({ product, currencySymbol, currencyRate, navigation }) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const { relatedProducts, loading, error } = useRelatedProducts({ product });

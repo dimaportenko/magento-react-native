@@ -1,12 +1,15 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import Swiper from 'react-native-swiper';
 import { View } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { magento } from '../../magento';
 import { Spinner } from '../common';
 import { ThemeContext } from '../../theme';
+import { MediaItem } from '../../magento/types';
 
-const ProductMedia = props => {
+const ProductMedia: FC<{
+  media: MediaItem[] | null;
+}> = props => {
   const theme = useContext(ThemeContext);
 
   const renderMedia = () => {
@@ -25,7 +28,7 @@ const ProductMedia = props => {
   const renderMediaItems = () => {
     const { media } = props;
 
-    return media.map(item => {
+    return media?.map(item => {
       console.log('media item');
       console.log(magento.getProductMediaUrl() + item.file);
       return (

@@ -4,8 +4,8 @@ import CustomerAuthReducer from './CustomerAuthReducer';
 import CategoryReducer, { CategoryReducerType } from './CategoryReducer';
 import CheckoutReducer from './CheckoutReducer';
 import MagentoReducer, { MagentoReducerType } from './MagentoReducer';
-import ProductReducer from './ProductReducer';
-import AccountReducer from './AccountReducer';
+import ProductReducer, { ProductReducerType } from './ProductReducer';
+import AccountReducer, { AccountReducerType } from './AccountReducer';
 import CartReducer, { CartReducerType } from './CartReducer';
 import HomeReducer from './HomeReducer';
 import SearchReducer, { SearchReducerType } from './SearchReducer';
@@ -20,6 +20,8 @@ export type StoreStateType = {
   ui: UIReducerType;
   categoryTree: CategoryTreeReducerType;
   search: SearchReducerType;
+  account: AccountReducerType;
+  product: ProductReducerType;
 };
 
 export default combineReducers<StoreStateType>({

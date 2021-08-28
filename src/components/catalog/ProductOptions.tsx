@@ -1,7 +1,7 @@
 /**
  * Created by Dima Portenko on 14.05.2020
  */
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { getProductCustomAttribute } from '../../helper/product';
@@ -9,12 +9,14 @@ import { ModalSelect } from '../common';
 import { ThemeContext } from '../../theme';
 import { getProductMedia, uiProductUpdate } from '../../actions';
 import _ from 'lodash';
+import { ProductType } from '../../magento/types';
+import { ProductCurrentReducerType } from '../../reducers/ProductReducer';
 
-export const ProductOptions = ({
-  currentProduct,
-  product,
-  setSelectedProduct,
-}) => {
+export const ProductOptions: FC<{
+  currentProduct: ProductCurrentReducerType;
+  product: ProductType;
+  setSelectedProduct: (item: ProductType) => void;
+}> = ({ currentProduct, product, setSelectedProduct }) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const { options, attributes, selectedOptions } = currentProduct;
@@ -92,7 +94,7 @@ export const ProductOptions = ({
         };
       }
 
-      const match = product.children.find(child => {
+      const match = product.children?.find(child => {
         let found = 0;
         prevOptions.every(prevOption => {
           const { attributeCode } = attributes[prevOption.attribute_id];

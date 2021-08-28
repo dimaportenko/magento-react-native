@@ -10,6 +10,7 @@ import {
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { CustomerType } from '../../magento/types';
+import { StoreStateType } from "../../reducers";
 
 const Account: FC<{
   customer: CustomerType | null;
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
   }),
 });
 
-const mapStateToProps = ({ account }) => {
+const mapStateToProps = ({ account }: StoreStateType) => {
   const { customer } = account;
   return { customer };
 };

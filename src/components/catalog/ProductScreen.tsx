@@ -1,7 +1,7 @@
 /**
  * Created by Dima Portenko on 14.05.2020
  */
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, FC } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import HTML from 'react-native-render-html';
@@ -30,19 +30,25 @@ import { RelatedProducts } from './RelatedProducts';
 import { ProductReviews } from './reviews/ProductReviews';
 import { ReviewFormContainer } from './reviews/ReviewFormContainer';
 import { magentoOptions } from '../../config/magento';
+import { StoreStateType } from '../../reducers';
+import { ProductType } from '../../magento/types';
 
-export const ProductScreen = props => {
+export const ProductScreen: FC<{
+  navigation: any;
+}> = props => {
   const { cart, currencyRate, currencySymbol, customer, current } = useSelector(
-    state => mapStateToProps(state),
+    (state: StoreStateType) => mapStateToProps(state),
   );
   const dispatch = useDispatch();
   const params = props.navigation?.state?.params
     ? props.navigation?.state?.params
     : {};
   const theme = useContext(ThemeContext);
-  const [product] = useState(params.product);
+  const [product] = useState<ProductType>(params.product);
   const [currentProduct, setCurProduct] = useState(current[product.id]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<ProductType | null>(
+    null,
+  );
   const { onPressAddToCart } = useAddToCart({
     product,
     cart,
@@ -193,7 +199,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state: StoreStateType) => {
   const {
     currency: {
       displayCurrencySymbol: currencySymbol,

@@ -143,24 +143,29 @@ export type OrderType = {
   // extension_attributes: Object
 };
 
+export type ProductCustomAttribute = {
+
+}
+
 export type ProductType = {
   // attribute_set_id: 9
   // created_at: "2021-06-15 09:35:17"
-  // custom_attributes: Array(13)
+  custom_attributes: ProductCustomAttribute[];
   // extension_attributes: Object
-  // id: 575
+  id: number;
   // media_gallery_entries: Array(1)
   name: string;
   // options: Array(0)
-  // price: 28
+  price: number;
   // product_links: Array(0)
   sku: string;
   // status: 1
   // tier_prices: Array(0)
-  // type_id: "simple"
+  type_id: 'simple' | 'configurable';
   // updated_at: "2021-06-15 09:35:17"
   // visibility: 1
   // weight: 1
+  children?: ProductType[];
 };
 
 export type QuoteItemType = {
@@ -237,4 +242,13 @@ export type CategoryType = {
   parent_id: number;
   position: number;
   product_count: number;
+};
+
+export type MediaItem = {
+  disabled: boolean;
+  id: number;
+  position: number;
+  file: string;
+  label: string;
+  media_type: string;
 };

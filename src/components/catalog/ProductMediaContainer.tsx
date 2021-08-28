@@ -1,13 +1,18 @@
 /**
  * Created by Dima Portenko on 14.05.2020
  */
-import React, { useEffect } from 'react';
+import React, { FC, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import ProductMedia from './ProductMedia';
 import { getProductMedia } from '../../actions';
+import { ProductType } from '../../magento/types';
+import { StoreStateType } from '../../reducers';
 
-export const ProductMediaContainer = ({ product, selectedProductSku }) => {
-  const current = useSelector(({ product }) => product.current);
+export const ProductMediaContainer: FC<{
+  product: ProductType;
+  selectedProductSku?: string;
+}> = ({ product, selectedProductSku }) => {
+  const current = useSelector(({ product }: StoreStateType) => product.current);
   const dispatch = useDispatch();
 
   useEffect(() => {

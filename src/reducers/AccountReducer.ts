@@ -10,9 +10,27 @@ import {
   MAGENTO_LOGOUT,
   MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR,
 } from '../actions/types';
+import { CustomerType, OrderType, ProductType } from '../magento/types';
 
-const INITIAL_STATE = {
-  customer: null,
+export type AccountReducerType = {
+  customer?: CustomerType;
+  orderData: Partial<OrderType>;
+  products: Record<string, ProductType>;
+  refreshing: boolean;
+  ui: {
+    postcode: string;
+    country: string;
+    countryId: string;
+    street: string;
+    city: string;
+    region: string;
+    error?: string;
+    loading: boolean;
+  };
+};
+
+const INITIAL_STATE: AccountReducerType = {
+  customer: undefined,
   orderData: {
     items: [],
   },
@@ -26,7 +44,7 @@ const INITIAL_STATE = {
     city: '',
     region: '',
     loading: false,
-    error: false,
+    error: undefined,
   },
 };
 

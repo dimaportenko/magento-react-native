@@ -1,14 +1,19 @@
 /**
  * Created by Dima Portenko on 14.05.2020
  */
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { ModalSelect } from '../common';
 import { uiProductCustomOptionUpdate } from '../../actions';
 import { ThemeContext } from '../../theme';
+import { ProductCurrentReducerType } from '../../reducers/ProductReducer';
+import { ProductType } from '../../magento/types';
 
-export const ProductCustomOptions = ({ currentProduct, product }) => {
+export const ProductCustomOptions: FC<{
+  currentProduct: ProductCurrentReducerType;
+  product: ProductType;
+}> = ({ currentProduct, product }) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const { customOptions } = currentProduct;

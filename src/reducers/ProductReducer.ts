@@ -5,7 +5,6 @@ import {
   MAGENTO_GET_CONF_OPTIONS,
   UI_PRODUCT_UPDATE_OPTIONS,
   UI_PRODUCT_QTY_INPUT,
-  NAVIGATION_GO_TO_SCREEN,
   MAGENTO_GET_CUSTOM_OPTIONS,
   UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
   MAGENTO_UPDATE_CONF_PRODUCT,
@@ -16,8 +15,52 @@ import {
 } from '../actions/types';
 import { getPriceFromChildren } from '../helper/product';
 import * as types from '../actions/types';
+import { MediaItem, ProductType } from '../magento/types';
 
-const INITIAL_STATE = {
+export type ProductOptionType = {
+  attribute_id: string | number;
+  id: number;
+  label: string;
+  position: number;
+  product_id: number;
+  values: {
+    value_index: number;
+  };
+};
+export type ProductAttributeOptionType = {
+  label: string;
+  value: string;
+};
+export type ProductAttributesType = Record<
+  string | number,
+  {
+    attributeCode: string;
+    options: ProductAttributeOptionType[];
+  }
+>;
+
+export type ProductCurrentReducerType = {
+  product: Partial<ProductType>;
+  attributes: ProductAttributesType;
+  qtyInput: number;
+  selectedOptions: Record<number, number>;
+  selectedCustomOptions: Record<number, number>;
+  medias: Record<string, MediaItem[]>;
+  options: ProductOptionType[];
+  customOptions: any[];
+};
+
+export type ProductReducerType = {
+  current: Record<string | number, ProductCurrentReducerType>;
+  relatedProducts: {
+    loading: boolean;
+    error: string;
+    items: ProductType[];
+  };
+  ratingOptions: any[];
+};
+
+const INITIAL_STATE: ProductReducerType = {
   current: {
     default: {
       product: {},
@@ -26,6 +69,7 @@ const INITIAL_STATE = {
       selectedOptions: {},
       selectedCustomOptions: {},
       medias: {},
+      options: [],
     },
   },
   relatedProducts: {
@@ -59,7 +103,7 @@ export default (state = INITIAL_STATE, action) => {
       const { id, sku, media } = action.payload;
       const medias =
         state.current[id] && state.current[id].medias
-          ? state.current[id].media
+          ? state.current[id].medias
           : {};
       const current = {
         ...state.current,
