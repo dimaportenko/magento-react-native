@@ -1,10 +1,19 @@
-import React, { useContext } from 'react';
-import { TextInput, View, ViewPropTypes } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { FC, useContext } from 'react';
+import { TextInput, View, ViewStyle } from 'react-native';
 import { Text } from './Text';
 import { ThemeContext } from '../../theme';
 
-const Input = ({
+const Input: FC<{
+  label: string;
+  value: string;
+  onChangeText: () => void;
+  placeholder: string;
+  secureTextEntry: boolean;
+  containerStyle: ViewStyle;
+  labelStyle: ViewStyle;
+  inputStyle: ViewStyle;
+  assignRef: (component: TextInput | null) => void;
+}> = ({
   label,
   value,
   onChangeText,
@@ -60,25 +69,6 @@ const styles = {
     paddingLeft: theme.spacing.large,
     flex: 1,
   }),
-};
-
-Input.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.string,
-  onChangeText: PropTypes.func,
-  placeholder: PropTypes.string,
-  secureTextEntry: PropTypes.bool,
-  containerStyle: ViewPropTypes.style,
-  assignRef: PropTypes.func,
-};
-
-Input.defaultProps = {
-  label: null,
-  value: '',
-  placeholder: '',
-  secureTextEntry: false,
-  assignRef: () => {},
-  onChangeText: () => {},
 };
 
 export { Input };

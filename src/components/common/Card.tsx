@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
-import { View, ViewPropTypes } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { FC, useContext } from 'react';
+import { View, ViewStyle } from 'react-native';
 import { ThemeContext } from '../../theme';
 
-const Card = ({ children, style }) => {
+const Card: FC<{
+  style: ViewStyle;
+}> = ({ children, style }) => {
   const theme = useContext(ThemeContext);
   return <View style={[styles.containerStyles(theme), style]}>{children}</View>;
 };
@@ -23,18 +24,6 @@ const styles = {
     marginRight: theme.spacing.tiny,
     marginTop: theme.spacing.small,
   }),
-};
-
-Card.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.arrayOf(PropTypes.element),
-  ]).isRequired,
-  style: ViewPropTypes.style,
-};
-
-Card.defaultProps = {
-  style: {},
 };
 
 export { Card };

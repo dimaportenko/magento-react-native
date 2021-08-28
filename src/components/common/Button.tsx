@@ -1,10 +1,13 @@
-import React, { useContext } from 'react';
-import { StyleSheet, TouchableOpacity, ViewPropTypes } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { FC, useContext } from 'react';
+import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
 import { Text } from './Text';
 import { ThemeContext } from '../../theme';
 
-const Button = ({ onPress, children, style, disabled }) => {
+const Button: FC<{
+  onPress: () => void;
+  style: ViewStyle;
+  disabled: boolean;
+}> = ({ onPress, children, style, disabled }) => {
   const theme = useContext(ThemeContext);
   const { buttonStyle, buttonTitle } = styles;
   return (
@@ -33,17 +36,5 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   }),
 });
-
-Button.propTypes = {
-  onPress: PropTypes.func.isRequired,
-  children: PropTypes.string.isRequired,
-  style: ViewPropTypes.style,
-  disabled: PropTypes.bool,
-};
-
-Button.defaultProps = {
-  style: {},
-  disabled: false,
-};
 
 export { Button };
