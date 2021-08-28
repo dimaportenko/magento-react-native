@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   View,
   StyleSheet,
   TouchableOpacity,
   FlatList,
   RefreshControl,
+  ListRenderItemInfo,
 } from 'react-native';
 import { connect } from 'react-redux';
 import { cartItemProduct, refreshCart } from '../../actions';
@@ -18,33 +18,29 @@ import {
 import { Button, Text, Price } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { CartReducerType } from '../../reducers/CartReducer';
+import { MagentoReducerType } from '../../reducers/MagentoReducer';
+import { QuoteItemType, QuoteType } from '../../magento/types';
 
-class Cart extends Component {
-	public props: any;
-	public context: any;
-	public items: any;
-	public products: any;
-	public totals: any;
-	public navigate: any;
-	public containerStyle: any;
-	public buttonTextStyle: any;
-	public container: any;
-	public content: any;
-	public footer: any;
-	public buttonStyle: any;
+type Props = {
+  cart: QuoteType;
+  cartItemProduct: typeof cartItemProduct;
+  refreshCart: typeof refreshCart;
+  products: CartReducerType['products'];
+  currencySymbol: string;
+  currencyRate: number;
+  navigation: any;
+  refreshing: boolean;
+};
+
+type State = {};
+
+class Cart extends Component<Props, State> {
   static contextType = ThemeContext;
 
   static navigationOptions = {
     title: translate('cart.title'),
     headerBackTitle: ' ',
-  };
-
-  static propTypes = {
-    cart: PropTypes.object,
-    products: PropTypes.object,
-    cartItemProduct: PropTypes.func,
-    refreshCart: PropTypes.func,
-    refreshing: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -57,7 +53,7 @@ class Cart extends Component {
     this.updateCartItemsProducts();
   }
 
-  componentDidUpdate(prevProps, prevState, snapshot) {
+  componentDidUpdate(prevProps: Props) {
     if (
       prevProps.cart.items &&
       this.props.cart.items &&
@@ -140,7 +136,7 @@ class Cart extends Component {
     );
   };
 
-  renderItem = items => (
+  renderItem = (items: ListRenderItemInfo<QuoteItemType>) => (
     <CartListItem
       expanded={false}
       item={items.item}
@@ -227,7 +223,13 @@ const styles = StyleSheet.create({
   }),
 });
 
-const mapStateToProps = ({ cart, magento }) => {
+const mapStateToProps = ({
+  cart,
+  magento,
+}: {
+  cart: CartReducerType;
+  magento: MagentoReducerType;
+}) => {
   const { products } = cart;
   const {
     currency: {

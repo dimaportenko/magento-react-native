@@ -14,13 +14,27 @@ import {
   MAGENTO_COUPON_LOADING,
   MAGENTO_COUPON_ERROR, MAGENTO_CART_RESET,
 } from '../actions/types';
+import { ProductType, QuoteType } from "../magento/types";
 
-const INITIAL_STATE = {
+export type CartReducerType = {
+  cartId: boolean;
+  addToCartLoading: boolean;
+  items: boolean;
+  errorMessage: boolean;
+  quote: QuoteType;
+  products: Record<string, ProductType>;
+  refreshing: boolean;
+  removingItemId: boolean;
+  couponLoading: boolean;
+  couponError: string;
+};
+
+const INITIAL_STATE: CartReducerType = {
   cartId: false,
   addToCartLoading: false,
   items: false,
   errorMessage: false,
-  cart: {},
+  quote: {},
   products: {},
   refreshing: false,
   removingItemId: false,

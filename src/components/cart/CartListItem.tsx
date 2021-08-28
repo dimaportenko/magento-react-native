@@ -1,16 +1,25 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { View, TouchableOpacity, Alert } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import { Icon } from 'react-native-elements';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { Spinner, Text, Price } from '../common';
 import { removeFromCartLoading, removeFromCart } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { CartReducerType } from '../../reducers/CartReducer';
+import { QuoteItemType } from '../../magento/types';
 
-const CartListItem = ({
+const CartListItem: FC<{
+  removeFromCartLoading: typeof removeFromCartLoading;
+  removeFromCart: typeof removeFromCart;
+  cart: CartReducerType;
+  products: CartReducerType['products'];
+  item: QuoteItemType;
+  currencyRate: number;
+  currencySymbol: string;
+}> = ({
   item,
   cart,
   products,
@@ -130,21 +139,7 @@ const styles = {
   }),
 };
 
-CartListItem.propTypes = {
-  products: PropTypes.object,
-  item: PropTypes.object.isRequired,
-  cart: PropTypes.object.isRequired,
-  currencySymbol: PropTypes.string.isRequired,
-  currencyRate: PropTypes.number.isRequired,
-  removeFromCartLoading: PropTypes.func.isRequired,
-  removeFromCart: PropTypes.func.isRequired,
-};
-
-CartListItem.defaultProps = {
-  products: {},
-};
-
-const mapStateToProps = ({ cart }) => {
+const mapStateToProps = ({ cart }: { cart: CartReducerType }) => {
   const { products } = cart;
   return {
     cart,

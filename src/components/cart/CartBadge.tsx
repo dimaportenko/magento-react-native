@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 import IconBadge from 'react-native-icon-badge';
 import { Text } from '../common';
 import { ThemeContext } from '../../theme';
 
-const CartBadge = ({ color, itemsCount }) => {
+const CartBadge: FC<{
+  color: string;
+  itemsCount: number;
+}> = ({ color, itemsCount = 0 }) => {
   const theme = useContext(ThemeContext);
 
   return (
@@ -40,15 +42,6 @@ const styles = {
     height: 15,
     backgroundColor: 'red',
   },
-};
-
-CartBadge.propTypes = {
-  color: PropTypes.string.isRequired,
-  itemsCount: PropTypes.number,
-};
-
-CartBadge.defaultProps = {
-  itemsCount: 0,
 };
 
 const mapStateToProps = ({ cart }) => {

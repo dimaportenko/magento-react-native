@@ -141,7 +141,6 @@ export type OrderType = {
   items: OrderItemType[];
   // payment: Object
   // extension_attributes: Object
-
 };
 
 export type ProductType = {
@@ -162,4 +161,69 @@ export type ProductType = {
   // updated_at: "2021-06-15 09:35:17"
   // visibility: 1
   // weight: 1
-}
+};
+
+export type QuoteItemType = {
+  item_id: number;
+  price: number;
+  qty: number;
+  name: string;
+  product_type: string;
+  quote_id: string;
+  sku: string;
+  thumbnail?: string;
+};
+
+export type QuoteType = {
+  // currency: Object
+  // extension_attributes: Object
+  created_at?: string;
+  billing_address?: AddressType;
+  customer?: CustomerType;
+  customer_is_guest?: boolean;
+  customer_note_notify?: boolean;
+  customer_tax_class_id?: number;
+  id?: number;
+  is_active?: boolean;
+  is_virtual?: boolean;
+  items?: QuoteItemType[];
+  items_count?: number;
+  items_qty?: number;
+  orig_order_id?: number;
+  store_id?: number;
+  updated_at?: string;
+};
+
+export type StoreConfigType = {
+  base_currency_code: string;
+  base_link_url: string;
+  base_media_url: string;
+  base_static_url: string;
+  base_url: string;
+  code: string;
+  default_display_currency_code: string;
+  locale: string;
+  secure_base_link_url: string;
+  secure_base_media_url: string;
+  secure_base_static_url: string;
+  secure_base_url: string;
+  timezone: string;
+  weight_unit: string;
+  website_id: number;
+  id: number;
+};
+
+export type CountryRegionType = {
+  code: string;
+  id: string;
+  name: string;
+};
+
+export type CountryType = {
+  full_name_english: string;
+  full_name_locale: string;
+  id: string;
+  three_letter_abbreviation: string;
+  two_letter_abbreviation: string;
+  available_regions: CountryRegionType[];
+};

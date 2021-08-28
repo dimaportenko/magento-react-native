@@ -18,7 +18,7 @@ const defaultOptions = {
   },
 };
 
-class Magento {
+export class Magento {
 	public configuration: any;
 	public base_url: any;
 	public root_path: any;

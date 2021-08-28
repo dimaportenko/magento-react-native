@@ -4,10 +4,10 @@ import dimens from './dimens';
 import typography from './typography';
 
 export type ThemeType = {
-  colors: Record<string, string>;
-  spacing: Record<string, number>;
-  dimens: Record<string, number>;
-  typography: Record<string, any>;
+  colors: typeof colors;
+  spacing: typeof spacing;
+  dimens: typeof dimens;
+  typography: typeof typography;
 };
 
 const theme: ThemeType = {

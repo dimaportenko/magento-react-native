@@ -7,9 +7,26 @@ import {
   MAGENTO_GET_CURRENCY,
   MAGENTO_GET_COUNTRIES,
 } from '../actions/types';
-import { magento } from '../magento';
+import { Magento, magento } from '../magento';
+import { CountryType, StoreConfigType } from '../magento/types';
 
-const INITIAL_STATE = {
+export type MagentoReducerCurrencyType = {
+  default_display_currency_code: string;
+  default_display_currency_symbol: string;
+  displayCurrencyCode: string;
+  displayCurrencySymbol: string;
+  displayCurrencyExchangeRate: number;
+};
+
+export type MagentoReducerType = {
+  magento: null | Magento;
+  storeConfig: StoreConfigType | null;
+  errorMessage?: string | null | undefined;
+  countries: CountryType[] | null;
+  currency: MagentoReducerCurrencyType;
+};
+
+const INITIAL_STATE: MagentoReducerType = {
   magento: null,
   storeConfig: null,
   countries: null,
