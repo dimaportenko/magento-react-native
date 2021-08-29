@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import CategoryTreeReducer, { CategoryTreeReducerType } from './CategoryTreeReducer';
+import CategoryTreeReducer, {
+  CategoryTreeReducerType,
+} from './CategoryTreeReducer';
 import CustomerAuthReducer from './CustomerAuthReducer';
 import CategoryReducer, { CategoryReducerType } from './CategoryReducer';
-import CheckoutReducer from './CheckoutReducer';
+import CheckoutReducer, { CheckoutReducerType } from './CheckoutReducer';
 import MagentoReducer, { MagentoReducerType } from './MagentoReducer';
 import ProductReducer, { ProductReducerType } from './ProductReducer';
 import AccountReducer, { AccountReducerType } from './AccountReducer';
@@ -22,6 +24,7 @@ export type StoreStateType = {
   search: SearchReducerType;
   account: AccountReducerType;
   product: ProductReducerType;
+  checkout: CheckoutReducerType;
 };
 
 export default combineReducers<StoreStateType>({

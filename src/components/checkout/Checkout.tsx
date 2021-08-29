@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import CheckoutSection from './CheckoutSection';
@@ -9,7 +9,10 @@ import CheckoutTotals from './CheckoutTotals';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 
-const Checkout = ({ navigation, activeSection: _activeSection }) => {
+const Checkout: FC<{
+  navigation: any;
+  activeSection: number;
+}> = ({ navigation, activeSection: _activeSection }) => {
   const theme = useContext(ThemeContext);
   const activeSection = Number(_activeSection);
 

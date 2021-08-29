@@ -17,7 +17,7 @@ import {
 import { ProductType, QuoteType } from "../magento/types";
 
 export type CartReducerType = {
-  cartId: boolean;
+  cartId?: string | number;
   addToCartLoading: boolean;
   items: boolean;
   errorMessage: boolean;
@@ -30,7 +30,7 @@ export type CartReducerType = {
 };
 
 const INITIAL_STATE: CartReducerType = {
-  cartId: false,
+  cartId: undefined,
   addToCartLoading: false,
   items: false,
   errorMessage: false,

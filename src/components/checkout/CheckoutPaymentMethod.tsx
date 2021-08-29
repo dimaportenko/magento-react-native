@@ -11,14 +11,22 @@ import {
 } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { PaymentItemType } from '../../reducers/CheckoutReducer';
 
-class CheckoutPaymentMethod extends Component {
-	public props: any;
-	public context: any;
-	public payments: any;
-	public selectedPayment: any;
-	public cartId: any;
-	public checkout: any;
+type Props = {
+  checkoutSelectedPaymentChanged: typeof checkoutSelectedPaymentChanged;
+  checkoutSetActiveSection: typeof checkoutSetActiveSection;
+  getGuestCartPaymentMethods: typeof getGuestCartPaymentMethods;
+  checkoutCustomerNextLoading: typeof checkoutCustomerNextLoading;
+  cartId: number | string | undefined;
+  payments?: PaymentItemType[];
+  selectedPayment: PaymentItemType;
+  loading: boolean;
+};
+type State = {};
+
+class CheckoutPaymentMethod extends Component<Props, State> {
   static contextType = ThemeContext;
 
   componentDidMount() {
@@ -121,7 +129,7 @@ const styles = {
   }),
 };
 
-const mapStateToProps = ({ cart, checkout }) => {
+const mapStateToProps = ({ cart, checkout }: StoreStateType) => {
   const { cartId } = cart;
   const { payments, selectedPayment } = checkout;
   const { loading } = checkout.ui;

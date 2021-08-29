@@ -1,11 +1,16 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import { View, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Text } from '../common';
 import { checkoutSetActiveSection } from '../../actions';
 import { ThemeContext } from '../../theme';
 
-const CheckoutSection = ({
+const CheckoutSection: FC<{
+  number: number;
+  expanded: boolean;
+  title: string;
+  checkoutSetActiveSection: (index: number) => void;
+}> = ({
   number,
   expanded,
   children,

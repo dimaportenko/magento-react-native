@@ -11,34 +11,45 @@ import {
 } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { ShippingItemType } from '../../magento/types';
 
-class CheckoutShippingMethod extends Component {
-	public props: any;
-	public context: any;
-	public shipping: any;
-	public selectedShipping: any;
-	public email: any;
-	public postcode: any;
-	public countryId: any;
-	public firstname: any;
-	public lastname: any;
-	public telephone: any;
-	public city: any;
-	public street: any;
-	public region: any;
-	public cartId: any;
-	public currencySymbol: any;
-	public currencyRate: any;
+type Props = {
+  getGuestCartShippingMethods: typeof getGuestCartShippingMethods;
+  checkoutSelectedShippingChanged: typeof checkoutSelectedShippingChanged;
+  addGuestCartShippingInfo: typeof addGuestCartShippingInfo;
+  checkoutCustomerNextLoading: typeof checkoutCustomerNextLoading;
+  email: string;
+  password: string;
+  postcode: string;
+  country: string;
+  countryId: string;
+  firstname: string;
+  lastname: string;
+  telephone: string;
+  street: string;
+  city: string;
+  region: string;
+  cartId: number | string | undefined;
+  loading: boolean;
+  currencySymbol: string;
+  currencyRate: number;
+  shipping?: ShippingItemType[];
+  selectedShipping?: ShippingItemType;
+};
+type State = {};
+
+class CheckoutShippingMethod extends Component<Props, State> {
   static contextType = ThemeContext;
 
   componentDidMount() {
     const { shipping, selectedShipping } = this.props;
-    if (!selectedShipping && shipping.length) {
+    if (!selectedShipping && shipping?.length) {
       this.props.checkoutSelectedShippingChanged(shipping[0]);
     }
   }
 
-  onShippingSelect(shipping) {
+  onShippingSelect(shipping: ShippingItemType) {
     console.log('shipping selected');
     console.log(shipping);
     this.props.checkoutSelectedShippingChanged(shipping);
@@ -185,7 +196,7 @@ const styles = {
   }),
 };
 
-const mapStateToProps = ({ cart, checkout, magento }) => {
+const mapStateToProps = ({ cart, checkout, magento }: StoreStateType) => {
   const {
     email,
     password,

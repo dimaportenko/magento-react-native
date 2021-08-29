@@ -11,23 +11,35 @@ import {
 import { Input, Spinner, ModalSelect, Button, Text } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { CountryType, CustomerType } from '../../magento/types';
 
-class CheckoutCustomerAccount extends Component {
-	public props: any;
-	public context: any;
-	public customer: any;
-	public email: any;
-	public password: any;
-	public postcode: any;
-	public countryId: any;
-	public firstname: any;
-	public lastname: any;
-	public telephone: any;
-	public city: any;
-	public street: any;
-	public region: any;
-	public cartId: any;
-	public countries: any;
+type Props = {
+  getCountries: typeof getCountries;
+  addGuestCartBillingAddress: typeof addGuestCartBillingAddress;
+  createCustomer: typeof createCustomer;
+  updateCheckoutUI: typeof updateCheckoutUI;
+  checkoutCustomerNextLoading: typeof checkoutCustomerNextLoading;
+  email: string;
+  password: string;
+  postcode: string;
+  country: string;
+  countryId: string;
+  firstname: string;
+  lastname: string;
+  telephone: string;
+  street: string;
+  city: string;
+  region: string;
+  cartId: number | string | undefined;
+  countries: CountryType[] | null;
+  customer: CustomerType;
+  errorMessage: string;
+};
+
+type State = {};
+
+class CheckoutCustomerAccount extends Component<Props, State> {
   static contextType = ThemeContext;
 
   componentDidMount() {
@@ -358,7 +370,7 @@ class CheckoutCustomerAccount extends Component {
         />
 
         <Text type="heading" style={styles.errorTextStyle(theme)}>
-          {this.props.error}
+          {this.props.errorMessage}
         </Text>
 
         {this.renderButton()}
@@ -386,7 +398,12 @@ const styles = StyleSheet.create({
   }),
 });
 
-const mapStateToProps = ({ checkout, cart, account, magento }) => {
+const mapStateToProps = ({
+  checkout,
+  cart,
+  account,
+  magento,
+}: StoreStateType) => {
   const { countries } = magento;
   const { cartId } = cart;
   const { customer } = account;
@@ -396,6 +413,7 @@ const mapStateToProps = ({ checkout, cart, account, magento }) => {
     cartId,
     countries,
     customer,
+    errorMessage: checkout.errorMessage,
   };
 };
 

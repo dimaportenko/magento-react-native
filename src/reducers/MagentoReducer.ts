@@ -11,6 +11,7 @@ import { Magento, magento } from '../magento';
 import { CountryType, StoreConfigType } from '../magento/types';
 
 export type MagentoReducerCurrencyType = {
+  base_currency_symbol: string;
   default_display_currency_code: string;
   default_display_currency_symbol: string;
   displayCurrencyCode: string;

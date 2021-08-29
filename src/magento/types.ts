@@ -252,3 +252,16 @@ export type MediaItem = {
   label: string;
   media_type: string;
 };
+
+export type ShippingItemType = {
+  available: boolean;
+  amount: number;
+  base_amount: number;
+  price_excl_tax: number;
+  price_incl_tax: number;
+  carrier_code: string;
+  carrier_title: string;
+  error_message: string;
+  method_code: string;
+  method_title: string;
+};

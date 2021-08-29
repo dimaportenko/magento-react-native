@@ -12,8 +12,69 @@ import {
   MAGENTO_ERROR_MESSAGE_CART_ORDER,
   MAGENTO_CHECKOUT_TOTALS,
 } from '../actions/types';
+import { RegionType, ShippingItemType } from '../magento/types';
 
-const INITIAL_STATE = {
+export type PaymentItemType = {
+  code: string;
+  title: string;
+};
+
+export type TotalsType = {
+  base_currency_code: string;
+  // base_discount_amount: 0
+  base_grand_total: number;
+  // base_shipping_amount: 5
+  // base_shipping_discount_amount: 0
+  base_shipping_incl_tax: number;
+  // base_shipping_tax_amount: 0
+  base_subtotal: number;
+  // base_subtotal_with_discount: 32
+  // base_tax_amount: 0
+  discount_amount: number;
+  // grand_total: 37
+  // items: Array(1)
+  // items_qty: 1
+  // quote_currency_code: "USD"
+  // shipping_amount: 5
+  // shipping_discount_amount: 0
+  // shipping_incl_tax: 5
+  // shipping_tax_amount: 0
+  // subtotal: 32
+  // subtotal_incl_tax: 32
+  // subtotal_with_discount: 32
+  // tax_amount: 0
+  // total_segments: Array(4)
+  // weee_tax_applied_amount: null
+};
+
+export type CheckoutReducerType = {
+  ui: {
+    email: string;
+    password: string;
+    postcode: string;
+    country: string;
+    countryId: string;
+    firstname: string;
+    lastname: string;
+    telephone: string;
+    street: string;
+    city: string;
+    region: string | RegionType;
+    loading: boolean;
+  };
+  selectedShipping?: ShippingItemType;
+  selectedPayment?: PaymentItemType;
+  shipping?: ShippingItemType[];
+  payments?: PaymentItemType[];
+  totals?: TotalsType;
+  countries: boolean;
+  orderId: boolean;
+  activeSection: number;
+  errorMessage: string;
+};
+
+
+const INITIAL_STATE: CheckoutReducerType = {
   ui: {
     email: '',
     password: '',
@@ -27,12 +88,13 @@ const INITIAL_STATE = {
     street: '',
     city: '',
     region: '',
+    loading: false,
   },
-  selectedShipping: false,
-  selectedPayment: false,
-  shipping: false,
-  payments: false,
-  totals: false,
+  selectedShipping: undefined,
+  selectedPayment: undefined,
+  shipping: undefined,
+  payments: undefined,
+  totals: undefined,
   countries: false,
   orderId: false,
   activeSection: 1,

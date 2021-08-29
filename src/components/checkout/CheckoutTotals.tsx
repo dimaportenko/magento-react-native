@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Alert, View, StyleSheet, TextInput, Dimensions } from 'react-native';
-import { StackActions, NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 import {
   checkoutSelectedPaymentChanged,
@@ -18,19 +17,38 @@ import { Button, Spinner, Text, Price } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
-import { Row, Spacer } from 'react-native-markup-kit';
+import { Spacer } from '../common/Spacer';
+import { PaymentItemType, TotalsType } from '../../reducers/CheckoutReducer';
+import { StoreStateType } from '../../reducers';
 
-class CheckoutTotals extends Component {
-	public props: any;
-	public context: any;
-	public setState: any;
-	public cartId: any;
-	public selectedPayment: any;
-	public baseCurrencySymbol: any;
-	public currencyCode: any;
-	public currencySymbol: any;
-	public currencyRate: any;
-	public payments: any;
+type Props = {
+  checkoutSelectedPaymentChanged: typeof checkoutSelectedPaymentChanged;
+  checkoutCustomerNextLoading: typeof checkoutCustomerNextLoading;
+  checkoutSetActiveSection: typeof checkoutSetActiveSection;
+  checkoutOrderPopupShown: typeof checkoutOrderPopupShown;
+  placeGuestCartOrder: typeof placeGuestCartOrder;
+  getCart: typeof getCart;
+  resetCart: typeof resetCart;
+  addCouponToCart: typeof addCouponToCart;
+  removeCouponFromCart: typeof removeCouponFromCart;
+  cartId: number | string | undefined;
+  selectedPayment?: PaymentItemType;
+  payments?: PaymentItemType[];
+  loading: boolean;
+  errorMessage: string;
+  totals?: TotalsType;
+  orderId?: number;
+  baseCurrencySymbol: string;
+  currencyCode: string;
+  currencySymbol: string;
+  currencyRate: number;
+  couponError: string;
+  couponLoading: boolean;
+};
+
+type State = {};
+
+class CheckoutTotals extends Component<Props, State> {
   static contextType = ThemeContext;
 
   state = {
@@ -284,7 +302,7 @@ const styles = StyleSheet.create({
   }),
 });
 
-const mapStateToProps = ({ cart, checkout, magento }) => {
+const mapStateToProps = ({ cart, checkout, magento }: StoreStateType) => {
   const { cartId, couponLoading, couponError } = cart;
   const { loading } = checkout.ui;
   const { payments, selectedPayment, totals, orderId, errorMessage } = checkout;
