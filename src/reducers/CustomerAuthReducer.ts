@@ -4,13 +4,24 @@ import {
   MAGENTO_PASSWORD_RESET_ERROR,
   MAGENTO_CREATE_CUSTOMER_LOADING,
   MAGENTO_CREATE_CUSTOMER_SUCCESS,
-  MAGENTO_CREATE_CUSTOMER_ERROR,
   MAGENTO_AUTH_LOADING,
   MAGENTO_AUTH,
   MAGENTO_AUTH_ERROR,
 } from '../actions/types';
+import { CustomerType } from '../magento/types';
 
-const INITIAL_STATE = {
+export type CustomerAuthReducerType = {
+  customer: CustomerType | null;
+  token: string | null;
+  error: string | null;
+  success: string | null;
+  loading: boolean;
+  resetLoading: boolean;
+  resetPasswordErrorMessage: string | null;
+  resetPasswordSuccessMessage: string | null;
+};
+
+const INITIAL_STATE: CustomerAuthReducerType = {
   customer: null,
   token: null,
   /**

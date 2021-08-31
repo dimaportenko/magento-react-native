@@ -2,7 +2,9 @@ import { combineReducers } from 'redux';
 import CategoryTreeReducer, {
   CategoryTreeReducerType,
 } from './CategoryTreeReducer';
-import CustomerAuthReducer from './CustomerAuthReducer';
+import CustomerAuthReducer, {
+  CustomerAuthReducerType,
+} from './CustomerAuthReducer';
 import CategoryReducer, { CategoryReducerType } from './CategoryReducer';
 import CheckoutReducer, { CheckoutReducerType } from './CheckoutReducer';
 import MagentoReducer, { MagentoReducerType } from './MagentoReducer';
@@ -26,6 +28,7 @@ export type StoreStateType = {
   product: ProductReducerType;
   checkout: CheckoutReducerType;
   home: HomeReducerType;
+  customerAuth: CustomerAuthReducerType;
 };
 
 export default combineReducers<StoreStateType>({

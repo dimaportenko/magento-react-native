@@ -82,7 +82,12 @@ export const changeCurrency = (
   },
 });
 
-export const uiProductListTypeGrid = data => ({
+export const uiProductListTypeGrid = (
+  data: boolean,
+): {
+  type: typeof UI_PRODUCT_LIST_TYPE_GRID;
+  payload: boolean;
+} => ({
   type: UI_PRODUCT_LIST_TYPE_GRID,
   payload: data,
 });
