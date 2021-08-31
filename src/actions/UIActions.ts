@@ -69,7 +69,11 @@ export const accountAddressNextLoading = loading => ({
   payload: loading,
 });
 
-export const changeCurrency = (currencyCode, currencySymbol, currencyRate) => ({
+export const changeCurrency = (
+  currencyCode: string,
+  currencySymbol: string,
+  currencyRate: number,
+) => ({
   type: UI_CHANGE_CURRENCY,
   payload: {
     currencyCode,

@@ -143,33 +143,36 @@ async function getCurrencyToBeDisplayed(currencyData) {
   };
 }
 
-export const getHomeData = refreshing => async dispatch => {
-  if (refreshing) {
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: true });
-  }
-
-  try {
-    const storeConfig = await magento.admin.getStoreConfig();
-    const config = storeConfig.find(conf => conf.code === magentoOptions.store);
-    magento.setStoreConfig(config);
-
-    const value = await magento.getHomeData();
-    if (!value) {
-      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
-      return;
+export const getHomeData =
+  (refreshing?: boolean) => async (dispatch: Dispatch) => {
+    if (refreshing) {
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: true });
     }
-    logError(value);
-    const payload = JSON.parse(value.content.replace(/<\/?[^>]+(>|$)/g, ''));
-    dispatch({ type: HOME_SCREEN_DATA, payload });
-    dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
 
-    _.forEach(payload.featuredCategories, (details, categoryId) =>
-      getFeaturedCategoryProducts(categoryId, dispatch),
-    );
-  } catch (e) {
-    logError(e);
-  }
-};
+    try {
+      const storeConfig = await magento.admin.getStoreConfig();
+      const config = storeConfig.find(
+        conf => conf.code === magentoOptions.store,
+      );
+      magento.setStoreConfig(config);
+
+      const value = await magento.getHomeData();
+      if (!value) {
+        dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
+        return;
+      }
+      logError(value);
+      const payload = JSON.parse(value.content.replace(/<\/?[^>]+(>|$)/g, ''));
+      dispatch({ type: HOME_SCREEN_DATA, payload });
+      dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: false });
+
+      _.forEach(payload.featuredCategories, (details, categoryId) =>
+        getFeaturedCategoryProducts(categoryId, dispatch),
+      );
+    } catch (e) {
+      logError(e);
+    }
+  };
 
 const getFeaturedCategoryProducts = async (categoryId, dispatch) => {
   try {

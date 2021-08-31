@@ -1,21 +1,31 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
-import PropTypes from 'prop-types';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import React, { FC, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  StyleProp,
+  StyleSheet,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
+import FastImage, { ImageStyle } from 'react-native-fast-image';
 import { Text, Price } from '../common';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
 import { finalPrice } from '../../helper/price';
-import { useSelector } from 'react-redux';
+import { ProductType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
-const FeaturedProductItem = ({
-  onPress,
-  currencySymbol,
-  currencyRate,
-  product,
-}) => {
+const FeaturedProductItem: FC<{
+  onPress(item: ProductType): void;
+  currencySymbol: string;
+  currencyRate: number;
+  product: ProductType;
+}> = ({ onPress, currencySymbol, currencyRate, product }) => {
   const theme = useContext(ThemeContext);
-  const [themeStyles, setThemeStyle] = useState({});
+  const [themeStyles, setThemeStyle] = useState<{
+    image: StyleProp<ImageStyle>;
+    text: StyleProp<TextStyle>;
+  }>();
   const [imageURI, setImageURI] = useState('');
   const price = useMemo(
     () => finalPrice(product.custom_attributes, product.price),
@@ -28,28 +38,28 @@ const FeaturedProductItem = ({
   useEffect(
     () =>
       setThemeStyle({
-        image: styles.imageStyle(theme),
-        text: styles.textStyle(theme),
+        image: imageStyle(theme),
+        text: textStyle(theme),
       }),
     [theme],
   );
 
   return (
-    <View style={styles.container(theme)}>
+    <View style={container(theme)}>
       <TouchableOpacity
-        style={styles.containerStyle(theme)}
+        style={containerStyle(theme)}
         onPress={() => {
           onPress(product);
         }}>
         <FastImage
-          style={themeStyles.image}
+          style={themeStyles?.image}
           resizeMode="contain"
           source={{ uri: imageURI }}
         />
         <View style={styles.infoStyle}>
           <Text
             type="subheading"
-            style={themeStyles.text}
+            style={themeStyles?.text}
             ellipsizeMode="tail"
             numberOfLines={2}>
             {product.name}
@@ -66,48 +76,40 @@ const FeaturedProductItem = ({
   );
 };
 
+const container = (theme: ThemeType) => ({
+  padding: theme.spacing.tiny,
+  width: theme.dimens.WINDOW_WIDTH * 0.32,
+});
+const containerStyle = (theme: ThemeType): StyleProp<ViewStyle> => ({
+  flexDirection: 'column',
+  flex: 1,
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+  backgroundColor: theme.colors.surface,
+  borderRadius: theme.dimens.borderRadius,
+  alignItems: 'center',
+  justifyContent: 'center',
+});
+const textStyle = (theme: ThemeType): StyleProp<TextStyle> => ({
+  justifyContent: 'center',
+  textAlign: 'center',
+  flexDirection: 'column',
+  marginTop: theme.spacing.small,
+});
+const imageStyle = (theme: ThemeType) => ({
+  height: theme.dimens.homeProductImageHeight,
+  width: theme.dimens.homeProductImageWidth,
+});
+
 const styles = StyleSheet.create({
-  container: theme => ({
-    padding: theme.spacing.tiny,
-    width: theme.dimens.WINDOW_WIDTH * 0.32,
-  }),
-  containerStyle: theme => ({
-    flexDirection: 'column',
-    flex: 1,
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.dimens.borderRadius,
-    alignItems: 'center',
-    justifyContent: 'center',
-  }),
   infoStyle: {
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textStyle: theme => ({
-    justifyContent: 'center',
-    textAlign: 'center',
-    flexDirection: 'column',
-    marginTop: theme.spacing.small,
-  }),
   priceStyle: {
     textAlign: 'center',
   },
-  imageStyle: theme => ({
-    height: theme.dimens.homeProductImageHeight,
-    width: theme.dimens.homeProductImageWidth,
-  }),
 });
-
-FeaturedProductItem.propTypes = {
-  currencySymbol: PropTypes.string.isRequired,
-  currencyRate: PropTypes.number.isRequired,
-  onPress: PropTypes.func,
-  product: PropTypes.object,
-};
-
-FeaturedProductItem.defaultProps = {};
 
 export default FeaturedProductItem;

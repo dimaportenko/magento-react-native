@@ -7,7 +7,17 @@ import {
   MAGENTO_UPDATE_REFRESHING_HOME_DATA,
 } from '../actions/types';
 
-const INITIAL_STATE = {
+export type HomeReducerType = {
+  refreshing: boolean;
+  slider?: {
+    image: string;
+    title: string;
+  }[];
+  featuredProducts?: any;
+  featuredCategories?: any;
+};
+
+const INITIAL_STATE: HomeReducerType = {
   slider: [],
   featuredProducts: {},
   refreshing: false,

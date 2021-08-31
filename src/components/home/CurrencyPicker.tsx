@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { FC } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import { connect } from 'react-redux';
 import { ModalSelect } from '../common';
@@ -8,8 +7,15 @@ import {
   currencyExchangeRateByCode,
 } from '../../helper/price';
 import { changeCurrency } from '../../actions';
+import { StoreStateType } from '../../reducers';
+import { MagentoReducerType } from '../../reducers/MagentoReducer';
 
-const CurrencyPicker = ({
+const CurrencyPicker: FC<{
+  currencies: MagentoReducerType['currency']['available_currency_codes'];
+  exchangeRates: MagentoReducerType['currency']['exchange_rates'];
+  selectedCurrencyCode: MagentoReducerType['currency']['displayCurrencyCode'];
+  changeCurrency: typeof changeCurrency;
+}> = ({
   currencies,
   exchangeRates,
   selectedCurrencyCode,
@@ -20,7 +26,7 @@ const CurrencyPicker = ({
     key: value,
   }));
 
-  const onChange = (atrribute, itemValue) => {
+  const onChange = (atrribute: string, itemValue: string) => {
     _changeCurrency(
       itemValue,
       priceSignByCode(itemValue),
@@ -49,25 +55,7 @@ const styles = {
   },
 };
 
-CurrencyPicker.propTypes = {
-  currencies: PropTypes.arrayOf(PropTypes.string),
-  exchangeRates: PropTypes.arrayOf(
-    PropTypes.shape({
-      currency_to: PropTypes.string.isRequired,
-      rate: PropTypes.number.isRequired,
-    }),
-  ),
-  selectedCurrencyCode: PropTypes.string,
-  changeCurrency: PropTypes.func.isRequired,
-};
-
-CurrencyPicker.defaultProps = {
-  currencies: [],
-  exchangeRates: [],
-  selectedCurrencyCode: '',
-};
-
-const mapStatetoProps = ({ magento }) => {
+const mapStatetoProps = ({ magento }: StoreStateType) => {
   const {
     currency: {
       available_currency_codes: currencies,

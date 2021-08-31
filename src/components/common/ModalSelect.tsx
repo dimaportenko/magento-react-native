@@ -1,12 +1,22 @@
-import React, { useState } from 'react';
-import { View, ViewPropTypes } from 'react-native';
+import React, { FC, useState } from 'react';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import PropTypes from 'prop-types';
 import { Input } from './Input';
 
-const ModalSelect = ({
+const ModalSelect: FC<{
+  data: {
+    key: string;
+    label: string;
+  }[];
+  label: string;
+  attribute: string;
+  onChange: (attribute: string, optionKey: string) => void;
+  disabled: boolean;
+  withLabel: boolean;
+  style?: ViewStyle;
+}> = ({
   data,
-  disabled,
+  disabled = false,
   label,
   onChange,
   attribute,
@@ -15,7 +25,7 @@ const ModalSelect = ({
 }) => {
   const [value, setValue] = useState('');
 
-  const _onChange = option => {
+  const _onChange = (option: { key: string; label: string }) => {
     setValue(!withLabel ? option.label : `${label} : ${option.label}`);
 
     if (onChange) {
@@ -42,31 +52,10 @@ const ModalSelect = ({
 };
 
 // TODO: add style for disabled element
-const styles = {
+const styles = StyleSheet.create({
   inputStyle: {
     textAlign: 'center',
   },
-};
-
-ModalSelect.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      key: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-      label: PropTypes.string,
-    }),
-  ).isRequired,
-  label: PropTypes.string.isRequired,
-  attribute: PropTypes.string,
-  onChange: PropTypes.func,
-  disabled: PropTypes.bool,
-  style: ViewPropTypes.style,
-};
-
-ModalSelect.defaultProps = {
-  disabled: false,
-  onChange: null,
-  attribute: '',
-  style: {},
-};
+});
 
 export { ModalSelect };

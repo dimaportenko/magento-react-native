@@ -1,19 +1,28 @@
 import React, { FC, useContext } from 'react';
-import { TextInput, View, ViewStyle } from 'react-native';
+import {
+  StyleProp,
+  TextInput,
+  TextInputProps,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { Text } from './Text';
 import { ThemeContext } from '../../theme';
 
-const Input: FC<{
-  label: string;
-  value: string;
-  onChangeText: () => void;
-  placeholder: string;
-  secureTextEntry: boolean;
-  containerStyle: ViewStyle;
-  labelStyle: ViewStyle;
-  inputStyle: ViewStyle;
-  assignRef: (component: TextInput | null) => void;
-}> = ({
+const Input: FC<
+  {
+    label?: string;
+    value: string;
+    onChangeText?: () => void;
+    placeholder: string;
+    secureTextEntry?: boolean;
+    containerStyle?: ViewStyle;
+    labelStyle?: ViewStyle;
+    inputStyle?: StyleProp<TextStyle> | undefined;
+    assignRef?: (component: TextInput | null) => void;
+  } & TextInputProps
+> = ({
   label,
   value,
   onChangeText,

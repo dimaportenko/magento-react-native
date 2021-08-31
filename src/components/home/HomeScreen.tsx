@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { ScrollView, View, StyleSheet, RefreshControl } from 'react-native';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import _ from 'lodash';
 import { MaterialHeaderButtons, Text, Item } from '../common';
 import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
@@ -12,14 +11,40 @@ import FeaturedProducts from './FeaturedProducts';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { ProductType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
-class HomeScreen extends Component {
-	public props: any;
-	public context: any;
-	public navigation: any;
+const mapStateToProps = (state: StoreStateType) => {
+  const {
+    errorMessage,
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = state.magento;
+  return {
+    ...state.home,
+    errorMessage,
+    currencySymbol,
+    currencyRate,
+  };
+};
+
+const connector = connect(mapStateToProps, { getHomeData, setCurrentProduct });
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
+  navigation: any;
+};
+
+type State = {};
+
+class HomeScreen extends Component<Props, State> {
   static contextType = ThemeContext;
 
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = ({ navigation }: { navigation: any }) => ({
     title: translate('home.title'),
     headerBackTitle: ' ',
     headerLeft: () => (
@@ -36,7 +61,7 @@ class HomeScreen extends Component {
 
   componentDidMount() {
     const { navigation } = this.props;
-    if (this.props.slider.length === 0) {
+    if (this.props.slider?.length === 0) {
       this.props.getHomeData();
     }
     navigation.setParams({ toggleDrawer: this.toggleDrawer });
@@ -47,7 +72,7 @@ class HomeScreen extends Component {
     navigation.toggleDrawer();
   };
 
-  onProductPress = product => {
+  onProductPress = (product: ProductType) => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_HOME_PRODUCT_PATH, {
       product,
@@ -85,7 +110,7 @@ class HomeScreen extends Component {
 
     return (
       <ScrollView
-        style={styles.container(theme)}
+        style={container(theme)}
         refreshControl={
           <RefreshControl
             refreshing={this.props.refreshing}
@@ -99,11 +124,12 @@ class HomeScreen extends Component {
   }
 }
 
+const container = (theme: ThemeType) => ({
+  flex: 1,
+  backgroundColor: theme.colors.background,
+});
+
 const styles = StyleSheet.create({
-  container: theme => ({
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  }),
   errorContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -111,40 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-HomeScreen.propTypes = {
-  slider: PropTypes.array,
-  getHomeData: PropTypes.func,
-  navigation: PropTypes.object,
-  featuredProducts: PropTypes.object,
-  featuredCategories: PropTypes.object,
-  setCurrentProduct: PropTypes.func,
-  currencySymbol: PropTypes.string.isRequired,
-  currencyRate: PropTypes.number.isRequired,
-  refreshing: PropTypes.bool,
-};
-
-HomeScreen.defaultProps = {
-  slider: [],
-};
-
-const mapStateToProps = state => {
-  const { refreshing } = state.home;
-  const {
-    errorMessage,
-    currency: {
-      displayCurrencySymbol: currencySymbol,
-      displayCurrencyExchangeRate: currencyRate,
-    },
-  } = state.magento;
-  return {
-    ...state.home,
-    refreshing,
-    errorMessage,
-    currencySymbol,
-    currencyRate,
-  };
-};
-
-export default connect(mapStateToProps, { getHomeData, setCurrentProduct })(
-  HomeScreen,
-);
+export default connector(HomeScreen);

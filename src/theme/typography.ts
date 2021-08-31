@@ -1,4 +1,4 @@
-import { Platform } from 'react-native';
+import { Platform, StyleProp, TextStyle } from 'react-native';
 import colors from './colors';
 
 const fontFamily = Platform.select({ android: 'sans-serif', ios: 'Helvetica' });
@@ -11,7 +11,7 @@ const titleTextColor = colors.titleText;
 const bodyTextColor = colors.bodyText;
 const captionTextColor = colors.captionText;
 
-export default {
+const Typography: Record<string, StyleProp<TextStyle>> = {
   /**
    * Title is reserved for the title of a screen(Toolbar)
    * and the titles of Modal dialogs.
@@ -20,14 +20,12 @@ export default {
     fontFamily,
     color: appbarTitleTextColor,
     fontSize: 18,
-    fontStyle: 'normal',
     fontWeight: fontWeightRegular,
   },
   titleTextSemiBold: {
     fontFamily,
     color: appbarTitleTextColor,
     fontSize: 18,
-    fontStyle: 'normal',
     fontWeight: fontWeightSemiBold,
   },
   /**
@@ -37,14 +35,12 @@ export default {
     fontFamily,
     color: titleTextColor,
     fontSize: 18,
-    fontStyle: 'normal',
     fontWeight: fontWeightRegular,
   },
   headingTextBold: {
     fontFamily,
     color: titleTextColor,
     fontSize: 18,
-    fontStyle: 'normal',
     fontWeight: fontWeightBold,
   },
   /**
@@ -54,14 +50,12 @@ export default {
     fontFamily,
     color: titleTextColor,
     fontSize: 16,
-    fontStyle: 'normal',
     fontWeight: fontWeightRegular,
   },
   subheadingTextBold: {
     fontFamily,
     color: titleTextColor,
     fontSize: 16,
-    fontStyle: 'normal',
     fontWeight: fontWeightBold,
   },
   /**
@@ -73,14 +67,12 @@ export default {
     fontFamily,
     color: bodyTextColor,
     fontSize: 15,
-    fontStyle: 'normal',
     fontWeight: fontWeightRegular,
   },
   bodyTextBold: {
     fontFamily,
     color: bodyTextColor,
     fontSize: 15,
-    fontStyle: 'normal',
     fontWeight: fontWeightBold,
   },
   /**
@@ -91,14 +83,12 @@ export default {
     fontFamily,
     color: titleTextColor,
     fontSize: 14,
-    fontStyle: 'normal',
     fontWeight: fontWeightRegular,
   },
   labelTextBold: {
     fontFamily,
     color: titleTextColor,
     fontSize: 14,
-    fontStyle: 'normal',
     fontWeight: fontWeightBold,
   },
   /**
@@ -110,14 +100,12 @@ export default {
     fontFamily,
     color: captionTextColor,
     fontSize: 12,
-    fontStyle: 'normal',
     fontWeight: fontWeightRegular,
   },
   captionTextBold: {
     fontFamily,
     color: captionTextColor,
     fontSize: 12,
-    fontStyle: 'normal',
     fontWeight: fontWeightBold,
   },
   /**
@@ -128,3 +116,5 @@ export default {
     color: colors.titleText,
   },
 };
+
+export default Typography;

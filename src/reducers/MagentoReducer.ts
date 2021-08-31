@@ -11,12 +11,17 @@ import { Magento, magento } from '../magento';
 import { CountryType, StoreConfigType } from '../magento/types';
 
 export type MagentoReducerCurrencyType = {
+  available_currency_codes: string[];
   base_currency_symbol: string;
   default_display_currency_code: string;
   default_display_currency_symbol: string;
   displayCurrencyCode: string;
   displayCurrencySymbol: string;
   displayCurrencyExchangeRate: number;
+  exchange_rates: {
+    currency_to: string;
+    rate: number;
+  }[];
 };
 
 export type MagentoReducerType = {

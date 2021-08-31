@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
-import { Text as RNText, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { FC, useContext, useMemo } from 'react';
+import { Text as RNText, TextProps } from 'react-native';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from '../../theme/theme';
 
 // Possible value for prop "type" for Text
 const HEADING = 'heading';
@@ -10,7 +10,19 @@ const BODY = 'body';
 const LABEL = 'label';
 const CAPTION = 'caption';
 
-const Text = ({
+type TextType =
+  | typeof HEADING
+  | typeof SUB_HEADING
+  | typeof BODY
+  | typeof LABEL
+  | typeof CAPTION;
+
+const Text: FC<
+  TextProps & {
+    type?: TextType;
+    bold?: boolean;
+  }
+> = ({
   /**
    * @type prop helps style Text with pre default styling define in
    * typography.js. Possible value of type can be:
@@ -22,12 +34,12 @@ const Text = ({
    *
    * default value: 'body'
    */
-  type,
+  type = BODY,
   /**
    * @bold prop is a boolean, if enabled will use bold version of the
    * type mentioned.
    */
-  bold,
+  bold = false,
   /**
    * @style prop will overwrite the predefined styling for Text defined by
    * @type prop
@@ -38,16 +50,17 @@ const Text = ({
   ...props
 }) => {
   const theme = useContext(ThemeContext);
-  return (
-    <RNText
-      style={StyleSheet.flatten([styles.text(type, bold, theme), style])}
-      {...props}
-    />
+  const textStyle = useMemo(
+    () => getTextStyle(type, bold, theme),
+    [type, bold, theme],
   );
+  return <RNText style={[textStyle, style]} {...props} />;
 };
 
-const getTextStyle = (type, bold, theme) => {
-  let style = '';
+type TypographyKeyType = keyof ThemeType['typography'];
+
+const getTextStyle = (type: TextType, bold: boolean, theme: ThemeType) => {
+  let style: TypographyKeyType;
   switch (type) {
     case HEADING:
       style = 'headingText';
@@ -65,27 +78,9 @@ const getTextStyle = (type, bold, theme) => {
       style = 'bodyText';
   }
   if (bold) {
-    style += 'Bold';
+    style = `${style}Bold`;
   }
   return theme.typography[style];
-};
-
-const styles = {
-  text: (type, bold, theme) => ({
-    ...getTextStyle(type, bold, theme),
-  }),
-};
-
-Text.propTypes = {
-  type: PropTypes.oneOf([HEADING, SUB_HEADING, BODY, LABEL, CAPTION]),
-  bold: PropTypes.bool,
-  style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-};
-
-Text.defaultProps = {
-  type: BODY,
-  bold: false,
-  style: {},
 };
 
 export { Text };

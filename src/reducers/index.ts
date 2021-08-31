@@ -9,7 +9,7 @@ import MagentoReducer, { MagentoReducerType } from './MagentoReducer';
 import ProductReducer, { ProductReducerType } from './ProductReducer';
 import AccountReducer, { AccountReducerType } from './AccountReducer';
 import CartReducer, { CartReducerType } from './CartReducer';
-import HomeReducer from './HomeReducer';
+import HomeReducer, { HomeReducerType } from './HomeReducer';
 import SearchReducer, { SearchReducerType } from './SearchReducer';
 import FilterReducer, { FilterReducerType } from './FilterReducer';
 import UIReducer, { UIReducerType } from './UIReducer';
@@ -25,6 +25,7 @@ export type StoreStateType = {
   account: AccountReducerType;
   product: ProductReducerType;
   checkout: CheckoutReducerType;
+  home: HomeReducerType;
 };
 
 export default combineReducers<StoreStateType>({
