@@ -1,9 +1,13 @@
 import React, { FC, useContext } from 'react';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { HeaderButtons, HeaderButton } from 'react-navigation-header-buttons';
+import {
+  HeaderButtons,
+  HeaderButton,
+  HeaderButtonProps,
+} from 'react-navigation-header-buttons';
 import { ThemeContext } from '../../theme';
 
-const MaterialHeaderButton: FC = props => {
+const MaterialHeaderButton: FC<HeaderButtonProps> = props => {
   const theme = useContext(ThemeContext);
   return (
     <HeaderButton

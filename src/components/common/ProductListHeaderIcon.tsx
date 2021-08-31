@@ -3,10 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { MaterialHeaderButtons, Item } from './Header';
 import { uiProductListTypeGrid } from '../../actions';
+import { StoreStateType } from '../../reducers';
 
 const HeaderGridToggleIcon = () => {
   const dispatch = useDispatch();
-  const isGrid = useSelector(({ ui }) => ui.listTypeGrid);
+  const isGrid = useSelector(({ ui }: StoreStateType) => ui.listTypeGrid);
 
   const onPress = () => {
     dispatch(uiProductListTypeGrid(!isGrid));

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Text } from './Text';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from "../../theme/theme";
 
 const Input: FC<
   {
@@ -61,7 +62,7 @@ const Input: FC<
 };
 
 const styles = {
-  containerStyle: theme => ({
+  containerStyle: (theme: ThemeType): ViewStyle => ({
     height: theme.dimens.defaultInputBoxHeight,
     backgroundColor: theme.colors.surface,
     borderWidth: 1,
@@ -69,12 +70,12 @@ const styles = {
     flexDirection: 'row',
     alignItems: 'center',
   }),
-  inputStyle: theme => ({
+  inputStyle: (theme: ThemeType) => ({
     color: theme.colors.titleText,
     padding: theme.spacing.small,
     flex: 2,
   }),
-  labelStyle: theme => ({
+  labelStyle: (theme: ThemeType) => ({
     paddingLeft: theme.spacing.large,
     flex: 1,
   }),

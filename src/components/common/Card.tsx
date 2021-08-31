@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { View, ViewStyle } from 'react-native';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from '../../theme/theme';
 
 const Card: FC<{
   style: ViewStyle;
@@ -10,7 +11,7 @@ const Card: FC<{
 };
 
 const styles = {
-  containerStyles: theme => ({
+  containerStyles: (theme: ThemeType) => ({
     borderWidth: 1,
     borderRadius: theme.dimens.borderRadius,
     borderColor: theme.colors.border,

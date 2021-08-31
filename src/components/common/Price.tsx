@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
-import { View, ViewPropTypes } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { FC, useContext } from 'react';
+import { StyleSheet, TextStyle, View, ViewStyle } from 'react-native';
 import { Text } from './Text';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from '../../theme/theme';
 
-const formatPrice = (price, currencyRate) =>
+const formatPrice = (price: number, currencyRate: number) =>
   parseFloat((price * currencyRate).toFixed(2));
 
 /**
@@ -20,23 +20,23 @@ const formatPrice = (price, currencyRate) =>
  *
  * @return React component
  */
-const Price = ({
-  currencySymbol,
-  currencyRate,
-  basePrice,
-  discountPrice,
-  style,
-}) => {
+const Price: FC<{
+  currencySymbol: string;
+  currencyRate: number;
+  basePrice: number;
+  discountPrice: number;
+  style: ViewStyle;
+}> = ({ currencySymbol, currencyRate, basePrice, discountPrice, style }) => {
   const theme = useContext(ThemeContext);
-  const isBold = () => discountPrice && discountPrice < basePrice;
+  const isBold = () => {
+    return discountPrice ? discountPrice < basePrice : false;
+  };
   const renderDiscountPrice = () =>
     discountPrice === basePrice ? null : (
       <Text
         type="label"
         bold={isBold()}
-        style={styles.discountPriceText(
-          theme,
-        )}>{`${currencySymbol} ${formatPrice(
+        style={discountPriceText(theme)}>{`${currencySymbol} ${formatPrice(
         discountPrice,
         currencyRate,
       )}`}</Text>
@@ -50,7 +50,7 @@ const Price = ({
       <Text
         type="label"
         bold={!isBold()}
-        style={styles.basePriceText(
+        style={basePriceText(
           basePrice,
           discountPrice,
         )}>{`${currencySymbol} ${formatPrice(basePrice, currencyRate)}`}</Text>
@@ -58,31 +58,20 @@ const Price = ({
   );
 };
 
-const styles = {
+const discountPriceText = (theme: ThemeType) => ({
+  marginEnd: theme.spacing.tiny,
+});
+const basePriceText = (
+  basePrice: number,
+  discountPrice: number,
+): TextStyle => ({
+  textDecorationLine:
+    discountPrice && discountPrice < basePrice ? 'line-through' : 'none',
+});
+const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
   },
-  discountPriceText: theme => ({
-    marginEnd: theme.spacing.tiny,
-  }),
-  basePriceText: (basePrice, discountPrice) => ({
-    textDecorationLine:
-      discountPrice && discountPrice < basePrice ? 'line-through' : 'none',
-  }),
-};
-
-Price.propTypes = {
-  currencySymbol: PropTypes.string.isRequired,
-  currencyRate: PropTypes.number.isRequired,
-  basePrice: PropTypes.number,
-  discountPrice: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  style: ViewPropTypes.style,
-};
-
-Price.defaultProps = {
-  basePrice: 0,
-  discountPrice: 0,
-  style: {},
-};
+});
 
 export { Price };

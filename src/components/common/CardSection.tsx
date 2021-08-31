@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react';
 import { View, ViewStyle } from 'react-native';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from '../../theme/theme';
 
 const CardSection: FC<{
   style: ViewStyle;
@@ -10,7 +11,7 @@ const CardSection: FC<{
 };
 
 const styles = {
-  containerStyles: theme => ({
+  containerStyles: (theme: ThemeType): ViewStyle => ({
     borderBottomWidth: 1,
     padding: theme.spacing.tiny,
     backgroundColor: theme.colors.surface,

@@ -1,7 +1,8 @@
 import React, { FC, useContext } from 'react';
-import { StyleSheet, TouchableOpacity, ViewStyle } from 'react-native';
+import { TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 import { Text } from './Text';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from '../../theme/theme';
 
 const Button: FC<{
   onPress: () => void;
@@ -20,8 +21,8 @@ const Button: FC<{
   );
 };
 
-const styles = StyleSheet.create({
-  buttonStyle: (theme, disabled) => ({
+const styles = {
+  buttonStyle: (theme: ThemeType, disabled: boolean): ViewStyle => ({
     borderWidth: 1,
     backgroundColor: disabled ? theme.colors.disabled : theme.colors.secondary,
     borderColor: disabled
@@ -31,10 +32,10 @@ const styles = StyleSheet.create({
     height: theme.dimens.defaultButtonHeight,
     justifyContent: 'center',
   }),
-  buttonTitle: (theme, disabled) => ({
+  buttonTitle: (theme: ThemeType, disabled: boolean): TextStyle => ({
     color: disabled ? theme.colors.disabledDark : theme.colors.white,
     alignSelf: 'center',
   }),
-});
+};
 
 export { Button };
