@@ -2,12 +2,24 @@ import _ from 'lodash';
 import admin from './lib/admin';
 import guest from './lib/guest';
 import customer from './lib/customer';
-import { ADMIN_TYPE, CUSTOMER_TYPE } from './types';
+import { ADMIN_TYPE, CUSTOMER_TYPE, GUEST_TYPE } from './types';
 import { logError } from '../helper/logger';
 import { parseNumber } from './utils/parser';
 
-const defaultOptions = {
-  url: null,
+export type MagentoOptions = {
+  url?: string;
+  store: string;
+  userAgent: string;
+  home_cms_block_id: string;
+  authentication: {
+    integration: {
+      access_token?: string;
+    };
+  };
+};
+
+const defaultOptions: MagentoOptions = {
+  url: undefined,
   store: 'default',
   userAgent: 'Dmytro Portenko Magento Library',
   home_cms_block_id: '',
@@ -18,32 +30,39 @@ const defaultOptions = {
   },
 };
 
-export class Magento {
-	public configuration: any;
-	public base_url: any;
-	public root_path: any;
-	public admin: any;
-	public guest: any;
-	public customer: any;
-	public access_token: any;
-	public customerToken: any;
-	public storeConfig: any;
-	public version: any;
-	public message: any;
+type ACLType = typeof ADMIN_TYPE | typeof CUSTOMER_TYPE | typeof GUEST_TYPE;
+type MethodType = 'GET' | 'POST' | 'DELETE' | 'PUT';
 
-  setOptions(options) {
-    this.configuration = { ...defaultOptions, ...options };
-    this.base_url = this.configuration.url;
-    this.root_path = `rest/${this.configuration.store}`;
+export class Magento {
+  public configuration?: MagentoOptions;
+  public base_url?: string;
+  public root_path?: string;
+  public admin: ReturnType<typeof admin>;
+  public guest: ReturnType<typeof guest>;
+  public customer: ReturnType<typeof customer>;
+  public access_token?: string;
+  public customerToken?: string;
+  public storeConfig: any;
+  public version?: string;
+  public message?: string;
+
+  constructor() {
     this.admin = admin(this);
     this.guest = guest(this);
     this.customer = customer(this);
+  }
+
+  setOptions(options: MagentoOptions) {
+    this.configuration = { ...defaultOptions, ...options };
+    this.base_url = this.configuration.url;
+    this.root_path = `rest/${this.configuration.store}`;
+
     this.getMagentoVersion();
     logError(new Error(JSON.stringify(options)));
   }
 
   init() {
-    if (this.configuration.authentication.integration.access_token) {
+    if (this.configuration?.authentication.integration.access_token) {
       this.access_token =
         this.configuration.authentication.integration.access_token;
       return;
@@ -51,23 +70,52 @@ export class Magento {
     throw new Error('Need Integration Token!');
   }
 
-  post(path, params, type = ADMIN_TYPE) {
+  post<Params extends Record<string, unknown>>(
+    path: string,
+    params: Params | null,
+    type: ACLType = ADMIN_TYPE,
+  ) {
     return this.send(path, 'POST', null, params, type);
   }
 
-  put(path, params, type = ADMIN_TYPE) {
+  put<Params extends Record<string, unknown>>(
+    path: string,
+    params: Params | null,
+    type: ACLType = ADMIN_TYPE,
+  ) {
     return this.send(path, 'PUT', null, params, type);
   }
 
-  get(path, params, data, type = ADMIN_TYPE) {
+  get<
+    Params extends Record<string, unknown>,
+    DataType extends Record<string, unknown>,
+  >(
+    path: string,
+    params: Params | null,
+    data: DataType | null,
+    type: ACLType = ADMIN_TYPE,
+  ) {
     return this.send(path, 'GET', params, data, type);
   }
 
-  delete(path, params, type = ADMIN_TYPE) {
+  delete<Params extends Record<string, unknown>>(
+    path: string,
+    params: Params | null,
+    type: ACLType = ADMIN_TYPE,
+  ) {
     return this.send(path, 'DELETE', params, null, type);
   }
 
-  send(url, method, params, data, type) {
+  send<
+    Params extends Record<string, unknown>,
+    DataType extends Record<string, unknown>,
+  >(
+    url: string,
+    method: MethodType,
+    params: Params | null,
+    data: DataType | null,
+    type: ACLType,
+  ) {
     let uri = `${this.base_url}${this.root_path}${url}`;
 
     if (params) {
@@ -86,8 +134,8 @@ export class Magento {
       );
     }
 
-    const headers = {
-      'User-Agent': this.configuration.userAgent,
+    const headers: Record<string, string> = {
+      'User-Agent': this.configuration?.userAgent,
       'Content-Type': 'application/json',
     };
     if (this.access_token && type === ADMIN_TYPE) {
@@ -150,7 +198,7 @@ export class Magento {
     this.storeConfig = config;
   }
 
-  setCustomerToken(token) {
+  setCustomerToken(token: string) {
     this.customerToken = token;
   }
 
@@ -181,7 +229,7 @@ export class Magento {
   }
 
   getHomeData() {
-    if (this.configuration.home_cms_block_id) {
+    if (this.configuration?.home_cms_block_id) {
       return this.admin.getCmsBlock(this.configuration.home_cms_block_id);
     }
     return false;
