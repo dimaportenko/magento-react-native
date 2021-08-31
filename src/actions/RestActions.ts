@@ -62,7 +62,7 @@ import { logError } from '../helper/logger';
 import { priceSignByCode } from '../helper/price';
 import { checkoutSetActiveSection } from './UIActions';
 import { CategoryType } from '../magento/types';
-import { PriceFilterType } from '../reducers/FilterReducer';
+import { FilterReducerType, PriceFilterType } from '../reducers/FilterReducer';
 import { Dispatch } from 'redux';
 
 export const initMagento = () => {
@@ -234,12 +234,24 @@ export const getProductsForCategory =
       });
   };
 
-export const addFilterData = data => ({
+type FilterDataType =
+  | FilterReducerType['priceFilter']
+  | FilterReducerType['sortOrder']
+  | undefined;
+
+export const addFilterData = (
+  data: FilterDataType,
+): {
+  type: typeof ADD_FILTER_DATA;
+  payload: FilterDataType;
+} => ({
   type: ADD_FILTER_DATA,
   payload: data,
 });
 
-export const resetFilters = () => ({
+export const resetFilters = (): {
+  type: typeof RESET_FILTERS_DATA;
+} => ({
   type: RESET_FILTERS_DATA,
 });
 

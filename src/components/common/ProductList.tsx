@@ -1,11 +1,21 @@
-import React, { useContext, useRef } from 'react';
-import PropTypes from 'prop-types';
+import React, { FC, useContext, useRef } from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  View,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  RefreshControlProps,
+  ViewStyle,
+  TextStyle,
+  ListRenderItemInfo,
+} from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import { ProductListItem, Spinner, Text } from '.';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { ProductType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
 const COLUMN_COUNT = 2;
 
@@ -28,7 +38,19 @@ const sortData = [
   },
 ];
 
-const ProductList = ({
+const ProductList: FC<{
+  onRowPress(product: ProductType): void;
+  currencySymbol: string;
+  currencyRate: number;
+  performSort(sortOder: number): void;
+  navigation: any;
+  canLoadMoreContent: boolean;
+  products: ProductType[];
+  onEndReached(): void;
+  refreshControl?: React.ReactElement<RefreshControlProps> | undefined;
+  gridColumnsValue: boolean;
+  searchIndicator: boolean;
+}> = ({
   onRowPress,
   currencySymbol,
   currencyRate,
@@ -42,9 +64,9 @@ const ProductList = ({
   searchIndicator,
 }) => {
   const theme = useContext(ThemeContext);
-  const selector = useRef(null);
+  const selector = useRef<ModalSelector>(null);
 
-  const renderItemRow = ({ item, index }) => (
+  const renderItemRow = ({ item }: ListRenderItemInfo<ProductType>) => (
     <ProductListItem
       imageStyle={styles.imageStyle}
       viewContainerStyle={{ flex: 1 }}
@@ -55,7 +77,10 @@ const ProductList = ({
     />
   );
 
-  const renderItemColumn = ({ item, index }) => (
+  const renderItemColumn = ({
+    item,
+    index,
+  }: ListRenderItemInfo<ProductType>) => (
     <ProductListItem
       viewContainerStyle={{
         width: theme.dimens.WINDOW_WIDTH / COLUMN_COUNT,
@@ -76,33 +101,31 @@ const ProductList = ({
   );
 
   const renderHeader = () => (
-    <View style={styles.headerContainerStyle(theme)}>
+    <View style={headerContainerStyle(theme)}>
       <ModalSelector
-        style={styles.iconWrapper(theme)}
+        style={iconWrapper(theme)}
         data={sortData}
-        ref={component => {
-          selector.current = component;
-        }}
+        ref={selector}
         customSelector={
           <TouchableOpacity
-            style={styles.iconWrapper(theme)}
-            onPress={() => selector.current.open()}>
+            style={iconWrapper(theme)}
+            /* @ts-ignore */
+            onPress={() => selector.current?.open()}>
             <Icon name="sort" size={24} color="#95989F" />
-            <Text style={styles.headerTextStyle(theme)}>
+            <Text style={headerTextStyle(theme)}>
               {translate('common.sort')}
             </Text>
           </TouchableOpacity>
         }
+        /* @ts-ignore */
         onChange={option => performSort(option.key)}
       />
-      <View style={styles.separator(theme)} />
+      <View style={separator(theme)} />
       <TouchableOpacity
-        style={styles.iconWrapper(theme)}
+        style={iconWrapper(theme)}
         onPress={() => navigation.toggleFilterDrawer()}>
         <Icon name="filter" size={24} color="#95989F" />
-        <Text style={styles.headerTextStyle(theme)}>
-          {translate('common.filter')}
-        </Text>
+        <Text style={headerTextStyle(theme)}>{translate('common.filter')}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -115,9 +138,7 @@ const ProductList = ({
     return null;
   };
 
-  const renderItemSeparator = () => (
-    <View style={styles.itemSeparator(theme)} />
-  );
+  const renderItemSeparator = () => <View style={itemSeparator(theme)} />;
 
   const renderContent = () => {
     if (!products) {
@@ -155,12 +176,37 @@ const ProductList = ({
   return <View style={styles.container}>{renderContent()}</View>;
 };
 
+const itemSeparator = (theme: ThemeType) => ({
+  height: theme.dimens.productListItemInBetweenSpace,
+  backgroundColor: theme.colors.border,
+  flex: 1,
+});
+const headerContainerStyle = (theme: ThemeType): ViewStyle => ({
+  flex: 1,
+  flexDirection: 'row',
+  alignItems: 'stretch',
+  borderBottomWidth: 1,
+  borderBottomColor: theme.colors.border,
+});
+const iconWrapper = (theme: ThemeType): ViewStyle => ({
+  flex: 1,
+  height: 32,
+  margin: theme.spacing.small,
+  flexDirection: 'row',
+  justifyContent: 'center',
+  alignItems: 'center',
+});
+const headerTextStyle = (theme: ThemeType): TextStyle => ({
+  textTransform: 'uppercase',
+  marginLeft: theme.spacing.small,
+});
+const separator = (theme: ThemeType) => ({
+  width: 1,
+  backgroundColor: theme.colors.border,
+  marginVertical: theme.spacing.small,
+});
+
 const styles = StyleSheet.create({
-  itemSeparator: theme => ({
-    height: theme.dimens.productListItemInBetweenSpace,
-    backgroundColor: theme.colors.border,
-    flex: 1,
-  }),
   container: {
     flex: 1,
   },
@@ -189,55 +235,6 @@ const styles = StyleSheet.create({
   columnContainerStyle: {
     flexDirection: 'column',
   },
-  headerContainerStyle: theme => ({
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.border,
-  }),
-  iconWrapper: theme => ({
-    flex: 1,
-    height: 32,
-    margin: theme.spacing.small,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }),
-  headerTextStyle: theme => ({
-    textTransform: 'uppercase',
-    marginLeft: theme.spacing.small,
-  }),
-  separator: theme => ({
-    width: 1,
-    backgroundColor: theme.colors.border,
-    marginVertical: theme.spacing.small,
-  }),
 });
-
-ProductList.propTypes = {
-  onRowPress: PropTypes.func,
-  currencySymbol: PropTypes.string.isRequired,
-  currencyRate: PropTypes.number.isRequired,
-  performSort: PropTypes.func,
-  navigation: PropTypes.object.isRequired,
-  canLoadMoreContent: PropTypes.bool.isRequired,
-  products: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.object),
-    PropTypes.bool,
-  ]),
-  onEndReached: PropTypes.func,
-  refreshControl: PropTypes.element,
-  gridColumnsValue: PropTypes.bool.isRequired,
-  searchIndicator: PropTypes.bool,
-};
-
-ProductList.defaultProps = {
-  onRowPress: () => {},
-  performSort: () => console.log('Perform Sort function not sent in props'),
-  onEndReached: () => {},
-  refreshControl: <></>,
-  searchIndicator: false,
-};
 
 export { ProductList };

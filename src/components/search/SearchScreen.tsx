@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, ViewStyle } from 'react-native';
 import { SearchBar } from 'react-native-elements';
-import { connect } from 'react-redux';
-import _ from 'lodash';
+import { connect, ConnectedProps } from 'react-redux';
+import _, { DebouncedFunc } from 'lodash';
 import {
   getSearchProducts,
   addFilterData,
@@ -14,28 +14,63 @@ import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_SEARCH_PRODUCT_PATH } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { ProductType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
-class SearchScreen extends Component {
-	public state: any;
-	public getSearchProducts: any;
-	public props: any;
-	public setState: any;
-	public context: any;
-	public canLoadMoreContent: any;
-	public loadingMore: any;
-	public products: any;
-	public sortOrder: any;
-	public priceFilter: any;
-	public input: any;
+const mapStateToProps = ({ search, filters, magento, ui }: StoreStateType) => {
+  const { sortOrder, priceFilter } = filters;
+  const { products, totalCount, loadingMore } = search;
+  const {
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = magento;
+  const canLoadMoreContent = (products.length ?? 0) < (totalCount ?? 0);
+  const { listTypeGrid } = ui;
+
+  return {
+    products,
+    sortOrder,
+    totalCount,
+    loadingMore,
+    priceFilter,
+    currencyRate,
+    listTypeGrid,
+    currencySymbol,
+    canLoadMoreContent,
+  };
+};
+
+const connector = connect(mapStateToProps, {
+  getSearchProducts,
+  setCurrentProduct,
+  resetFilters,
+  addFilterData,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
+  navigation: any;
+};
+
+type State = {
+  input: string;
+};
+
+class SearchScreen extends Component<Props, State> {
   static contextType = ThemeContext;
+  getSearchProducts: DebouncedFunc<PropsFromRedux['getSearchProducts']>;
 
-  static navigationOptions = ({ navigation }) => ({
+  static navigationOptions = () => ({
     title: translate('search.title'),
     headerBackTitle: ' ',
     headerRight: () => <HeaderGridToggleIcon />,
   });
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.state = {
       input: '',
@@ -43,7 +78,7 @@ class SearchScreen extends Component {
     this.getSearchProducts = _.debounce(this.props.getSearchProducts, 1000);
   }
 
-  onRowPress = product => {
+  onRowPress = (product: ProductType) => {
     this.props.setCurrentProduct({ product });
     NavigationService.navigate(NAVIGATION_SEARCH_PRODUCT_PATH, {
       product,
@@ -65,7 +100,7 @@ class SearchScreen extends Component {
     }
   };
 
-  updateSearch = input => {
+  updateSearch = (input: string) => {
     this.setState({ input }, () => {
       this.props.resetFilters();
       this.getSearchProducts(
@@ -77,7 +112,7 @@ class SearchScreen extends Component {
     });
   };
 
-  performSort = sortOrder => {
+  performSort = (sortOrder: number) => {
     this.props.addFilterData(sortOrder);
     this.props.getSearchProducts(
       this.state.input,
@@ -107,14 +142,14 @@ class SearchScreen extends Component {
     const { input } = this.state;
 
     return (
-      <View style={styles.containerStyle(theme)}>
+      <View style={containerStyle(theme)}>
         <SearchBar
           placeholder={translate('search.searchPlaceholderText')}
           onChangeText={this.updateSearch}
           value={input}
-          containerStyle={styles.searchStyle(theme)}
-          inputStyle={styles.inputStyle(theme)}
-          inputContainerStyle={styles.inputContainerStyle(theme)}
+          containerStyle={searchStyle(theme)}
+          inputStyle={inputStyle(theme)}
+          inputContainerStyle={inputContainerStyle(theme)}
           showLoading={this.props.loadingMore}
         />
         <View style={{ flex: 1 }}>{this.renderContent()}</View>
@@ -123,64 +158,25 @@ class SearchScreen extends Component {
   }
 }
 
-const styles = {
-  containerStyle: theme => ({
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  }),
-  searchStyle: theme => ({
-    backgroundColor: theme.colors.background,
-    alignSelf: 'center',
-    borderBottomWidth: 0,
-    borderTopWidth: 0,
-    height: theme.dimens.searchBarHeight,
-    width: theme.dimens.WINDOW_WIDTH,
-  }),
-  inputContainerStyle: theme => ({
-    backgroundColor: theme.colors.surface,
-    borderRadius: theme.dimens.searchBarBorderRadius,
-  }),
-  inputStyle: theme => ({
-    backgroundColor: theme.colors.surface,
-    color: theme.colors.titleText,
-  }),
-  notFoundTextWrap: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  notFoundText: {
-    textAlign: 'center',
-  },
-};
+const containerStyle = (theme: ThemeType) => ({
+  flex: 1,
+  backgroundColor: theme.colors.background,
+});
+const searchStyle = (theme: ThemeType): ViewStyle => ({
+  backgroundColor: theme.colors.background,
+  alignSelf: 'center',
+  borderBottomWidth: 0,
+  borderTopWidth: 0,
+  height: theme.dimens.searchBarHeight,
+  width: theme.dimens.WINDOW_WIDTH,
+});
+const inputContainerStyle = (theme: ThemeType) => ({
+  backgroundColor: theme.colors.surface,
+  borderRadius: theme.dimens.searchBarBorderRadius,
+});
+const inputStyle = (theme: ThemeType) => ({
+  backgroundColor: theme.colors.surface,
+  color: theme.colors.titleText,
+});
 
-const mapStateToProps = ({ search, filters, magento, ui }) => {
-  const { sortOrder, priceFilter } = filters;
-  const { products, totalCount, loadingMore } = search;
-  const {
-    currency: {
-      displayCurrencySymbol: currencySymbol,
-      displayCurrencyExchangeRate: currencyRate,
-    },
-  } = magento;
-  const canLoadMoreContent = products.length < totalCount;
-  const { listTypeGrid } = ui;
-
-  return {
-    products,
-    sortOrder,
-    totalCount,
-    loadingMore,
-    priceFilter,
-    currencyRate,
-    listTypeGrid,
-    currencySymbol,
-    canLoadMoreContent,
-  };
-};
-
-export default connect(mapStateToProps, {
-  getSearchProducts,
-  setCurrentProduct,
-  resetFilters,
-  addFilterData,
-})(SearchScreen);
+export default connector(SearchScreen);

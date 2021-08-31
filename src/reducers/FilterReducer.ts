@@ -1,4 +1,5 @@
 import { ADD_FILTER_DATA, RESET_FILTERS_DATA } from '../actions/types';
+import { addFilterData, resetFilters } from '../actions';
 
 export type PriceFilterType = {
   price: {
@@ -19,13 +20,17 @@ const INITIAL_STATE: FilterReducerType = {
   categoryScreen: undefined,
 };
 
-export default (state = INITIAL_STATE, action) => {
+type Actions =
+  | ReturnType<typeof addFilterData>
+  | ReturnType<typeof resetFilters>;
+
+export default (state = INITIAL_STATE, action: Actions) => {
   switch (action.type) {
     case ADD_FILTER_DATA: {
       if (typeof action.payload === 'number') {
         return { ...state, sortOrder: action.payload };
       }
-      if (action.payload.price) {
+      if (action.payload?.price) {
         return { ...state, priceFilter: action.payload };
       }
       return { ...state, categoryScreen: true };
