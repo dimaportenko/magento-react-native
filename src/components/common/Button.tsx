@@ -7,8 +7,8 @@ import { ThemeType } from '../../theme/theme';
 const Button: FC<{
   onPress: () => void;
   style: ViewStyle;
-  disabled: boolean;
-}> = ({ onPress, children, style, disabled }) => {
+  disabled?: boolean;
+}> = ({ onPress, children, style, disabled = false }) => {
   const theme = useContext(ThemeContext);
   const { buttonStyle, buttonTitle } = styles;
   return (

@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
-import { ScrollView } from 'react-native';
-import { connect } from 'react-redux';
+import { ScrollView, ViewStyle } from 'react-native';
+import { useSelector } from 'react-redux';
 import CheckoutSection from './CheckoutSection';
 import CheckoutCustomerAccount from './CheckoutCustomerAccount';
 import CheckoutShippingMethod from './CheckoutShippingMethod';
@@ -8,13 +8,17 @@ import CheckoutPaymentMethod from './CheckoutPaymentMethod';
 import CheckoutTotals from './CheckoutTotals';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
 const Checkout: FC<{
   navigation: any;
-  activeSection: number;
-}> = ({ navigation, activeSection: _activeSection }) => {
+}> = ({ navigation }) => {
   const theme = useContext(ThemeContext);
-  const activeSection = Number(_activeSection);
+
+  const activeSection = useSelector(
+    (state: StoreStateType) => state.checkout.activeSection,
+  );
 
   return (
     <ScrollView style={styles.container(theme)}>
@@ -46,24 +50,17 @@ const Checkout: FC<{
   );
 };
 
+// @ts-ignore
 Checkout.navigationOptions = {
   title: translate('checkout.title'),
   headerBackTitle: ' ',
 };
 
 const styles = {
-  container: theme => ({
+  container: (theme: ThemeType): ViewStyle => ({
     backgroundColor: theme.colors.background,
     flex: 1,
   }),
 };
 
-const mapStateToProps = ({ checkout }) => {
-  const { activeSection } = checkout;
-
-  return {
-    activeSection,
-  };
-};
-
-export default connect(mapStateToProps)(Checkout);
+export default Checkout;

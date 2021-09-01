@@ -21,6 +21,7 @@ export type PaymentItemType = {
 
 export type TotalsType = {
   base_currency_code: string;
+  coupon_code?: string;
   // base_discount_amount: 0
   base_grand_total: number;
   // base_shipping_amount: 5
@@ -59,7 +60,13 @@ export type CheckoutReducerType = {
     telephone: string;
     street: string;
     city: string;
-    region: string | RegionType;
+    region:
+      | string
+      | {
+          region: string;
+          regionCode: string;
+          regionId: number;
+        };
     loading: boolean;
   };
   selectedShipping?: ShippingItemType;
@@ -72,7 +79,6 @@ export type CheckoutReducerType = {
   activeSection: number;
   errorMessage: string;
 };
-
 
 const INITIAL_STATE: CheckoutReducerType = {
   ui: {

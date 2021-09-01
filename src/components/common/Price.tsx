@@ -24,15 +24,15 @@ const Price: FC<{
   currencySymbol: string;
   currencyRate: number;
   basePrice: number;
-  discountPrice: number;
-  style: ViewStyle;
+  discountPrice?: number;
+  style?: ViewStyle;
 }> = ({ currencySymbol, currencyRate, basePrice, discountPrice, style }) => {
   const theme = useContext(ThemeContext);
   const isBold = () => {
     return discountPrice ? discountPrice < basePrice : false;
   };
   const renderDiscountPrice = () =>
-    discountPrice === basePrice ? null : (
+    discountPrice === basePrice || discountPrice === undefined ? null : (
       <Text
         type="label"
         bold={isBold()}
@@ -63,7 +63,7 @@ const discountPriceText = (theme: ThemeType) => ({
 });
 const basePriceText = (
   basePrice: number,
-  discountPrice: number,
+  discountPrice?: number,
 ): TextStyle => ({
   textDecorationLine:
     discountPrice && discountPrice < basePrice ? 'line-through' : 'none',

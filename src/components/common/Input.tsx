@@ -15,7 +15,7 @@ const Input: FC<
   {
     label?: string;
     value: string;
-    onChangeText?: () => void;
+    onChangeText?: (text: string) => void;
     placeholder: string;
     secureTextEntry?: boolean;
     containerStyle?: ViewStyle;

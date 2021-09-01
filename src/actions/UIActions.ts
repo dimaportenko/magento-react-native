@@ -44,7 +44,7 @@ export const checkoutCustomerNextLoading = loading => ({
   payload: loading,
 });
 
-export const checkoutSetActiveSection = section => ({
+export const checkoutSetActiveSection = (section: string) => ({
   type: UI_CHECKOUT_ACTIVE_SECTION,
   payload: section,
 });
@@ -54,7 +54,7 @@ export const checkoutOrderPopupShown = () => ({
   payload: false,
 });
 
-export const updateCheckoutUI = (key, value) => ({
+export const updateCheckoutUI = (key: string, value: unknown) => ({
   type: UI_CHECKOUT_UPDATE,
   payload: { key, value },
 });

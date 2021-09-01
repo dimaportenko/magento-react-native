@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
-import { Alert, View, StyleSheet, TextInput, Dimensions } from 'react-native';
-import { connect } from 'react-redux';
+import {
+  Alert,
+  View,
+  StyleSheet,
+  TextInput,
+  Dimensions,
+  ViewStyle,
+} from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import {
   checkoutSelectedPaymentChanged,
   checkoutCustomerNextLoading,
@@ -18,32 +25,52 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
 import { Spacer } from '../common/Spacer';
-import { PaymentItemType, TotalsType } from '../../reducers/CheckoutReducer';
 import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
-type Props = {
-  checkoutSelectedPaymentChanged: typeof checkoutSelectedPaymentChanged;
-  checkoutCustomerNextLoading: typeof checkoutCustomerNextLoading;
-  checkoutSetActiveSection: typeof checkoutSetActiveSection;
-  checkoutOrderPopupShown: typeof checkoutOrderPopupShown;
-  placeGuestCartOrder: typeof placeGuestCartOrder;
-  getCart: typeof getCart;
-  resetCart: typeof resetCart;
-  addCouponToCart: typeof addCouponToCart;
-  removeCouponFromCart: typeof removeCouponFromCart;
-  cartId: number | string | undefined;
-  selectedPayment?: PaymentItemType;
-  payments?: PaymentItemType[];
-  loading: boolean;
-  errorMessage: string;
-  totals?: TotalsType;
-  orderId?: number;
-  baseCurrencySymbol: string;
-  currencyCode: string;
-  currencySymbol: string;
-  currencyRate: number;
-  couponError: string;
-  couponLoading: boolean;
+const mapStateToProps = ({ cart, checkout, magento }: StoreStateType) => {
+  const { cartId, couponLoading, couponError } = cart;
+  const { loading } = checkout.ui;
+  const { payments, selectedPayment, totals, orderId, errorMessage } = checkout;
+  const {
+    base_currency_symbol: baseCurrencySymbol,
+    displayCurrencyCode: currencyCode,
+    displayCurrencySymbol: currencySymbol,
+    displayCurrencyExchangeRate: currencyRate,
+  } = magento.currency;
+  return {
+    cartId,
+    payments,
+    selectedPayment,
+    totals,
+    loading,
+    orderId,
+    errorMessage,
+    baseCurrencySymbol,
+    currencyCode,
+    currencySymbol,
+    currencyRate,
+    couponError,
+    couponLoading,
+  };
+};
+
+const connector = connect(mapStateToProps, {
+  checkoutSelectedPaymentChanged,
+  checkoutCustomerNextLoading,
+  checkoutSetActiveSection,
+  checkoutOrderPopupShown,
+  placeGuestCartOrder,
+  getCart,
+  resetCart,
+  addCouponToCart,
+  removeCouponFromCart,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
+  navigation: any;
 };
 
 type State = {};
@@ -60,7 +87,7 @@ class CheckoutTotals extends Component<Props, State> {
     const payment = {
       paymentMethod: {
         // po_number: selectedPayment.code,
-        method: selectedPayment.code,
+        method: selectedPayment?.code,
         // additional_data: [
         // 	"string"
         // ],
@@ -81,17 +108,22 @@ class CheckoutTotals extends Component<Props, State> {
 
   renderTotals() {
     const {
-      totals: {
-        base_currency_code: baseCurrencyCode,
-        base_subtotal: baseSubTotal,
-        base_grand_total: grandTotal,
-        base_shipping_incl_tax: shippingTotal,
-      },
+      totals,
       baseCurrencySymbol,
       currencyCode,
       currencySymbol,
       currencyRate,
     } = this.props;
+
+    if (!totals) {
+      return;
+    }
+    const {
+      base_currency_code: baseCurrencyCode,
+      base_subtotal: baseSubTotal,
+      base_grand_total: grandTotal,
+      base_shipping_incl_tax: shippingTotal,
+    } = totals;
 
     return (
       <View style={styles.totalsStyle}>
@@ -148,7 +180,7 @@ class CheckoutTotals extends Component<Props, State> {
   renderButton() {
     const theme = this.context;
     const { payments } = this.props;
-    if (!payments.length) {
+    if (!payments?.length) {
       return <View />;
     }
 
@@ -163,8 +195,8 @@ class CheckoutTotals extends Component<Props, State> {
       <View style={styles.nextButtonStyle}>
         <Button
           onPress={this.onPlacePressed}
-          disable={this.props.loading}
-          style={styles.buttonStyle(theme)}>
+          disabled={this.props.loading}
+          style={buttonStyle(theme)}>
           {translate('checkout.placeOrderButton')}
         </Button>
       </View>
@@ -179,7 +211,7 @@ class CheckoutTotals extends Component<Props, State> {
     }
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (this.props.orderId && this.props.orderId !== prevProps.orderId) {
       this.showPopup(
         translate('common.order'),
@@ -199,7 +231,7 @@ class CheckoutTotals extends Component<Props, State> {
     }
   }
 
-  showPopup(title, message) {
+  showPopup(title: string, message: string) {
     this.props.checkoutSetActiveSection(1);
     this.props.resetCart();
     // this.props.checkoutOrderPopupShown();
@@ -225,7 +257,7 @@ class CheckoutTotals extends Component<Props, State> {
     return (
       <View>
         <View style={[styles.row, { justifyContent: 'space-between' }]}>
-          <View style={styles.couponInputContainer(theme)}>
+          <View style={couponInputContainer(theme)}>
             <TextInput
               // style={{ width: '100%' }}
               editable={!this.props?.totals?.coupon_code}
@@ -259,7 +291,7 @@ class CheckoutTotals extends Component<Props, State> {
   render() {
     const theme = this.context;
     return (
-      <View style={styles.container(theme)}>
+      <View style={container(theme)}>
         {this.renderCoupon()}
         {this.renderTotals()}
         {this.renderButton()}
@@ -268,11 +300,24 @@ class CheckoutTotals extends Component<Props, State> {
   }
 }
 
+const container = (theme: ThemeType): ViewStyle => ({
+  margin: theme.spacing.large,
+  alignItems: 'flex-start',
+});
+const buttonStyle = (theme: ThemeType): ViewStyle => ({
+  marginVertical: theme.spacing.large,
+  alignSelf: 'center',
+  width: theme.dimens.WINDOW_WIDTH * 0.9,
+});
+const couponInputContainer = (theme: ThemeType) => ({
+  borderWidth: 1,
+  borderColor: theme.colors.border,
+  marginBottom: 20,
+  padding: 10,
+  width: Dimensions.get('window').width - 100 - 30 - 50,
+});
+
 const styles = StyleSheet.create({
-  container: theme => ({
-    margin: theme.spacing.large,
-    alignItems: 'flex-start',
-  }),
   radioWrap: {
     alignItems: 'flex-start',
     alignSelf: 'flex-start',
@@ -288,55 +333,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     alignSelf: 'flex-end',
   },
-  buttonStyle: theme => ({
-    marginVertical: theme.spacing.large,
-    alignSelf: 'center',
-    width: theme.dimens.WINDOW_WIDTH * 0.9,
-  }),
-  couponInputContainer: theme => ({
-    borderWidth: 1,
-    borderColor: theme.colors.border,
-    marginBottom: 20,
-    padding: 10,
-    width: Dimensions.get('window').width - 100 - 30 - 50,
-  }),
 });
 
-const mapStateToProps = ({ cart, checkout, magento }: StoreStateType) => {
-  const { cartId, couponLoading, couponError } = cart;
-  const { loading } = checkout.ui;
-  const { payments, selectedPayment, totals, orderId, errorMessage } = checkout;
-  const {
-    base_currency_symbol: baseCurrencySymbol,
-    displayCurrencyCode: currencyCode,
-    displayCurrencySymbol: currencySymbol,
-    displayCurrencyExchangeRate: currencyRate,
-  } = magento.currency;
-  return {
-    cartId,
-    payments,
-    selectedPayment,
-    totals,
-    loading,
-    orderId,
-    errorMessage,
-    baseCurrencySymbol,
-    currencyCode,
-    currencySymbol,
-    currencyRate,
-    couponError,
-    couponLoading,
-  };
-};
-
-export default connect(mapStateToProps, {
-  checkoutSelectedPaymentChanged,
-  checkoutCustomerNextLoading,
-  checkoutSetActiveSection,
-  checkoutOrderPopupShown,
-  placeGuestCartOrder,
-  getCart,
-  resetCart,
-  addCouponToCart,
-  removeCouponFromCart,
-})(CheckoutTotals);
+export default connector(CheckoutTotals);

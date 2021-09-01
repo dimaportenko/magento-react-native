@@ -1,28 +1,23 @@
 import React, { FC, useContext } from 'react';
-import { View, TouchableOpacity } from 'react-native';
-import { connect } from 'react-redux';
+import { View, TouchableOpacity, StyleSheet, ViewStyle } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { Text } from '../common';
 import { checkoutSetActiveSection } from '../../actions';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from '../../theme/theme';
 
 const CheckoutSection: FC<{
-  number: number;
+  number: string;
   expanded: boolean;
   title: string;
-  checkoutSetActiveSection: (index: number) => void;
-}> = ({
-  number,
-  expanded,
-  children,
-  title,
-  checkoutSetActiveSection: _checkoutSetActiveSection,
-}) => {
+}> = ({ number, expanded, children, title }) => {
   const theme = useContext(ThemeContext);
+  const dispatch = useDispatch();
 
   const onPress = () => {
     console.log('Checkout section press');
     console.log(number);
-    _checkoutSetActiveSection(number);
+    dispatch(checkoutSetActiveSection(number));
   };
 
   const renderExpanded = () => {
@@ -35,7 +30,7 @@ const CheckoutSection: FC<{
   const container = expanded ? styles.containerStyles : {};
   return (
     <View style={container}>
-      <TouchableOpacity style={styles.headerStyles(theme)} onPress={onPress}>
+      <TouchableOpacity style={headerStyles(theme)} onPress={onPress}>
         <Text style={styles.leftText}>{title}</Text>
         <View style={styles.textBackground}>
           <Text style={styles.textStyle}>{number}</Text>
@@ -46,23 +41,24 @@ const CheckoutSection: FC<{
   );
 };
 
-const styles = {
+const headerStyles = (theme: ThemeType): ViewStyle => ({
+  opacity: 1,
+  borderBottomWidth: 1,
+  height: theme.dimens.checkouSectionHeaderHeight,
+  borderColor: theme.colors.border,
+  position: 'relative',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  paddingLeft: theme.spacing.small,
+  marginBottom: theme.spacing.tiny,
+  backgroundColor: theme.colors.white,
+});
+
+const styles = StyleSheet.create({
   containerStyles: {
     flex: 1,
   },
-  headerStyles: theme => ({
-    opacity: 1,
-    borderBottomWidth: 1,
-    height: theme.dimens.checkouSectionHeaderHeight,
-    borderColor: theme.colors.border,
-    position: 'relative',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingLeft: theme.spacing.small,
-    marginBottom: theme.spacing.tiny,
-    backgroundColor: theme.colors.white,
-  }),
   textBackground: {
     backgroundColor: '#999',
     height: 40,
@@ -84,6 +80,6 @@ const styles = {
   expandedStyle: {
     flex: 1,
   },
-};
+});
 
-export default connect(null, { checkoutSetActiveSection })(CheckoutSection);
+export default CheckoutSection;

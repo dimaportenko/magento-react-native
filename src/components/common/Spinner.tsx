@@ -1,9 +1,11 @@
-import React, { useContext } from 'react';
-import { View, ViewPropTypes, ActivityIndicator } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { FC, useContext } from 'react';
+import { View, ActivityIndicator, ViewStyle, StyleSheet } from 'react-native';
 import { ThemeContext } from '../../theme';
 
-const Spinner = ({ size, style }) => {
+const Spinner: FC<{
+  size?: number | 'small' | 'large' | undefined;
+  style?: ViewStyle;
+}> = ({ size, style }) => {
   const theme = useContext(ThemeContext);
   return (
     <View style={[styles.spinnerStyle, style]}>
@@ -12,22 +14,12 @@ const Spinner = ({ size, style }) => {
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   spinnerStyle: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-};
-
-Spinner.propTypes = {
-  size: PropTypes.oneOf(['large', 'small']),
-  style: ViewPropTypes.style,
-};
-
-Spinner.defaultProps = {
-  size: 'large',
-  style: {},
-};
+});
 
 export { Spinner };

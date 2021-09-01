@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import { View, StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import {
   getCountries,
   addGuestCartBillingAddress,
@@ -12,30 +12,38 @@ import { Input, Spinner, ModalSelect, Button, Text } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { StoreStateType } from '../../reducers';
-import { CountryType, CustomerType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
-type Props = {
-  getCountries: typeof getCountries;
-  addGuestCartBillingAddress: typeof addGuestCartBillingAddress;
-  createCustomer: typeof createCustomer;
-  updateCheckoutUI: typeof updateCheckoutUI;
-  checkoutCustomerNextLoading: typeof checkoutCustomerNextLoading;
-  email: string;
-  password: string;
-  postcode: string;
-  country: string;
-  countryId: string;
-  firstname: string;
-  lastname: string;
-  telephone: string;
-  street: string;
-  city: string;
-  region: string;
-  cartId: number | string | undefined;
-  countries: CountryType[] | null;
-  customer: CustomerType;
-  errorMessage: string;
+const mapStateToProps = ({
+  checkout,
+  cart,
+  account,
+  magento,
+}: StoreStateType) => {
+  const { countries } = magento;
+  const { cartId } = cart;
+  const { customer } = account;
+
+  return {
+    ...checkout.ui,
+    cartId,
+    countries,
+    customer,
+    errorMessage: checkout.errorMessage,
+  };
 };
+
+const connector = connect(mapStateToProps, {
+  getCountries,
+  updateCheckoutUI,
+  addGuestCartBillingAddress,
+  checkoutCreateCustomer: createCustomer,
+  checkoutCustomerNextLoading,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {};
 
 type State = {};
 
@@ -84,7 +92,6 @@ class CheckoutCustomerAccount extends Component<Props, State> {
   onNextPressed = () => {
     const {
       email,
-      password,
       postcode,
       countryId,
       firstname,
@@ -95,29 +102,6 @@ class CheckoutCustomerAccount extends Component<Props, State> {
       region,
       cartId,
     } = this.props;
-
-    const customer = {
-      customer: {
-        email,
-        firstname,
-        lastname,
-        addresses: [
-          {
-            defaultShipping: true,
-            defaultBilling: true,
-            firstname,
-            lastname,
-            region,
-            postcode,
-            street: [street],
-            city,
-            telephone,
-            countryId,
-          },
-        ],
-      },
-      password,
-    };
 
     const regionValue =
       typeof region === 'object'
@@ -172,25 +156,25 @@ class CheckoutCustomerAccount extends Component<Props, State> {
     this.props.addGuestCartBillingAddress(cartId, address);
   };
 
-  updateUI = (key, value) => {
+  updateUI = (key: string, value: unknown) => {
     this.props.updateCheckoutUI(key, value);
   };
 
-  countrySelect(attributeId, optionValue?) {
+  countrySelect(attributeId: string, optionValue?: unknown) {
     this.props.updateCheckoutUI('countryId', optionValue);
   }
 
-  regionSelect(attributeId, selectedRegion?) {
+  regionSelect(attributeId: string, selectedRegion: string) {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
-      const country = countries.find(item => item.id === countryId);
-      const regionData = country.available_regions.find(
+      const country = countries?.find(item => item.id === countryId);
+      const regionData = country?.available_regions.find(
         item => item.id === selectedRegion,
       );
       const region = {
-        regionCode: regionData.code,
-        region: regionData.name,
-        regionId: regionData.id,
+        regionCode: regionData?.code,
+        region: regionData?.name,
+        regionId: regionData?.id,
       };
       this.updateUI('region', region);
     }
@@ -202,7 +186,7 @@ class CheckoutCustomerAccount extends Component<Props, State> {
       return <Spinner size="large" />;
     }
     return (
-      <View style={styles.nextButtonStyle}>
+      <View style={sh.nextButtonStyle}>
         <Button onPress={this.onNextPressed} style={styles.buttonStyle(theme)}>
           {translate('common.next')}
         </Button>
@@ -220,9 +204,10 @@ class CheckoutCustomerAccount extends Component<Props, State> {
           key: value.id,
         }));
 
-        const label = region?.region
-          ? region?.region
-          : translate('common.region');
+        const label =
+          typeof region === 'object' && region?.region
+            ? region.region
+            : translate('common.region');
 
         return (
           <ModalSelect
@@ -231,7 +216,6 @@ class CheckoutCustomerAccount extends Component<Props, State> {
             key="regions"
             label={label}
             attribute={translate('common.region')}
-            value={translate('common.region')}
             data={data}
             onChange={this.regionSelect.bind(this)}
           />
@@ -284,7 +268,6 @@ class CheckoutCustomerAccount extends Component<Props, State> {
         key="countries"
         label={label}
         attribute={translate('common.country')}
-        value={translate('common.country')}
         data={data}
         onChange={this.countrySelect.bind(this)}
       />
@@ -379,48 +362,26 @@ class CheckoutCustomerAccount extends Component<Props, State> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: theme => ({
-    padding: theme.spacing.large,
-  }),
-  errorTextStyle: theme => ({
-    color: theme.colors.error,
-    alignSelf: 'center',
-  }),
+const sh = StyleSheet.create({
   nextButtonStyle: {
     flex: 1,
     alignItems: 'center',
   },
-  buttonStyle: theme => ({
+});
+
+const styles = {
+  container: (theme: ThemeType) => ({
+    padding: theme.spacing.large,
+  }),
+  errorTextStyle: (theme: ThemeType): TextStyle => ({
+    color: theme.colors.error,
+    alignSelf: 'center',
+  }),
+  buttonStyle: (theme: ThemeType): ViewStyle => ({
     marginVertical: theme.spacing.large,
     alignSelf: 'center',
     width: theme.dimens.WINDOW_WIDTH * 0.9,
   }),
-});
-
-const mapStateToProps = ({
-  checkout,
-  cart,
-  account,
-  magento,
-}: StoreStateType) => {
-  const { countries } = magento;
-  const { cartId } = cart;
-  const { customer } = account;
-
-  return {
-    ...checkout.ui,
-    cartId,
-    countries,
-    customer,
-    errorMessage: checkout.errorMessage,
-  };
 };
 
-export default connect(mapStateToProps, {
-  getCountries,
-  updateCheckoutUI,
-  addGuestCartBillingAddress,
-  checkoutCreateCustomer: createCustomer,
-  checkoutCustomerNextLoading,
-})(CheckoutCustomerAccount);
+export default connector(CheckoutCustomerAccount);

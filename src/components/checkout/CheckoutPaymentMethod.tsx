@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { connect } from 'react-redux';
+import { View, Text, StyleSheet, ViewStyle } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import RadioForm from 'react-native-simple-radio-button';
 import { Spinner, Button } from '../common';
 import {
@@ -13,17 +13,30 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { StoreStateType } from '../../reducers';
 import { PaymentItemType } from '../../reducers/CheckoutReducer';
+import { ThemeType } from '../../theme/theme';
 
-type Props = {
-  checkoutSelectedPaymentChanged: typeof checkoutSelectedPaymentChanged;
-  checkoutSetActiveSection: typeof checkoutSetActiveSection;
-  getGuestCartPaymentMethods: typeof getGuestCartPaymentMethods;
-  checkoutCustomerNextLoading: typeof checkoutCustomerNextLoading;
-  cartId: number | string | undefined;
-  payments?: PaymentItemType[];
-  selectedPayment: PaymentItemType;
-  loading: boolean;
+const mapStateToProps = ({ cart, checkout }: StoreStateType) => {
+  const { cartId } = cart;
+  const { payments, selectedPayment } = checkout;
+  const { loading } = checkout.ui;
+  return {
+    cartId,
+    payments,
+    selectedPayment,
+    loading,
+  };
 };
+
+const connector = connect(mapStateToProps, {
+  checkoutSelectedPaymentChanged,
+  checkoutSetActiveSection,
+  getGuestCartPaymentMethods,
+  checkoutCustomerNextLoading,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {};
 type State = {};
 
 class CheckoutPaymentMethod extends Component<Props, State> {
@@ -31,17 +44,17 @@ class CheckoutPaymentMethod extends Component<Props, State> {
 
   componentDidMount() {
     const { payments, selectedPayment } = this.props;
-    if (!selectedPayment && payments.length) {
+    if (!selectedPayment && payments?.length) {
       this.props.checkoutSelectedPaymentChanged(payments[0]);
     }
   }
 
-  onPaymentSelect(payment) {
+  onPaymentSelect(payment: PaymentItemType) {
     this.props.checkoutSelectedPaymentChanged(payment);
   }
 
   onNextPressed = () => {
-    const { cartId, selectedPayment } = this.props;
+    const { cartId } = this.props;
     this.props.checkoutCustomerNextLoading(true);
     this.props.getGuestCartPaymentMethods(cartId);
   };
@@ -56,20 +69,19 @@ class CheckoutPaymentMethod extends Component<Props, State> {
 
     const radioProps = payments.map(item => ({
       label: item.title,
-      value: item,
+      value: item.code,
     }));
 
     return (
       <RadioForm
         buttonColor={theme.colors.secondary}
         labelColor={theme.colors.bodyText}
-        selectedLabelColor={theme.colors.titleText}
-        style={styles.radioWrap}
         radio_props={radioProps}
         initial={0}
         animation={false}
-        onPress={value => {
-          this.onPaymentSelect(value);
+        onPress={(value: string) => {
+          const item = payments.find(item => item.code === value);
+          this.onPaymentSelect(item!);
         }}
       />
     );
@@ -77,20 +89,20 @@ class CheckoutPaymentMethod extends Component<Props, State> {
 
   renderButton() {
     const theme = this.context;
-    const { payments, checkout } = this.props;
-    if (!payments.length) {
+    const { payments } = this.props;
+    if (!payments?.length) {
       return <View />;
     }
 
     if (this.props.loading) {
       return (
-        <View style={styles.nextButtonStyle}>
+        <View style={sh.nextButtonStyle}>
           <Spinner size="large" />
         </View>
       );
     }
     return (
-      <View style={styles.nextButtonStyle}>
+      <View style={sh.nextButtonStyle}>
         <Button onPress={this.onNextPressed} style={styles.buttonStyle(theme)}>
           {translate('common.next')}
         </Button>
@@ -109,11 +121,7 @@ class CheckoutPaymentMethod extends Component<Props, State> {
   }
 }
 
-const styles = {
-  container: theme => ({
-    margin: theme.spacing.large,
-    alignItems: 'flex-start',
-  }),
+const sh = StyleSheet.create({
   radioWrap: {
     alignItems: 'flex-start',
     alignSelf: 'flex-start',
@@ -122,28 +130,18 @@ const styles = {
     flex: 1,
     alignSelf: 'center',
   },
-  buttonStyle: theme => ({
+});
+
+const styles = {
+  container: (theme: ThemeType): ViewStyle => ({
+    margin: theme.spacing.large,
+    alignItems: 'flex-start',
+  }),
+  buttonStyle: (theme: ThemeType): ViewStyle => ({
     marginVertical: theme.spacing.large,
     alignSelf: 'center',
     width: theme.dimens.WINDOW_WIDTH * 0.9,
   }),
 };
 
-const mapStateToProps = ({ cart, checkout }: StoreStateType) => {
-  const { cartId } = cart;
-  const { payments, selectedPayment } = checkout;
-  const { loading } = checkout.ui;
-  return {
-    cartId,
-    payments,
-    selectedPayment,
-    loading,
-  };
-};
-
-export default connect(mapStateToProps, {
-  checkoutSelectedPaymentChanged,
-  checkoutSetActiveSection,
-  getGuestCartPaymentMethods,
-  checkoutCustomerNextLoading,
-})(CheckoutPaymentMethod);
+export default connector(CheckoutPaymentMethod);
