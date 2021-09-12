@@ -143,9 +143,7 @@ export type OrderType = {
   // extension_attributes: Object
 };
 
-export type ProductCustomAttribute = {
-
-}
+export type ProductCustomAttribute = {};
 
 export type ProductType = {
   // attribute_set_id: 9
@@ -265,3 +263,41 @@ export type ShippingItemType = {
   method_code: string;
   method_title: string;
 };
+
+export type ProductReviewItemRatingVotes = {
+  customer_id?: number;
+  entity_pk_value: string;
+  option_id: string;
+  percent: string;
+  rating_code: string;
+  rating_id: string;
+  remote_ip: string;
+  remote_ip_long: string;
+  review_id: string;
+  store_id: string;
+  value: string;
+  vote_id: string;
+};
+
+export type ProductReviewItemType = {
+  customer_id?: number;
+  created_at: Date;
+  detail: string;
+  detail_id: string;
+  entity_code: string;
+  entity_id: string;
+  entity_pk_value: string;
+  nickname: string;
+  review_id: string;
+  status_id: string;
+  title: string;
+  rating_votes: ProductReviewItemRatingVotes[];
+};
+
+export type ProductReviewType = {
+  avg_rating_percent: '67';
+  count: 3;
+  reviews: ProductReviewItemType[];
+};
+
+export type ProductReviewResponse = ProductReviewType[];

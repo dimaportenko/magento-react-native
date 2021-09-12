@@ -1,14 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { FC } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { Text } from '../../common';
-import { AirbnbRating, Rating } from 'react-native-ratings';
+import { AirbnbRating } from 'react-native-ratings';
 import moment from 'moment';
 import Typography from '../../../theme/typography';
 import { Spacer } from '../../common/Spacer';
+import {
+  ProductReviewItemRatingVotes,
+  ProductReviewItemType,
+} from '../../../magento/types';
 
-const CustomerReviews = ({ reviews }) => {
-  const renderRatings = ratings =>
+const CustomerReviews: FC<{
+  reviews: ProductReviewItemType[];
+}> = ({ reviews }) => {
+  const renderRatings = (ratings: ProductReviewItemRatingVotes[]) =>
     ratings.map(rating => (
       <View style={[styles.row, styles.ratingsWrap]}>
         <Text style={styles.ratingTitle}>{rating.rating_code}</Text>
@@ -17,7 +22,7 @@ const CustomerReviews = ({ reviews }) => {
           size={20}
           isDisabled
           // onFinishRating={val => setValue(val)}
-          defaultRating={rating.value}
+          defaultRating={Number.parseInt(rating.value)}
         />
       </View>
     ));
@@ -53,11 +58,11 @@ const CustomerReviews = ({ reviews }) => {
 const styles = StyleSheet.create({
   container: {},
   title: {
-    ...Typography.headingText,
+    ...(Typography.headingText as object),
     marginBottom: 10,
   },
   ratingTitle: {
-    ...Typography.captionText,
+    ...(Typography.captionText as object),
     width: 50,
   },
   row: {
@@ -68,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   detail: {
-    ...Typography.bodyText,
+    ...(Typography.bodyText as object),
     fontSize: 14,
   },
   reviewByWrap: {
@@ -82,27 +87,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
-
-CustomerReviews.propTypes = {
-  reviews: PropTypes.arrayOf(
-    PropTypes.shape({
-      title: PropTypes.string,
-      detail: PropTypes.string,
-      nickname: PropTypes.string,
-      created_at: PropTypes.string,
-      review_id: PropTypes.string || PropTypes.number,
-      rating_votes: PropTypes.arrayOf(
-        PropTypes.shape({
-          rating_code: PropTypes.string,
-          value: PropTypes.string || PropTypes.number,
-        }),
-      ),
-    }),
-  ),
-};
-
-CustomerReviews.defaultProps = {
-  reviews: [],
-};
 
 export default CustomerReviews;

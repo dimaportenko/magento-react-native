@@ -15,7 +15,7 @@ type Props = {
   label?: string;
   value: string;
   onChangeText?: (text: string) => void;
-  placeholder: string;
+  placeholder?: string;
   secureTextEntry?: boolean;
   containerStyle?: ViewStyle;
   labelStyle?: ViewStyle;

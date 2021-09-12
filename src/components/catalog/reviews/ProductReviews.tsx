@@ -6,16 +6,21 @@ import React, { useEffect, useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 import Sizes from '../../../theme/dimens';
-import { Row, Spacer } from 'react-native-markup-kit';
 import { useProductReviews } from '../../../hooks/useProductReviews';
 import CustomerReviews from './CustomerReviews';
 import { Spinner, Text } from '../../common';
 import Typography from '../../../theme/typography';
+import { Spacer, Row } from '../../common';
+import { ProductType } from '../../../magento/types';
 
-export const ProductReviews = ({ product }) => {
+type Props = {
+  product: ProductType;
+};
+
+export const ProductReviews = ({ product }: Props) => {
   const [expanded, setExpanded] = useState(false);
   const [iconName, setIconName] = useState('angle-down');
-  const { reviews, loading, error } = useProductReviews({ product });
+  const { reviews, loading } = useProductReviews({ product });
 
   useEffect(() => {
     setIconName(expanded ? 'angle-up' : 'angle-down');
@@ -34,7 +39,7 @@ export const ProductReviews = ({ product }) => {
   }
 
   return (
-    <View style={styles.customerReviewsWrap}>
+    <View style={[Typography.headingText, styles.customerReviewsWrap]}>
       <TouchableOpacity
         style={styles.expandHeaderRow}
         onPress={() => {
@@ -58,20 +63,15 @@ export const ProductReviews = ({ product }) => {
 
 const styles = StyleSheet.create({
   customerReviewsWrap: {
-    // marginLeft: Sizes.WINDOW_WIDTH * 0.05,
     marginTop: Sizes.WINDOW_WIDTH * 0.05,
     margin: 10,
   },
   expandHeaderRow: {
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#eae9e9',
     width: Sizes.WINDOW_WIDTH * 0.9,
   },
   expandHeaderWrap: {
     justifyContent: 'space-between',
     width: Sizes.WINDOW_WIDTH * 0.9,
   },
-  customerReviewsTitle: {
-    ...Typography.headingText,
-  },
+  customerReviewsTitle: {},
 });

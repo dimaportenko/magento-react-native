@@ -91,8 +91,8 @@ export class Magento {
     DataType extends Record<string, unknown>,
   >(
     path: string,
-    params: Params | null,
-    data: DataType | null,
+    params: Params | null | undefined,
+    data: DataType | null | undefined,
     type: ACLType = ADMIN_TYPE,
   ) {
     return this.send(path, 'GET', params, data, type);
@@ -112,8 +112,8 @@ export class Magento {
   >(
     url: string,
     method: MethodType,
-    params: Params | null,
-    data: DataType | null,
+    params: Params | null | undefined,
+    data: DataType | null | undefined,
     type: ACLType,
   ) {
     let uri = `${this.base_url}${this.root_path}${url}`;
@@ -152,6 +152,7 @@ export class Magento {
         data,
         ...params,
       });
+      console.log('fetch', uri);
       fetch(uri, { method, headers, body: JSON.stringify(data) })
         .then(response => {
           console.log(response);
@@ -209,7 +210,7 @@ export class Magento {
     return false;
   }
 
-  setAccessToken(token) {
+  setAccessToken(token: string) {
     this.access_token = token;
   }
 

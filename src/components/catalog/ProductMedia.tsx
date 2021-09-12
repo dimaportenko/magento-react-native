@@ -6,6 +6,7 @@ import { magento } from '../../magento';
 import { Spinner } from '../common';
 import { ThemeContext } from '../../theme';
 import { MediaItem } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
 const ProductMedia: FC<{
   media: MediaItem[] | null;
@@ -46,10 +47,10 @@ const ProductMedia: FC<{
 };
 
 const styles = {
-  imageContainer: theme => ({
+  imageContainer: (theme: ThemeType) => ({
     height: theme.dimens.productDetailImageHeight,
   }),
-  imageStyle: theme => ({
+  imageStyle: (theme: ThemeType) => ({
     height: theme.dimens.productDetailImageHeight - 10,
     top: 0,
   }),

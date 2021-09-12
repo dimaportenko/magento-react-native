@@ -11,3 +11,5 @@ export * from './ProductListHeaderIcon';
 export * from './ProductListItem';
 export * from './Price';
 export * from './IconBadge';
+export * from './Row';
+export * from './Spacer';

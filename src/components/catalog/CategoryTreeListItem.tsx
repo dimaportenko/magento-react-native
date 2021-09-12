@@ -1,6 +1,6 @@
 import React, { FC, useContext, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { View, TouchableOpacity, LayoutAnimation } from 'react-native';
+import { View, TouchableOpacity, LayoutAnimation, TextStyle, ViewStyle } from 'react-native';
 import { Icon } from 'react-native-elements';
 import CategoryTreeList from './CategoryTreeList';
 import { Text } from '../common';
@@ -9,6 +9,7 @@ import { NAVIGATION_CATEGORY_PATH } from '../../navigation/routes';
 import NavigationService from '../../navigation/NavigationService';
 import { ThemeContext } from '../../theme';
 import { CategoryType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
 const CategoryTreeListItem: FC<{
   category: CategoryType;
@@ -58,7 +59,7 @@ const CategoryTreeListItem: FC<{
 
   const renderItem = () => {
     const { category } = props;
-    const titleStyle = {
+    const titleStyle: TextStyle = {
       alignSelf: 'flex-start',
       paddingLeft: 10 * category.level,
     };
@@ -94,7 +95,7 @@ const CategoryTreeListItem: FC<{
 };
 
 const styles = {
-  rowStyles: theme => ({
+  rowStyles: (theme: ThemeType): ViewStyle => ({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -103,7 +104,7 @@ const styles = {
     paddingVertical: theme.spacing.small,
     backgroundColor: theme.colors.surface,
   }),
-  dropIcon: theme => ({
+  dropIcon: (theme: ThemeType) => ({
     height: 24,
     padding: 2,
     paddingRight: theme.spacing.large,

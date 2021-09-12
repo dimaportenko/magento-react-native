@@ -25,7 +25,16 @@ export type ProductOptionType = {
   product_id: number;
   values: {
     value_index: number;
-  };
+  }[];
+};
+export type ProductCustomOptionType = {
+  option_id: number;
+  title: string;
+  values: {
+    title: string;
+    value_index: number;
+    option_type_id: number;
+  }[];
 };
 export type ProductAttributeOptionType = {
   label: string;
@@ -47,7 +56,7 @@ export type ProductCurrentReducerType = {
   selectedCustomOptions: Record<number, number>;
   medias: Record<string, MediaItem[]>;
   options: ProductOptionType[];
-  customOptions: any[];
+  customOptions: ProductCustomOptionType[];
 };
 
 export type ProductReducerType = {

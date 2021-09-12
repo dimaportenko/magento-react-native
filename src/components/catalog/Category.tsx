@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, FC } from 'react';
-import { connect, useSelector } from 'react-redux';
+import { connect, ConnectedProps, useSelector } from 'react-redux';
 import { View, RefreshControl } from 'react-native';
 import {
   addFilterData,
@@ -12,26 +12,50 @@ import NavigationService from '../../navigation/NavigationService';
 import { NAVIGATION_HOME_PRODUCT_PATH } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 import { StoreStateType } from '../../reducers';
-import { CategoryType, ProductType } from '../../magento/types';
-import { PriceFilterType } from '../../reducers/FilterReducer';
+import { ProductType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
-const Category: FC<{
-  canLoadMoreContent: boolean;
-  addFilterData: typeof addFilterData;
-  getProductsForCategoryOrChild: typeof getProductsForCategoryOrChild;
-  setCurrentProduct: typeof setCurrentProduct;
-  updateProductsForCategoryOrChild: typeof updateProductsForCategoryOrChild;
-  category: CategoryType | undefined;
-  loadingMore: boolean;
-  products: ProductType[] | undefined;
-  totalCount: number;
-  sortOrder: number | undefined;
-  priceFilter: PriceFilterType;
-  refreshing: boolean;
+const mapStateToProps = (state: StoreStateType) => {
+  const category = state.category.current?.category;
+  const { products, totalCount, loadingMore, refreshing } = state.category;
+  const {
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = state.magento;
+  const { priceFilter, sortOrder } = state.filters;
+  const productsLength = products?.length ? products.length : 0;
+  const canLoadMoreContent = productsLength < totalCount;
+
+  return {
+    category,
+    products,
+    totalCount,
+    canLoadMoreContent,
+    loadingMore,
+    refreshing,
+    priceFilter,
+    sortOrder,
+    currencySymbol,
+    currencyRate,
+  };
+};
+
+const connector = connect(mapStateToProps, {
+  getProductsForCategoryOrChild,
+  updateProductsForCategoryOrChild,
+  setCurrentProduct,
+  addFilterData,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   navigation: any;
-  currencySymbol: string;
-  currencyRate: number;
-}> = ({
+};
+
+const Category: FC<Props> = ({
   canLoadMoreContent,
   loadingMore,
   products,
@@ -52,7 +76,7 @@ const Category: FC<{
   const listTypeGrid = useSelector(({ ui }: StoreStateType) => ui.listTypeGrid);
 
   useEffect(() => {
-    _addFilterData({ categoryScreen: true });
+    _addFilterData(true);
     if (category) {
       _getProductsForCategoryOrChild(category);
     }
@@ -101,14 +125,13 @@ const Category: FC<{
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        products={products}
+        products={products ?? []}
         onEndReached={onEndReached}
         canLoadMoreContent={canLoadMoreContent}
         onRowPress={onRowPress}
         navigation={navigation}
         gridColumnsValue={listTypeGrid}
         performSort={performSort}
-        sortOrder={sortOrder}
         currencySymbol={currencySymbol}
         currencyRate={currencyRate}
       />
@@ -116,6 +139,7 @@ const Category: FC<{
   );
 };
 
+// @ts-ignore
 Category.navigationOptions = ({ navigation }: { navigation: any }) => ({
   title: navigation.state.params.title.toUpperCase(),
   headerBackTitle: ' ',
@@ -123,42 +147,10 @@ Category.navigationOptions = ({ navigation }: { navigation: any }) => ({
 });
 
 const styles = {
-  containerStyle: theme => ({
+  containerStyle: (theme: ThemeType) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   }),
 };
 
-const mapStateToProps = (state: StoreStateType) => {
-  const category = state.category.current?.category;
-  const { products, totalCount, loadingMore, refreshing } = state.category;
-  const {
-    currency: {
-      displayCurrencySymbol: currencySymbol,
-      displayCurrencyExchangeRate: currencyRate,
-    },
-  } = state.magento;
-  const { priceFilter, sortOrder } = state.filters;
-  const productsLength = products?.length ? products.length : 0;
-  const canLoadMoreContent = productsLength < totalCount;
-
-  return {
-    category,
-    products,
-    totalCount,
-    canLoadMoreContent,
-    loadingMore,
-    refreshing,
-    priceFilter,
-    sortOrder,
-    currencySymbol,
-    currencyRate,
-  };
-};
-
-export default connect(mapStateToProps, {
-  getProductsForCategoryOrChild,
-  updateProductsForCategoryOrChild,
-  setCurrentProduct,
-  addFilterData,
-})(Category);
+export default connector(Category);

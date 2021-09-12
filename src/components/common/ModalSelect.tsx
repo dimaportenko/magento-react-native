@@ -12,7 +12,7 @@ const ModalSelect: FC<{
   attribute: string;
   onChange: (attribute: string, optionKey: string) => void;
   disabled: boolean;
-  withLabel: boolean;
+  withLabel?: boolean;
   style?: ViewStyle;
 }> = ({
   data,

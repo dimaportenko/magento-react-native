@@ -237,6 +237,7 @@ export const getProductsForCategory =
 type FilterDataType =
   | FilterReducerType['priceFilter']
   | FilterReducerType['sortOrder']
+  | FilterReducerType['categoryScreen']
   | undefined;
 
 export const addFilterData = (

@@ -2,7 +2,7 @@
  * Created by Dima Portenko on 14.05.2020
  */
 import React, { FC, useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import FeaturedProducts from '../home/FeaturedProducts';
 import { translate } from '../../i18n';
 import { ThemeContext } from '../../theme';
@@ -31,7 +31,7 @@ export const RelatedProducts: FC<{
     return <Spinner />;
   }
 
-  const onProductPress = pressedProduct => {
+  const onProductPress = (pressedProduct: ProductType) => {
     dispatch(setCurrentProduct({ product: pressedProduct }));
     navigation.push(NAVIGATION_HOME_PRODUCT_PATH, {
       title: pressedProduct.name,
@@ -44,17 +44,9 @@ export const RelatedProducts: FC<{
       style={{ marginBottom: theme.spacing.large }}
       products={{ items: relatedProducts }}
       title={translate('product.relatedProductsTitle')}
-      titleStyle={styles.relatedProductTitle}
       onPress={onProductPress}
       currencySymbol={currencySymbol}
       currencyRate={currencyRate}
     />
   );
 };
-
-const styles = StyleSheet.create({
-  relatedProductTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});

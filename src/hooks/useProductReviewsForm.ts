@@ -8,12 +8,13 @@ import { magento } from '../magento';
 import * as types from '../actions/types';
 import { Alert } from 'react-native';
 import { logError } from '../helper/logger';
+import { StoreStateType } from "../reducers";
 
 type Props = {};
 
 type Result = {
-  reviews: {},
-  loading: boolean,
+  reviews: {};
+  loading: boolean;
 };
 
 export const useProductReviewsForm = (props: Props): Result => {
@@ -21,10 +22,10 @@ export const useProductReviewsForm = (props: Props): Result => {
   const [postReviewLoading, setPostReviewLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  const ratingOptions = useSelector(({ product }) => product.ratingOptions);
+  const ratingOptions = useSelector(({ product }: StoreStateType) => product.ratingOptions);
   const dispatch = useDispatch();
 
-  const getAvailableRatings = async () => {
+  const getAvailableRatings = React.useCallback(async () => {
     try {
       setLoading(true);
       const optionsResult = await magento.admin.getRatingOptions();
@@ -37,7 +38,7 @@ export const useProductReviewsForm = (props: Props): Result => {
       logError(error);
     }
     setLoading(false);
-  };
+  }, [dispatch]);
 
   const postReview = async review => {
     try {

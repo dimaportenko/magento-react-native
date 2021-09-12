@@ -2,7 +2,7 @@
  * @flow
  * Created by Dima Portenko on 25.05.2020
  */
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, FC } from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
 import { Row, Spacer } from 'react-native-markup-kit';
 import { Icon } from 'react-native-elements';
@@ -12,8 +12,11 @@ import { useProductReviewsForm } from '../../../hooks/useProductReviewsForm';
 import Sizes from '../../../theme/dimens';
 import Colors from '../../../theme/colors';
 import Typography from '../../../theme/typography';
+import { ProductType } from '../../../magento/types';
 
-export const ReviewFormContainer = ({ product }) => {
+export const ReviewFormContainer: FC<{
+  product: ProductType;
+}> = ({ product }) => {
   const [expanded, setExpanded] = useState(false);
   const [success, setSuccess] = useState(false);
   const [iconName, setIconName] = useState('angle-down');
@@ -118,7 +121,7 @@ const styles = StyleSheet.create({
     width: Sizes.WINDOW_WIDTH * 0.9,
   },
   customerReviewsTitle: {
-    ...Typography.headingText,
+    ...(Typography.headingText as object),
   },
   successContainer: {
     marginHorizontal: Sizes.WINDOW_WIDTH * 0.05,

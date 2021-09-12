@@ -1,8 +1,8 @@
 /**
  * Created by Dima Portenko on 14.05.2020
  */
-import React, { FC, useContext } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useContext } from 'react';
+import { View, ViewStyle } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { getProductCustomAttribute } from '../../helper/product';
 import { ModalSelect } from '../common';
@@ -10,13 +10,23 @@ import { ThemeContext } from '../../theme';
 import { getProductMedia, uiProductUpdate } from '../../actions';
 import _ from 'lodash';
 import { ProductType } from '../../magento/types';
-import { ProductCurrentReducerType } from '../../reducers/ProductReducer';
+import {
+  ProductCurrentReducerType,
+  ProductOptionType,
+} from '../../reducers/ProductReducer';
+import { ThemeType } from '../../theme/theme';
 
-export const ProductOptions: FC<{
+type Props = {
   currentProduct: ProductCurrentReducerType;
   product: ProductType;
   setSelectedProduct: (item: ProductType) => void;
-}> = ({ currentProduct, product, setSelectedProduct }) => {
+};
+
+export const ProductOptions = ({
+  currentProduct,
+  product,
+  setSelectedProduct,
+}: Props) => {
   const theme = useContext(ThemeContext);
   const dispatch = useDispatch();
   const { options, attributes, selectedOptions } = currentProduct;
@@ -25,7 +35,7 @@ export const ProductOptions: FC<{
     return <View />;
   }
 
-  const optionSelect = (attributeId, optionValue) => {
+  const optionSelect = (attributeId: string, optionValue: string) => {
     const { selectedOptions } = currentProduct;
     const updatedOptions = { ...selectedOptions, [attributeId]: optionValue };
     dispatch(uiProductUpdate(updatedOptions, product.id));
@@ -33,7 +43,7 @@ export const ProductOptions: FC<{
     updateSelectedProduct(updatedOptions);
   };
 
-  const updateSelectedProduct = selectedOptions => {
+  const updateSelectedProduct = (selectedOptions: Record<string, number>) => {
     const { attributes, options } = currentProduct;
     const selectedKeys = Object.keys(selectedOptions);
 
@@ -42,7 +52,7 @@ export const ProductOptions: FC<{
     }
 
     if (selectedKeys.length === options.length) {
-      const searchOption = {};
+      const searchOption: Record<string, number> = {};
       selectedKeys.forEach(attribute_id => {
         const code = attributes[attribute_id].attributeCode;
         searchOption[code] = selectedOptions[attribute_id];
@@ -68,87 +78,100 @@ export const ProductOptions: FC<{
     }
   };
 
-  const prevOptions = [];
+  const prevOptions: ProductOptionType[] = [];
   let first = true;
-  return options.map(option => {
-    if (!attributes[option.attribute_id]) {
-      return <View key={option.id} />;
-    }
-
-    let data = option.values.map(value => {
-      let optionLabel = value.value_index;
-
-      if (attributes && attributes[option.attribute_id]) {
-        const findedValue = attributes[option.attribute_id].options.find(
-          optionData => Number(optionData.value) === Number(value.value_index),
-        );
-        if (findedValue) {
-          optionLabel = findedValue.label;
+  return (
+    <>
+      {options.map(option => {
+        if (!attributes[option.attribute_id]) {
+          return <View key={option.id} />;
         }
-      }
 
-      if (first) {
-        return {
-          label: optionLabel,
-          key: value.value_index,
-        };
-      }
+        let data = option.values.map(value => {
+          let optionLabel = value.value_index.toString();
 
-      const match = product.children?.find(child => {
-        let found = 0;
-        prevOptions.every(prevOption => {
-          const { attributeCode } = attributes[prevOption.attribute_id];
-          const currentAttributeCode =
-            attributes[option.attribute_id].attributeCode;
-          const childOption = getProductCustomAttribute(child, attributeCode);
-          const currentOption = getProductCustomAttribute(
-            child,
-            currentAttributeCode,
-          );
-          const selectedValue = selectedOptions[prevOption.attribute_id];
-          if (
-            Number(childOption.value) === Number(selectedValue) &&
-            Number(currentOption.value) === Number(value.value_index)
-          ) {
-            found++;
-            return false;
+          if (attributes && attributes[option.attribute_id]) {
+            const findedValue = attributes[option.attribute_id].options.find(
+              optionData =>
+                Number(optionData.value) === Number(value.value_index),
+            );
+            if (findedValue) {
+              optionLabel = findedValue.label;
+            }
           }
-          return true;
+
+          if (first) {
+            return {
+              label: optionLabel,
+              key: value.value_index.toString(),
+            };
+          }
+
+          const match = product.children?.find(child => {
+            let found = 0;
+            prevOptions.every(prevOption => {
+              const { attributeCode } = attributes[prevOption.attribute_id];
+              const currentAttributeCode =
+                attributes[option.attribute_id].attributeCode;
+              const childOption = getProductCustomAttribute(
+                child,
+                attributeCode,
+              );
+              const currentOption = getProductCustomAttribute(
+                child,
+                currentAttributeCode,
+              );
+              const selectedValue =
+                selectedOptions[prevOption.attribute_id as number];
+              if (
+                Number(childOption.value) === Number(selectedValue) &&
+                Number(currentOption.value) === Number(value.value_index)
+              ) {
+                found++;
+                return false;
+              }
+              return true;
+            });
+            return found === prevOptions.length;
+          });
+
+          if (match) {
+            return {
+              label: optionLabel,
+              key: value.value_index,
+            };
+          }
+          return false;
         });
-        return found === prevOptions.length;
-      });
+        data = data.filter(object => object !== false);
+        first = false;
+        prevOptions.push(option);
 
-      if (match) {
-        return {
-          label: optionLabel,
-          key: value.value_index,
-        };
-      }
-      return false;
-    });
-    data = data.filter(object => object !== false);
-    first = false;
-    prevOptions.push(option);
-
-    return (
-      <ModalSelect
-        style={styles.modalStyle(theme)}
-        disabled={data.length === 0}
-        key={option.id}
-        label={option.label}
-        attribute={option.attribute_id}
-        value={option.id}
-        data={data}
-        onChange={optionSelect}
-      />
-    );
-  });
+        return (
+          <ModalSelect
+            style={styles.modalStyle(theme)}
+            disabled={data.length === 0}
+            key={option.id}
+            label={option.label}
+            attribute={option.attribute_id as string}
+            data={
+              data as {
+                key: string;
+                label: string;
+              }[]
+            }
+            onChange={optionSelect}
+          />
+        );
+      })}
+    </>
+  );
 };
 
-const styles = StyleSheet.create({
-  modalStyle: theme => ({
+const styles = {
+  modalStyle: (theme: ThemeType): ViewStyle => ({
     alignSelf: 'center',
     width: theme.dimens.WINDOW_WIDTH * 0.9,
     marginBottom: theme.spacing.large,
   }),
-});
+};

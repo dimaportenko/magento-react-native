@@ -2,17 +2,16 @@
  * Created by Dima Portenko on 14.05.2020
  */
 import React, { useContext, useState, useEffect, FC } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  TextStyle,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import HTML from 'react-native-render-html';
-import {
-  Button,
-  HeaderGridToggleIcon,
-  Input,
-  Price,
-  Spinner,
-  Text,
-} from '../common';
+import { Button, Input, Price, Spinner, Text } from '../common';
 import { translate } from '../../i18n';
 import { ThemeContext } from '../../theme';
 import {
@@ -32,6 +31,7 @@ import { ReviewFormContainer } from './reviews/ReviewFormContainer';
 import { magentoOptions } from '../../config/magento';
 import { StoreStateType } from '../../reducers';
 import { ProductType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
 export const ProductScreen: FC<{
   navigation: any;
@@ -74,7 +74,7 @@ export const ProductScreen: FC<{
     if (selectedProduct) {
       return (
         <Price
-          style={styles.priceContainer}
+          style={sh.priceContainer}
           basePrice={selectedProduct.price}
           currencySymbol={currencySymbol}
           currencyRate={currencyRate}
@@ -83,7 +83,7 @@ export const ProductScreen: FC<{
     }
     return (
       <Price
-        style={styles.priceContainer}
+        style={sh.priceContainer}
         basePrice={product.price}
         discountPrice={finalPrice(product.custom_attributes, product.price)}
         currencySymbol={currencySymbol}
@@ -133,14 +133,14 @@ export const ProductScreen: FC<{
       {renderAddToCartButton()}
       <Text style={styles.errorStyle(theme)}>{cart.errorMessage}</Text>
       {description !== '' ? (
-        <View style={styles.descriptionStyle}>
-          <Text bold type="subheading" style={styles.productDetailTitle}>
+        <View style={sh.descriptionStyle}>
+          <Text bold type="subheading" style={sh.productDetailTitle}>
             {translate('product.productDetailLabel')}
           </Text>
           <HTML html={description} />
         </View>
       ) : (
-        <Text style={styles.descriptionStyle}>
+        <Text style={sh.descriptionStyle}>
           {translate('product.noProductDetail')}
         </Text>
       )}
@@ -160,44 +160,48 @@ export const ProductScreen: FC<{
   );
 };
 
+// @ts-ignore
 ProductScreen.navigationOptions = ({ navigation }) => ({
   title: navigation.state.params.title.toUpperCase(),
 });
 
-const styles = StyleSheet.create({
-  container: theme => ({
-    flex: 1,
-    backgroundColor: theme.colors.background,
-  }),
-  textStyle: theme => ({
-    padding: theme.spacing.small,
-    textAlign: 'center',
-  }),
-  inputContainer: theme => ({
-    width: 40,
-    alignSelf: 'center',
-    marginBottom: theme.spacing.extraLarge,
-  }),
-  buttonStyle: theme => ({
-    alignSelf: 'center',
-    marginTop: 10,
-    width: theme.dimens.WINDOW_WIDTH * 0.9,
-  }),
+const sh = StyleSheet.create({
   descriptionStyle: {
     padding: 16,
   },
   productDetailTitle: {
     marginBottom: 4,
   },
-  errorStyle: theme => ({
-    textAlign: 'center',
-    padding: theme.spacing.small,
-    color: theme.colors.error,
-  }),
   priceContainer: {
     alignSelf: 'center',
   },
 });
+
+const styles = {
+  container: (theme: ThemeType) => ({
+    flex: 1,
+    backgroundColor: theme.colors.background,
+  }),
+  textStyle: (theme: ThemeType): TextStyle => ({
+    padding: theme.spacing.small,
+    textAlign: 'center',
+  }),
+  inputContainer: (theme: ThemeType): ViewStyle => ({
+    width: 40,
+    alignSelf: 'center',
+    marginBottom: theme.spacing.extraLarge,
+  }),
+  buttonStyle: (theme: ThemeType): ViewStyle => ({
+    alignSelf: 'center',
+    marginTop: 10,
+    width: theme.dimens.WINDOW_WIDTH * 0.9,
+  }),
+  errorStyle: (theme: ThemeType): TextStyle => ({
+    textAlign: 'center',
+    padding: theme.spacing.small,
+    color: theme.colors.error,
+  }),
+};
 
 const mapStateToProps = (state: StoreStateType) => {
   const {

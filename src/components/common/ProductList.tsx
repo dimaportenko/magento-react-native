@@ -49,7 +49,7 @@ const ProductList: FC<{
   onEndReached(): void;
   refreshControl?: React.ReactElement<RefreshControlProps> | undefined;
   gridColumnsValue: boolean;
-  searchIndicator: boolean;
+  searchIndicator?: boolean;
 }> = ({
   onRowPress,
   currencySymbol,

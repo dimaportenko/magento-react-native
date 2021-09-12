@@ -4,19 +4,32 @@ import React, {
   useEffect,
   useImperativeHandle,
   forwardRef,
+  MutableRefObject,
 } from 'react';
-import PropTypes from 'prop-types';
-import { View, StyleSheet, Keyboard } from 'react-native';
+import { View, StyleSheet, Keyboard, TextInput } from 'react-native';
 import { AirbnbRating } from 'react-native-ratings';
 import Colors from '../../../theme/colors';
 import { Input, Spinner, Text } from '../../common';
 import Sizes from '../../../theme/dimens';
-import { Button } from '../../common';
-import { Row, Spacer } from 'react-native-markup-kit';
+import { Button, Row, Spacer } from '../../common';
 
 const Required = () => <Text style={styles.required}>*</Text>;
 
-const ReviewForm = forwardRef((props, ref) => {
+type Props = {
+  productName: string;
+  onMountRefs: (refs: MutableRefObject<TextInput | null>['current'][]) => void;
+  onSubmit: () => void;
+  loading: boolean;
+};
+//
+// ReviewForm.defaultProps = {
+//   productName: '',
+//   onMountRefs: () => {},
+//   onSubmit: () => {},
+//   loading: false,
+// };
+
+const ReviewForm = forwardRef<TextInput, Props>((props, ref) => {
   const [price, setPrice] = useState(0);
   const [value, setValue] = useState(0);
   const [quality, setQuality] = useState(0);
@@ -25,9 +38,9 @@ const ReviewForm = forwardRef((props, ref) => {
   const [review, setReview] = useState('');
   const [submitEnabled, setSubmitEnabled] = useState(false);
 
-  const nicknameEl = useRef(null);
-  const summaryEl = useRef(null);
-  const reviewEl = useRef(null);
+  const nicknameEl = useRef<TextInput>(null);
+  const summaryEl = useRef<TextInput>(null);
+  const reviewEl = useRef<TextInput>(null);
 
   useEffect(() => {
     if (props.onMountRefs) {
@@ -233,19 +246,5 @@ const styles = StyleSheet.create({
     height: 100,
   },
 });
-
-ReviewForm.propTypes = {
-  productName: PropTypes.string,
-  onMountRefs: PropTypes.func,
-  onSubmit: PropTypes.func,
-  loading: PropTypes.bool,
-};
-
-ReviewForm.defaultProps = {
-  productName: '',
-  onMountRefs: () => {},
-  onSubmit: () => {},
-  loading: false,
-};
 
 export default ReviewForm;

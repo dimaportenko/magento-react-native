@@ -1,32 +1,37 @@
 /**
- * @flow
  * Created by Dima Portenko on 25.05.2020
  */
 import React, { useEffect, useState } from 'react';
 import { magento } from '../magento';
 import { logError } from '../helper/logger';
+import {
+  ProductReviewResponse,
+  ProductReviewType,
+  ProductType,
+} from '../magento/types';
 
 type Props = {
-  product: {
-    id: number,
-  },
+  product: ProductType;
 };
 
 type Result = {
-  reviews: {},
-  loading: boolean,
+  reviews: ProductReviewType | undefined;
+  loading: boolean;
+  error: boolean | unknown;
 };
 
 export const useProductReviews = ({ product }: Props): Result => {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState<ProductReviewType | undefined>();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<unknown | boolean>(false);
 
-  const getReviews = async () => {
+  const getReviews = React.useCallback(async () => {
     try {
       setLoading(true);
-      const result = await magento.admin.getProductReviews(product.id);
-      if (result.length) {
+      const result: ProductReviewResponse | undefined =
+        await magento.admin.getProductReviews(product.id);
+
+      if (result?.length) {
         setReviews(result[0]);
       }
     } catch (err) {
@@ -34,7 +39,7 @@ export const useProductReviews = ({ product }: Props): Result => {
       logError(err);
     }
     setLoading(false);
-  };
+  }, [product.id]);
 
   useEffect(() => {
     if (product?.id) {

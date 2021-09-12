@@ -1,5 +1,6 @@
 import { ADMIN_TYPE } from '../../types';
 import { getParamsFromSearchCriterias } from '../../utils/params';
+import { Magento } from "../../index";
 
 const getSortFieldName = sortOrder => {
   switch (sortOrder) {
@@ -27,7 +28,7 @@ const getSortDirection = sortOrder => {
   }
 };
 
-export default magento => ({
+export default (magento: Magento) => ({
   getStoreConfig: () =>
     magento.get('/V1/store/storeConfigs', undefined, undefined, ADMIN_TYPE),
 
@@ -346,7 +347,7 @@ export default magento => ({
       ADMIN_TYPE,
     ),
 
-  getProductReviews: productId =>
+  getProductReviews: (productId: number) =>
     magento.get(
       `/V1/mma/review/reviews/${productId}`,
       undefined,

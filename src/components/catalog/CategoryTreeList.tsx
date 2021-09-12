@@ -13,7 +13,7 @@ const CategoryTreeList: FC<{
   refreshControl?: React.ReactElement<RefreshControlProps> | undefined;
 }> = ({ categories, refreshControl }) => {
   const renderItem = (category: ListRenderItemInfo<CategoryType>) => {
-    return <CategoryTreeListItem category={category.item} expanded={false} />;
+    return <CategoryTreeListItem category={category.item} />;
   };
 
   return (
