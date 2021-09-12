@@ -6,8 +6,9 @@ import {
   FlatList,
   RefreshControl,
   ListRenderItemInfo,
+  ViewStyle,
 } from 'react-native';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { cartItemProduct, refreshCart } from '../../actions';
 import CartListItem from './CartListItem';
 import NavigationService from '../../navigation/NavigationService';
@@ -18,19 +19,33 @@ import {
 import { Button, Text, Price } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
-import { CartReducerType } from '../../reducers/CartReducer';
-import { MagentoReducerType } from '../../reducers/MagentoReducer';
-import { QuoteItemType, QuoteType } from '../../magento/types';
+import { QuoteItemType } from '../../magento/types';
+import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
-type Props = {
-  cart: QuoteType;
-  cartItemProduct: typeof cartItemProduct;
-  refreshCart: typeof refreshCart;
-  products: CartReducerType['products'];
-  currencySymbol: string;
-  currencyRate: number;
+const mapStateToProps = ({ cart, magento }: StoreStateType) => {
+  const { products } = cart;
+  const {
+    currency: {
+      displayCurrencySymbol: currencySymbol,
+      displayCurrencyExchangeRate: currencyRate,
+    },
+  } = magento;
+  return {
+    products,
+    currencyRate,
+    currencySymbol,
+    cart: cart.quote,
+    refreshing: cart.refreshing,
+  };
+};
+
+const connector = connect(mapStateToProps, { cartItemProduct, refreshCart });
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   navigation: any;
-  refreshing: boolean;
 };
 
 type State = {};
@@ -92,9 +107,7 @@ class Cart extends Component<Props, State> {
   };
 
   renderTotals() {
-    const theme = this.context;
     const { items } = this.props.cart;
-    const { totals } = styles;
 
     let sum = 0;
     if (items) {
@@ -105,7 +118,7 @@ class Cart extends Component<Props, State> {
 
     if (sum > 0) {
       return (
-        <View style={styles.totalPriceContainer}>
+        <View style={sh.totalPriceContainer}>
           <Text type="heading">{`${translate('common.total')} `}</Text>
           <Price
             currencyRate={this.props.currencyRate}
@@ -138,7 +151,6 @@ class Cart extends Component<Props, State> {
 
   renderItem = (items: ListRenderItemInfo<QuoteItemType>) => (
     <CartListItem
-      expanded={false}
       item={items.item}
       currencyRate={this.props.currencyRate}
       currencySymbol={this.props.currencySymbol}
@@ -148,11 +160,13 @@ class Cart extends Component<Props, State> {
   renderCart = () => {
     const theme = this.context;
     const { items } = this.props.cart;
-    const { container, content, footer, buttonStyle } = styles;
+    const { container, footer, buttonStyle } = styles;
+
+    const data = !!items ? [...items] : [];
 
     return (
       <View style={container(theme)}>
-        <View style={content}>
+        <View style={sh.content}>
           <FlatList
             refreshControl={
               <RefreshControl
@@ -160,7 +174,7 @@ class Cart extends Component<Props, State> {
                 onRefresh={this.onRefresh}
               />
             }
-            data={[...items]}
+            data={data}
             renderItem={this.renderItem}
             keyExtractor={(item, index) => index.toString()}
           />
@@ -187,63 +201,43 @@ class Cart extends Component<Props, State> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const sh = StyleSheet.create({
+  content: {
+    flex: 1,
+  },
+  totalPriceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+});
+
+const styles = {
+  container: (theme: ThemeType) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   }),
-  containerStyle: theme => ({
+  containerStyle: (theme: ThemeType): ViewStyle => ({
     backgroundColor: theme.colors.background,
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   }),
-  content: {
-    flex: 1,
-  },
-  totals: theme => ({
+  totals: (theme: ThemeType) => ({
     paddingTop: theme.spacing.small,
   }),
-  totalPriceContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  buttonTextStyle: theme => ({
+  buttonTextStyle: (theme: ThemeType) => ({
     padding: theme.spacing.large,
     top: 0,
     color: theme.colors.secondary,
   }),
-  footer: theme => ({
+  footer: (theme: ThemeType): ViewStyle => ({
     padding: theme.spacing.large,
     flexDirection: 'row',
     justifyContent: 'space-around',
   }),
-  buttonStyle: theme => ({
+  buttonStyle: (theme: ThemeType) => ({
     width: theme.dimens.WINDOW_WIDTH * 0.5,
   }),
-});
-
-const mapStateToProps = ({
-  cart,
-  magento,
-}: {
-  cart: CartReducerType;
-  magento: MagentoReducerType;
-}) => {
-  const { products } = cart;
-  const {
-    currency: {
-      displayCurrencySymbol: currencySymbol,
-      displayCurrencyExchangeRate: currencyRate,
-    },
-  } = magento;
-  return {
-    products,
-    currencyRate,
-    currencySymbol,
-    cart: cart.quote,
-    refreshing: cart.refreshing,
-  };
 };
 
-export default connect(mapStateToProps, { cartItemProduct, refreshCart })(Cart);
+export default connector(Cart);

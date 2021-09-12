@@ -10,3 +10,4 @@ export * from './ProductList';
 export * from './ProductListHeaderIcon';
 export * from './ProductListItem';
 export * from './Price';
+export * from './IconBadge';

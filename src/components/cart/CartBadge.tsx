@@ -1,15 +1,27 @@
 import React, { FC, useContext } from 'react';
-import { View } from 'react-native';
-import { connect } from 'react-redux';
+import { TextStyle, View } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import { Icon } from 'react-native-elements';
-import IconBadge from 'react-native-icon-badge';
-import { Text } from '../common';
+import { IconBadge, Text } from '../common';
 import { ThemeContext } from '../../theme';
+import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
-const CartBadge: FC<{
+const mapStateToProps = ({ cart }: StoreStateType) => {
+  const itemsCount =
+    cart.quote && cart.quote.items_qty ? cart.quote.items_qty : 0;
+  return { itemsCount };
+};
+
+const connector = connect(mapStateToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   color: string;
-  itemsCount: number;
-}> = ({ color, itemsCount = 0 }) => {
+};
+
+const CartBadge: FC<Props> = ({ color, itemsCount = 0 }) => {
   const theme = useContext(ThemeContext);
 
   return (
@@ -27,7 +39,7 @@ const CartBadge: FC<{
 };
 
 const styles = {
-  textStyle: theme => ({
+  textStyle: (theme: ThemeType): TextStyle => ({
     color: theme.colors.white,
     fontSize: 12,
     textAlign: 'center',
@@ -44,10 +56,4 @@ const styles = {
   },
 };
 
-const mapStateToProps = ({ cart }) => {
-  const itemsCount =
-    cart.quote && cart.quote.items_qty ? cart.quote.items_qty : 0;
-  return { itemsCount };
-};
-
-export default connect(mapStateToProps)(CartBadge);
+export default connector(CartBadge);

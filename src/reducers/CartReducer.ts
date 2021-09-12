@@ -24,7 +24,7 @@ export type CartReducerType = {
   quote: QuoteType;
   products: Record<string, ProductType>;
   refreshing: boolean;
-  removingItemId: boolean;
+  removingItemId: number;
   couponLoading: boolean;
   couponError: string;
 };
@@ -37,7 +37,7 @@ const INITIAL_STATE: CartReducerType = {
   quote: {},
   products: {},
   refreshing: false,
-  removingItemId: false,
+  removingItemId: -1,
   couponLoading: false,
   couponError: '',
 };
