@@ -59,7 +59,7 @@ export const updateCheckoutUI = (key: string, value: unknown) => ({
   payload: { key, value },
 });
 
-export const updateAccountAddressUI = (key, value) => ({
+export const updateAccountAddressUI = (key: string, value: unknown) => ({
   type: UI_ACCOUNT_CUSTOMER_DATA_UPDATE,
   payload: { key, value },
 });

@@ -7,6 +7,7 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
 import { OrderType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
 
 const OrderListItem: FC<{
   item: OrderType;
@@ -34,7 +35,7 @@ const OrderListItem: FC<{
             item.customer_lastname
           }`}
         </Text>
-        <View style={styles.row}>
+        <View style={sh.row}>
           <Text type="label">
             {`${translate('orderListItem.orderTotal')}: `}
           </Text>
@@ -52,8 +53,8 @@ const OrderListItem: FC<{
   );
 };
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const styles = {
+  container: (theme: ThemeType) => ({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.dimens.borderRadius,
     marginTop: theme.spacing.small,
@@ -62,6 +63,9 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
     flex: 1,
   }),
+};
+
+const sh = StyleSheet.create({
   row: {
     flexDirection: 'row',
   },

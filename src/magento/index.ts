@@ -41,7 +41,7 @@ export class Magento {
   public guest: ReturnType<typeof guest>;
   public customer: ReturnType<typeof customer>;
   public access_token?: string;
-  public customerToken?: string;
+  public customerToken?: string | null;
   public storeConfig: any;
   public version?: string;
   public message?: string;
@@ -198,7 +198,7 @@ export class Magento {
     this.storeConfig = config;
   }
 
-  setCustomerToken(token: string) {
+  setCustomerToken(token?: string | null) {
     this.customerToken = token;
   }
 

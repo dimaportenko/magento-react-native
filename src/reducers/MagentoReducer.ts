@@ -45,6 +45,10 @@ const INITIAL_STATE: MagentoReducerType = {
     displayCurrencyCode: '',
     displayCurrencySymbol: '',
     displayCurrencyExchangeRate: 1,
+
+    available_currency_codes: [],
+    base_currency_symbol: '',
+    exchange_rates: [],
   },
 };
 

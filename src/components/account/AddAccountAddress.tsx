@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import { TextStyle, View, ViewStyle } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import {
   getCountries,
   addAccountAddress,
@@ -11,20 +11,36 @@ import {
 import { Input, Spinner, ModalSelect, Button, Text } from '../common';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
-import { CustomerType } from '../../magento/types';
+import { ThemeType } from '../../theme/theme';
+import { StoreStateType } from '../../reducers';
 
-type Props = {
-  getCountries: typeof getCountries;
-  addAccountAddress: typeof addAccountAddress;
-  updateAccountAddressUI: typeof updateAccountAddressUI;
-  accountAddressNextLoading: typeof accountAddressNextLoading;
-  resetAccountAddressUI: typeof resetAccountAddressUI;
-  customer: CustomerType;
+const mapStateToProps = ({ account, magento }: StoreStateType) => {
+  const { customer } = account;
+  const { countries } = magento;
+  return {
+    ...account.ui,
+    countries,
+    customer,
+  };
+};
+
+const connector = connect(mapStateToProps, {
+  getCountries,
+  updateAccountAddressUI,
+  addAccountAddress,
+  accountAddressNextLoading,
+  resetAccountAddressUI,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
+  navigation: any;
 };
 
 type State = {};
 
-class AddAccountAddress extends Component<Props, State> {
+class AddAccountAddress extends Component<PropsFromRedux, State> {
   static contextType = ThemeContext;
 
   componentWillUnmount() {
@@ -82,8 +98,8 @@ class AddAccountAddress extends Component<Props, State> {
             postcode,
             city,
             // same_as_billing: 1,
-            firstname: customer.firstname,
-            lastname: customer.lastname,
+            firstname: customer?.firstname,
+            lastname: customer?.lastname,
             telephone,
           },
         ],
@@ -92,29 +108,29 @@ class AddAccountAddress extends Component<Props, State> {
 
     this.props.updateAccountAddressUI('error', false);
     this.props.accountAddressNextLoading(true);
-    this.props.addAccountAddress(customer.id, data);
+    this.props.addAccountAddress(customer?.id, data);
     // this.props.resetAccountAddressUI();
   };
 
-  updateUI = (key, value) => {
+  updateUI = (key: string, value: unknown) => {
     this.props.updateAccountAddressUI(key, value);
   };
 
-  countrySelect = (attributeId, optionValue) => {
+  countrySelect = (attributeId: string, optionValue: string) => {
     this.props.updateAccountAddressUI('countryId', optionValue);
   };
 
-  regionSelect = (attributeId, selectedRegion) => {
+  regionSelect = (attributeId: string, selectedRegion: string) => {
     const { countryId, countries } = this.props;
     if (countryId && countryId.length) {
-      const country = countries.find(item => item.id === countryId);
-      const regionData = country.available_regions.find(
+      const country = countries?.find(item => item.id === countryId);
+      const regionData = country?.available_regions.find(
         item => item.id === selectedRegion,
       );
       const region = {
-        regionCode: regionData.code,
-        region: regionData.name,
-        regionId: regionData.id,
+        regionCode: regionData?.code,
+        region: regionData?.name,
+        regionId: regionData?.id,
       };
       this.updateUI('region', region);
     }
@@ -143,9 +159,10 @@ class AddAccountAddress extends Component<Props, State> {
           key: value.id,
         }));
 
-        const label = region?.region
-          ? region?.region
-          : translate('common.region');
+        const label =
+          typeof region === 'object' && region?.region
+            ? region.region
+            : translate('common.region');
 
         return (
           <ModalSelect
@@ -154,7 +171,6 @@ class AddAccountAddress extends Component<Props, State> {
             key="regions"
             label={label}
             attribute="Region"
-            value="Region"
             data={data}
             onChange={this.regionSelect}
             style={styles.inputContainer(theme)}
@@ -209,7 +225,6 @@ class AddAccountAddress extends Component<Props, State> {
         key="countries"
         label={label}
         attribute={translate('common.country')}
-        value={translate('common.country')}
         data={data}
         onChange={this.countrySelect}
         style={styles.inputContainer(theme)}
@@ -261,40 +276,24 @@ class AddAccountAddress extends Component<Props, State> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const styles = {
+  container: (theme: ThemeType) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
     padding: theme.spacing.large,
   }),
-  inputContainer: theme => ({
+  inputContainer: (theme: ThemeType) => ({
     marginBottom: theme.spacing.large,
   }),
-  errorTextStyle: theme => ({
+  errorTextStyle: (theme: ThemeType): TextStyle => ({
     color: theme.colors.error,
     alignSelf: 'center',
   }),
-  buttonStyle: theme => ({
+  buttonStyle: (theme: ThemeType): ViewStyle => ({
     marginVertical: theme.spacing.large,
     alignSelf: 'center',
     width: theme.dimens.WINDOW_WIDTH * 0.9,
   }),
-});
-
-const mapStateToProps = ({ account, magento }) => {
-  const { customer } = account;
-  const { countries } = magento;
-  return {
-    ...account.ui,
-    countries,
-    customer,
-  };
 };
 
-export default connect(mapStateToProps, {
-  getCountries,
-  updateAccountAddressUI,
-  addAccountAddress,
-  accountAddressNextLoading,
-  resetAccountAddressUI,
-})(AddAccountAddress);
+export default connector(AddAccountAddress);

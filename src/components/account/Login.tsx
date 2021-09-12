@@ -5,8 +5,11 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  TextStyle,
+  ViewStyle,
+  TextInput,
 } from 'react-native';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Spinner, Button, Input, Text } from '../common';
 import { auth } from '../../actions/CustomerAuthActions';
 import {
@@ -15,20 +18,43 @@ import {
 } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { ThemeType } from '../../theme/theme';
 
-const Login: FC<{
-  loading: boolean;
-  error?: string;
-  success?: string;
+const mapStateToProps = ({
+  customerAuth,
+}: {
+  customerAuth: {
+    loading: boolean;
+    error?: string;
+    success?: string;
+  };
+}) => {
+  const { error, success, loading } = customerAuth;
+
+  return { error, success, loading };
+};
+
+const connector = connect(mapStateToProps, { auth });
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   navigation: any;
-  auth: typeof auth;
-}> = ({ loading, error, success, navigation, auth: _auth }) => {
+};
+
+const Login: FC<Props> = ({
+  loading,
+  error,
+  success,
+  navigation,
+  auth: _auth,
+}) => {
   const theme = useContext(ThemeContext);
   // Internal State
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // Reference
-  const passwordInput = useRef();
+  const passwordInput = useRef<TextInput>(null);
 
   const onLoginPress = () => {
     _auth(email, password);
@@ -58,9 +84,7 @@ const Login: FC<{
           {translate('login.signupButton')}
         </Button>
         <TouchableOpacity onPress={passwordForget} style={styles.link(theme)}>
-          <Text style={styles.linkTitle}>
-            {translate('login.forgetPassword')}
-          </Text>
+          <Text style={sh.linkTitle}>{translate('login.forgetPassword')}</Text>
         </TouchableOpacity>
       </View>
     );
@@ -78,7 +102,7 @@ const Login: FC<{
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       style={styles.container(theme)}>
       <Input
         autoCapitalize="none"
@@ -90,7 +114,7 @@ const Login: FC<{
         value={email}
         editable={!loading}
         onChangeText={setEmail}
-        onSubmitEditing={() => passwordInput.current.focus()}
+        onSubmitEditing={() => passwordInput.current?.focus()}
         containerStyle={styles.inputContainer(theme)}
         textContentType="emailAddress"
       />
@@ -104,9 +128,7 @@ const Login: FC<{
         editable={!loading}
         onChangeText={setPassword}
         onSubmitEditing={onLoginPress}
-        assignRef={input => {
-          passwordInput.current = input;
-        }}
+        ref={passwordInput}
         containerStyle={styles.inputContainer(theme)}
         textContentType="password"
       />
@@ -116,56 +138,46 @@ const Login: FC<{
   );
 };
 
+// @ts-ignore
 Login.navigationOptions = {
   title: translate('login.title'),
 };
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const styles = {
+  container: (theme: ThemeType): ViewStyle => ({
     flex: 1,
     backgroundColor: theme.colors.background,
     alignItems: 'center',
     paddingTop: theme.dimens.WINDOW_HEIGHT * 0.1,
   }),
-  inputContainer: theme => ({
+  inputContainer: (theme: ThemeType) => ({
     width: theme.dimens.WINDOW_WIDTH * 0.7,
     marginBottom: theme.spacing.large,
   }),
-  buttonMargin: theme => ({
+  buttonMargin: (theme: ThemeType) => ({
     marginTop: theme.spacing.large,
   }),
-  error: theme => ({
+  error: (theme: ThemeType): TextStyle => ({
     color: theme.colors.error,
     width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
     marginTop: theme.spacing.large,
   }),
-  success: theme => ({
+  success: (theme: ThemeType): TextStyle => ({
     width: theme.dimens.WINDOW_WIDTH * 0.85,
     color: theme.colors.success,
     textAlign: 'center',
     marginTop: theme.spacing.extraLarge,
   }),
-  link: theme => ({
+  link: (theme: ThemeType) => ({
     marginTop: theme.spacing.extraLarge,
   }),
+};
+
+const sh = StyleSheet.create({
   linkTitle: {
     textAlign: 'center',
   },
 });
 
-const mapStateToProps = ({
-  customerAuth,
-}: {
-  customerAuth: {
-    loading: boolean;
-    error?: string;
-    success?: string;
-  };
-}) => {
-  const { error, success, loading } = customerAuth;
-
-  return { error, success, loading };
-};
-
-export default connect(mapStateToProps, { auth })(Login);
+export default connector(Login);

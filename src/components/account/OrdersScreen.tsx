@@ -1,12 +1,14 @@
 import React, { useEffect, useContext, FC } from 'react';
 import moment from 'moment';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import {
   TouchableOpacity,
   View,
   FlatList,
   RefreshControl,
   ListRenderItemInfo,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
 import { getOrdersForCustomer } from '../../actions';
 import { Text } from '../common';
@@ -16,14 +18,30 @@ import { translate } from '../../i18n';
 
 import { NAVIGATION_HOME_SCREEN_PATH } from '../../navigation/routes';
 import { OrderType } from '../../magento/types';
+import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
-const OrdersScreen: FC<{
-  customerId: number;
-  orders: OrderType[] | null;
-  refreshing: boolean;
-  getOrdersForCustomer: typeof getOrdersForCustomer;
+const mapStateToProps = ({ account }: StoreStateType) => {
+  const customerId = account.customer ? account.customer.id : null;
+  const orders = account.orderData ? account.orderData.items : [];
+  return {
+    customerId,
+    orders,
+    refreshing: account.refreshing,
+  };
+};
+
+const connector = connect(mapStateToProps, {
+  getOrdersForCustomer,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   navigation: any;
-}> = ({
+};
+
+const OrdersScreen: FC<Props> = ({
   orders = null,
   customerId,
   refreshing,
@@ -33,11 +51,15 @@ const OrdersScreen: FC<{
   const theme = useContext(ThemeContext);
 
   useEffect(() => {
-    _getOrdersForCustomer(customerId, true);
+    if (customerId !== null) {
+      _getOrdersForCustomer(customerId, true);
+    }
   }, [_getOrdersForCustomer, customerId]);
 
   const onRefresh = () => {
-    _getOrdersForCustomer(customerId, true);
+    if (customerId !== null) {
+      _getOrdersForCustomer(customerId, true);
+    }
   };
 
   const renderItem = (orderItem: ListRenderItemInfo<OrderType>) => (
@@ -83,42 +105,31 @@ const OrdersScreen: FC<{
   return renderEmptyOrderList();
 };
 
+// @ts-ignore
 OrdersScreen.navigationOptions = () => ({
   title: translate('ordersScreen.title'),
   headerBackTitle: ' ',
 });
 
 const styles = {
-  container: theme => ({
+  container: (theme: ThemeType) => ({
     flex: 1,
     backgroundColor: theme.colors.background,
   }),
-  emptyListContainerStyle: theme => ({
+  emptyListContainerStyle: (theme: ThemeType): ViewStyle => ({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: theme.colors.background,
   }),
-  textStyle: theme => ({
+  textStyle: (theme: ThemeType) => ({
     paddingTop: theme.spacing.small,
   }),
-  buttonTextStyle: theme => ({
+  buttonTextStyle: (theme: ThemeType): TextStyle => ({
     padding: theme.spacing.large,
     top: 0,
     color: theme.colors.secondary,
   }),
 };
 
-const mapStateToProps = ({ account, magento }) => {
-  const customerId = account.customer ? account.customer.id : null;
-  const orders = account.orderData ? account.orderData.items : [];
-  return {
-    customerId,
-    orders,
-    refreshing: account.refreshing,
-  };
-};
-
-export default connect(mapStateToProps, {
-  getOrdersForCustomer,
-})(OrdersScreen);
+export default connector(OrdersScreen);

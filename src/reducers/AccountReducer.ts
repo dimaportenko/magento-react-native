@@ -14,7 +14,9 @@ import { CustomerType, OrderType, ProductType } from '../magento/types';
 
 export type AccountReducerType = {
   customer?: CustomerType;
-  orderData: Partial<OrderType>;
+  orderData: {
+    items: OrderType[];
+  };
   products: Record<string, ProductType>;
   refreshing: boolean;
   ui: {
@@ -23,9 +25,16 @@ export type AccountReducerType = {
     countryId: string;
     street: string;
     city: string;
-    region: string;
+    region:
+      | string
+      | {
+          region: string;
+          regionCode: string;
+          regionId: number;
+        };
     error?: string;
     loading: boolean;
+    telephone: string;
   };
 };
 
@@ -43,6 +52,7 @@ const INITIAL_STATE: AccountReducerType = {
     street: '',
     city: '',
     region: '',
+    telephone: '',
     loading: false,
     error: undefined,
   },

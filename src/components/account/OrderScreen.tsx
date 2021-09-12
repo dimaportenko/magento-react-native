@@ -1,20 +1,39 @@
 import React, { useEffect, useContext, FC } from 'react';
 import { View, StyleSheet, FlatList, ListRenderItemInfo } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { connect } from 'react-redux';
+import { connect, ConnectedProps } from 'react-redux';
 import { Text, Price } from '../common';
 import { orderProductDetail } from '../../actions';
 import { getProductThumbnailFromAttribute } from '../../helper/product';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { priceSignByCode } from '../../helper/price';
-import { OrderItemType, OrderType, ProductType } from '../../magento/types';
+import { OrderItemType, OrderType } from '../../magento/types';
+import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
-const OrderScreen: FC<{
+const mapStateToProps = ({ account }: StoreStateType) => {
+  const { products } = account;
+  return {
+    products,
+  };
+};
+
+const connector = connect(mapStateToProps, {
+  orderProductDetail,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   navigation: any;
-  orderProductDetail: typeof orderProductDetail;
-  products: Record<string, ProductType>;
-}> = ({ products, navigation, orderProductDetail: _orderProductDetail }) => {
+};
+
+const OrderScreen: FC<Props> = ({
+  products,
+  navigation,
+  orderProductDetail: _orderProductDetail,
+}) => {
   const theme = useContext(ThemeContext);
   const currencySymbol = priceSignByCode(
     navigation.state.params.item.order_currency_code,
@@ -36,7 +55,7 @@ const OrderScreen: FC<{
 
   const renderItem = (item: ListRenderItemInfo<OrderItemType>) => (
     <View style={styles.itemContainer(theme)}>
-      <View style={styles.row}>
+      <View style={sh.row}>
         <FastImage
           style={styles.imageStyle(theme)}
           resizeMode="contain"
@@ -47,7 +66,7 @@ const OrderScreen: FC<{
           <Text type="label">{`${translate('common.sku')}: ${
             item.item.sku
           }`}</Text>
-          <View style={styles.row}>
+          <View style={sh.row}>
             <Text type="label">{`${translate('common.price')}: `}</Text>
             <Price
               currencyRate={1}
@@ -58,7 +77,7 @@ const OrderScreen: FC<{
           <Text type="label">{`${translate('common.quantity')}: ${
             item.item.qty_ordered
           }`}</Text>
-          <View style={styles.row}>
+          <View style={sh.row}>
             <Text type="label">{`${translate('common.subTotal')}: `}</Text>
             <Price
               basePrice={item.item.row_total}
@@ -83,7 +102,7 @@ const OrderScreen: FC<{
       <Text type="label">{`${translate('orderListItem.status')}: ${
         item.status
       }`}</Text>
-      <View style={styles.row}>
+      <View style={sh.row}>
         <Text type="label">{`${translate('common.subTotal')}: `}</Text>
         <Price
           basePrice={item.subtotal}
@@ -91,7 +110,7 @@ const OrderScreen: FC<{
           currencySymbol={currencySymbol}
         />
       </View>
-      <View style={styles.row}>
+      <View style={sh.row}>
         <Text type="label">
           {`${translate('orderListItem.shippingAndHandling')}: `}
         </Text>
@@ -101,7 +120,7 @@ const OrderScreen: FC<{
           currencySymbol={currencySymbol}
         />
       </View>
-      <View style={styles.row}>
+      <View style={sh.row}>
         <Text type="label" bold>
           {`${translate('common.grandTotal')}: `}
         </Text>
@@ -115,19 +134,26 @@ const OrderScreen: FC<{
   );
 };
 
+// @ts-ignore
 OrderScreen.navigationOptions = ({ navigation }: { navigation: any }) => ({
   title: `${translate('common.order')} # ${
     navigation.state.params.item.increment_id
   }`,
 });
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const sh = StyleSheet.create({
+  row: {
+    flexDirection: 'row',
+  },
+});
+
+const styles = {
+  container: (theme: ThemeType) => ({
     backgroundColor: theme.colors.background,
     padding: theme.spacing.large,
     flex: 1,
   }),
-  itemContainer: theme => ({
+  itemContainer: (theme: ThemeType) => ({
     backgroundColor: theme.colors.surface,
     borderRadius: theme.dimens.borderRadius,
     padding: theme.spacing.small,
@@ -135,22 +161,10 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.border,
     flex: 1,
   }),
-  row: {
-    flexDirection: 'row',
-  },
-  imageStyle: theme => ({
+  imageStyle: (theme: ThemeType) => ({
     width: theme.dimens.orderImageWidth,
     height: theme.dimens.orderImageHeight,
   }),
-});
-
-const mapStateToProps = ({ account, magento }) => {
-  const { products } = account;
-  return {
-    products,
-  };
 };
 
-export default connect(mapStateToProps, {
-  orderProductDetail,
-})(OrderScreen);
+export default connector(OrderScreen);

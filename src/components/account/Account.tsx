@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, FC } from 'react';
-import { connect } from 'react-redux';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
+import { View, ActivityIndicator, StyleSheet, ViewStyle } from 'react-native';
 import { Button, Text } from '../common';
 import { logout, currentCustomer } from '../../actions';
 import {
@@ -9,15 +9,23 @@ import {
 } from '../../navigation/routes';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
-import { CustomerType } from '../../magento/types';
-import { StoreStateType } from "../../reducers";
+import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
-const Account: FC<{
-  customer: CustomerType | null;
+const mapStateToProps = ({ account }: StoreStateType) => {
+  const { customer } = account;
+  return { customer };
+};
+
+const connector = connect(mapStateToProps, { logout, currentCustomer });
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+type Props = PropsFromRedux & {
   navigation: any;
-  currentCustomer: typeof currentCustomer;
-  logout: typeof logout;
-}> = ({
+};
+
+const Account: FC<Props> = ({
   customer = null,
   navigation,
   currentCustomer: _currentCustomer,
@@ -50,13 +58,13 @@ const Account: FC<{
     const { email, firstname, lastname } = customer;
     return (
       <View style={styles.textContainer(theme)}>
-        <Text bold type="subheading" style={styles.center}>
+        <Text bold type="subheading" style={sh.center}>
           {translate('account.contactInformation')}
         </Text>
-        <Text style={styles.center}>
+        <Text style={sh.center}>
           {firstname} {lastname}
         </Text>
-        <Text style={styles.center}>{email}</Text>
+        <Text style={sh.center}>{email}</Text>
       </View>
     );
   };
@@ -85,34 +93,33 @@ const Account: FC<{
   );
 };
 
+// @ts-ignore
 Account.navigationOptions = {
   title: translate('account.title'),
 };
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const sh = StyleSheet.create({
+  center: {
+    textAlign: 'center',
+  },
+});
+
+const styles = {
+  container: (theme: ThemeType): ViewStyle => ({
     flex: 1,
     backgroundColor: theme.colors.background,
     alignItems: 'center',
     paddingTop: theme.spacing.large,
   }),
-  activity: theme => ({
+  activity: (theme: ThemeType) => ({
     padding: theme.spacing.large,
   }),
-  center: {
-    textAlign: 'center',
-  },
-  textContainer: theme => ({
+  textContainer: (theme: ThemeType) => ({
     marginBottom: theme.spacing.large,
   }),
-  buttonMargin: theme => ({
+  buttonMargin: (theme: ThemeType) => ({
     marginTop: theme.spacing.large,
   }),
-});
-
-const mapStateToProps = ({ account }: StoreStateType) => {
-  const { customer } = account;
-  return { customer };
 };
 
-export default connect(mapStateToProps, { logout, currentCustomer })(Account);
+export default connector(Account);

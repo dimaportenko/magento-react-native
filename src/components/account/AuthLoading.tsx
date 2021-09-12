@@ -1,5 +1,5 @@
 import React, { FC, useContext, useEffect } from 'react';
-import { View, StatusBar, StyleSheet } from 'react-native';
+import { View, StatusBar, ViewStyle } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Spinner } from '../common';
 import {
@@ -9,6 +9,7 @@ import {
 import { magento } from '../../magento';
 import { logError } from '../../helper/logger';
 import { ThemeContext } from '../../theme';
+import { ThemeType } from '../../theme/theme';
 
 const AuthLoading: FC<{
   navigation: any;
@@ -34,7 +35,7 @@ const AuthLoading: FC<{
     };
 
     bootstrapAsync();
-  }, []);
+  }, []); // eslint-disable-line
 
   return (
     <View style={styles.container(theme)}>
@@ -44,13 +45,13 @@ const AuthLoading: FC<{
   );
 };
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const styles = {
+  container: (theme: ThemeType): ViewStyle => ({
     flex: 1,
     alignContent: 'center',
     flexDirection: 'column',
     backgroundColor: theme.colors.background,
   }),
-});
+};
 
 export default AuthLoading;

@@ -1,18 +1,30 @@
 import React, { useRef, useState, useContext, FC } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import { View, TextInput, TextStyle, ViewStyle } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import { Spinner, Button, Text, Input } from '../common';
 import { signIn } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { ThemeType } from '../../theme/theme';
+import { StoreStateType } from '../../reducers';
+
+const mapStateToProps = ({ customerAuth }: StoreStateType) => {
+  const { error, success, loading } = customerAuth;
+
+  return { error, success, loading };
+};
+
+const connector = connect(mapStateToProps, { signIn });
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
 
 // This file name should be Signup
-const Signin: FC<{
-  loading: boolean;
-  error?: string;
-  success?: string;
-  signIn: typeof signIn;
-}> = ({ loading, error, success, signIn: _signIn }) => {
+const Signin: FC<PropsFromRedux> = ({
+  loading,
+  error,
+  success,
+  signIn: _signIn,
+}) => {
   const theme = useContext(ThemeContext);
   // Internal State
   const [firstname, setFirstname] = useState('');
@@ -20,9 +32,9 @@ const Signin: FC<{
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   // Reference
-  const lastnameInput = useRef(null);
-  const emailInput = useRef(null);
-  const passwordInput = useRef(null);
+  const lastnameInput = useRef<TextInput>(null);
+  const emailInput = useRef<TextInput>(null);
+  const passwordInput = useRef<TextInput>(null);
 
   const onCreateAccountPress = () => {
     // TODO: add password validation check
@@ -75,7 +87,7 @@ const Signin: FC<{
         editable={!loading}
         onChangeText={setFirstname}
         onSubmitEditing={() => {
-          lastnameInput.current.focus();
+          lastnameInput.current?.focus();
         }}
         containerStyle={styles.inputContainer(theme)}
       />
@@ -88,11 +100,9 @@ const Signin: FC<{
         value={lastname}
         editable={!loading}
         onChangeText={setLastname}
-        assignRef={input => {
-          lastnameInput.current = input;
-        }}
+        ref={lastnameInput}
         onSubmitEditing={() => {
-          emailInput.current.focus();
+          emailInput.current?.focus();
         }}
         containerStyle={styles.inputContainer(theme)}
       />
@@ -106,11 +116,9 @@ const Signin: FC<{
         value={email}
         editable={!loading}
         onChangeText={setEmail}
-        assignRef={input => {
-          emailInput.current = input;
-        }}
+        ref={emailInput}
         onSubmitEditing={() => {
-          passwordInput.current.focus();
+          passwordInput.current?.focus();
         }}
         containerStyle={styles.inputContainer(theme)}
       />
@@ -123,9 +131,7 @@ const Signin: FC<{
         value={password}
         editable={!loading}
         onChangeText={setPassword}
-        assignRef={input => {
-          passwordInput.current = input;
-        }}
+        ref={passwordInput}
         onSubmitEditing={onCreateAccountPress}
         containerStyle={styles.inputContainer(theme)}
       />
@@ -136,39 +142,33 @@ const Signin: FC<{
   );
 };
 
+// @ts-ignore
 Signin.navigationOptions = {
   title: translate('signup.title'),
 };
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const styles = {
+  container: (theme: ThemeType): ViewStyle => ({
     flex: 1,
     backgroundColor: theme.colors.background,
     alignItems: 'center',
     paddingTop: theme.dimens.WINDOW_HEIGHT * 0.1,
   }),
-  inputContainer: theme => ({
+  inputContainer: (theme: ThemeType) => ({
     width: theme.dimens.WINDOW_WIDTH * 0.7,
     marginBottom: theme.spacing.large,
   }),
-  error: theme => ({
+  error: (theme: ThemeType): TextStyle => ({
     color: theme.colors.error,
     width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
     marginTop: theme.spacing.extraLarge,
   }),
-  success: theme => ({
+  success: (theme: ThemeType): TextStyle => ({
     color: theme.colors.success,
     width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
-    marginTop: theme.soacing.extraLarge,
+    marginTop: theme.spacing.extraLarge,
   }),
-});
-
-const mapStateToProps = ({ customerAuth }) => {
-  const { error, success, loading } = customerAuth;
-
-  return { error, success, loading };
 };
-
-export default connect(mapStateToProps, { signIn })(Signin);
+export default connector(Signin);

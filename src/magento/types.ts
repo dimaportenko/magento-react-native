@@ -43,7 +43,7 @@ export type OrderItemType = {
   // base_row_total_incl_tax: 0
   // base_tax_amount: 0
   // base_tax_invoiced: 0
-  // created_at: "2021-08-27 18:14:24"
+  created_at: Date;
   // discount_amount: 0
   // discount_invoiced: 0
   // discount_percent: 0

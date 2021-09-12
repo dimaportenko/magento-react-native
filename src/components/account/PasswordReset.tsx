@@ -1,18 +1,35 @@
 import React, { useState, useContext, useEffect, FC } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { connect } from 'react-redux';
+import { View, StyleSheet, TextStyle, ViewStyle } from 'react-native';
+import { connect, ConnectedProps } from 'react-redux';
 import { Spinner, Button, Text, Input } from '../common';
 import { initiatePasswordReset, updatePasswordResetUI } from '../../actions';
 import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
+import { StoreStateType } from '../../reducers';
+import { ThemeType } from '../../theme/theme';
 
-const PasswordReset: FC<{
-  loading: boolean;
-  error?: string;
-  success?: string;
-  initiatePasswordReset: typeof initiatePasswordReset;
-  updatePasswordResetUI: typeof updatePasswordResetUI;
-}> = ({
+const mapStateToProps = ({ customerAuth }: StoreStateType) => {
+  const {
+    resetLoading: loading,
+    resetPasswordErrorMessage: error,
+    resetPasswordSuccessMessage: success,
+  } = customerAuth;
+
+  return {
+    loading,
+    success,
+    error,
+  };
+};
+
+const connector = connect(mapStateToProps, {
+  initiatePasswordReset,
+  updatePasswordResetUI,
+});
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const PasswordReset: FC<PropsFromRedux> = ({
   loading,
   error,
   success,
@@ -61,7 +78,7 @@ const PasswordReset: FC<{
       <Text bold type="subheading" style={styles.title(theme)}>
         {translate('passwordReset.passwordRecovery')}
       </Text>
-      <Text style={styles.description}>
+      <Text style={sh.description}>
         {translate('passwordReset.passwordRecoveryInstructions')}
       </Text>
       <Input
@@ -82,56 +99,43 @@ const PasswordReset: FC<{
   );
 };
 
+// @ts-ignore
 PasswordReset.navigationOptions = {
   title: translate('passwordReset.title'),
 };
 
-const styles = StyleSheet.create({
-  container: theme => ({
+const sh = StyleSheet.create({
+  description: {
+    textAlign: 'center',
+  },
+});
+
+const styles = {
+  container: (theme: ThemeType): ViewStyle => ({
     flex: 1,
     backgroundColor: theme.colors.background,
     alignItems: 'center',
     paddingTop: theme.dimens.WINDOW_HEIGHT * 0.1,
   }),
-  title: theme => ({
+  title: (theme: ThemeType) => ({
     marginBottom: theme.spacing.medium,
   }),
-  description: {
-    textAlign: 'center',
-  },
-  emailOffset: theme => ({
+  emailOffset: (theme: ThemeType) => ({
     width: theme.dimens.WINDOW_WIDTH * 0.7,
     marginVertical: theme.spacing.large,
   }),
-  error: theme => ({
+  error: (theme: ThemeType): TextStyle => ({
     color: theme.colors.error,
     width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
     marginTop: theme.spacing.extraLarge,
   }),
-  success: theme => ({
+  success: (theme: ThemeType): TextStyle => ({
     color: theme.colors.success,
     width: theme.dimens.WINDOW_WIDTH * 0.85,
     textAlign: 'center',
     marginTop: theme.spacing.extraLarge,
   }),
-});
-
-const mapStateToProps = ({ customerAuth }) => {
-  const {
-    resetLoading: loading,
-    resetPasswordErrorMessage: error,
-    resetPasswordSuccessMessage: success,
-  } = customerAuth;
-
-  return {
-    loading,
-    success,
-    error,
-  };
 };
 
-export default connect(mapStateToProps, {
-  initiatePasswordReset,
-  updatePasswordResetUI,
-})(PasswordReset);
+export default connector(PasswordReset);
