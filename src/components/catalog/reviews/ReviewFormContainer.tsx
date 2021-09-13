@@ -2,17 +2,27 @@
  * @flow
  * Created by Dima Portenko on 25.05.2020
  */
-import React, { useState, useRef, useEffect, useCallback, FC } from 'react';
+import React, { useState, useRef, useEffect, FC } from 'react';
 import { TouchableOpacity, View, StyleSheet } from 'react-native';
-import { Row, Spacer } from 'react-native-markup-kit';
 import { Icon } from 'react-native-elements';
-import { Spinner, Text } from '../../common';
-import ReviewForm from './ReviewForm';
-import { useProductReviewsForm } from '../../../hooks/useProductReviewsForm';
+import { Row, Spacer, Spinner, Text } from '../../common';
+import ReviewForm, { ReviewFormRefType } from './ReviewForm';
+import {
+  PostReviewData,
+  PostReviewRatingData,
+  useProductReviewsForm,
+} from '../../../hooks/useProductReviewsForm';
 import Sizes from '../../../theme/dimens';
 import Colors from '../../../theme/colors';
 import Typography from '../../../theme/typography';
 import { ProductType } from '../../../magento/types';
+
+export type SubmitReviewData = {
+  [key: string]: string | number;
+  nickname: string;
+  title: string;
+  detail: string;
+};
 
 export const ReviewFormContainer: FC<{
   product: ProductType;
@@ -20,8 +30,8 @@ export const ReviewFormContainer: FC<{
   const [expanded, setExpanded] = useState(false);
   const [success, setSuccess] = useState(false);
   const [iconName, setIconName] = useState('angle-down');
-  const [reviewFormRefs, setReviewFormRefs] = useState([]);
-  const reviewFormRef = useRef();
+
+  const reviewFormRef = useRef<ReviewFormRefType>();
   const { postReviewLoading, postReview, ratingOptions, loading } =
     useProductReviewsForm({
       product,
@@ -52,22 +62,22 @@ export const ReviewFormContainer: FC<{
     );
   }
 
-  const submitReview = data => {
-    const ratingData = ratingOptions.map(option => ({
+  const submitReview = (data: SubmitReviewData) => {
+    const ratingData: PostReviewRatingData[] = ratingOptions.map(option => ({
       rating_id: option.rating_id,
       ratingCode: option.rating_code,
       ratingValue: data[option.rating_code.toLowerCase()],
     }));
-    const review = {
+    const review: PostReviewData = {
       productId: product.id,
       nickname: data.nickname,
       title: data.title,
       detail: data.detail,
       ratingData,
     };
-    postReview(review, success => {
+    postReview(review, (success: boolean) => {
       if (success) {
-        reviewFormRefs.current.reset();
+        reviewFormRef.current?.reset();
       }
     });
   };
@@ -94,9 +104,7 @@ export const ReviewFormContainer: FC<{
             ref={reviewFormRef}
             loading={postReviewLoading}
             productName={product.name}
-            onMountRefs={refs => setReviewFormRefs(refs)}
             onSubmit={submitReview}
-            ratingOptions={ratingOptions}
           />
         </View>
       )}

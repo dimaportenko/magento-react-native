@@ -68,4 +68,10 @@ export default {
   captionText: '#8c8c8c',
   black: '#000000',
   white: '#ffffff',
+
+  /**
+   * product review form
+   */
+  reviewGray: '#888888',
+  reviewInputBackground: '#f6f6f6',
 };

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
 import { MaterialHeaderButtons, Item } from './Header';
 import { uiProductListTypeGrid } from '../../actions';
 import { StoreStateType } from '../../reducers';
@@ -22,10 +21,6 @@ const HeaderGridToggleIcon = () => {
       />
     </MaterialHeaderButtons>
   );
-};
-
-HeaderGridToggleIcon.propTypes = {
-  changeGridValueFunction: PropTypes.func,
 };
 
 export { HeaderGridToggleIcon };

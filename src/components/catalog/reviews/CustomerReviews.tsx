@@ -15,7 +15,9 @@ const CustomerReviews: FC<{
 }> = ({ reviews }) => {
   const renderRatings = (ratings: ProductReviewItemRatingVotes[]) =>
     ratings.map(rating => (
-      <View style={[styles.row, styles.ratingsWrap]}>
+      <View
+        style={[styles.row, styles.ratingsWrap]}
+        key={`${rating.rating_id}`}>
         <Text style={styles.ratingTitle}>{rating.rating_code}</Text>
         <AirbnbRating
           showRating={false}

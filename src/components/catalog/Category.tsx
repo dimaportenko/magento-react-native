@@ -60,8 +60,8 @@ const Category: FC<Props> = ({
   loadingMore,
   products,
   totalCount,
-  sortOrder, // Add its validation in prop-types
-  priceFilter, // Add its validation in prop-types
+  sortOrder,
+  priceFilter,
   category,
   refreshing,
   navigation,

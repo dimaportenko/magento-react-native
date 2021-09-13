@@ -59,6 +59,15 @@ export type ProductCurrentReducerType = {
   customOptions: ProductCustomOptionType[];
 };
 
+export type RatingOptionType = {
+  entity_id: string;
+  is_active: string;
+  position: string;
+  rating_code: string;
+  rating_id: string;
+  store_id: string;
+};
+
 export type ProductReducerType = {
   current: Record<string | number, ProductCurrentReducerType>;
   relatedProducts: {
@@ -66,7 +75,7 @@ export type ProductReducerType = {
     error: string;
     items: ProductType[];
   };
-  ratingOptions: any[];
+  ratingOptions: RatingOptionType[];
 };
 
 const INITIAL_STATE: ProductReducerType = {
