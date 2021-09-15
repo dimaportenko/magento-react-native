@@ -2421,6 +2421,11 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
+"@types/i18n-js@^3.8.2":
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/@types/i18n-js/-/i18n-js-3.8.2.tgz#957a3fa268124d09e3b3b34695f0184118f4bc4f"
+  integrity sha512-F+AuFCjllE1A0W/YUxJB13q2t7cWITMqXOTXQ/InfXxxT8nXrrqL7s/8Pv6XThGjFPemukElwk6QlMOKCEg7eQ==
+
 "@types/is-function@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@types/is-function/-/is-function-1.0.0.tgz#1b0b819b1636c7baf0d6785d030d12edf70c3e83"
@@ -7433,11 +7438,6 @@ react-native-localize@^1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-1.3.1.tgz#d0b7046acd4214ac2bcb61102317374351400c76"
   integrity sha512-Y3LzTHyrgsIsDYvjWSRguARBKjiLaahcbJg663ZqP1Tcpan4LYn/f3iusM+Oh6qYvClnlo9AlBkLdCZbWwe7Tw==
-
-react-native-markup-kit@^0.0.4:
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/react-native-markup-kit/-/react-native-markup-kit-0.0.4.tgz#860d259decdd4f2fcf995cf4dbb52077b8351dd4"
-  integrity sha512-DvIqvYcmWWTmkC4LAx3vwQSz9Jjq4OUc8UG6FCEI3jMEGny3Yng8VaZMapamZExdSidtE5F1a5iAdT2j/XYV0Q==
 
 react-native-modal-selector@^2.0.2:
   version "2.0.2"

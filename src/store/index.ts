@@ -1,11 +1,11 @@
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
+import { createStore, applyMiddleware, compose, AnyAction } from 'redux';
+import thunk, { ThunkDispatch } from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createBlacklistFilter } from 'redux-persist-transform-filter';
 import AsyncStorage from '@react-native-community/async-storage';
 
-import reducers from '../reducers';
+import reducers, { StoreStateType } from '../reducers';
 import { magentoOptions } from '../config/magento';
 
 const categoryTreeSubsetBlacklistFilter = createBlacklistFilter(
@@ -49,7 +49,10 @@ const persistConfig = {
   stateReconciler: autoMergeLevel2,
 };
 
-const persistedReducer = persistReducer(persistConfig, reducers);
+const persistedReducer = persistReducer<StoreStateType>(
+  persistConfig,
+  reducers,
+);
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -57,6 +60,9 @@ export const store = createStore(
   persistedReducer,
   composeEnhancer(applyMiddleware(thunk)),
 );
+
+export type StoreGetStateType = typeof store.getState;
+export type StoreDispatchType = ThunkDispatch<StoreStateType, void, AnyAction>;
 
 export const persistor = persistStore(store);
 

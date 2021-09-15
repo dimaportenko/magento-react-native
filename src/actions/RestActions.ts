@@ -64,6 +64,7 @@ import { checkoutSetActiveSection } from './UIActions';
 import { CategoryType } from '../magento/types';
 import { FilterReducerType, PriceFilterType } from '../reducers/FilterReducer';
 import { Dispatch } from 'redux';
+import { StoreDispatchType, StoreGetStateType } from "../store";
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
@@ -439,17 +440,18 @@ export const setCurrentProduct = product => ({
   payload: product,
 });
 
-export const createCustomerCart = customerId => async dispatch => {
-  if (customerId) {
-    try {
-      const cartId = await magento.admin.getCart(customerId);
-      dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
-      dispatch(getCart());
-    } catch (error) {
-      logError(error);
+export const createCustomerCart =
+  (customerId: number) => async (dispatch: StoreDispatchType) => {
+    if (customerId) {
+      try {
+        const cartId = await magento.admin.getCart(customerId);
+        dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
+        dispatch(getCart());
+      } catch (error) {
+        logError(error);
+      }
     }
-  }
-};
+  };
 
 export const resetCart = () => {
   return async dispatch => {
@@ -466,7 +468,7 @@ export const resetCart = () => {
 
 export const getCart =
   (refreshing = false) =>
-  async (dispatch, getState) => {
+  async (dispatch: Dispatch, getState: StoreGetStateType) => {
     if (refreshing) {
       dispatch({
         type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
@@ -496,7 +498,7 @@ export const getCart =
 
         if (!cartId || !cart) {
           cartId = await magento.guest.createGuestCart();
-          AsyncStorage.setItem('cartId', cartId);
+          AsyncStorage.setItem('cartId', cartId ?? '');
           cart = await magento.guest.getGuestCart(cartId);
         }
         dispatch({ type: MAGENTO_CREATE_CART, payload: cartId });
@@ -507,7 +509,8 @@ export const getCart =
         type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
         payload: false,
       });
-    } catch (error) {
+    } catch (err: unknown) {
+      const error = err as Error;
       logError(error);
       if (
         error.message &&
@@ -521,7 +524,7 @@ export const getCart =
     }
   };
 
-export const addToCartLoading = isLoading => ({
+export const addToCartLoading = (isLoading?: boolean) => ({
   type: MAGENTO_ADD_TO_CART_LOADING,
   payload: isLoading,
 });
