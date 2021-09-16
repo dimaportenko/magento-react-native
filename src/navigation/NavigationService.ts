@@ -6,7 +6,7 @@ function setTopLevelNavigator(navigatorRef) {
   navigator = navigatorRef;
 }
 
-function navigate(routeName, params) {
+function navigate(routeName: string, params?: Record<string, unknown>) {
   navigator.dispatch(
     NavigationActions.navigate({
       routeName,

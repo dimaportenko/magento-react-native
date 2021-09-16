@@ -145,7 +145,7 @@ async function getCurrencyToBeDisplayed(currencyData) {
 }
 
 export const getHomeData =
-  (refreshing?: boolean) => async (dispatch: Dispatch) => {
+  (refreshing?: boolean) => async (dispatch: StoreDispatchType) => {
     if (refreshing) {
       dispatch({ type: MAGENTO_UPDATE_REFRESHING_HOME_DATA, payload: true });
     }
@@ -193,7 +193,7 @@ const getFeaturedCategoryProducts = async (categoryId, dispatch) => {
 };
 
 export const getCategoryTree =
-  (refreshing?: boolean) => async (dispatch: Dispatch) => {
+  (refreshing?: boolean) => async (dispatch: StoreDispatchType) => {
     if (refreshing) {
       dispatch({
         type: MAGENTO_UPDATE_REFRESHING_CATEGORY_TREE,
@@ -264,7 +264,7 @@ export const getProductsForCategoryOrChild =
     sortOrder?: number,
     filter?: PriceFilterType,
   ) =>
-  async (dispatch: Dispatch) => {
+  async (dispatch: StoreDispatchType) => {
     if (offset) {
       dispatch({ type: MAGENTO_LOAD_MORE_CATEGORY_PRODUCTS, payload: true });
     }
@@ -468,7 +468,7 @@ export const resetCart = () => {
 
 export const getCart =
   (refreshing = false) =>
-  async (dispatch: Dispatch, getState: StoreGetStateType) => {
+  async (dispatch: StoreDispatchType, getState: StoreGetStateType) => {
     if (refreshing) {
       dispatch({
         type: MAGENTO_UPDATE_REFRESHING_CART_ITEM_PRODUCT,
