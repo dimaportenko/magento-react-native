@@ -63,13 +63,12 @@ import { priceSignByCode } from '../helper/price';
 import { checkoutSetActiveSection } from './UIActions';
 import { CategoryType } from '../magento/types';
 import { FilterReducerType, PriceFilterType } from '../reducers/FilterReducer';
-import { Dispatch } from 'redux';
-import { StoreDispatchType, StoreGetStateType } from "../store";
+import { StoreDispatchType, StoreGetStateType } from '../store';
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
 
-  return async dispatch => {
+  return async (dispatch: StoreDispatchType) => {
     try {
       magento.init();
       dispatch({ type: MAGENTO_INIT, payload: magento });
@@ -78,7 +77,8 @@ export const initMagento = () => {
       const customerToken = await AsyncStorage.getItem('customerToken');
       magento.setCustomerToken(customerToken);
       getCurrency(dispatch);
-    } catch (error) {
+    } catch (err: unknown) {
+      const error = err as Error;
       logError(error);
       dispatch({
         type: MAGENTO_INIT_ERROR,
@@ -88,7 +88,7 @@ export const initMagento = () => {
   };
 };
 
-const getCurrency = async dispatch => {
+const getCurrency = async (dispatch: StoreDispatchType) => {
   try {
     const data = await magento.guest.getCurrency();
     const displayCurrency = await getCurrencyToBeDisplayed(data);

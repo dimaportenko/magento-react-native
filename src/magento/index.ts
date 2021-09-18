@@ -16,6 +16,8 @@ export type MagentoOptions = {
       access_token?: string;
     };
   };
+  reviewEnabled?: boolean;
+  websiteId?: number;
 };
 
 const defaultOptions: MagentoOptions = {

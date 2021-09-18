@@ -1,6 +1,7 @@
 import { GUEST_TYPE } from '../../types';
+import { Magento } from '../../index';
 
-export default magento => ({
+export default (magento: Magento) => ({
   createGuestCart: () => magento.post('/V1/guest-carts', undefined, GUEST_TYPE),
 
   addItemToCart: (cartId, item) =>
@@ -90,7 +91,7 @@ export default magento => ({
   createCustomer: customer =>
     magento.post('/V1/customers', customer, GUEST_TYPE),
 
-  auth: (username, password) => {
+  auth: (username: string, password: string) => {
     if (username) {
       const path = '/V1/integration/customer/token';
       return magento.post(path, { username, password }, GUEST_TYPE);
@@ -98,12 +99,12 @@ export default magento => ({
     throw new Error('Email is required!');
   },
 
-  initiatePasswordReset: email => {
+  initiatePasswordReset: (email: string) => {
     // PUT /V1/customers/password
     const data = {
       email,
       template: 'email_reset',
-      websiteId: magento.configuration.websiteId,
+      websiteId: magento?.configuration?.websiteId,
     };
 
     const path = '/V1/customers/password';

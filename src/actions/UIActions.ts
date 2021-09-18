@@ -13,33 +13,40 @@ import {
   UI_CHANGE_CURRENCY,
   UI_PRODUCT_LIST_TYPE_GRID,
 } from './types';
+import { ShippingItemType } from '../magento/types';
+import { PaymentItemType } from '../reducers/CheckoutReducer';
 
-export const updateProductQtyInput = (qty, id) => ({
+export const updateProductQtyInput = (qty: string, id: number) => ({
   type: UI_PRODUCT_QTY_INPUT,
   payload: { qty, id },
 });
 
-export const uiProductUpdate = (selectedOptions, id) => ({
+export const uiProductUpdate = (selectedOptions: object, id: number) => ({
   type: UI_PRODUCT_UPDATE_OPTIONS,
   payload: { selectedOptions, id },
 });
 
-export const uiProductCustomOptionUpdate = (selectedOptions, id) => ({
+export const uiProductCustomOptionUpdate = (
+  selectedOptions: object,
+  id: number,
+) => ({
   type: UI_PRODUCT_UPDATE_CUSTOM_OPTIONS,
   payload: { selectedOptions, id },
 });
 
-export const checkoutSelectedShippingChanged = shipping => ({
+export const checkoutSelectedShippingChanged = (
+  shipping: ShippingItemType,
+) => ({
   type: UI_CHECKOUT_SHIPPING_SELECTED,
   payload: shipping,
 });
 
-export const checkoutSelectedPaymentChanged = payment => ({
+export const checkoutSelectedPaymentChanged = (payment: PaymentItemType) => ({
   type: UI_CHECKOUT_PAYMENT_SELECTED,
   payload: payment,
 });
 
-export const checkoutCustomerNextLoading = loading => ({
+export const checkoutCustomerNextLoading = (loading: boolean) => ({
   type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING,
   payload: loading,
 });
@@ -64,7 +71,7 @@ export const updateAccountAddressUI = (key: string, value: unknown) => ({
   payload: { key, value },
 });
 
-export const accountAddressNextLoading = loading => ({
+export const accountAddressNextLoading = (loading: boolean) => ({
   type: UI_ACCOUNT_CUSTOMER_DATA_LOADING,
   payload: loading,
 });
