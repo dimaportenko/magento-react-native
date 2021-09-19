@@ -1,18 +1,36 @@
-export const getParamsFromSearchCriterias = searchCriterias => {
-  if (searchCriterias.groups) {
+export type SearchCriteriasParams = {
+  field: string;
+  value: string;
+  conditionType: string;
+};
+
+export type SearchCriteriasType =
+  | {
+      groups?: SearchCriteriasParams[][];
+    }
+  | SearchCriteriasParams[]
+  | SearchCriteriasParams;
+
+export const getParamsFromSearchCriterias = (
+  searchCriterias: SearchCriteriasType,
+) => {
+  if ('groups' in searchCriterias && searchCriterias.groups) {
     let params = {};
     searchCriterias.groups.forEach((item, index) => {
       params = { ...params, ...getParamsFromSearchCriteriaGroup(item, index) };
     });
     return params;
-  } else if (searchCriterias.length) {
+  } else if ('length' in searchCriterias && searchCriterias.length) {
     return getParamsFromSearchCriteriaGroup(searchCriterias, 0);
-  } else {
+  } else if ('field' in searchCriterias) {
     return getParamsFromSearchCriteriaItem(searchCriterias);
   }
 };
 
-const getParamsFromSearchCriteriaGroup = (group, groupNumber) => {
+const getParamsFromSearchCriteriaGroup = (
+  group: SearchCriteriasParams[],
+  groupNumber: number,
+) => {
   let params = {};
   group.forEach((item, index) => {
     params = {
@@ -24,7 +42,7 @@ const getParamsFromSearchCriteriaGroup = (group, groupNumber) => {
 };
 
 const getParamsFromSearchCriteriaItem = (
-  searchCriteria,
+  searchCriteria: SearchCriteriasParams,
   filterGroups = 0,
   filters = 0,
 ) => ({

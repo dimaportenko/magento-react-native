@@ -1,4 +1,4 @@
-export const parseNumber = strg => {
+export const parseNumber = (strg: string) => {
   strg = strg || '';
   let decimal = '.';
   strg = strg.replace(/[^0-9$.,]/g, '');

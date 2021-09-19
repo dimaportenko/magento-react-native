@@ -2,7 +2,12 @@ import _ from 'lodash';
 import admin from './lib/admin';
 import guest from './lib/guest';
 import customer from './lib/customer';
-import { ADMIN_TYPE, CUSTOMER_TYPE, GUEST_TYPE } from './types';
+import {
+  ADMIN_TYPE,
+  CUSTOMER_TYPE,
+  GUEST_TYPE,
+  StoreConfigType,
+} from './types';
 import { logError } from '../helper/logger';
 import { parseNumber } from './utils/parser';
 
@@ -44,7 +49,7 @@ export class Magento {
   public customer: ReturnType<typeof customer>;
   public access_token?: string;
   public customerToken?: string | null;
-  public storeConfig: any;
+  public storeConfig?: StoreConfigType;
   public version?: string;
   public message?: string;
 
@@ -74,7 +79,7 @@ export class Magento {
 
   post<Params extends Record<string, unknown>>(
     path: string,
-    params: Params | null,
+    params: Params | null | undefined,
     type: ACLType = ADMIN_TYPE,
   ) {
     return this.send(path, 'POST', null, params, type);
@@ -136,10 +141,12 @@ export class Magento {
       );
     }
 
-    const headers: Record<string, string> = {
-      'User-Agent': this.configuration?.userAgent,
+    const headers: RequestInit['headers'] = {
       'Content-Type': 'application/json',
     };
+    if (this.configuration?.userAgent) {
+      headers['User-Agent'] = this.configuration?.userAgent;
+    }
     if (this.access_token && type === ADMIN_TYPE) {
       headers.Authorization = `Bearer ${this.access_token}`;
     } else if (this.customerToken && type === CUSTOMER_TYPE) {
@@ -180,12 +187,12 @@ export class Magento {
     });
   }
 
-  getErrorMessageForResponce(data) {
+  getErrorMessageForResponce(data: any) {
     const params = data.parameters;
     let { message } = data;
     if (typeof params !== 'undefined') {
       if (Array.isArray(params) && params.length > 0) {
-        data.parameters.forEach((item, index) => {
+        data.parameters.forEach((item: string, index: number) => {
           message = message.replace(`%${index + 1}`, item);
         });
         return message;
@@ -197,7 +204,7 @@ export class Magento {
     return message;
   }
 
-  setStoreConfig(config) {
+  setStoreConfig(config: StoreConfigType) {
     this.storeConfig = config;
   }
 
@@ -217,11 +224,11 @@ export class Magento {
   }
 
   getMediaUrl() {
-    return this.storeConfig.base_media_url;
+    return this.storeConfig?.base_media_url;
   }
 
   getProductMediaUrl() {
-    return `${this.storeConfig.base_media_url}catalog/product`;
+    return `${this.storeConfig?.base_media_url}catalog/product`;
   }
 
   getCart() {
@@ -252,7 +259,24 @@ export class Magento {
     }
   };
 
-  makeParams = ({ sort, page, pageSize, filter }) => {
+  makeParams = ({
+    sort,
+    page,
+    pageSize,
+    filter,
+  }: {
+    sort: number;
+    page: number;
+    pageSize: number;
+    filter?: Record<
+      string,
+      | {
+          condition: string;
+          value: string;
+        }
+      | string
+    >;
+  }) => {
     let index = 0;
     let query = '';
     if (typeof sort !== 'undefined') {
@@ -268,7 +292,7 @@ export class Magento {
     }
 
     if (typeof filter !== 'undefined') {
-      Object.keys(filter).forEach(key => {
+      Object.keys(filter).forEach((key: string) => {
         let value = filter[key];
         let condition = null;
         let subQuery = '';
