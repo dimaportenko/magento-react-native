@@ -14,7 +14,7 @@ import { parseNumber } from './utils/parser';
 export type MagentoOptions = {
   url?: string;
   store: string;
-  userAgent: string;
+  userAgent?: string;
   home_cms_block_id: string;
   authentication: {
     integration: {
@@ -23,6 +23,7 @@ export type MagentoOptions = {
   };
   reviewEnabled?: boolean;
   websiteId?: number;
+  persistAppData?: boolean;
 };
 
 const defaultOptions: MagentoOptions = {
@@ -87,7 +88,7 @@ export class Magento {
 
   put<Params extends Record<string, unknown>>(
     path: string,
-    params: Params | null,
+    params: Params | null | undefined,
     type: ACLType = ADMIN_TYPE,
   ) {
     return this.send(path, 'PUT', null, params, type);
@@ -107,7 +108,7 @@ export class Magento {
 
   delete<Params extends Record<string, unknown>>(
     path: string,
-    params: Params | null,
+    params: Params | null | undefined,
     type: ACLType = ADMIN_TYPE,
   ) {
     return this.send(path, 'DELETE', params, null, type);

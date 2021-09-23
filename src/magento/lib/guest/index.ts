@@ -1,27 +1,63 @@
 import { GUEST_TYPE } from '../../types';
 import { Magento } from '../../index';
 
+export type GuestAddToCartItemType = {
+  cartItem: {
+    sku: string;
+    qty: number;
+    quoteId: string;
+    productOption?: {
+      extensionAttributes: {
+        configurableItemOptions?: {
+          optionId: string;
+          optionValue: string;
+        }[];
+        customOptions?: {
+          optionId: string;
+          optionValue: string;
+        }[];
+      };
+    };
+  };
+};
+
+export type GuestCustomerAddressType = {
+  address: {
+    region: string;
+    region_id: string;
+    region_code: string;
+    country_id: string;
+    street: string[];
+    telephone: string;
+    postcode: string;
+    city: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    same_as_billing: number;
+  };
+};
+
 export default (magento: Magento) => ({
   createGuestCart: () => magento.post('/V1/guest-carts', undefined, GUEST_TYPE),
 
-  addItemToCart: (cartId, item) =>
+  addItemToCart: (cartId: string, item: GuestAddToCartItemType) =>
     magento.post(`/V1/guest-carts/${cartId}/items`, item, GUEST_TYPE),
 
-  getGuestCart: cartId =>
+  getGuestCart: (cartId: string) =>
     magento.get(`/V1/guest-carts/${cartId}`, undefined, undefined, GUEST_TYPE),
 
-  addCouponToCart: (cartId, couponCode) =>
+  addCouponToCart: (cartId: string, couponCode: string) =>
     magento.put(
       `/V1/guest-carts/${cartId}/coupons/${couponCode}`,
-      undefined,
       undefined,
       GUEST_TYPE,
     ),
 
-  removeCouponFromCart: cartId =>
+  removeCouponFromCart: (cartId: string) =>
     magento.delete(`/V1/guest-carts/${cartId}/coupons`, undefined, GUEST_TYPE),
 
-  getCartTotals: cartId =>
+  getCartTotals: (cartId: string) =>
     magento.get(
       `/V1/guest-carts/${cartId}/totals`,
       undefined,
@@ -29,28 +65,37 @@ export default (magento: Magento) => ({
       GUEST_TYPE,
     ),
 
-  addGuestCartBillingAddress: (cartId, address) =>
+  addGuestCartBillingAddress: (
+    cartId: string,
+    address: GuestCustomerAddressType,
+  ) =>
     magento.post(
       `/V1/guest-carts/${cartId}/billing-address`,
       address,
       GUEST_TYPE,
     ),
 
-  guestCartEstimateShippingMethods: (cartId, address) =>
+  guestCartEstimateShippingMethods: (
+    cartId: string,
+    address: GuestCustomerAddressType,
+  ) =>
     magento.post(
       `/V1/guest-carts/${cartId}/estimate-shipping-methods`,
       address,
       GUEST_TYPE,
     ),
 
-  addGuestCartShippingInfo: (cartId, address) =>
+  addGuestCartShippingInfo: (
+    cartId: string,
+    address: GuestCustomerAddressType,
+  ) =>
     magento.post(
       `/V1/guest-carts/${cartId}/shipping-information`,
       address,
       GUEST_TYPE,
     ),
 
-  getGuestCartPaymentInfo: cartId =>
+  getGuestCartPaymentInfo: (cartId: string) =>
     magento.get(
       `/V1/guest-carts/${cartId}/payment-information`,
       undefined,
@@ -58,7 +103,7 @@ export default (magento: Magento) => ({
       GUEST_TYPE,
     ),
 
-  getGuestCartPaymentMethods: cartId =>
+  getGuestCartPaymentMethods: (cartId: string) =>
     magento.get(
       `/V1/guest-carts/${cartId}/payment-methods`,
       undefined,
@@ -66,7 +111,7 @@ export default (magento: Magento) => ({
       GUEST_TYPE,
     ),
 
-  getGuestCartShippingMethods: cartId =>
+  getGuestCartShippingMethods: (cartId: string) =>
     magento.get(
       `/V1/guest-carts/${cartId}/shipping-methods`,
       undefined,
@@ -74,7 +119,7 @@ export default (magento: Magento) => ({
       GUEST_TYPE,
     ),
 
-  placeGuestCartOrder: (cartId, payment) =>
+  placeGuestCartOrder: (cartId: string, payment) =>
     magento.put(`/V1/guest-carts/${cartId}/order`, payment, GUEST_TYPE),
 
   getCountries: () =>
