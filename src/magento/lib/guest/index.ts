@@ -38,6 +38,21 @@ export type GuestCustomerAddressType = {
   };
 };
 
+export type GuestCartPaymentParamType = {
+  paymentMethod: {
+    method: string;
+  };
+};
+
+export type CustomerSignInType = {
+  customer: {
+    email: string;
+    firstname: string;
+    lastname: string;
+  };
+  password: string;
+};
+
 export default (magento: Magento) => ({
   createGuestCart: () => magento.post('/V1/guest-carts', undefined, GUEST_TYPE),
 
@@ -119,13 +134,13 @@ export default (magento: Magento) => ({
       GUEST_TYPE,
     ),
 
-  placeGuestCartOrder: (cartId: string, payment) =>
+  placeGuestCartOrder: (cartId: string, payment: GuestCartPaymentParamType) =>
     magento.put(`/V1/guest-carts/${cartId}/order`, payment, GUEST_TYPE),
 
   getCountries: () =>
     magento.get('/V1/directory/countries', undefined, undefined, GUEST_TYPE),
 
-  getCountriesByCountryId: countryId =>
+  getCountriesByCountryId: (countryId: string) =>
     magento.get(
       `/V1/directory/countries/${countryId}`,
       undefined,
@@ -133,7 +148,7 @@ export default (magento: Magento) => ({
       GUEST_TYPE,
     ),
 
-  createCustomer: customer =>
+  createCustomer: (customer: CustomerSignInType) =>
     magento.post('/V1/customers', customer, GUEST_TYPE),
 
   auth: (username: string, password: string) => {

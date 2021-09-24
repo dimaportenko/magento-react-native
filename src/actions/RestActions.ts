@@ -743,22 +743,23 @@ export const getCountries = () => dispatch => {
     });
 };
 
-export const placeGuestCartOrder = (cartId, payment) => async dispatch => {
-  try {
-    let data;
-    if (magento.isCustomerLogin()) {
-      data = await magento.customer.placeCartOrder(payment);
-    } else {
-      data = await magento.guest.placeGuestCartOrder(cartId, payment);
+export const placeGuestCartOrder =
+  (cartId: string, payment) => async (dispatch: StoreDispatchType) => {
+    try {
+      let data;
+      if (magento.isCustomerLogin()) {
+        data = await magento.customer.placeCartOrder(payment);
+      } else {
+        data = await magento.guest.placeGuestCartOrder(cartId, payment);
+      }
+      dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
+      dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
+    } catch (error) {
+      logError(error);
+      const message = error.message ? error.message : 'Place order error';
+      dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: message });
     }
-    dispatch({ type: MAGENTO_PLACE_GUEST_CART_ORDER, payload: data });
-    dispatch({ type: UI_CHECKOUT_CUSTOMER_NEXT_LOADING, payload: false });
-  } catch (error) {
-    logError(error);
-    const message = error.message ? error.message : 'Place order error';
-    dispatch({ type: MAGENTO_ERROR_MESSAGE_CART_ORDER, payload: message });
-  }
-};
+  };
 
 export const createCustomer = customer => dispatch => {
   magento.guest

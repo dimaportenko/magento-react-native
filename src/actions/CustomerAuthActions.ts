@@ -22,15 +22,7 @@ import {
 import { logError } from '../helper/logger';
 import { StoreDispatchType } from '../store';
 import { CustomerType } from '../magento/types';
-
-type CustomerSignInType = {
-  customer: {
-    email: string;
-    firstname: string;
-    lastname: string;
-  };
-  password: string;
-};
+import { CustomerSignInType } from '../magento/lib/guest';
 
 export const signIn =
   (customer: CustomerSignInType) => async (dispatch: StoreDispatchType) => {

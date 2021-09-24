@@ -12,9 +12,10 @@ import {
   MAGENTO_CURRENT_PRODUCT,
   MAGENTO_LOGIN_SUCCESS,
   MAGENTO_COUPON_LOADING,
-  MAGENTO_COUPON_ERROR, MAGENTO_CART_RESET,
+  MAGENTO_COUPON_ERROR,
+  MAGENTO_CART_RESET,
 } from '../actions/types';
-import { ProductType, QuoteType } from "../magento/types";
+import { ProductType, QuoteType } from '../magento/types';
 
 export type CartReducerType = {
   cartId?: string | number;
