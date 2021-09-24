@@ -1,8 +1,9 @@
 import { ADMIN_TYPE } from '../../types';
 import { getParamsFromSearchCriterias } from '../../utils/params';
-import { Magento } from "../../index";
+import { Magento } from '../../index';
+import { PostReviewDataApiParamType } from '../types';
 
-const getSortFieldName = sortOrder => {
+const getSortFieldName = (sortOrder: number) => {
   switch (sortOrder) {
     case 0:
     case 1:
@@ -15,7 +16,7 @@ const getSortFieldName = sortOrder => {
   }
 };
 
-const getSortDirection = sortOrder => {
+const getSortDirection = (sortOrder: number) => {
   switch (sortOrder) {
     case 0:
     case 2:
@@ -33,29 +34,28 @@ export default (magento: Magento) => ({
     magento.get('/V1/store/storeConfigs', undefined, undefined, ADMIN_TYPE),
 
   updateCustomerData: (id, customer) =>
-    magento.put(`/V1/customers/${id}`, customer, undefined, ADMIN_TYPE),
+    magento.put(`/V1/customers/${id}`, customer, ADMIN_TYPE),
 
-  addCouponToCart: (cartId, couponCode) =>
+  addCouponToCart: (cartId: string, couponCode: string) =>
     magento.put(
       `/V1/carts/${cartId}/coupons/${couponCode}`,
-      undefined,
       undefined,
       ADMIN_TYPE,
     ),
 
-  removeCouponFromCart: cartId =>
+  removeCouponFromCart: (cartId: string) =>
     magento.delete(`/V1/carts/${cartId}/coupons`, undefined, ADMIN_TYPE),
 
-  getCartTotals: cartId =>
+  getCartTotals: (cartId: string) =>
     magento.get(`/V1/carts/${cartId}/totals`, undefined, undefined, ADMIN_TYPE),
 
   getCategoriesTree: () =>
     magento.get('/V1/categories', undefined, undefined, ADMIN_TYPE),
 
-  getCategory: id =>
+  getCategory: (id: number) =>
     magento.get(`/V1/categories/${id}`, undefined, undefined, ADMIN_TYPE),
 
-  getCategoryAttributes: attributeCode =>
+  getCategoryAttributes: (attributeCode: string) =>
     magento.get(
       `/V1/categories/attributes/${attributeCode}`,
       undefined,
@@ -254,10 +254,10 @@ export default (magento: Magento) => ({
   getProductsWithSearchCritaria: searchCriteria =>
     magento.get('/V1/products', searchCriteria, undefined, ADMIN_TYPE),
 
-  getProductBySku: sku =>
+  getProductBySku: (sku: string) =>
     magento.get(`/V1/products/${sku}`, undefined, undefined, ADMIN_TYPE),
 
-  getProductOptions: sku =>
+  getProductOptions: (sku: string) =>
     magento.get(
       `/V1/products/${sku}/options`,
       undefined,
@@ -265,14 +265,29 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  getFeaturedChildren: ({ page, pageSize = 10, filter }) => {
+  getFeaturedChildren: ({
+    page,
+    pageSize = 10,
+    filter,
+  }: {
+    page: number;
+    pageSize: number;
+    filter?: Record<
+      string,
+      | {
+          condition: string;
+          value: string;
+        }
+      | string
+    >;
+  }) => {
     let path = '/V1/products?';
     path += magento.makeParams({ page, pageSize, filter });
     console.log('PATH:', path);
     return magento.get(path, undefined, undefined, ADMIN_TYPE);
   },
 
-  getConfigurableChildren: sku =>
+  getConfigurableChildren: (sku: string) =>
     magento.get(
       `/V1/configurable-products/${sku}/children`,
       undefined,
@@ -280,7 +295,7 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  getConfigurableProductOptions: sku =>
+  getConfigurableProductOptions: (sku: string) =>
     magento.get(
       `/V1/configurable-products/${sku}/options/all`,
       undefined,
@@ -288,7 +303,7 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  getConfigurableProductOptionById: (sku, id) =>
+  getConfigurableProductOptionById: (sku: string, id: number) =>
     magento.get(
       `/V1/configurable-products/${sku}/options/${id}`,
       undefined,
@@ -328,7 +343,7 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  getOrderList: customerId => {
+  getOrderList: (customerId: number) => {
     console.log('getting orders for: ', customerId);
 
     const path = '/V1/orders';
@@ -339,7 +354,7 @@ export default (magento: Magento) => ({
     return magento.get(path, params, undefined, ADMIN_TYPE);
   },
 
-  getLinkedProducts: (sku, type) =>
+  getLinkedProducts: (sku: string, type: string) =>
     magento.get(
       `/V1/products/${sku}/links/${type}`,
       undefined,
@@ -363,6 +378,6 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  postGuestReview: review =>
+  postGuestReview: (review: PostReviewDataApiParamType) =>
     magento.post('/V1/mma/review/guest/post', review, ADMIN_TYPE),
 });

@@ -266,7 +266,7 @@ export class Magento {
     pageSize,
     filter,
   }: {
-    sort: number;
+    sort?: number;
     page: number;
     pageSize: number;
     filter?: Record<
