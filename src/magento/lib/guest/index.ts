@@ -1,48 +1,9 @@
 import { GUEST_TYPE } from '../../types';
 import { Magento } from '../../index';
-
-export type GuestAddToCartItemType = {
-  cartItem: {
-    sku: string;
-    qty: number;
-    quoteId: string;
-    productOption?: {
-      extensionAttributes: {
-        configurableItemOptions?: {
-          optionId: string;
-          optionValue: string;
-        }[];
-        customOptions?: {
-          optionId: string;
-          optionValue: string;
-        }[];
-      };
-    };
-  };
-};
-
-export type GuestCustomerAddressType = {
-  address: {
-    region: string;
-    region_id: string;
-    region_code: string;
-    country_id: string;
-    street: string[];
-    telephone: string;
-    postcode: string;
-    city: string;
-    firstname: string;
-    lastname: string;
-    email: string;
-    same_as_billing: number;
-  };
-};
-
-export type GuestCartPaymentParamType = {
-  paymentMethod: {
-    method: string;
-  };
-};
+import {
+  AddToCartItemApiParamType, CartPaymentApiParamType,
+  CustomerAddressApiParamType,
+} from '../types';
 
 export type CustomerSignInType = {
   customer: {
@@ -56,7 +17,7 @@ export type CustomerSignInType = {
 export default (magento: Magento) => ({
   createGuestCart: () => magento.post('/V1/guest-carts', undefined, GUEST_TYPE),
 
-  addItemToCart: (cartId: string, item: GuestAddToCartItemType) =>
+  addItemToCart: (cartId: string, item: AddToCartItemApiParamType) =>
     magento.post(`/V1/guest-carts/${cartId}/items`, item, GUEST_TYPE),
 
   getGuestCart: (cartId: string) =>
@@ -82,7 +43,7 @@ export default (magento: Magento) => ({
 
   addGuestCartBillingAddress: (
     cartId: string,
-    address: GuestCustomerAddressType,
+    address: CustomerAddressApiParamType,
   ) =>
     magento.post(
       `/V1/guest-carts/${cartId}/billing-address`,
@@ -92,7 +53,7 @@ export default (magento: Magento) => ({
 
   guestCartEstimateShippingMethods: (
     cartId: string,
-    address: GuestCustomerAddressType,
+    address: CustomerAddressApiParamType,
   ) =>
     magento.post(
       `/V1/guest-carts/${cartId}/estimate-shipping-methods`,
@@ -102,7 +63,7 @@ export default (magento: Magento) => ({
 
   addGuestCartShippingInfo: (
     cartId: string,
-    address: GuestCustomerAddressType,
+    address: CustomerAddressApiParamType,
   ) =>
     magento.post(
       `/V1/guest-carts/${cartId}/shipping-information`,
@@ -134,7 +95,7 @@ export default (magento: Magento) => ({
       GUEST_TYPE,
     ),
 
-  placeGuestCartOrder: (cartId: string, payment: GuestCartPaymentParamType) =>
+  placeGuestCartOrder: (cartId: string, payment: CartPaymentApiParamType) =>
     magento.put(`/V1/guest-carts/${cartId}/order`, payment, GUEST_TYPE),
 
   getCountries: () =>

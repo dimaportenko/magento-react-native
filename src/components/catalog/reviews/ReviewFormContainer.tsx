@@ -8,7 +8,7 @@ import { Icon } from 'react-native-elements';
 import { Row, Spacer, Spinner, Text } from '../../common';
 import ReviewForm, { ReviewFormRefType } from './ReviewForm';
 import {
-  PostReviewData,
+  PostReviewDataApiParamType,
   PostReviewRatingData,
   useProductReviewsForm,
 } from '../../../hooks/useProductReviewsForm';

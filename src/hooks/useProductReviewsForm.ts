@@ -11,6 +11,7 @@ import { logError } from '../helper/logger';
 import { StoreStateType } from '../reducers';
 import { RatingOptionType } from '../reducers/ProductReducer';
 import { ProductType } from '../magento/types';
+import { PostReviewDataApiParamType } from '../magento/lib/types';
 
 type Props = {
   onSuccess?: () => void;
@@ -23,23 +24,9 @@ type Result = {
   postReviewLoading: boolean;
   ratingOptions: RatingOptionType[];
   postReview: (
-    review: PostReviewData,
+    review: PostReviewDataApiParamType,
     callback: (success: boolean) => void,
   ) => void;
-};
-
-export type PostReviewRatingData = {
-  ratingCode: string;
-  ratingValue: string | number;
-  rating_id: string;
-};
-
-export type PostReviewData = {
-  detail: string;
-  nickname: string;
-  title: string;
-  productId: number;
-  ratingData: PostReviewRatingData[];
 };
 
 export const useProductReviewsForm = (props: Props): Result => {
@@ -67,7 +54,7 @@ export const useProductReviewsForm = (props: Props): Result => {
     setLoading(false);
   }, [dispatch]);
 
-  const postReview = async (review: PostReviewData) => {
+  const postReview = async (review: PostReviewDataApiParamType) => {
     try {
       setPostReviewLoading(true);
       let result;
