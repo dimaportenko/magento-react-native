@@ -1,7 +1,10 @@
-import { ADMIN_TYPE } from '../../types';
-import { getParamsFromSearchCriterias } from '../../utils/params';
+import { ADMIN_TYPE, CategoryType } from '../../types';
+import {
+  getParamsFromSearchCriterias,
+  SearchCriteriasType,
+} from '../../utils/params';
 import { Magento } from '../../index';
-import { PostReviewDataApiParamType } from '../types';
+import { CustomerDataType, PostReviewDataApiParamType } from '../types';
 
 const getSortFieldName = (sortOrder: number) => {
   switch (sortOrder) {
@@ -33,7 +36,7 @@ export default (magento: Magento) => ({
   getStoreConfig: () =>
     magento.get('/V1/store/storeConfigs', undefined, undefined, ADMIN_TYPE),
 
-  updateCustomerData: (id, customer) =>
+  updateCustomerData: (id: number, customer: CustomerDataType) =>
     magento.put(`/V1/customers/${id}`, customer, ADMIN_TYPE),
 
   addCouponToCart: (cartId: string, couponCode: string) =>
@@ -85,13 +88,13 @@ export default (magento: Magento) => ({
    * 3 = Arrange products in descending order based on their prices
    */
   getSearchCreteriaForCategoryAndChild: (
-    category,
+    category: CategoryType,
     pageSize = 10,
     offset = 1,
-    sortOrder,
-    filter,
+    sortOrder?: number,
+    filter?: Record<string, string | Record<string, string>>,
   ) => {
-    const currentPage = parseInt(offset / pageSize, 10) + 1;
+    const currentPage = parseInt(`${offset / pageSize}`, 10) + 1;
     const searchCriteria = {
       groups: [
         [
@@ -112,7 +115,7 @@ export default (magento: Magento) => ({
     };
 
     let categoryIds = '';
-    const getForCategory = cat => {
+    const getForCategory = (cat: CategoryType) => {
       categoryIds = `${categoryIds},${cat.id}`;
       cat.children_data.forEach(childCategory => {
         getForCategory(childCategory);
@@ -157,7 +160,8 @@ export default (magento: Magento) => ({
         }
       });
     }
-    const params = getParamsFromSearchCriterias(searchCriteria);
+    const params: Record<string, string | number> =
+      getParamsFromSearchCriterias(searchCriteria);
     if (typeof sortOrder === 'number') {
       params['searchCriteria[sortOrders][0][field]'] =
         getSortFieldName(sortOrder);
@@ -171,7 +175,13 @@ export default (magento: Magento) => ({
     return magento.admin.getProductsWithSearchCritaria(params);
   },
 
-  getProducts: (categoryId, pageSize = 10, offset = 0, sortOrder, filter) =>
+  getProducts: (
+    categoryId: number,
+    pageSize = 10,
+    offset = 0,
+    sortOrder: number,
+    filter: Record<string, string | Record<string, string>>,
+  ) =>
     magento.admin.getProductsWithAttribute(
       'category_id',
       categoryId,
@@ -183,18 +193,18 @@ export default (magento: Magento) => ({
     ),
 
   getProductsWithAttribute: (
-    attributeCode,
-    attributeValue,
+    attributeCode: string,
+    attributeValue: string | number,
     pageSize = 10,
     offset = 0,
-    sortOrder,
-    filter,
+    sortOrder?: number,
+    filter?: Record<string, string | Record<string, string>>,
     conditionType = 'like',
   ) => {
-    const currentPage = parseInt(offset / pageSize, 10) + 1;
+    const currentPage = parseInt(`${offset / pageSize}`, 10) + 1;
     const currentAttributeValue =
       conditionType === 'eq' ? attributeValue : `%\\${attributeValue}%`;
-    const params = {
+    const params: Record<string, string | number> = {
       'searchCriteria[filterGroups][0][filters][0][field]': attributeCode,
       'searchCriteria[filterGroups][0][filters][0][value]':
         currentAttributeValue,
@@ -246,12 +256,12 @@ export default (magento: Magento) => ({
     return magento.admin.getProductsWithSearchCritaria(params);
   },
 
-  getProductsBy: searchCriteria => {
+  getProductsBy: (searchCriteria: SearchCriteriasType) => {
     const params = getParamsFromSearchCriterias(searchCriteria);
     return magento.get('/V1/products', params, undefined, ADMIN_TYPE);
   },
 
-  getProductsWithSearchCritaria: searchCriteria =>
+  getProductsWithSearchCritaria: (searchCriteria: Record<string, unknown>) =>
     magento.get('/V1/products', searchCriteria, undefined, ADMIN_TYPE),
 
   getProductBySku: (sku: string) =>
@@ -311,7 +321,7 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  getProductAttributesOptions: attributeId =>
+  getProductAttributesOptions: (attributeId: string | number) =>
     magento.get(
       `/V1/products/attributes/${attributeId}/options`,
       undefined,
@@ -319,7 +329,7 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  getAttributeByCode: attributeCode =>
+  getAttributeByCode: (attributeCode: string) =>
     magento.get(
       `/V1/products/attributes/${attributeCode}`,
       undefined,
@@ -327,16 +337,16 @@ export default (magento: Magento) => ({
       ADMIN_TYPE,
     ),
 
-  getProductMedia: sku =>
+  getProductMedia: (sku: string) =>
     magento.get(`/V1/products/${sku}/media`, undefined, undefined, ADMIN_TYPE),
 
-  getCart: customerId =>
+  getCart: (customerId: number) =>
     magento.post(`/V1/customers/${customerId}/carts`, undefined, ADMIN_TYPE),
 
-  getCmsBlock: id =>
+  getCmsBlock: (id: number | string) =>
     magento.get(`/V1/cmsBlock/${id}`, undefined, undefined, ADMIN_TYPE),
 
-  removeItemFromCart: (cartId, itemId) =>
+  removeItemFromCart: (cartId: string | number, itemId: string | number) =>
     magento.delete(
       `/V1/carts/${cartId}/items/${itemId}`,
       undefined,

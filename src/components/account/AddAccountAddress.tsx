@@ -13,6 +13,8 @@ import { ThemeContext } from '../../theme';
 import { translate } from '../../i18n';
 import { ThemeType } from '../../theme/theme';
 import { StoreStateType } from '../../reducers';
+import { AddressType, CustomerType } from '../../magento/types';
+import { AddressDataType, CustomerDataType } from "../../magento/lib/types";
 
 const mapStateToProps = ({ account, magento }: StoreStateType) => {
   const { customer } = account;
@@ -76,6 +78,8 @@ class AddAccountAddress extends Component<PropsFromRedux, State> {
     const { postcode, countryId, city, street, region, customer, telephone } =
       this.props;
 
+    if (!customer) return;
+
     const regionValue =
       typeof region === 'object'
         ? {
@@ -87,28 +91,32 @@ class AddAccountAddress extends Component<PropsFromRedux, State> {
             region,
           };
 
-    const data = {
+    const address: AddressDataType = {
+      region: regionValue,
+      country_id: countryId,
+      street: [street],
+      postcode,
+      city,
+      // same_as_billing: 1,
+      telephone,
+    };
+    if (customer?.firstname) {
+      address.firstname = customer.firstname;
+    }
+    if (customer?.lastname) {
+      address.lastname = customer.lastname;
+    }
+
+    const data: CustomerDataType = {
       customer: {
         ...customer,
-        addresses: [
-          {
-            region: regionValue,
-            country_id: countryId,
-            street: [street],
-            postcode,
-            city,
-            // same_as_billing: 1,
-            firstname: customer?.firstname,
-            lastname: customer?.lastname,
-            telephone,
-          },
-        ],
+        addresses: [address],
       },
     };
 
     this.props.updateAccountAddressUI('error', false);
     this.props.accountAddressNextLoading(true);
-    this.props.addAccountAddress(customer?.id, data);
+    this.props.addAccountAddress(customer.id, data);
     // this.props.resetAccountAddressUI();
   };
 
@@ -169,7 +177,7 @@ class AddAccountAddress extends Component<PropsFromRedux, State> {
             withLabel={false}
             disabled={data.length === 0}
             key="regions"
-            label={label}
+            label={label ?? ''}
             attribute="Region"
             data={data}
             onChange={this.regionSelect}
@@ -223,8 +231,8 @@ class AddAccountAddress extends Component<PropsFromRedux, State> {
         withLabel={false}
         disabled={data.length === 0}
         key="countries"
-        label={label}
-        attribute={translate('common.country')}
+        label={label ?? ''}
+        attribute={translate('common.country') ?? ''}
         data={data}
         onChange={this.countrySelect}
         style={styles.inputContainer(theme)}

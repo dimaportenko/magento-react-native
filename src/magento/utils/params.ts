@@ -25,6 +25,7 @@ export const getParamsFromSearchCriterias = (
   } else if ('field' in searchCriterias) {
     return getParamsFromSearchCriteriaItem(searchCriterias);
   }
+  return {};
 };
 
 const getParamsFromSearchCriteriaGroup = (

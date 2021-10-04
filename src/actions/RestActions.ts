@@ -64,6 +64,7 @@ import { checkoutSetActiveSection } from './UIActions';
 import { CategoryType } from '../magento/types';
 import { FilterReducerType, PriceFilterType } from '../reducers/FilterReducer';
 import { StoreDispatchType, StoreGetStateType } from '../store';
+import { CustomerDataType } from '../magento/lib/types';
 
 export const initMagento = () => {
   magento.setOptions(magentoOptions);
@@ -641,18 +642,21 @@ export const orderProductDetail = sku => async dispatch => {
   }
 };
 
-export const addAccountAddress = (id, customer) => async dispatch => {
-  try {
-    const data = await magento.admin.updateCustomerData(id, customer);
-    dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS, payload: data });
-  } catch (error) {
-    logError(error);
-    const message = error.message
-      ? error.message
-      : 'Sorry, something went wrong. Please check your internet connection and try again';
-    dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR, payload: message });
-  }
-};
+export const addAccountAddress =
+  (id: number, customer: CustomerDataType) =>
+  async (dispatch: StoreDispatchType) => {
+    try {
+      const data = await magento.admin.updateCustomerData(id, customer);
+      dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS, payload: data });
+    } catch (err: unknown) {
+      const error = err as Error;
+      logError(error);
+      const message = error.message
+        ? error.message
+        : 'Sorry, something went wrong. Please check your internet connection and try again';
+      dispatch({ type: MAGENTO_ADD_ACCOUNT_ADDRESS_ERROR, payload: message });
+    }
+  };
 
 export const addGuestCartBillingAddress =
   (cartId, address) => async dispatch => {

@@ -54,3 +54,35 @@ export type PostReviewDataApiParamType = {
   productId: number;
   ratingData: PostReviewRatingData[];
 };
+
+export type AddressDataType = {
+  city: string;
+  country_id: string;
+  firstname?: string;
+  lastname?: string;
+  postcode: string;
+  customer_id?: number;
+  id?: number;
+  region: RegionDataType;
+  street: string[];
+  telephone: string;
+};
+
+export type RegionDataType = {
+  region?: string;
+  region_code?: string;
+  region_id?: number;
+};
+
+export type CustomerDataType = {
+  customer: {
+    addresses: AddressDataType[];
+    email: string;
+    firstname: string;
+    lastname: string;
+    group_id: number;
+    id: number;
+    store_id: number;
+    website_id: number;
+  };
+};

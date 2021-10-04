@@ -1,7 +1,8 @@
 import { GUEST_TYPE } from '../../types';
 import { Magento } from '../../index';
 import {
-  AddToCartItemApiParamType, CartPaymentApiParamType,
+  AddToCartItemApiParamType,
+  CartPaymentApiParamType,
   CustomerAddressApiParamType,
 } from '../types';
 
