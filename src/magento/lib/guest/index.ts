@@ -21,20 +21,20 @@ export default (magento: Magento) => ({
   addItemToCart: (cartId: string, item: AddToCartItemApiParamType) =>
     magento.post(`/V1/guest-carts/${cartId}/items`, item, GUEST_TYPE),
 
-  getGuestCart: (cartId: string) =>
+  getGuestCart: (cartId: string | number) =>
     magento.get(`/V1/guest-carts/${cartId}`, undefined, undefined, GUEST_TYPE),
 
-  addCouponToCart: (cartId: string, couponCode: string) =>
+  addCouponToCart: (cartId: string | number, couponCode: string) =>
     magento.put(
       `/V1/guest-carts/${cartId}/coupons/${couponCode}`,
       undefined,
       GUEST_TYPE,
     ),
 
-  removeCouponFromCart: (cartId: string) =>
+  removeCouponFromCart: (cartId: string | number) =>
     magento.delete(`/V1/guest-carts/${cartId}/coupons`, undefined, GUEST_TYPE),
 
-  getCartTotals: (cartId: string) =>
+  getCartTotals: (cartId: string | number) =>
     magento.get(
       `/V1/guest-carts/${cartId}/totals`,
       undefined,

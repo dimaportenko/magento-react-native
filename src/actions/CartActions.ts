@@ -11,6 +11,9 @@ export const addCouponToCart =
     try {
       const cartId = getState().cart?.cartId || getState().cart?.quote?.id;
       let totals;
+      if (!cartId) {
+        throw new Error('No cart id');
+      }
       if (magento.isCustomerLogin()) {
         await magento.admin.addCouponToCart(cartId, couponCode);
         totals = await magento.admin.getCartTotals(cartId);
@@ -31,6 +34,9 @@ export const removeCouponFromCart =
   () => async (dispatch: StoreDispatchType, getState: StoreGetStateType) => {
     dispatch({ type: types.MAGENTO_COUPON_LOADING, payload: true });
     const cartId = getState().cart?.cartId;
+    if (!cartId) {
+      throw new Error('No cart id');
+    }
     try {
       let totals;
       if (magento.isCustomerLogin()) {
@@ -60,6 +66,10 @@ export const refreshCart =
         cart = await magento.customer.getCustomerCart();
       } else {
         const cartId = getState().cart?.cartId;
+        if (!cartId) {
+          throw new Error('No cart id');
+        }
+
         cart = await magento.guest.getGuestCart(cartId);
       }
       dispatch({ type: types.MAGENTO_GET_CART, payload: cart });
