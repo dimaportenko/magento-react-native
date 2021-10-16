@@ -12,6 +12,26 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors)
 [![License](https://img.shields.io/github/license/troublediehard/magento-react-native)](LICENSE)
 
+
+<div align="center">
+  <a align="center" href="https://github.com/dimaportenko?tab=followers">
+    <img src="https://img.shields.io/github/followers/dimaportenko?label=Follow%20%40dimaportenko&style=social" />
+  </a>
+  <br/>
+  <a align="center" href="https://twitter.com/dimaportenko">
+    <img src="https://img.shields.io/twitter/follow/dimaportenko?label=Follow%20%40dimaportenko&style=social" />
+  </a>
+  <br/>
+  <a align="center" href="https://www.youtube.com/channel/UCReKeeIMZywvQoaZPZKzQbQ">
+    <img src="https://img.shields.io/youtube/channel/subscribers/UCReKeeIMZywvQoaZPZKzQbQ" />
+  </a>
+  <br/>
+  <a align="center" href="https://www.youtube.com/channel/UCReKeeIMZywvQoaZPZKzQbQ">
+    <img src="https://img.shields.io/youtube/channel/views/UCReKeeIMZywvQoaZPZKzQbQ" />
+  </a>
+</div>
+<br/>
+
 Magento React Native is a fully functional eCommerce App for your Magento 2 website. It uses [Magento 2 REST API](https://devdocs.magento.com/guides/v2.3/get-started/rest_front.html), to dispaly catalog, products, add products to cart, place an order and much more.
 
 ## 📣 Annoncement
