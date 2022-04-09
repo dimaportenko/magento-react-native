@@ -14,7 +14,7 @@
     "bugsnag-react-native": "^2.23.2",
     "i18n-js": "^3.3.0",
     "lodash": "^4.17.21",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "prop-types": "^15.6.0",
     "react": "17.0.1",
     "react-native": "0.64.2",
